@@ -1743,42 +1743,176 @@ async function generatePEI() {
     // Page break for Objectifs
     children.push(new Paragraph({ children: [new PageBreak()] }));
 
-    // Objectifs de l'intervention
-    children.push(new Paragraph({ children: [new TextRun({ text: 'Objectifs de l\'intervention et méthodes', bold: true, size: 24, underline: {} })], alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
+    // Objectifs de l'intervention - Page 4
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Objectifs de l\'intervention et méthodes', bold: true, size: 24, underline: {} })], alignment: AlignmentType.CENTER, spacing: { after: 300 } }));
 
-    children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences transversales', bold: true, size: 20 })], spacing: { before: 100, after: 100 } }));
+    // Compétences dans les domaines de développement et d'apprentissage
+    children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences dans les domaines de développement et d\'apprentissage', bold: true, size: 22 })], spacing: { before: 200, after: 200 } }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
 
-    // Competence tables for each Bereich
-    const bereichNames = { verhalten: 'Comportement', kommunikation: 'Communication', sozialisation: 'Socialisation', kognition: 'Cognition' };
+    // Page break - Compétences transversales header
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences transversales', bold: true, size: 22 })], spacing: { after: 300 } }));
 
-    for (const [bereich, bereichName] of Object.entries(bereichNames)) {
-        const goals = ziele[bereich];
-        const lastItem = lastErreicht[bereich];
-        const compActuelle = lastItem ? `${lastItem.code}: ${lastItem.keyword}` : '';
+    // Helper function for competence table
+    function createCompetenceTable(domainName, grobzielText, goals, compActuelle) {
+        const domainContent = [new Paragraph({children: [new TextRun({text: domainName, bold: true, size: 22})]})];
+        if (grobzielText) {
+            domainContent.push(new Paragraph({children: [new TextRun({text: grobzielText, italics: true, size: 18})]}));
+        }
+        if (goals && goals.length > 0) {
+            domainContent.push(new Paragraph({children: [new TextRun({text: `(${goals.map(g => g.code).join(', ')})`, size: 18})]}));
+        }
 
-        children.push(new Table({
+        return new Table({
             rows: [
                 new TableRow({ children: [
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [
+                        new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]}),
+                        new Paragraph({children: [new TextRun({text: '(Feinziel, formulation de l\'objectif pour l\'élève)', italics: true, size: 16})]})
+                    ], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [
+                        new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]}),
+                        new Paragraph({children: [new TextRun({text: '(mise en œuvre CDSE)', italics: true, size: 16})]})
+                    ], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [
+                        new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]}),
+                        new Paragraph({children: [new TextRun({text: '(mise en œuvre titulaire/autres intervenants)', italics: true, size: 16})]})
+                    ], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
                 ]}),
                 new TableRow({ children: [
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: bereichName, bold: true, size: 16})]}), ...(goals.length > 0 ? [new Paragraph({children: [new TextRun({text: `(${goals.map(g => g.code).join(', ')})`, size: 14})]})] : [])], borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: compActuelle, size: 16})]})], borders: cellBorders }),
-                    new TableCell({ children: goals.map(g => new Paragraph({children: [new TextRun({text: `"${g.zieltext}"`, size: 16})]})), borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                    new TableCell({ children: domainContent, borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: compActuelle || '', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: goals && goals.length > 0 ? goals.map(g => new Paragraph({children: [new TextRun({text: `"${g.zieltext}"`, size: 22})]})) : [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
                 ]})
             ],
             width: { size: 100, type: WidthType.PERCENTAGE }
-        }));
-        children.push(new Paragraph({ spacing: { after: 100 } }));
+        });
     }
 
-    // Page break for Signatures
+    // Comportement - Page 5
+    const verhaltenGoals = ziele.verhalten;
+    const verhaltenActuelle = lastErreicht.verhalten ? `${lastErreicht.verhalten.code}: ${lastErreicht.verhalten.keyword}` : '';
+    children.push(createCompetenceTable('Comportement', '(Grobziel p.ex COMP-10: attendre)', verhaltenGoals, verhaltenActuelle));
+
+    // Page break - Communication - Page 6
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    const kommunikationGoals = ziele.kommunikation;
+    const kommunikationActuelle = lastErreicht.kommunikation ? `${lastErreicht.kommunikation.code}: ${lastErreicht.kommunikation.keyword}` : '';
+    children.push(createCompetenceTable('Communication', null, kommunikationGoals, kommunikationActuelle));
+
+    // Page break - Socialisation - Page 7
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    const sozialisationGoals = ziele.sozialisation;
+    const sozialisationActuelle = lastErreicht.sozialisation ? `${lastErreicht.sozialisation.code}: ${lastErreicht.sozialisation.keyword}` : '';
+    children.push(createCompetenceTable('Socialisation', null, sozialisationGoals, sozialisationActuelle));
+
+    // Page break - Cognition - Page 8
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    const kognitionGoals = ziele.kognition;
+    const kognitionActuelle = lastErreicht.kognition ? `${lastErreicht.kognition.code}: ${lastErreicht.kognition.keyword}` : '';
+    children.push(createCompetenceTable('Cognition', null, kognitionGoals, kognitionActuelle));
+
+    // Page break - Démarches mentales etc. - Page 9
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [
+                    new Paragraph({children: [new TextRun({text: 'Iwwerschrëften aus Complément iwwerhuelen wann et passt:', italics: true, size: 18})]}),
+                    new Paragraph({children: [new TextRun({text: 'Démarches mentales, Manières d\'apprendre, attitudes relationnelles, Attitudes affectives.', italics: true, size: 18})]}),
+                    new Paragraph({children: [new TextRun({text: 'Pro Iwwerschrëft eng Këscht, Këschten sou oft kopeieren wei neideg', italics: true, size: 18})]})
+                ], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Page break - Compétences essentielles - Page 10
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences essentielles à la vie autonome et la participation maximale', bold: true, size: 22 })], spacing: { after: 300 } }));
+
+    // Autres table
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [
+                    new Paragraph({children: [new TextRun({text: 'Autres', bold: true, size: 22})]}),
+                    new Paragraph({children: [new TextRun({text: '(objectifs indépendants des objectifs de l\'ELDiB)', italics: true, size: 18})]})
+                ], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    children.push(new Paragraph({ spacing: { after: 300 } }));
+
+    // Culture et loisirs table
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Culture et loisirs', bold: true, size: 22})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Page break for Signatures - Page 11
     children.push(new Paragraph({ children: [new PageBreak()] }));
 
     // Signatures
@@ -1822,9 +1956,29 @@ async function generatePEI() {
         width: { size: 100, type: WidthType.PERCENTAGE }
     }));
 
-    // Create document
+    // Create document with Calibri 11pt as default font
     const doc = new Document({
-        sections: [{ children }]
+        styles: {
+            default: {
+                document: {
+                    run: {
+                        font: "Calibri",
+                        size: 22 // 11pt = 22 half-points
+                    },
+                    paragraph: {
+                        spacing: { line: 276 } // 1.15 line spacing
+                    }
+                }
+            }
+        },
+        sections: [{
+            properties: {
+                page: {
+                    margin: { top: 720, bottom: 720, left: 720, right: 720 } // 0.5 inch margins
+                }
+            },
+            children
+        }]
     });
 
     // Generate and download
