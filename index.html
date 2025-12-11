@@ -1412,53 +1412,63 @@ function getStammdaten() {
     };
 }
 
-// Generate ELDiB Grid with colors
+// Generate ELDiB Grid with colors - compact version like original
 function generateELDiBGrid() {
-    const bereiche = [
-        { key: 'verhalten', label: 'COMP', max: 33 },
-        { key: 'kommunikation', label: 'COMM', max: 35 },
-        { key: 'sozialisation', label: 'SOC', max: 41 },
-        { key: 'kognition', label: 'COG', max: 62 }
-    ];
-
     // Build color map
     const colorMap = {};
     for (const [code, sel] of Object.entries(state.selections)) {
-        if (sel.status === 'erreicht') colorMap[code] = '#90EE90'; // green
-        else if (sel.status === 'ziel') colorMap[code] = '#FFFF00'; // yellow
+        if (sel.status === 'erreicht') colorMap[code] = '#90EE90';
+        else if (sel.status === 'ziel') colorMap[code] = '#FFFF00';
     }
 
-    let html = '<table style="border-collapse:collapse;font-size:9px;margin:20px auto;">';
-    html += '<tr><th></th>';
-    bereiche.forEach(b => html += `<th style="padding:5px;border:1px solid #000;background:#ddd;">${b.label}<br>${b.max}</th>`);
-    html += '</tr>';
+    const getColor = (bereich, nr) => {
+        const prefixes = { verhalten: 'V', kommunikation: 'K', sozialisation: 'SOZ', kognition: 'KOG' };
+        return colorMap[`${prefixes[bereich]}-${nr}`] || '#fff';
+    };
 
-    // Levels V to I (top to bottom like original)
-    const levels = [
-        { name: 'NIVEAU V', ranges: { verhalten: [29,33], kommunikation: [30,35], sozialisation: [37,41], kognition: [57,62] } },
-        { name: 'NIVEAU IV', ranges: { verhalten: [22,28], kommunikation: [23,29], sozialisation: [28,36], kognition: [49,56] } },
-        { name: 'NIVEAU III', ranges: { verhalten: [15,21], kommunikation: [15,22], sozialisation: [19,27], kognition: [32,48] } },
-        { name: 'NIVEAU II', ranges: { verhalten: [9,14], kommunikation: [9,14], sozialisation: [13,18], kognition: [15,31] } },
-        { name: 'NIVEAU I', ranges: { verhalten: [1,8], kommunikation: [1,8], sozialisation: [1,12], kognition: [1,14] } }
-    ];
+    // Compact grid - 4 columns side by side, each with its own level structure
+    let html = `<table style="border-collapse:collapse;font-size:6pt;margin:10px auto;width:auto;">
+        <tr>
+            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COMP<br>33</th>
+            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COMM<br>35</th>
+            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">SOC<br>41</th>
+            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COG<br>62</th>
+        </tr>`;
 
-    levels.forEach(level => {
-        const maxRows = Math.max(...bereiche.map(b => level.ranges[b.key][1] - level.ranges[b.key][0] + 1));
-        for (let row = 0; row < maxRows; row++) {
+    // Define items per level for each area
+    const struktur = {
+        verhalten:     { V: [33,32,31,30,29], IV: [28,27,26,25,24,23,22], III: [21,20,19,18,17,16,15], II: [14,13,12,11,10,9], I: [8,7,6,5,4,3,2,1] },
+        kommunikation: { V: [35,34,33,32,31,30], IV: [29,28,27,26,25,24,23], III: [22,21,20,19,18,17,16,15], II: [14,13,12,11,10,9], I: [8,7,6,5,4,3,2,1] },
+        sozialisation: { V: [41,40,39,38,37], IV: [36,35,34,33,32,31,30,29,28], III: [27,26,25,24,23,22,21,20,19], II: [18,17,16,15,14,13], I: [12,11,10,9,8,7,6,5,4,3,2,1] },
+        kognition:     { V: [62,61,60,59,58,57], IV: [56,55,54,53,52,51,50,49], III: [48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32], II: [31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], I: [14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
+    };
+
+    const levels = ['V', 'IV', 'III', 'II', 'I'];
+
+    levels.forEach(lvl => {
+        const maxItems = Math.max(
+            struktur.verhalten[lvl].length,
+            struktur.kommunikation[lvl].length,
+            struktur.sozialisation[lvl].length,
+            struktur.kognition[lvl].length
+        );
+
+        for (let i = 0; i < maxItems; i++) {
             html += '<tr>';
-            if (row === 0) html += `<td rowspan="${maxRows}" style="padding:5px;border:1px solid #000;background:#eee;writing-mode:vertical-lr;text-align:center;font-weight:bold;">${level.name}</td>`;
-            bereiche.forEach(b => {
-                const start = level.ranges[b.key][0];
-                const end = level.ranges[b.key][1];
-                const itemNr = end - row;
-                if (itemNr >= start) {
-                    const code = b.key === 'verhalten' ? `V-${itemNr}` :
-                                 b.key === 'kommunikation' ? `K-${itemNr}` :
-                                 b.key === 'sozialisation' ? `SOZ-${itemNr}` : `KOG-${itemNr}`;
-                    const bgColor = colorMap[code] || '#fff';
-                    html += `<td style="width:30px;height:20px;border:1px solid #000;text-align:center;background:${bgColor};">${itemNr}</td>`;
+            ['verhalten', 'kommunikation', 'sozialisation', 'kognition'].forEach(bereich => {
+                const items = struktur[bereich][lvl];
+                const nr = items[i];
+                if (nr !== undefined) {
+                    const bg = getColor(bereich, nr);
+                    html += `<td style="width:12px;height:10px;border:1px solid #000;text-align:center;background:${bg};font-size:6pt;">${nr}</td>`;
                 } else {
-                    html += '<td style="border:1px solid #000;"></td>';
+                    html += `<td style="width:12px;height:10px;border:1px solid #000;"></td>`;
+                }
+                // Add level label in second column of each pair
+                if (i === 0 && bereich === 'verhalten') {
+                    html += `<td rowspan="${maxItems}" style="border:1px solid #000;padding:1px;font-size:5pt;writing-mode:vertical-lr;text-align:center;background:#f5f5f5;">NIV.${lvl}</td>`;
+                } else if (bereich !== 'verhalten') {
+                    // Empty cell for alignment
                 }
             });
             html += '</tr>';
@@ -1466,7 +1476,11 @@ function generateELDiBGrid() {
     });
 
     html += '</table>';
-    html += '<p style="font-size:10px;text-align:center;"><span style="background:#90EE90;padding:2px 8px;">vert</span> = objectif atteint &nbsp; <span style="background:#FFFF00;padding:2px 8px;">jaune</span> = objectif potentiel</p>';
+    html += `<p style="font-size:7pt;text-align:center;margin:5px 0;">
+        Légende: COMP=Comportement; COMM=Communication; SOC=Socialisation; COG=Cognition<br>
+        <span style="background:#90EE90;padding:1px 6px;">vert</span>=objectif atteint;
+        <span style="background:#FFFF00;padding:1px 6px;">jaune</span>=objectif potentiel
+    </p>`;
     return html;
 }
 
