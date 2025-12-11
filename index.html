@@ -1473,57 +1473,195 @@ function generateELDiBGrid() {
 function generatePEI() {
     const stammdaten = getStammdaten();
     const ziele = { verhalten: [], kommunikation: [], sozialisation: [], kognition: [] };
+    const erreichte = { verhalten: [], kommunikation: [], sozialisation: [], kognition: [] };
 
     for (const [code, selection] of Object.entries(state.selections)) {
-        if (selection.status === 'ziel') {
-            const bereich = findBereichByCode(code);
-            const item = findItemByCode(code);
-            if (bereich && item) {
+        const bereich = findBereichByCode(code);
+        const item = findItemByCode(code);
+        if (bereich && item) {
+            if (selection.status === 'ziel') {
                 ziele[bereich].push({ code, keyword: item.keyword, zieltext: selection.zieltext || item.zielformulierungen[0] });
+            } else if (selection.status === 'erreicht') {
+                erreichte[bereich].push({ code, keyword: item.keyword });
             }
         }
     }
 
-    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PEI - ${stammdaten.schueler_name}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; font-size: 11pt; }
-        h1 { font-size: 16pt; border-bottom: 2px solid #333; }
-        h2 { font-size: 13pt; margin-top: 20px; background: #f0f0f0; padding: 5px; }
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        th, td { border: 1px solid #000; padding: 6px; text-align: left; }
-        th { background: #e0e0e0; }
-        .info-table td { border: none; padding: 3px 10px; }
-    </style></head><body>
-    <h1>Plan éducatif individualisé (PEI)</h1>
-
-    <h2>Informations générales sur l'élève</h2>
-    <table class="info-table">
-        <tr><td><strong>Nom:</strong></td><td>${stammdaten.schueler_name}</td><td><strong>Matricule:</strong></td><td>${stammdaten.matricule}</td></tr>
-        <tr><td><strong>Date de naissance:</strong></td><td>${stammdaten.geburtsdatum}</td><td><strong>Année scolaire:</strong></td><td>${stammdaten.schuljahr}</td></tr>
-        <tr><td><strong>École/Lycée:</strong></td><td>${stammdaten.foerderort}</td><td><strong>Classe:</strong></td><td>${stammdaten.klasse}</td></tr>
-    </table>
-
-    <h2>Développement ELDiB</h2>
-    ${generateELDiBGrid()}
-
-    <h2>Compétences transversales - Objectifs</h2>`;
-
-    const bereichNames = { verhalten: 'Comportement', kommunikation: 'Communication', sozialisation: 'Socialisation', kognition: 'Cognition' };
-
-    for (const [bereich, items] of Object.entries(ziele)) {
-        if (items.length > 0) {
-            html += `<h3>${bereichNames[bereich]}</h3>
-            <table><thead><tr><th style="width:60px;">Code</th><th style="width:120px;">Domaine</th><th>Objectif (Ich-Ziel)</th></tr></thead><tbody>`;
-            items.forEach(item => {
-                html += `<tr><td>${item.code}</td><td>${item.keyword}</td><td>"${item.zieltext}"</td></tr>`;
-            });
-            html += '</tbody></table>';
-        }
+    // Get last erreicht per bereich for "Compétences actuelles"
+    const lastErreicht = {};
+    for (const [bereich, items] of Object.entries(erreichte)) {
+        const sorted = items.sort((a,b) => parseInt(b.code.split('-').pop()) - parseInt(a.code.split('-').pop()));
+        lastErreicht[bereich] = sorted[0] || null;
     }
 
-    html += `<h2>Signatures</h2>
-    <table><tr><td style="width:50%;padding:20px;">Date: _____________<br><br>Signature: _____________</td>
-    <td style="width:50%;padding:20px;">Date: _____________<br><br>Signature (Parents): _____________</td></tr></table>
+    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PEI - ${stammdaten.schueler_name}</title>
+    <style>
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; font-size: 10pt; }
+        .title-page { text-align: center; padding-top: 200px; page-break-after: always; }
+        .title-page h1 { font-size: 35pt; color: #2F5496; border: none; margin-bottom: 50px; }
+        h1 { font-size: 14pt; text-decoration: underline; text-align: center; margin: 20px 0; }
+        h2 { font-size: 11pt; margin-top: 15px; margin-bottom: 5px; }
+        h3 { font-size: 10pt; margin: 10px 0 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 5px 0; }
+        th, td { border: 1px solid #000; padding: 4px 6px; text-align: left; vertical-align: top; font-size: 9pt; }
+        th { background: #f0f0f0; }
+        .info-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+        .info-box { border: 1px solid #000; padding: 5px 10px; min-width: 200px; flex: 1; }
+        .info-label { font-weight: bold; font-size: 9pt; }
+        .section { margin: 15px 0; }
+        .checkbox { font-family: 'Segoe UI Symbol', sans-serif; }
+        .page-break { page-break-before: always; }
+        .competence-table td { height: 60px; }
+        .legend { font-size: 8pt; text-align: center; margin-top: 5px; }
+        .signature-table td { border: none; padding: 20px; vertical-align: bottom; }
+    </style></head><body>
+
+    <!-- Titelseite -->
+    <div class="title-page">
+        <h1>Plan éducatif individualisé (PEI)</h1>
+    </div>
+
+    <!-- Seite 2: Informations générales -->
+    <h1>Informations générales sur l'élève</h1>
+
+    <div class="info-grid">
+        <div class="info-box"><span class="info-label">Nom</span><br>${stammdaten.schueler_name?.split(' ')[0] || ''}</div>
+        <div class="info-box"><span class="info-label">Prénom</span><br>${stammdaten.schueler_name?.split(' ').slice(1).join(' ') || ''}</div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box"><span class="info-label">Matricule</span><br>${stammdaten.matricule}</div>
+        <div class="info-box"><span class="info-label">Année scolaire actuelle</span><br>${stammdaten.schuljahr}</div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box"><span class="info-label">Adresse de l'élève</span><br>&nbsp;</div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box"><span class="info-label">Première langue parlée</span><br>&nbsp;</div>
+    </div>
+
+    <h2>Coordonnées des représentants légaux</h2>
+    <table>
+        <tr><td style="width:50%"><strong>Nom et prénom :</strong> ${stammdaten.eltern1_name}</td>
+            <td><strong>Nom et prénom :</strong></td></tr>
+        <tr><td><strong>Numéro de téléphone :</strong> ${stammdaten.eltern1_tel}</td>
+            <td><strong>Numéro de téléphone :</strong></td></tr>
+        <tr><td><strong>Adresse mail :</strong> ${stammdaten.eltern1_email}</td>
+            <td><strong>Adresse mail :</strong></td></tr>
+    </table>
+
+    <h2>Scolarisation actuelle</h2>
+    <table>
+        <tr><td><strong>Titulaire/Régent(e) de classe</strong></td><td></td>
+            <td><strong>Cycle/Classe</strong></td><td>${stammdaten.klasse}</td></tr>
+        <tr><td><strong>École / Lycée</strong></td><td>${stammdaten.foerderort}</td>
+            <td><strong>Bâtiment</strong></td><td></td></tr>
+    </table>
+
+    <h2>Scolarisation spécialisée</h2>
+    <table>
+        <tr><td><strong>Personne de référence</strong></td><td>${stammdaten.einschaetzende}</td></tr>
+        <tr><td><strong>Lieu de scolarisation</strong></td><td></td></tr>
+    </table>
+
+    <!-- Seite 3: ELDiB Raster -->
+    <div class="page-break"></div>
+    <h2>Besoins éducatifs spécifiques</h2>
+    <h3>Développement ELDiB</h3>
+    ${generateELDiBGrid()}
+
+    <h2>Description du/des besoin(s) éducatif(s) spécifique(s)</h2>
+    <p style="font-size:8pt;font-style:italic;">(Selon ELDiB, points à développer)</p>
+    <table>
+        <tr><td><strong>CDSE :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Lycée :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Parents :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Élève :</strong></td><td style="height:40px;"></td></tr>
+    </table>
+
+    <h2>Points forts, ressources et centres d'intérêts</h2>
+    <table>
+        <tr><td><strong>CDSE :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Lycée :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Parents :</strong></td><td style="height:40px;"></td></tr>
+        <tr><td><strong>Élève :</strong></td><td style="height:40px;"></td></tr>
+    </table>
+
+    <!-- Seite 4: Compétences transversales -->
+    <div class="page-break"></div>
+    <h1>Objectifs de l'intervention et méthodes</h1>
+
+    <h2><span class="checkbox">☐</span> Compétences transversales</h2>`;
+
+    const bereichNames = {
+        verhalten: 'Comportement',
+        kommunikation: 'Communication',
+        sozialisation: 'Socialisation',
+        kognition: 'Cognition'
+    };
+
+    // Generate table for each Bereich with goals
+    for (const [bereich, bereichName] of Object.entries(bereichNames)) {
+        const goals = ziele[bereich];
+        const lastItem = lastErreicht[bereich];
+        const compActuelle = lastItem ? `${lastItem.code}: ${lastItem.keyword}` : '';
+
+        html += `
+        <table class="competence-table">
+            <tr>
+                <th style="width:15%;">Domaine(s)</th>
+                <th style="width:15%;">Compétences actuelles</th>
+                <th style="width:25%;">Objectif(s)<br><span style="font-weight:normal;font-size:8pt;">(Feinziel, formulation pour l'élève)</span></th>
+                <th style="width:22%;">Méthode(s) et stratégie(s)<br><span style="font-weight:normal;font-size:8pt;">(mise en œuvre CDSE)</span></th>
+                <th style="width:23%;">Observation(s) et adaptation(s)<br><span style="font-weight:normal;font-size:8pt;">(mise en œuvre titulaire)</span></th>
+            </tr>
+            <tr>
+                <td><strong>${bereichName}</strong>${goals.length > 0 ? '<br><span style="font-size:8pt;">(' + goals.map(g => g.code).join(', ') + ')</span>' : ''}</td>
+                <td>${compActuelle}</td>
+                <td>${goals.map(g => '"' + g.zieltext + '"').join('<br><br>') || ''}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>`;
+    }
+
+    html += `
+    <h2><span class="checkbox">☐</span> Compétences essentielles à la vie autonome et la participation maximale</h2>
+    <table class="competence-table">
+        <tr>
+            <th style="width:15%;">Domaine(s)</th>
+            <th style="width:15%;">Compétences actuelles</th>
+            <th style="width:25%;">Objectif(s)</th>
+            <th style="width:22%;">Méthode(s) et stratégie(s)</th>
+            <th style="width:23%;">Observation(s) et adaptation(s)</th>
+        </tr>
+        <tr>
+            <td>Culture et loisirs</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- Signatures -->
+    <div class="page-break"></div>
+    <h1>Signatures</h1>
+    <table>
+        <tr><th>Nom</th><th>Signature(s)</th></tr>
+        <tr><td style="height:30px;"></td><td></td></tr>
+        <tr><td style="height:30px;"></td><td></td></tr>
+        <tr><td style="height:30px;"></td><td></td></tr>
+        <tr><td style="height:30px;"></td><td></td></tr>
+    </table>
+
+    <table class="signature-table" style="margin-top:50px;">
+        <tr>
+            <td style="width:50%;">Pour le,<br><br><br>_______________________<br>Signature</td>
+            <td>Certifié le,<br><br><br>_______________________<br>Signature</td>
+        </tr>
+    </table>
+
     </body></html>`;
 
     downloadAsWord(html, `PEI_${stammdaten.schueler_name || 'export'}.doc`);
