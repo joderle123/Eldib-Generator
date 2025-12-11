@@ -1412,75 +1412,51 @@ function getStammdaten() {
     };
 }
 
-// Generate ELDiB Grid with colors - compact version like original
+// Generate ELDiB Grid - horizontal layout to fit on 1 page
 function generateELDiBGrid() {
-    // Build color map
     const colorMap = {};
     for (const [code, sel] of Object.entries(state.selections)) {
         if (sel.status === 'erreicht') colorMap[code] = '#90EE90';
         else if (sel.status === 'ziel') colorMap[code] = '#FFFF00';
     }
+    const getColor = (prefix, nr) => colorMap[`${prefix}-${nr}`] || '#fff';
 
-    const getColor = (bereich, nr) => {
-        const prefixes = { verhalten: 'V', kommunikation: 'K', sozialisation: 'SOZ', kognition: 'KOG' };
-        return colorMap[`${prefixes[bereich]}-${nr}`] || '#fff';
-    };
+    const cell = (prefix, nr) => `<td style="width:9px;height:9px;border:1px solid #000;text-align:center;background:${getColor(prefix,nr)};font-size:5pt;padding:0;line-height:9px;">${nr}</td>`;
 
-    // Compact grid - 4 columns side by side, each with its own level structure
-    let html = `<table style="border-collapse:collapse;font-size:6pt;margin:10px auto;width:auto;">
-        <tr>
-            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COMP<br>33</th>
-            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COMM<br>35</th>
-            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">SOC<br>41</th>
-            <th colspan="2" style="border:1px solid #000;padding:2px 4px;background:#ddd;text-align:center;">COG<br>62</th>
-        </tr>`;
+    const levels = [
+        { n:'V',  V:[33,32,31,30,29], K:[35,34,33,32,31,30], S:[41,40,39,38,37], C:[62,61,60,59,58,57] },
+        { n:'IV', V:[28,27,26,25,24,23,22], K:[29,28,27,26,25,24,23], S:[36,35,34,33,32,31,30,29,28], C:[56,55,54,53,52,51,50,49] },
+        { n:'III',V:[21,20,19,18,17,16,15], K:[22,21,20,19,18,17,16,15], S:[27,26,25,24,23,22,21,20,19], C:[48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32] },
+        { n:'II', V:[14,13,12,11,10,9], K:[14,13,12,11,10,9], S:[18,17,16,15,14,13], C:[31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15] },
+        { n:'I',  V:[8,7,6,5,4,3,2,1], K:[8,7,6,5,4,3,2,1], S:[12,11,10,9,8,7,6,5,4,3,2,1], C:[14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
+    ];
 
-    // Define items per level for each area
-    const struktur = {
-        verhalten:     { V: [33,32,31,30,29], IV: [28,27,26,25,24,23,22], III: [21,20,19,18,17,16,15], II: [14,13,12,11,10,9], I: [8,7,6,5,4,3,2,1] },
-        kommunikation: { V: [35,34,33,32,31,30], IV: [29,28,27,26,25,24,23], III: [22,21,20,19,18,17,16,15], II: [14,13,12,11,10,9], I: [8,7,6,5,4,3,2,1] },
-        sozialisation: { V: [41,40,39,38,37], IV: [36,35,34,33,32,31,30,29,28], III: [27,26,25,24,23,22,21,20,19], II: [18,17,16,15,14,13], I: [12,11,10,9,8,7,6,5,4,3,2,1] },
-        kognition:     { V: [62,61,60,59,58,57], IV: [56,55,54,53,52,51,50,49], III: [48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32], II: [31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], I: [14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
-    };
-
-    const levels = ['V', 'IV', 'III', 'II', 'I'];
+    let html = `<table style="border-collapse:collapse;font-size:5pt;margin:5px auto;">
+    <tr><td style="border:1px solid #000;background:#ddd;padding:1px;font-weight:bold;"></td>
+        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COMP</b> 33</td>
+        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COMM</b> 35</td>
+        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>SOC</b> 41</td>
+        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COG</b> 62</td></tr>`;
 
     levels.forEach(lvl => {
-        const maxItems = Math.max(
-            struktur.verhalten[lvl].length,
-            struktur.kommunikation[lvl].length,
-            struktur.sozialisation[lvl].length,
-            struktur.kognition[lvl].length
-        );
-
-        for (let i = 0; i < maxItems; i++) {
-            html += '<tr>';
-            ['verhalten', 'kommunikation', 'sozialisation', 'kognition'].forEach(bereich => {
-                const items = struktur[bereich][lvl];
-                const nr = items[i];
-                if (nr !== undefined) {
-                    const bg = getColor(bereich, nr);
-                    html += `<td style="width:12px;height:10px;border:1px solid #000;text-align:center;background:${bg};font-size:6pt;">${nr}</td>`;
-                } else {
-                    html += `<td style="width:12px;height:10px;border:1px solid #000;"></td>`;
-                }
-                // Add level label in second column of each pair
-                if (i === 0 && bereich === 'verhalten') {
-                    html += `<td rowspan="${maxItems}" style="border:1px solid #000;padding:1px;font-size:5pt;writing-mode:vertical-lr;text-align:center;background:#f5f5f5;">NIV.${lvl}</td>`;
-                } else if (bereich !== 'verhalten') {
-                    // Empty cell for alignment
-                }
-            });
-            html += '</tr>';
-        }
+        html += `<tr><td style="border:1px solid #000;background:#eee;padding:1px 2px;font-weight:bold;font-size:5pt;">${lvl.n}</td>`;
+        // COMP
+        lvl.V.forEach(nr => html += cell('V', nr));
+        for(let i=lvl.V.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
+        // COMM
+        lvl.K.forEach(nr => html += cell('K', nr));
+        for(let i=lvl.K.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
+        // SOC
+        lvl.S.forEach(nr => html += cell('SOZ', nr));
+        for(let i=lvl.S.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
+        // COG
+        lvl.C.forEach(nr => html += cell('KOG', nr));
+        for(let i=lvl.C.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
+        html += '</tr>';
     });
 
-    html += '</table>';
-    html += `<p style="font-size:7pt;text-align:center;margin:5px 0;">
-        Légende: COMP=Comportement; COMM=Communication; SOC=Socialisation; COG=Cognition<br>
-        <span style="background:#90EE90;padding:1px 6px;">vert</span>=objectif atteint;
-        <span style="background:#FFFF00;padding:1px 6px;">jaune</span>=objectif potentiel
-    </p>`;
+    html += `</table><p style="font-size:5pt;text-align:center;margin:2px;">
+        <span style="background:#90EE90;padding:0 3px;">vert</span>=atteint <span style="background:#FFFF00;padding:0 3px;">jaune</span>=objectif</p>`;
     return html;
 }
 
