@@ -21,9 +21,16 @@ function showTab(tabId) {
         tab.classList.remove('active');
     });
 
-    // Show selected tab
+    // Show selected tab content
     document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
+
+    // Find and activate the correct tab button
+    document.querySelectorAll('.tab').forEach(tab => {
+        const onclickAttr = tab.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes("'" + tabId + "'")) {
+            tab.classList.add('active');
+        }
+    });
 
     // Update stats if showing overview
     if (tabId === 'uebersicht') {
