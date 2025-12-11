@@ -1421,42 +1421,130 @@ function generateELDiBGrid() {
     }
     const getColor = (prefix, nr) => colorMap[`${prefix}-${nr}`] || '#fff';
 
-    const cell = (prefix, nr) => `<td style="width:9px;height:9px;border:1px solid #000;text-align:center;background:${getColor(prefix,nr)};font-size:5pt;padding:0;line-height:9px;">${nr}</td>`;
+    // ELDiB structure per NIVEAU - exact original layout (vertical columns, numbers top to bottom)
+    const structure = {
+        V:    { V: [33], K: [35,34], S: [41], C: [62,61] },
+        IV:   { V: [32,31,30,29,28], K: [33,32,31,30,29], S: [40,39,38,37,36,35], C: [60,59,58,57,56] },
+        III:  { V: [27,26,25,24,23,22,21], K: [28,27,26,25,24,23,22], S: [34,33,32,31,30,29,28,27,26], C: [55,54,53,52,51,50,49,48] },
+        II:   { V: [20,19,18,17,16,15,14], K: [21,20,19,18,17,16,15,14], S: [25,24,23,22,21,20,19], C: [47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31] },
+        I:    { V: [13,12,11,10,9,8,7,6,5,4,3,2,1], K: [13,12,11,10,9,8,7,6,5,4,3,2,1], S: [18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1], C: [30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
+    };
 
-    const levels = [
-        { n:'V',  V:[33,32,31,30,29], K:[35,34,33,32,31,30], S:[41,40,39,38,37], C:[62,61,60,59,58,57] },
-        { n:'IV', V:[28,27,26,25,24,23,22], K:[29,28,27,26,25,24,23], S:[36,35,34,33,32,31,30,29,28], C:[56,55,54,53,52,51,50,49] },
-        { n:'III',V:[21,20,19,18,17,16,15], K:[22,21,20,19,18,17,16,15], S:[27,26,25,24,23,22,21,20,19], C:[48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32] },
-        { n:'II', V:[14,13,12,11,10,9], K:[14,13,12,11,10,9], S:[18,17,16,15,14,13], C:[31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15] },
-        { n:'I',  V:[8,7,6,5,4,3,2,1], K:[8,7,6,5,4,3,2,1], S:[12,11,10,9,8,7,6,5,4,3,2,1], C:[14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
-    ];
+    // Cell dimensions for compact layout
+    const cellSize = '11px';
+    const fontSize = '6pt';
 
-    let html = `<table style="border-collapse:collapse;font-size:5pt;margin:5px auto;">
-    <tr><td style="border:1px solid #000;background:#ddd;padding:1px;font-weight:bold;"></td>
-        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COMP</b> 33</td>
-        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COMM</b> 35</td>
-        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>SOC</b> 41</td>
-        <td style="border:1px solid #000;background:#ddd;padding:1px;text-align:center;" colspan="17"><b>COG</b> 62</td></tr>`;
+    const cell = (prefix, nr, withColor = true) => {
+        const bg = withColor ? getColor(prefix, nr) : '#fff';
+        return `<td style="width:${cellSize};height:${cellSize};border:1px solid #000;text-align:center;vertical-align:middle;background:${bg};font-size:${fontSize};padding:0;line-height:${cellSize};">${nr}</td>`;
+    };
 
-    levels.forEach(lvl => {
-        html += `<tr><td style="border:1px solid #000;background:#eee;padding:1px 2px;font-weight:bold;font-size:5pt;">${lvl.n}</td>`;
-        // COMP
-        lvl.V.forEach(nr => html += cell('V', nr));
-        for(let i=lvl.V.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
-        // COMM
-        lvl.K.forEach(nr => html += cell('K', nr));
-        for(let i=lvl.K.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
-        // SOC
-        lvl.S.forEach(nr => html += cell('SOZ', nr));
-        for(let i=lvl.S.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
-        // COG
-        lvl.C.forEach(nr => html += cell('KOG', nr));
-        for(let i=lvl.C.length;i<17;i++) html += `<td style="border:1px solid #000;width:9px;height:9px;"></td>`;
-        html += '</tr>';
+    const emptyCell = () => `<td style="width:${cellSize};height:${cellSize};border:1px solid #000;"></td>`;
+
+    // Find max items per row across all NIVEAUX
+    const maxPerRow = { V: 1, K: 2, S: 1, C: 2 };
+    Object.values(structure).forEach(level => {
+        Object.entries(level).forEach(([col, items]) => {
+            maxPerRow[col] = Math.max(maxPerRow[col], items.length);
+        });
     });
 
-    html += `</table><p style="font-size:5pt;text-align:center;margin:2px;">
-        <span style="background:#90EE90;padding:0 3px;">vert</span>=atteint <span style="background:#FFFF00;padding:0 3px;">jaune</span>=objectif</p>`;
+    // Build the grid - VERTICAL layout like original (items listed vertically per niveau)
+    let html = `<div style="display:flex;gap:20px;justify-content:center;">`;
+
+    // Grid 1: Colored status grid
+    html += `<table style="border-collapse:collapse;font-size:${fontSize};">`;
+    html += `<tr style="background:#f0f0f0;">
+        <td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:7pt;"></td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMP</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMM</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">SOC</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COG</td>
+    </tr>
+    <tr style="background:#f0f0f0;">
+        <td style="border:1px solid #000;padding:2px;"></td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">33</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">35</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">41</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">62</td>
+    </tr>`;
+
+    // Each NIVEAU
+    ['V', 'IV', 'III', 'II', 'I'].forEach(niveau => {
+        const lvl = structure[niveau];
+        const maxRows = Math.max(lvl.V.length, lvl.K.length, lvl.S.length, lvl.C.length);
+
+        for (let row = 0; row < maxRows; row++) {
+            html += `<tr>`;
+            if (row === 0) {
+                html += `<td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:6pt;text-align:center;vertical-align:middle;" rowspan="${maxRows}">NIVEAU ${niveau}</td>`;
+            }
+            // COMP
+            if (row < lvl.V.length) html += cell('V', lvl.V[row]);
+            else html += emptyCell();
+            // COMM
+            if (row < lvl.K.length) html += cell('K', lvl.K[row]);
+            else html += emptyCell();
+            // SOC
+            if (row < lvl.S.length) html += cell('SOZ', lvl.S[row]);
+            else html += emptyCell();
+            // COG
+            if (row < lvl.C.length) html += cell('KOG', lvl.C[row]);
+            else html += emptyCell();
+            html += `</tr>`;
+        }
+    });
+    html += `</table>`;
+
+    // Grid 2: Date grid (empty, same structure)
+    html += `<table style="border-collapse:collapse;font-size:${fontSize};">`;
+    html += `<tr style="background:#f0f0f0;">
+        <td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:7pt;"></td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMP</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMM</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">SOC</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COG</td>
+    </tr>
+    <tr style="background:#f0f0f0;">
+        <td style="border:1px solid #000;padding:2px;"></td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">33</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">35</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">41</td>
+        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">62</td>
+    </tr>`;
+
+    ['V', 'IV', 'III', 'II', 'I'].forEach(niveau => {
+        const lvl = structure[niveau];
+        const maxRows = Math.max(lvl.V.length, lvl.K.length, lvl.S.length, lvl.C.length);
+
+        for (let row = 0; row < maxRows; row++) {
+            html += `<tr>`;
+            if (row === 0) {
+                html += `<td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:6pt;text-align:center;vertical-align:middle;" rowspan="${maxRows}">NIVEAU ${niveau}</td>`;
+            }
+            // 4 empty columns for dates
+            if (row < lvl.V.length) html += cell('V', lvl.V[row], false);
+            else html += emptyCell();
+            if (row < lvl.K.length) html += cell('K', lvl.K[row], false);
+            else html += emptyCell();
+            if (row < lvl.S.length) html += cell('SOZ', lvl.S[row], false);
+            else html += emptyCell();
+            if (row < lvl.C.length) html += cell('KOG', lvl.C[row], false);
+            else html += emptyCell();
+            html += `</tr>`;
+        }
+    });
+
+    // Add Date row at bottom
+    html += `<tr><td colspan="5" style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">Date:</td></tr>`;
+    html += `</table>`;
+
+    html += `</div>`;
+
+    // Legend and copyright
+    html += `<p style="font-size:6pt;text-align:center;margin:5px 0 2px 0;">Légende: COMP-Comportement; COMM-Communication; SOC-Socialisation; COG-Cognition</p>`;
+    html += `<p style="font-size:6pt;text-align:center;margin:0;"><span style="background:#90EE90;padding:0 3px;">vert</span>-objectif atteint; <span style="background:#FFFF00;padding:0 3px;">jaune</span>-objectif potentiel</p>`;
+
     return html;
 }
 
@@ -1484,104 +1572,161 @@ function generatePEI() {
         lastErreicht[bereich] = sorted[0] || null;
     }
 
+    // Extract name parts
+    const nameParts = (stammdaten.schueler_name || '').split(' ');
+    const nom = nameParts[0] || '';
+    const prenom = nameParts.slice(1).join(' ') || '';
+
     let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PEI - ${stammdaten.schueler_name}</title>
     <style>
-        @page { size: A4; margin: 1.5cm; }
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; font-size: 10pt; }
-        .title-page { text-align: center; padding-top: 200px; page-break-after: always; }
-        .title-page h1 { font-size: 35pt; color: #2F5496; border: none; margin-bottom: 50px; }
-        h1 { font-size: 14pt; text-decoration: underline; text-align: center; margin: 20px 0; }
-        h2 { font-size: 11pt; margin-top: 15px; margin-bottom: 5px; }
-        h3 { font-size: 10pt; margin: 10px 0 5px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 5px 0; }
-        th, td { border: 1px solid #000; padding: 4px 6px; text-align: left; vertical-align: top; font-size: 9pt; }
-        th { background: #f0f0f0; }
-        .info-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
-        .info-box { border: 1px solid #000; padding: 5px 10px; min-width: 200px; flex: 1; }
-        .info-label { font-weight: bold; font-size: 9pt; }
-        .section { margin: 15px 0; }
-        .checkbox { font-family: 'Segoe UI Symbol', sans-serif; }
+        @page { size: A4; margin: 2cm 1.5cm; }
+        body { font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.3; margin: 0; padding: 15px; }
+        .title-page { text-align: center; padding-top: 250px; page-break-after: always; }
+        .title-page h1 { font-size: 32pt; color: #2F5496; border: none; margin: 0; font-weight: bold; }
+        h1.section-title { font-size: 12pt; text-decoration: underline; text-align: center; margin: 15px 0 10px 0; }
+        h2 { font-size: 10pt; font-weight: bold; margin: 12px 0 6px 0; }
+        h3 { font-size: 9pt; font-weight: bold; margin: 8px 0 4px 0; }
+        table { border-collapse: collapse; margin: 4px 0; }
+        td, th { border: 1px solid #000; padding: 3px 5px; vertical-align: top; font-size: 9pt; }
+        th { background: #f0f0f0; font-weight: bold; }
+        .info-row { display: table; width: 100%; margin: 4px 0; }
+        .info-cell { display: table-cell; border: 1px solid #000; padding: 4px 8px; vertical-align: top; }
+        .info-label { font-size: 8pt; color: #666; display: block; margin-bottom: 2px; }
+        .info-value { font-size: 10pt; min-height: 14px; }
+        .two-col { width: 50%; }
+        .full-width { width: 100%; }
         .page-break { page-break-before: always; }
-        .competence-table td { height: 60px; }
-        .legend { font-size: 8pt; text-align: center; margin-top: 5px; }
-        .signature-table td { border: none; padding: 20px; vertical-align: bottom; }
+        .checkbox { font-family: 'Segoe UI Symbol', sans-serif; }
+        .small-text { font-size: 8pt; }
+        .italic { font-style: italic; }
+        .comp-table { width: 100%; margin: 6px 0; }
+        .comp-table td, .comp-table th { font-size: 8pt; padding: 4px; }
+        .signature-row { margin-top: 30px; }
+        .no-border td { border: none; }
     </style></head><body>
 
-    <!-- Titelseite -->
+    <!-- TITELSEITE - Page 1 -->
     <div class="title-page">
         <h1>Plan éducatif individualisé (PEI)</h1>
     </div>
 
-    <!-- Seite 2: Informations générales -->
-    <h1>Informations générales sur l'élève</h1>
+    <!-- PAGE 2: Informations générales sur l'élève -->
+    <h1 class="section-title">Informations générales sur l'élève</h1>
 
-    <div class="info-grid">
-        <div class="info-box"><span class="info-label">Nom</span><br>${stammdaten.schueler_name?.split(' ')[0] || ''}</div>
-        <div class="info-box"><span class="info-label">Prénom</span><br>${stammdaten.schueler_name?.split(' ').slice(1).join(' ') || ''}</div>
+    <div class="info-row">
+        <div class="info-cell two-col"><span class="info-label">Nom</span><div class="info-value">${nom}</div></div>
+        <div class="info-cell two-col"><span class="info-label">Prénom</span><div class="info-value">${prenom}</div></div>
     </div>
-    <div class="info-grid">
-        <div class="info-box"><span class="info-label">Matricule</span><br>${stammdaten.matricule}</div>
-        <div class="info-box"><span class="info-label">Année scolaire actuelle</span><br>${stammdaten.schuljahr}</div>
+    <div class="info-row">
+        <div class="info-cell two-col"><span class="info-label">Matricule</span><div class="info-value">${stammdaten.matricule || ''}</div></div>
+        <div class="info-cell two-col"><span class="info-label">Année scolaire actuelle</span><div class="info-value">${stammdaten.schuljahr || ''}</div></div>
     </div>
-    <div class="info-grid">
-        <div class="info-box"><span class="info-label">Adresse de l'élève</span><br>&nbsp;</div>
+    <div class="info-row">
+        <div class="info-cell full-width"><span class="info-label">Adresse de l'élève</span><div class="info-value">&nbsp;</div></div>
     </div>
-    <div class="info-grid">
-        <div class="info-box"><span class="info-label">Première langue parlée</span><br>&nbsp;</div>
+    <div class="info-row">
+        <div class="info-cell full-width"><span class="info-label">Première langue parlée</span><div class="info-value">&nbsp;</div></div>
     </div>
 
     <h2>Coordonnées des représentants légaux</h2>
-    <table>
-        <tr><td style="width:50%"><strong>Nom et prénom :</strong> ${stammdaten.eltern1_name}</td>
-            <td><strong>Nom et prénom :</strong></td></tr>
-        <tr><td><strong>Numéro de téléphone :</strong> ${stammdaten.eltern1_tel}</td>
-            <td><strong>Numéro de téléphone :</strong></td></tr>
-        <tr><td><strong>Adresse mail :</strong> ${stammdaten.eltern1_email}</td>
-            <td><strong>Adresse mail :</strong></td></tr>
+    <table style="width:100%;">
+        <tr>
+            <td style="width:50%;"><span class="info-label">Nom et prénom :</span><br>${stammdaten.eltern1_name || ''}</td>
+            <td style="width:50%;"><span class="info-label">Nom et prénom :</span><br>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><span class="info-label">Numéro de téléphone :</span><br>${stammdaten.eltern1_tel || ''}</td>
+            <td><span class="info-label">Numéro de téléphone :</span><br>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><span class="info-label">Adresse mail :</span><br>${stammdaten.eltern1_email || ''}</td>
+            <td><span class="info-label">Adresse mail :</span><br>&nbsp;</td>
+        </tr>
+    </table>
+
+    <h2>Parcours scolaire</h2>
+    <table style="width:100%;">
+        <tr><td style="width:30%;"><strong>Progression scolaire</strong></td><td>........................</td></tr>
+        <tr><td><strong>Remarques éventuelles sur la progression scolaire</strong></td><td style="height:40px;">&nbsp;</td></tr>
     </table>
 
     <h2>Scolarisation actuelle</h2>
-    <table>
-        <tr><td><strong>Titulaire/Régent(e) de classe</strong></td><td></td>
-            <td><strong>Cycle/Classe</strong></td><td>${stammdaten.klasse}</td></tr>
-        <tr><td><strong>École / Lycée</strong></td><td>${stammdaten.foerderort}</td>
-            <td><strong>Bâtiment</strong></td><td></td></tr>
+    <table style="width:100%;">
+        <tr>
+            <td style="width:25%;"><strong>Titulaire/Régent(e) de classe</strong></td>
+            <td style="width:25%;">&nbsp;</td>
+            <td style="width:25%;"><strong>Cycle/Classe</strong></td>
+            <td style="width:25%;">${stammdaten.klasse || ''}</td>
+        </tr>
+        <tr>
+            <td><strong>École / Lycée</strong></td>
+            <td>${stammdaten.foerderort || ''}</td>
+            <td><strong>Bâtiment</strong></td>
+            <td>&nbsp;</td>
+        </tr>
     </table>
 
     <h2>Scolarisation spécialisée</h2>
-    <table>
-        <tr><td><strong>Personne de référence</strong></td><td>${stammdaten.einschaetzende}</td></tr>
-        <tr><td><strong>Lieu de scolarisation</strong></td><td></td></tr>
+    <table style="width:100%;">
+        <tr><td style="width:30%;"><strong>Personne de référence</strong></td><td>${stammdaten.einschaetzende || ''}</td></tr>
+        <tr><td><strong>Lieu de scolarisation</strong></td><td>&nbsp;</td></tr>
     </table>
 
-    <!-- Seite 3: ELDiB Raster -->
+    <h2>Intervention(s) par acteur(s) du dispositif des prises en charge des élèves à besoins éducatifs spécifiques</h2>
+    <table style="width:100%;">
+        <tr><th>Intervenant</th><th>Fonction</th><th>Type d'intervention</th></tr>
+        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    </table>
+
+    <p style="margin:8px 0;"><span class="checkbox">☐</span> <strong>Aménagement(s) raisonnable(s)</strong></p>
+
+    <!-- PAGE 3: ELDiB Grid -->
     <div class="page-break"></div>
     <h2>Besoins éducatifs spécifiques</h2>
     <h3>Développement ELDiB</h3>
     ${generateELDiBGrid()}
+    <p class="small-text" style="text-align:center;margin-top:3px;">© Distributed in the English original by the Developmental Therapy Institute, Inc., 1992. Translated, printed and distributed by permission of the Developmental Therapy Institute, Inc.<br>© deutsche Ausgabe: Institut für Entwicklungstherapie/Entwicklungspädagogik e.V. (ETEP Europe) und Marita Bergsson, Düsseldorf, 2007</p>
 
     <h2>Description du/des besoin(s) éducatif(s) spécifique(s)</h2>
-    <p style="font-size:8pt;font-style:italic;">(Selon ELDiB, points à développer)</p>
-    <table>
-        <tr><td><strong>CDSE :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Lycée :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Parents :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Élève :</strong></td><td style="height:40px;"></td></tr>
+    <p class="small-text italic">(Selon ELDiB, points à développer, hei kann een d'anzugehende Themen an déi verschidde Perspektive rabréngen)</p>
+    <table style="width:100%;">
+        <tr><td style="width:15%;"><strong>CDSE :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Lycée :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Parents :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Élève :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+    </table>
+
+    <table style="width:100%;margin-top:10px;">
+        <tr><td colspan="2" class="small-text italic">(hei kann een och Progrèsen/Fortschritter festhalen)</td></tr>
+        <tr><td style="width:15%;"><strong>CDSE :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Lycée :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Parents :</strong></td><td style="height:30px;">&nbsp;</td></tr>
+        <tr><td><strong>Élève :</strong></td><td style="height:30px;">&nbsp;</td></tr>
     </table>
 
     <h2>Points forts, ressources et centres d'intérêts</h2>
-    <table>
-        <tr><td><strong>CDSE :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Lycée :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Parents :</strong></td><td style="height:40px;"></td></tr>
-        <tr><td><strong>Élève :</strong></td><td style="height:40px;"></td></tr>
+    <table style="width:100%;">
+        <tr><td style="height:60px;">&nbsp;</td></tr>
     </table>
 
-    <!-- Seite 4: Compétences transversales -->
+    <!-- PAGE 4: Objectifs de l'intervention et méthodes -->
     <div class="page-break"></div>
-    <h1>Objectifs de l'intervention et méthodes</h1>
+    <h1 class="section-title">Objectifs de l'intervention et méthodes</h1>
 
-    <h2><span class="checkbox">☐</span> Compétences transversales</h2>`;
+    <p style="margin:8px 0;"><span class="checkbox">☐</span> <strong>Compétences dans les domaines de développement et d'apprentissage</strong></p>
+    <table class="comp-table" style="width:100%;">
+        <tr>
+            <th style="width:15%;">Domaine(s)</th>
+            <th style="width:20%;">Compétences actuelles</th>
+            <th style="width:25%;">Objectif(s)</th>
+            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
+            <th style="width:20%;">Observation(s) et adaptation(s)</th>
+        </tr>
+        <tr><td style="height:50px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    </table>
+
+    <p style="margin:12px 0 8px 0;"><span class="checkbox">☐</span> <strong>Compétences transversales</strong></p>`;
 
     const bereichNames = {
         verhalten: 'Comportement',
@@ -1595,60 +1740,92 @@ function generatePEI() {
         const goals = ziele[bereich];
         const lastItem = lastErreicht[bereich];
         const compActuelle = lastItem ? `${lastItem.code}: ${lastItem.keyword}` : '';
+        const grobzielExample = bereich === 'verhalten' ? '<br><span class="small-text italic">(Grobziel p.ex COMP-10: attendre)</span>' : '';
 
         html += `
-        <table class="competence-table">
-            <tr>
-                <th style="width:15%;">Domaine(s)</th>
-                <th style="width:15%;">Compétences actuelles</th>
-                <th style="width:25%;">Objectif(s)<br><span style="font-weight:normal;font-size:8pt;">(Feinziel, formulation pour l'élève)</span></th>
-                <th style="width:22%;">Méthode(s) et stratégie(s)<br><span style="font-weight:normal;font-size:8pt;">(mise en œuvre CDSE)</span></th>
-                <th style="width:23%;">Observation(s) et adaptation(s)<br><span style="font-weight:normal;font-size:8pt;">(mise en œuvre titulaire)</span></th>
-            </tr>
-            <tr>
-                <td><strong>${bereichName}</strong>${goals.length > 0 ? '<br><span style="font-size:8pt;">(' + goals.map(g => g.code).join(', ') + ')</span>' : ''}</td>
-                <td>${compActuelle}</td>
-                <td>${goals.map(g => '"' + g.zieltext + '"').join('<br><br>') || ''}</td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>`;
+    <table class="comp-table" style="width:100%;">
+        <tr>
+            <th style="width:15%;">Domaine(s)</th>
+            <th style="width:20%;">Compétences actuelles</th>
+            <th style="width:25%;">Objectif(s)<br><span class="small-text">(Feinziel, formulation de l'objectif pour l'élève)</span></th>
+            <th style="width:20%;">Méthode(s) et stratégie(s)<br><span class="small-text">(mise en œuvre CDSE)</span></th>
+            <th style="width:20%;">Observation(s) et adaptation(s)<br><span class="small-text">(mise en œuvre titulaire/autres intervenants)</span></th>
+        </tr>
+        <tr>
+            <td><strong>${bereichName}</strong>${grobzielExample}${goals.length > 0 ? '<br><span class="small-text">(' + goals.map(g => g.code).join(', ') + ')</span>' : ''}</td>
+            <td>${compActuelle}</td>
+            <td>${goals.map(g => '"' + g.zieltext + '"').join('<br><br>') || '&nbsp;'}</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>`;
     }
 
     html += `
-    <h2><span class="checkbox">☐</span> Compétences essentielles à la vie autonome et la participation maximale</h2>
-    <table class="competence-table">
+    <p style="margin:12px 0 8px 0;"><span class="checkbox">☐</span> <strong>Compétences essentielles à la vie autonome et la participation maximale</strong></p>
+    <table class="comp-table" style="width:100%;">
         <tr>
             <th style="width:15%;">Domaine(s)</th>
-            <th style="width:15%;">Compétences actuelles</th>
+            <th style="width:20%;">Compétences actuelles</th>
             <th style="width:25%;">Objectif(s)</th>
-            <th style="width:22%;">Méthode(s) et stratégie(s)</th>
-            <th style="width:23%;">Observation(s) et adaptation(s)</th>
+            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
+            <th style="width:20%;">Observation(s) et adaptation(s)</th>
         </tr>
         <tr>
-            <td>Culture et loisirs</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><strong>Autres</strong><br><span class="small-text italic">(objectifs indépendants des objectifs de l'ELDiB)</span></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <table class="comp-table" style="width:100%;">
+        <tr>
+            <th style="width:15%;">Domaine(s)</th>
+            <th style="width:20%;">Compétences actuelles</th>
+            <th style="width:25%;">Objectif(s)</th>
+            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
+            <th style="width:20%;">Observation(s) et adaptation(s)</th>
+        </tr>
+        <tr>
+            <td><strong>Culture et loisirs</strong></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
         </tr>
     </table>
 
-    <!-- Signatures -->
+    <!-- PAGE 5: Signatures -->
     <div class="page-break"></div>
-    <h1>Signatures</h1>
-    <table>
-        <tr><th>Nom</th><th>Signature(s)</th></tr>
-        <tr><td style="height:30px;"></td><td></td></tr>
-        <tr><td style="height:30px;"></td><td></td></tr>
-        <tr><td style="height:30px;"></td><td></td></tr>
-        <tr><td style="height:30px;"></td><td></td></tr>
+    <h1 class="section-title">Signatures</h1>
+
+    <p class="small-text italic">Liste de présence (Tabelle no folgendem Muster ausfëllen an Zeilen, déi herno zevill sinn eraushuelen)</p>
+    <table style="width:100%;">
+        <tr><th style="width:50%;">Nom</th><th style="width:50%;">Signature(s)</th></tr>
+        <tr><td style="height:25px;">MUSTERMANN Jacques</td><td>&nbsp;</td></tr>
+        <tr><td style="height:25px;">HIRSCH Madeleine; Erziehungsberechtigte</td><td>&nbsp;</td></tr>
+        <tr><td style="height:25px;">SCHILTZ Micheline; LP</td><td>&nbsp;</td></tr>
+        <tr><td style="height:25px;">LAMBERTY Georgius; ESEB-2</td><td>&nbsp;</td></tr>
+        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td></tr>
     </table>
 
-    <table class="signature-table" style="margin-top:50px;">
+    <p class="small-text" style="color:red;margin:15px 0;">(! All Commentaire a roud eraushuelen w.e.g!)</p>
+
+    <table class="no-border" style="width:100%;margin-top:40px;">
         <tr>
-            <td style="width:50%;">Pour le,<br><br><br>_______________________<br>Signature</td>
-            <td>Certifié le,<br><br><br>_______________________<br>Signature</td>
+            <td style="width:50%;padding:20px;vertical-align:bottom;">
+                <strong>Pour le,</strong><br><br><br>
+                Nom Prénom<br><br>
+                _____________________________<br>
+                Signature
+            </td>
+            <td style="width:50%;padding:20px;vertical-align:bottom;">
+                <strong>Certifié le,</strong><br><br><br>
+                &nbsp;<br><br>
+                _____________________________<br>
+                Signature
+            </td>
         </tr>
     </table>
 
