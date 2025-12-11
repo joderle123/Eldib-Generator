@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELDiB Generator</title>
+    <!-- docx.js für echte Word-Dokumente -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -1412,143 +1415,28 @@ function getStammdaten() {
     };
 }
 
-// Generate ELDiB Grid - horizontal layout to fit on 1 page
-function generateELDiBGrid() {
-    const colorMap = {};
-    for (const [code, sel] of Object.entries(state.selections)) {
-        if (sel.status === 'erreicht') colorMap[code] = '#90EE90';
-        else if (sel.status === 'ziel') colorMap[code] = '#FFFF00';
-    }
-    const getColor = (prefix, nr) => colorMap[`${prefix}-${nr}`] || '#fff';
+// ELDiB structure - exact item distribution per NIVEAU
+const ELDIB_STRUCTURE = {
+    V:   { V: [33], K: [35,34], S: [41], C: [62,61] },
+    IV:  { V: [32,31,30,29,28], K: [33,32,31,30,29], S: [40,39,38,37,36,35], C: [60,59,58,57,56] },
+    III: { V: [27,26,25,24,23,22,21], K: [28,27,26,25,24,23,22], S: [34,33,32,31,30,29,28,27,26], C: [55,54,53,52,51,50,49,48] },
+    II:  { V: [20,19,18,17,16,15,14], K: [21,20,19,18,17,16,15,14], S: [25,24,23,22,21,20,19], C: [47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31] },
+    I:   { V: [13,12,11,10,9,8,7,6,5,4,3,2,1], K: [13,12,11,10,9,8,7,6,5,4,3,2,1], S: [18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1], C: [30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
+};
 
-    // ELDiB structure per NIVEAU - exact original layout (vertical columns, numbers top to bottom)
-    const structure = {
-        V:    { V: [33], K: [35,34], S: [41], C: [62,61] },
-        IV:   { V: [32,31,30,29,28], K: [33,32,31,30,29], S: [40,39,38,37,36,35], C: [60,59,58,57,56] },
-        III:  { V: [27,26,25,24,23,22,21], K: [28,27,26,25,24,23,22], S: [34,33,32,31,30,29,28,27,26], C: [55,54,53,52,51,50,49,48] },
-        II:   { V: [20,19,18,17,16,15,14], K: [21,20,19,18,17,16,15,14], S: [25,24,23,22,21,20,19], C: [47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31] },
-        I:    { V: [13,12,11,10,9,8,7,6,5,4,3,2,1], K: [13,12,11,10,9,8,7,6,5,4,3,2,1], S: [18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1], C: [30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1] }
-    };
-
-    // Cell dimensions for compact layout
-    const cellSize = '11px';
-    const fontSize = '6pt';
-
-    const cell = (prefix, nr, withColor = true) => {
-        const bg = withColor ? getColor(prefix, nr) : '#fff';
-        return `<td style="width:${cellSize};height:${cellSize};border:1px solid #000;text-align:center;vertical-align:middle;background:${bg};font-size:${fontSize};padding:0;line-height:${cellSize};">${nr}</td>`;
-    };
-
-    const emptyCell = () => `<td style="width:${cellSize};height:${cellSize};border:1px solid #000;"></td>`;
-
-    // Find max items per row across all NIVEAUX
-    const maxPerRow = { V: 1, K: 2, S: 1, C: 2 };
-    Object.values(structure).forEach(level => {
-        Object.entries(level).forEach(([col, items]) => {
-            maxPerRow[col] = Math.max(maxPerRow[col], items.length);
-        });
-    });
-
-    // Build the grid - VERTICAL layout like original (items listed vertically per niveau)
-    let html = `<div style="display:flex;gap:20px;justify-content:center;">`;
-
-    // Grid 1: Colored status grid
-    html += `<table style="border-collapse:collapse;font-size:${fontSize};">`;
-    html += `<tr style="background:#f0f0f0;">
-        <td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:7pt;"></td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMP</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMM</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">SOC</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COG</td>
-    </tr>
-    <tr style="background:#f0f0f0;">
-        <td style="border:1px solid #000;padding:2px;"></td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">33</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">35</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">41</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">62</td>
-    </tr>`;
-
-    // Each NIVEAU
-    ['V', 'IV', 'III', 'II', 'I'].forEach(niveau => {
-        const lvl = structure[niveau];
-        const maxRows = Math.max(lvl.V.length, lvl.K.length, lvl.S.length, lvl.C.length);
-
-        for (let row = 0; row < maxRows; row++) {
-            html += `<tr>`;
-            if (row === 0) {
-                html += `<td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:6pt;text-align:center;vertical-align:middle;" rowspan="${maxRows}">NIVEAU ${niveau}</td>`;
-            }
-            // COMP
-            if (row < lvl.V.length) html += cell('V', lvl.V[row]);
-            else html += emptyCell();
-            // COMM
-            if (row < lvl.K.length) html += cell('K', lvl.K[row]);
-            else html += emptyCell();
-            // SOC
-            if (row < lvl.S.length) html += cell('SOZ', lvl.S[row]);
-            else html += emptyCell();
-            // COG
-            if (row < lvl.C.length) html += cell('KOG', lvl.C[row]);
-            else html += emptyCell();
-            html += `</tr>`;
-        }
-    });
-    html += `</table>`;
-
-    // Grid 2: Date grid (empty, same structure)
-    html += `<table style="border-collapse:collapse;font-size:${fontSize};">`;
-    html += `<tr style="background:#f0f0f0;">
-        <td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:7pt;"></td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMP</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COMM</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">SOC</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-weight:bold;font-size:7pt;">COG</td>
-    </tr>
-    <tr style="background:#f0f0f0;">
-        <td style="border:1px solid #000;padding:2px;"></td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">33</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">35</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">41</td>
-        <td style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">62</td>
-    </tr>`;
-
-    ['V', 'IV', 'III', 'II', 'I'].forEach(niveau => {
-        const lvl = structure[niveau];
-        const maxRows = Math.max(lvl.V.length, lvl.K.length, lvl.S.length, lvl.C.length);
-
-        for (let row = 0; row < maxRows; row++) {
-            html += `<tr>`;
-            if (row === 0) {
-                html += `<td style="border:1px solid #000;padding:2px;font-weight:bold;font-size:6pt;text-align:center;vertical-align:middle;" rowspan="${maxRows}">NIVEAU ${niveau}</td>`;
-            }
-            // 4 empty columns for dates
-            if (row < lvl.V.length) html += cell('V', lvl.V[row], false);
-            else html += emptyCell();
-            if (row < lvl.K.length) html += cell('K', lvl.K[row], false);
-            else html += emptyCell();
-            if (row < lvl.S.length) html += cell('SOZ', lvl.S[row], false);
-            else html += emptyCell();
-            if (row < lvl.C.length) html += cell('KOG', lvl.C[row], false);
-            else html += emptyCell();
-            html += `</tr>`;
-        }
-    });
-
-    // Add Date row at bottom
-    html += `<tr><td colspan="5" style="border:1px solid #000;padding:2px;text-align:center;font-size:6pt;">Date:</td></tr>`;
-    html += `</table>`;
-
-    html += `</div>`;
-
-    // Legend and copyright
-    html += `<p style="font-size:6pt;text-align:center;margin:5px 0 2px 0;">Légende: COMP-Comportement; COMM-Communication; SOC-Socialisation; COG-Cognition</p>`;
-    html += `<p style="font-size:6pt;text-align:center;margin:0;"><span style="background:#90EE90;padding:0 3px;">vert</span>-objectif atteint; <span style="background:#FFFF00;padding:0 3px;">jaune</span>-objectif potentiel</p>`;
-
-    return html;
+// Helper to get color for item
+function getItemColor(prefix, nr) {
+    const code = `${prefix}-${nr}`;
+    const sel = state.selections[code];
+    if (sel?.status === 'erreicht') return '90EE90'; // green
+    if (sel?.status === 'ziel') return 'FFFF00'; // yellow
+    return 'FFFFFF'; // white
 }
 
-function generatePEI() {
+// Generate PEI using docx.js for proper Word document
+async function generatePEI() {
+    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, VerticalAlign, PageBreak, ShadingType, HeadingLevel } = docx;
+
     const stammdaten = getStammdaten();
     const ziele = { verhalten: [], kommunikation: [], sozialisation: [], kognition: [] };
     const erreichte = { verhalten: [], kommunikation: [], sozialisation: [], kognition: [] };
@@ -1565,273 +1453,383 @@ function generatePEI() {
         }
     }
 
-    // Get last erreicht per bereich for "Compétences actuelles"
     const lastErreicht = {};
     for (const [bereich, items] of Object.entries(erreichte)) {
         const sorted = items.sort((a,b) => parseInt(b.code.split('-').pop()) - parseInt(a.code.split('-').pop()));
         lastErreicht[bereich] = sorted[0] || null;
     }
 
-    // Extract name parts
     const nameParts = (stammdaten.schueler_name || '').split(' ');
     const nom = nameParts[0] || '';
     const prenom = nameParts.slice(1).join(' ') || '';
 
-    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PEI - ${stammdaten.schueler_name}</title>
-    <style>
-        @page { size: A4; margin: 2cm 1.5cm; }
-        body { font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.3; margin: 0; padding: 15px; }
-        .title-page { text-align: center; padding-top: 250px; page-break-after: always; }
-        .title-page h1 { font-size: 32pt; color: #2F5496; border: none; margin: 0; font-weight: bold; }
-        h1.section-title { font-size: 12pt; text-decoration: underline; text-align: center; margin: 15px 0 10px 0; }
-        h2 { font-size: 10pt; font-weight: bold; margin: 12px 0 6px 0; }
-        h3 { font-size: 9pt; font-weight: bold; margin: 8px 0 4px 0; }
-        table { border-collapse: collapse; margin: 4px 0; }
-        td, th { border: 1px solid #000; padding: 3px 5px; vertical-align: top; font-size: 9pt; }
-        th { background: #f0f0f0; font-weight: bold; }
-        .info-row { display: table; width: 100%; margin: 4px 0; }
-        .info-cell { display: table-cell; border: 1px solid #000; padding: 4px 8px; vertical-align: top; }
-        .info-label { font-size: 8pt; color: #666; display: block; margin-bottom: 2px; }
-        .info-value { font-size: 10pt; min-height: 14px; }
-        .two-col { width: 50%; }
-        .full-width { width: 100%; }
-        .page-break { page-break-before: always; }
-        .checkbox { font-family: 'Segoe UI Symbol', sans-serif; }
-        .small-text { font-size: 8pt; }
-        .italic { font-style: italic; }
-        .comp-table { width: 100%; margin: 6px 0; }
-        .comp-table td, .comp-table th { font-size: 8pt; padding: 4px; }
-        .signature-row { margin-top: 30px; }
-        .no-border td { border: none; }
-    </style></head><body>
+    // Helper functions
+    const cellBorders = { top: {style: BorderStyle.SINGLE, size: 1}, bottom: {style: BorderStyle.SINGLE, size: 1}, left: {style: BorderStyle.SINGLE, size: 1}, right: {style: BorderStyle.SINGLE, size: 1} };
+    const noBorders = { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE} };
 
-    <!-- TITELSEITE - Page 1 -->
-    <div class="title-page">
-        <h1>Plan éducatif individualisé (PEI)</h1>
-    </div>
+    // Create ELDiB Grid Table
+    function createELDiBGrid(withColors = true) {
+        const rows = [];
+        const cellWidth = 280; // ~0.5cm in twips
+        const niveauWidth = 600;
 
-    <!-- PAGE 2: Informations générales sur l'élève -->
-    <h1 class="section-title">Informations générales sur l'élève</h1>
+        // Header row 1: COMP, COMM, SOC, COG
+        rows.push(new TableRow({
+            children: [
+                new TableCell({ children: [new Paragraph('')], width: {size: niveauWidth, type: WidthType.DXA}, borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMP', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMM', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'SOC', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COG', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+            ]
+        }));
 
-    <div class="info-row">
-        <div class="info-cell two-col"><span class="info-label">Nom</span><div class="info-value">${nom}</div></div>
-        <div class="info-cell two-col"><span class="info-label">Prénom</span><div class="info-value">${prenom}</div></div>
-    </div>
-    <div class="info-row">
-        <div class="info-cell two-col"><span class="info-label">Matricule</span><div class="info-value">${stammdaten.matricule || ''}</div></div>
-        <div class="info-cell two-col"><span class="info-label">Année scolaire actuelle</span><div class="info-value">${stammdaten.schuljahr || ''}</div></div>
-    </div>
-    <div class="info-row">
-        <div class="info-cell full-width"><span class="info-label">Adresse de l'élève</span><div class="info-value">&nbsp;</div></div>
-    </div>
-    <div class="info-row">
-        <div class="info-cell full-width"><span class="info-label">Première langue parlée</span><div class="info-value">&nbsp;</div></div>
-    </div>
+        // Header row 2: totals
+        rows.push(new TableRow({
+            children: [
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '33', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '35', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '41', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '62', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+            ]
+        }));
 
-    <h2>Coordonnées des représentants légaux</h2>
-    <table style="width:100%;">
-        <tr>
-            <td style="width:50%;"><span class="info-label">Nom et prénom :</span><br>${stammdaten.eltern1_name || ''}</td>
-            <td style="width:50%;"><span class="info-label">Nom et prénom :</span><br>&nbsp;</td>
-        </tr>
-        <tr>
-            <td><span class="info-label">Numéro de téléphone :</span><br>${stammdaten.eltern1_tel || ''}</td>
-            <td><span class="info-label">Numéro de téléphone :</span><br>&nbsp;</td>
-        </tr>
-        <tr>
-            <td><span class="info-label">Adresse mail :</span><br>${stammdaten.eltern1_email || ''}</td>
-            <td><span class="info-label">Adresse mail :</span><br>&nbsp;</td>
-        </tr>
-    </table>
+        // For each NIVEAU
+        ['V', 'IV', 'III', 'II', 'I'].forEach(niveau => {
+            const lvl = ELDIB_STRUCTURE[niveau];
+            const maxRows = Math.max(lvl.V.length, lvl.K.length, lvl.S.length, lvl.C.length);
 
-    <h2>Parcours scolaire</h2>
-    <table style="width:100%;">
-        <tr><td style="width:30%;"><strong>Progression scolaire</strong></td><td>........................</td></tr>
-        <tr><td><strong>Remarques éventuelles sur la progression scolaire</strong></td><td style="height:40px;">&nbsp;</td></tr>
-    </table>
+            for (let row = 0; row < maxRows; row++) {
+                const cells = [];
 
-    <h2>Scolarisation actuelle</h2>
-    <table style="width:100%;">
-        <tr>
-            <td style="width:25%;"><strong>Titulaire/Régent(e) de classe</strong></td>
-            <td style="width:25%;">&nbsp;</td>
-            <td style="width:25%;"><strong>Cycle/Classe</strong></td>
-            <td style="width:25%;">${stammdaten.klasse || ''}</td>
-        </tr>
-        <tr>
-            <td><strong>École / Lycée</strong></td>
-            <td>${stammdaten.foerderort || ''}</td>
-            <td><strong>Bâtiment</strong></td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+                // NIVEAU label (only first row, merged)
+                if (row === 0) {
+                    cells.push(new TableCell({
+                        children: [new Paragraph({children: [new TextRun({text: `NIVEAU ${niveau}`, bold: true, size: 12})]})],
+                        rowSpan: maxRows,
+                        borders: cellBorders,
+                        verticalAlign: VerticalAlign.CENTER
+                    }));
+                }
 
-    <h2>Scolarisation spécialisée</h2>
-    <table style="width:100%;">
-        <tr><td style="width:30%;"><strong>Personne de référence</strong></td><td>${stammdaten.einschaetzende || ''}</td></tr>
-        <tr><td><strong>Lieu de scolarisation</strong></td><td>&nbsp;</td></tr>
-    </table>
+                // COMP cell
+                const vItem = lvl.V[row];
+                const vColor = vItem && withColors ? getItemColor('V', vItem) : 'FFFFFF';
+                cells.push(new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: vItem ? String(vItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    borders: cellBorders,
+                    shading: vItem ? {fill: vColor, type: ShadingType.CLEAR} : undefined,
+                    verticalAlign: VerticalAlign.CENTER
+                }));
 
-    <h2>Intervention(s) par acteur(s) du dispositif des prises en charge des élèves à besoins éducatifs spécifiques</h2>
-    <table style="width:100%;">
-        <tr><th>Intervenant</th><th>Fonction</th><th>Type d'intervention</th></tr>
-        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-    </table>
+                // COMM cell
+                const kItem = lvl.K[row];
+                const kColor = kItem && withColors ? getItemColor('K', kItem) : 'FFFFFF';
+                cells.push(new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: kItem ? String(kItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    borders: cellBorders,
+                    shading: kItem ? {fill: kColor, type: ShadingType.CLEAR} : undefined,
+                    verticalAlign: VerticalAlign.CENTER
+                }));
 
-    <p style="margin:8px 0;"><span class="checkbox">☐</span> <strong>Aménagement(s) raisonnable(s)</strong></p>
+                // SOC cell
+                const sItem = lvl.S[row];
+                const sColor = sItem && withColors ? getItemColor('SOZ', sItem) : 'FFFFFF';
+                cells.push(new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: sItem ? String(sItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    borders: cellBorders,
+                    shading: sItem ? {fill: sColor, type: ShadingType.CLEAR} : undefined,
+                    verticalAlign: VerticalAlign.CENTER
+                }));
 
-    <!-- PAGE 3: ELDiB Grid -->
-    <div class="page-break"></div>
-    <h2>Besoins éducatifs spécifiques</h2>
-    <h3>Développement ELDiB</h3>
-    ${generateELDiBGrid()}
-    <p class="small-text" style="text-align:center;margin-top:3px;">© Distributed in the English original by the Developmental Therapy Institute, Inc., 1992. Translated, printed and distributed by permission of the Developmental Therapy Institute, Inc.<br>© deutsche Ausgabe: Institut für Entwicklungstherapie/Entwicklungspädagogik e.V. (ETEP Europe) und Marita Bergsson, Düsseldorf, 2007</p>
+                // COG cell
+                const cItem = lvl.C[row];
+                const cColor = cItem && withColors ? getItemColor('KOG', cItem) : 'FFFFFF';
+                cells.push(new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: cItem ? String(cItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    borders: cellBorders,
+                    shading: cItem ? {fill: cColor, type: ShadingType.CLEAR} : undefined,
+                    verticalAlign: VerticalAlign.CENTER
+                }));
 
-    <h2>Description du/des besoin(s) éducatif(s) spécifique(s)</h2>
-    <p class="small-text italic">(Selon ELDiB, points à développer, hei kann een d'anzugehende Themen an déi verschidde Perspektive rabréngen)</p>
-    <table style="width:100%;">
-        <tr><td style="width:15%;"><strong>CDSE :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Lycée :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Parents :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Élève :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-    </table>
+                rows.push(new TableRow({ children: cells }));
+            }
+        });
 
-    <table style="width:100%;margin-top:10px;">
-        <tr><td colspan="2" class="small-text italic">(hei kann een och Progrèsen/Fortschritter festhalen)</td></tr>
-        <tr><td style="width:15%;"><strong>CDSE :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Lycée :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Parents :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-        <tr><td><strong>Élève :</strong></td><td style="height:30px;">&nbsp;</td></tr>
-    </table>
+        // Date row for second grid
+        if (!withColors) {
+            rows.push(new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Date:', size: 12})]})], columnSpan: 5, borders: cellBorders })
+                ]
+            }));
+        }
 
-    <h2>Points forts, ressources et centres d'intérêts</h2>
-    <table style="width:100%;">
-        <tr><td style="height:60px;">&nbsp;</td></tr>
-    </table>
+        return new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } });
+    }
 
-    <!-- PAGE 4: Objectifs de l'intervention et méthodes -->
-    <div class="page-break"></div>
-    <h1 class="section-title">Objectifs de l'intervention et méthodes</h1>
+    // Build document sections
+    const children = [];
 
-    <p style="margin:8px 0;"><span class="checkbox">☐</span> <strong>Compétences dans les domaines de développement et d'apprentissage</strong></p>
-    <table class="comp-table" style="width:100%;">
-        <tr>
-            <th style="width:15%;">Domaine(s)</th>
-            <th style="width:20%;">Compétences actuelles</th>
-            <th style="width:25%;">Objectif(s)</th>
-            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
-            <th style="width:20%;">Observation(s) et adaptation(s)</th>
-        </tr>
-        <tr><td style="height:50px;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-    </table>
+    // Page 1: Title
+    children.push(
+        new Paragraph({ spacing: { before: 4000 } }),
+        new Paragraph({
+            children: [new TextRun({ text: 'Plan éducatif individualisé (PEI)', bold: true, size: 64, color: '2F5496' })],
+            alignment: AlignmentType.CENTER
+        }),
+        new Paragraph({ children: [new PageBreak()] })
+    );
 
-    <p style="margin:12px 0 8px 0;"><span class="checkbox">☐</span> <strong>Compétences transversales</strong></p>`;
+    // Page 2: Informations générales
+    children.push(
+        new Paragraph({ children: [new TextRun({ text: 'Informations générales sur l\'élève', bold: true, size: 24, underline: {} })], alignment: AlignmentType.CENTER, spacing: { after: 200 } })
+    );
 
-    const bereichNames = {
-        verhalten: 'Comportement',
-        kommunikation: 'Communication',
-        sozialisation: 'Socialisation',
-        kognition: 'Cognition'
-    };
+    // Info boxes
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Nom', size: 16, color: '666666'})]}), new Paragraph({children: [new TextRun({text: nom, size: 20})]})], borders: cellBorders, width: {size: 50, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Prénom', size: 16, color: '666666'})]}), new Paragraph({children: [new TextRun({text: prenom, size: 20})]})], borders: cellBorders, width: {size: 50, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Matricule', size: 16, color: '666666'})]}), new Paragraph({children: [new TextRun({text: stammdaten.matricule || '', size: 20})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Année scolaire actuelle', size: 16, color: '666666'})]}), new Paragraph({children: [new TextRun({text: stammdaten.schuljahr || '', size: 20})]})], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
 
-    // Generate table for each Bereich with goals
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Adresse de l\'élève', size: 16, color: '666666'})]}), new Paragraph('')], borders: cellBorders })] }),
+            new TableRow({ children: [new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Première langue parlée', size: 16, color: '666666'})]}), new Paragraph('')], borders: cellBorders })] })
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Coordonnées des représentants légaux
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Coordonnées des représentants légaux', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Nom et prénom :', size: 16})]}), new Paragraph({children: [new TextRun({text: stammdaten.eltern1_name || '', size: 18})]})], borders: cellBorders, width: {size: 50, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Nom et prénom :', size: 16})]}), new Paragraph('')], borders: cellBorders, width: {size: 50, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Numéro de téléphone :', size: 16})]}), new Paragraph({children: [new TextRun({text: stammdaten.eltern1_tel || '', size: 18})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Numéro de téléphone :', size: 16})]}), new Paragraph('')], borders: cellBorders })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Adresse mail :', size: 16})]}), new Paragraph({children: [new TextRun({text: stammdaten.eltern1_email || '', size: 18})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Adresse mail :', size: 16})]}), new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Parcours scolaire
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Parcours scolaire', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Progression scolaire', bold: true, size: 18})]})], borders: cellBorders, width: {size: 30, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph('........................')], borders: cellBorders, width: {size: 70, type: WidthType.PERCENTAGE} })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Remarques éventuelles', bold: true, size: 18})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Scolarisation actuelle
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Scolarisation actuelle', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Titulaire/Régent(e)', bold: true, size: 16})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Cycle/Classe', bold: true, size: 16})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: stammdaten.klasse || '', size: 18})]})], borders: cellBorders })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'École / Lycée', bold: true, size: 16})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: stammdaten.foerderort || '', size: 18})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Bâtiment', bold: true, size: 16})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Scolarisation spécialisée
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Scolarisation spécialisée', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Personne de référence', bold: true, size: 16})]})], borders: cellBorders, width: {size: 30, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: stammdaten.einschaetzende || '', size: 18})]})], borders: cellBorders })
+            ]}),
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Lieu de scolarisation', bold: true, size: 16})]})], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+            ]})
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Page break before ELDiB
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+
+    // ELDiB Section
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Besoins éducatifs spécifiques', bold: true, size: 20 })], spacing: { after: 100 } }));
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Développement ELDiB', bold: true, size: 18 })], spacing: { after: 100 } }));
+
+    // Two ELDiB grids side by side using a wrapper table
+    children.push(new Table({
+        rows: [new TableRow({
+            children: [
+                new TableCell({ children: [createELDiBGrid(true)], borders: noBorders, width: {size: 48, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph('')], borders: noBorders, width: {size: 4, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [createELDiBGrid(false)], borders: noBorders, width: {size: 48, type: WidthType.PERCENTAGE} })
+            ]
+        })],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Copyright
+    children.push(new Paragraph({
+        children: [new TextRun({ text: '© Distributed in the English original by the Developmental Therapy Institute, Inc., 1992.', size: 12, italics: true })],
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 100 }
+    }));
+    children.push(new Paragraph({
+        children: [new TextRun({ text: 'Légende: COMP-Comportement; COMM-Communication; SOC-Socialisation; COG-Cognition', size: 14 })],
+        alignment: AlignmentType.CENTER
+    }));
+    children.push(new Paragraph({
+        children: [
+            new TextRun({ text: 'vert', size: 14, shading: {fill: '90EE90'} }),
+            new TextRun({ text: '-objectif atteint; ', size: 14 }),
+            new TextRun({ text: 'jaune', size: 14, shading: {fill: 'FFFF00'} }),
+            new TextRun({ text: '-objectif potentiel', size: 14 })
+        ],
+        alignment: AlignmentType.CENTER
+    }));
+
+    // Description section
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Description du/des besoin(s) éducatif(s) spécifique(s)', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: ['CDSE :', 'Lycée :', 'Parents :', 'Élève :'].map(label => new TableRow({
+            children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: label, bold: true, size: 16})]})], borders: cellBorders, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders, width: {size: 85, type: WidthType.PERCENTAGE} })
+            ]
+        })),
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Points forts
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Points forts, ressources et centres d\'intérêts', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
+    children.push(new Table({
+        rows: [new TableRow({ children: [new TableCell({ children: [new Paragraph('')], borders: cellBorders })] })],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    // Page break for Objectifs
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+
+    // Objectifs de l'intervention
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Objectifs de l\'intervention et méthodes', bold: true, size: 24, underline: {} })], alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
+
+    children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences transversales', bold: true, size: 20 })], spacing: { before: 100, after: 100 } }));
+
+    // Competence tables for each Bereich
+    const bereichNames = { verhalten: 'Comportement', kommunikation: 'Communication', sozialisation: 'Socialisation', kognition: 'Cognition' };
+
     for (const [bereich, bereichName] of Object.entries(bereichNames)) {
         const goals = ziele[bereich];
         const lastItem = lastErreicht[bereich];
         const compActuelle = lastItem ? `${lastItem.code}: ${lastItem.keyword}` : '';
-        const grobzielExample = bereich === 'verhalten' ? '<br><span class="small-text italic">(Grobziel p.ex COMP-10: attendre)</span>' : '';
 
-        html += `
-    <table class="comp-table" style="width:100%;">
-        <tr>
-            <th style="width:15%;">Domaine(s)</th>
-            <th style="width:20%;">Compétences actuelles</th>
-            <th style="width:25%;">Objectif(s)<br><span class="small-text">(Feinziel, formulation de l'objectif pour l'élève)</span></th>
-            <th style="width:20%;">Méthode(s) et stratégie(s)<br><span class="small-text">(mise en œuvre CDSE)</span></th>
-            <th style="width:20%;">Observation(s) et adaptation(s)<br><span class="small-text">(mise en œuvre titulaire/autres intervenants)</span></th>
-        </tr>
-        <tr>
-            <td><strong>${bereichName}</strong>${grobzielExample}${goals.length > 0 ? '<br><span class="small-text">(' + goals.map(g => g.code).join(', ') + ')</span>' : ''}</td>
-            <td>${compActuelle}</td>
-            <td>${goals.map(g => '"' + g.zieltext + '"').join('<br><br>') || '&nbsp;'}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>`;
+        children.push(new Table({
+            rows: [
+                new TableRow({ children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s)', bold: true, size: 16})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
+                ]}),
+                new TableRow({ children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: bereichName, bold: true, size: 16})]}), ...(goals.length > 0 ? [new Paragraph({children: [new TextRun({text: `(${goals.map(g => g.code).join(', ')})`, size: 14})]})] : [])], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: compActuelle, size: 16})]})], borders: cellBorders }),
+                    new TableCell({ children: goals.map(g => new Paragraph({children: [new TextRun({text: `"${g.zieltext}"`, size: 16})]})), borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]})
+            ],
+            width: { size: 100, type: WidthType.PERCENTAGE }
+        }));
+        children.push(new Paragraph({ spacing: { after: 100 } }));
     }
 
-    html += `
-    <p style="margin:12px 0 8px 0;"><span class="checkbox">☐</span> <strong>Compétences essentielles à la vie autonome et la participation maximale</strong></p>
-    <table class="comp-table" style="width:100%;">
-        <tr>
-            <th style="width:15%;">Domaine(s)</th>
-            <th style="width:20%;">Compétences actuelles</th>
-            <th style="width:25%;">Objectif(s)</th>
-            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
-            <th style="width:20%;">Observation(s) et adaptation(s)</th>
-        </tr>
-        <tr>
-            <td><strong>Autres</strong><br><span class="small-text italic">(objectifs indépendants des objectifs de l'ELDiB)</span></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
-    <table class="comp-table" style="width:100%;">
-        <tr>
-            <th style="width:15%;">Domaine(s)</th>
-            <th style="width:20%;">Compétences actuelles</th>
-            <th style="width:25%;">Objectif(s)</th>
-            <th style="width:20%;">Méthode(s) et stratégie(s)</th>
-            <th style="width:20%;">Observation(s) et adaptation(s)</th>
-        </tr>
-        <tr>
-            <td><strong>Culture et loisirs</strong></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+    // Page break for Signatures
+    children.push(new Paragraph({ children: [new PageBreak()] }));
 
-    <!-- PAGE 5: Signatures -->
-    <div class="page-break"></div>
-    <h1 class="section-title">Signatures</h1>
+    // Signatures
+    children.push(new Paragraph({ children: [new TextRun({ text: 'Signatures', bold: true, size: 24, underline: {} })], alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
 
-    <p class="small-text italic">Liste de présence (Tabelle no folgendem Muster ausfëllen an Zeilen, déi herno zevill sinn eraushuelen)</p>
-    <table style="width:100%;">
-        <tr><th style="width:50%;">Nom</th><th style="width:50%;">Signature(s)</th></tr>
-        <tr><td style="height:25px;">MUSTERMANN Jacques</td><td>&nbsp;</td></tr>
-        <tr><td style="height:25px;">HIRSCH Madeleine; Erziehungsberechtigte</td><td>&nbsp;</td></tr>
-        <tr><td style="height:25px;">SCHILTZ Micheline; LP</td><td>&nbsp;</td></tr>
-        <tr><td style="height:25px;">LAMBERTY Georgius; ESEB-2</td><td>&nbsp;</td></tr>
-        <tr><td style="height:25px;">&nbsp;</td><td>&nbsp;</td></tr>
-    </table>
+    children.push(new Table({
+        rows: [
+            new TableRow({ children: [
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Nom', bold: true, size: 18})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 50, type: WidthType.PERCENTAGE} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Signature(s)', bold: true, size: 18})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 50, type: WidthType.PERCENTAGE} })
+            ]}),
+            ...['', '', '', ''].map(() => new TableRow({ children: [
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+            ]}))
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
 
-    <p class="small-text" style="color:red;margin:15px 0;">(! All Commentaire a roud eraushuelen w.e.g!)</p>
+    // Certification signatures
+    children.push(new Paragraph({ spacing: { before: 400 } }));
+    children.push(new Table({
+        rows: [new TableRow({ children: [
+            new TableCell({ children: [
+                new Paragraph({children: [new TextRun({text: 'Pour le,', bold: true, size: 18})]}),
+                new Paragraph(''),
+                new Paragraph({children: [new TextRun({text: 'Nom Prénom', size: 18})]}),
+                new Paragraph(''),
+                new Paragraph({children: [new TextRun({text: '_____________________________', size: 18})]}),
+                new Paragraph({children: [new TextRun({text: 'Signature', size: 16})]})
+            ], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} }),
+            new TableCell({ children: [
+                new Paragraph({children: [new TextRun({text: 'Certifié le,', bold: true, size: 18})]}),
+                new Paragraph(''),
+                new Paragraph(''),
+                new Paragraph(''),
+                new Paragraph({children: [new TextRun({text: '_____________________________', size: 18})]}),
+                new Paragraph({children: [new TextRun({text: 'Signature', size: 16})]})
+            ], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} })
+        ]})],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
 
-    <table class="no-border" style="width:100%;margin-top:40px;">
-        <tr>
-            <td style="width:50%;padding:20px;vertical-align:bottom;">
-                <strong>Pour le,</strong><br><br><br>
-                Nom Prénom<br><br>
-                _____________________________<br>
-                Signature
-            </td>
-            <td style="width:50%;padding:20px;vertical-align:bottom;">
-                <strong>Certifié le,</strong><br><br><br>
-                &nbsp;<br><br>
-                _____________________________<br>
-                Signature
-            </td>
-        </tr>
-    </table>
+    // Create document
+    const doc = new Document({
+        sections: [{ children }]
+    });
 
-    </body></html>`;
-
-    downloadAsWord(html, `PEI_${stammdaten.schueler_name || 'export'}.doc`);
+    // Generate and download
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `PEI_${stammdaten.schueler_name || 'export'}.docx`);
 }
 
 function generateComplement() {
