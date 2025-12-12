@@ -1629,31 +1629,33 @@ async function generatePEI() {
     const cellBorders = { top: {style: BorderStyle.SINGLE, size: 1}, bottom: {style: BorderStyle.SINGLE, size: 1}, left: {style: BorderStyle.SINGLE, size: 1}, right: {style: BorderStyle.SINGLE, size: 1} };
     const noBorders = { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE} };
 
-    // Create ELDiB Grid Table
+    // Create ELDiB Grid Table - compact to fit on 1 page
     function createELDiBGrid(withColors = true) {
         const rows = [];
-        const cellWidth = 280; // ~0.5cm in twips
-        const niveauWidth = 600;
+        const cellWidth = 220; // smaller cells to fit on 1 page
+        const niveauWidth = 500;
 
         // Header row 1: COMP, COMM, SOC, COG
         rows.push(new TableRow({
+            height: {value: 200, rule: 'exact'},
             children: [
                 new TableCell({ children: [new Paragraph('')], width: {size: niveauWidth, type: WidthType.DXA}, borders: cellBorders }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMP', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMM', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'SOC', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COG', bold: true, size: 14})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMP', bold: true, size: 12})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COMM', bold: true, size: 12})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'SOC', bold: true, size: 12})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'COG', bold: true, size: 12})]})], width: {size: cellWidth, type: WidthType.DXA}, borders: cellBorders, shading: {fill: 'D9D9D9'} }),
             ]
         }));
 
         // Header row 2: totals
         rows.push(new TableRow({
+            height: {value: 200, rule: 'exact'},
             children: [
                 new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '33', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '35', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '41', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '62', size: 12})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '33', size: 10})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '35', size: 10})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '41', size: 10})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
+                new TableCell({ children: [new Paragraph({children: [new TextRun({text: '62', size: 10})]})], borders: cellBorders, shading: {fill: 'D9D9D9'} }),
             ]
         }));
 
@@ -1668,7 +1670,7 @@ async function generatePEI() {
                 // NIVEAU label (only first row, merged)
                 if (row === 0) {
                     cells.push(new TableCell({
-                        children: [new Paragraph({children: [new TextRun({text: `NIVEAU ${niveau}`, bold: true, size: 12})]})],
+                        children: [new Paragraph({children: [new TextRun({text: `NIV ${niveau}`, bold: true, size: 10})], spacing: {before: 0, after: 0}})],
                         rowSpan: maxRows,
                         borders: cellBorders,
                         verticalAlign: VerticalAlign.CENTER
@@ -1679,7 +1681,7 @@ async function generatePEI() {
                 const vItem = lvl.V[row];
                 const vColor = vItem && withColors ? getItemColor('V', vItem) : 'FFFFFF';
                 cells.push(new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: vItem ? String(vItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    children: [new Paragraph({children: [new TextRun({text: vItem ? String(vItem) : '', size: 10})], alignment: AlignmentType.CENTER, spacing: {before: 0, after: 0}})],
                     borders: cellBorders,
                     shading: vItem ? {fill: vColor, type: ShadingType.CLEAR} : undefined,
                     verticalAlign: VerticalAlign.CENTER
@@ -1689,7 +1691,7 @@ async function generatePEI() {
                 const kItem = lvl.K[row];
                 const kColor = kItem && withColors ? getItemColor('K', kItem) : 'FFFFFF';
                 cells.push(new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: kItem ? String(kItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    children: [new Paragraph({children: [new TextRun({text: kItem ? String(kItem) : '', size: 10})], alignment: AlignmentType.CENTER, spacing: {before: 0, after: 0}})],
                     borders: cellBorders,
                     shading: kItem ? {fill: kColor, type: ShadingType.CLEAR} : undefined,
                     verticalAlign: VerticalAlign.CENTER
@@ -1699,7 +1701,7 @@ async function generatePEI() {
                 const sItem = lvl.S[row];
                 const sColor = sItem && withColors ? getItemColor('SOZ', sItem) : 'FFFFFF';
                 cells.push(new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: sItem ? String(sItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    children: [new Paragraph({children: [new TextRun({text: sItem ? String(sItem) : '', size: 10})], alignment: AlignmentType.CENTER, spacing: {before: 0, after: 0}})],
                     borders: cellBorders,
                     shading: sItem ? {fill: sColor, type: ShadingType.CLEAR} : undefined,
                     verticalAlign: VerticalAlign.CENTER
@@ -1709,13 +1711,13 @@ async function generatePEI() {
                 const cItem = lvl.C[row];
                 const cColor = cItem && withColors ? getItemColor('KOG', cItem) : 'FFFFFF';
                 cells.push(new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: cItem ? String(cItem) : '', size: 12})], alignment: AlignmentType.CENTER})],
+                    children: [new Paragraph({children: [new TextRun({text: cItem ? String(cItem) : '', size: 10})], alignment: AlignmentType.CENTER, spacing: {before: 0, after: 0}})],
                     borders: cellBorders,
                     shading: cItem ? {fill: cColor, type: ShadingType.CLEAR} : undefined,
                     verticalAlign: VerticalAlign.CENTER
                 }));
 
-                rows.push(new TableRow({ children: cells }));
+                rows.push(new TableRow({ height: {value: 180, rule: 'exact'}, children: cells }));
             }
         });
 
@@ -2170,7 +2172,9 @@ async function generatePEI() {
     saveAs(blob, `PEI_${stammdaten.schueler_name || 'export'}.docx`);
 }
 
-function generateComplement() {
+async function generateComplement() {
+    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, VerticalAlign } = docx;
+
     const stammdaten = getStammdaten();
     const erreichte = { verhalten: [], kommunikation: [], sozialisation: [], kognition: [] };
 
@@ -2188,48 +2192,243 @@ function generateComplement() {
         erreichte[bereich] = erreichte[bereich].sort((a, b) => b.nr - a.nr).slice(0, 4);
     }
 
-    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Complément - ${stammdaten.schueler_name}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; font-size: 11pt; }
-        h1 { font-size: 14pt; }
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-        th { background: #e0e0e0; }
-        .header-info { margin-bottom: 15px; }
-    </style></head><body>
-    <div class="header-info">
-        <strong>Nom Prénom:</strong> ${stammdaten.schueler_name} &nbsp;&nbsp;&nbsp; <strong>Matricule:</strong> ${stammdaten.matricule}<br>
-        <strong>Lycée / Classe:</strong> ${stammdaten.foerderort} / ${stammdaten.klasse}
-    </div>
+    const nameParts = (stammdaten.schueler_name || '').split(' ');
+    const nom = nameParts[0] || '';
+    const prenom = nameParts.slice(1).join(' ') || '';
 
-    <h1>Complément au bulletin ${stammdaten.schuljahr} - Trimestre ${stammdaten.trimester}</h1>
+    const cellBorders = { top: {style: BorderStyle.SINGLE, size: 1}, bottom: {style: BorderStyle.SINGLE, size: 1}, left: {style: BorderStyle.SINGLE, size: 1}, right: {style: BorderStyle.SINGLE, size: 1} };
+    const noBorders = { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE} };
 
-    <h2>☑ Compétences transversales</h2>
-    <p><em>Evaluation commentée des performances et des progrès</em></p>
+    // Helper: Create a row with domain and evaluation
+    function createDomainRow(domainName, items, isEldib = false) {
+        const itemsText = items && items.length > 0
+            ? items.map(i => `${i.code}: ${i.keyword}`).join('\n')
+            : '';
 
-    <table>
-        <tr><th>Domaines de compétences (selon ELDiB)</th><th>Derniers items atteints</th></tr>
-        <tr><td><strong>Comportement</strong></td><td>${erreichte.verhalten.map(i => `${i.code}: ${i.keyword}`).join('<br>') || '-'}</td></tr>
-        <tr><td><strong>Communication</strong></td><td>${erreichte.kommunikation.map(i => `${i.code}: ${i.keyword}`).join('<br>') || '-'}</td></tr>
-        <tr><td><strong>Socialisation</strong></td><td>${erreichte.sozialisation.map(i => `${i.code}: ${i.keyword}`).join('<br>') || '-'}</td></tr>
-        <tr><td><strong>Cognition</strong></td><td>${erreichte.kognition.map(i => `${i.code}: ${i.keyword}`).join('<br>') || '-'}</td></tr>
-    </table>
+        return new TableRow({
+            children: [
+                new TableCell({
+                    children: [
+                        new Paragraph({children: [new TextRun({text: domainName, bold: true, size: 22})]}),
+                        isEldib ? new Paragraph({children: [new TextRun({text: '(selon ELDiB)', italics: true, size: 18})]}) : new Paragraph('')
+                    ],
+                    borders: cellBorders,
+                    width: {size: 35, type: WidthType.PERCENTAGE}
+                }),
+                new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: itemsText, size: 22})]})],
+                    borders: cellBorders,
+                    width: {size: 65, type: WidthType.PERCENTAGE}
+                })
+            ]
+        });
+    }
 
-    <h2>☐ Autres domaines de compétences</h2>
-    <table>
-        <tr><td>☐ Démarches mentales</td><td></td></tr>
-        <tr><td>☐ Manières d'apprendre</td><td></td></tr>
-        <tr><td>☐ Attitudes relationnelles</td><td></td></tr>
-        <tr><td>☐ Attitudes affectives</td><td></td></tr>
-    </table>
+    // Helper: Create checkbox row
+    function createCheckboxRow(label) {
+        return new TableRow({
+            children: [
+                new TableCell({
+                    children: [new Paragraph({children: [new TextRun({text: `☐ ${label}`, size: 22})]})],
+                    borders: cellBorders,
+                    width: {size: 35, type: WidthType.PERCENTAGE}
+                }),
+                new TableCell({
+                    children: [new Paragraph('')],
+                    borders: cellBorders,
+                    width: {size: 65, type: WidthType.PERCENTAGE}
+                })
+            ]
+        });
+    }
 
-    <h2>☐ Compétences essentielles à la vie autonome</h2>
-    <table><tr><td>☐ Culture et loisirs</td><td></td></tr></table>
+    const children = [];
 
-    <p style="margin-top:40px;"><strong>Date:</strong> _____________ &nbsp;&nbsp;&nbsp; <strong>Signature:</strong> _____________</p>
-    </body></html>`;
+    // Header: NOM and Prénom
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'NOM', bold: true, size: 22})]})], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Prénom', bold: true, size: 22})]})], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: nom, size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: prenom, size: 22})]})], borders: cellBorders })
+                ]
+            })
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
 
-    downloadAsWord(html, `Complement_${stammdaten.schueler_name || 'export'}_Trim${stammdaten.trimester}.doc`);
+    children.push(new Paragraph({ spacing: { after: 100 } }));
+
+    // Matricule and Lycée/Classe
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Matricule', bold: true, size: 22})]})], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Lycée / Classe', bold: true, size: 22})]})], borders: noBorders, width: {size: 50, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: stammdaten.matricule || '', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: `${stammdaten.foerderort || ''} / ${stammdaten.klasse || ''}`, size: 22})]})], borders: cellBorders })
+                ]
+            })
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    children.push(new Paragraph({ spacing: { after: 300 } }));
+
+    // Section: Compétences transversales
+    children.push(new Paragraph({
+        children: [new TextRun({ text: '☑ Compétences transversales', bold: true, size: 24 })],
+        spacing: { after: 100 }
+    }));
+
+    // Table header for transversales
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaines de compétences à évaluer', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 35, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Evaluation commentée des performances et des progrès', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 65, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            createDomainRow('Comportement', erreichte.verhalten, true),
+            createDomainRow('Communication', erreichte.kommunikation, true),
+            createDomainRow('Socialisation', erreichte.sozialisation, true),
+            createDomainRow('Cognition', erreichte.kognition, true)
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    children.push(new Paragraph({ spacing: { after: 300 } }));
+
+    // Section: Autres domaines
+    children.push(new Paragraph({
+        children: [new TextRun({ text: '☐ Autres domaines de compétences:', bold: true, size: 24 })],
+        spacing: { after: 100 }
+    }));
+
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaines de compétences à évaluer', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 35, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Evaluation commentée des performances et des progrès', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 65, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            createCheckboxRow('Démarches mentales'),
+            createCheckboxRow('Manières d\'apprendre'),
+            createCheckboxRow('Attitudes relationnelles'),
+            createCheckboxRow('Attitudes affectives')
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    children.push(new Paragraph({ spacing: { after: 300 } }));
+
+    // Section: Compétences essentielles
+    children.push(new Paragraph({
+        children: [new TextRun({ text: '☐ Compétences essentielles à la vie autonome et la participation maximale', bold: true, size: 24 })],
+        spacing: { after: 100 }
+    }));
+
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaines de compétences à évaluer', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 35, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Evaluation commentée des performances et des progrès', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 65, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            createCheckboxRow('Culture et loisirs')
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    children.push(new Paragraph({ spacing: { after: 300 } }));
+
+    // Section: Cours facultatifs
+    children.push(new Paragraph({
+        children: [new TextRun({ text: '☐ Cours facultatifs, activités périscolaires et stages auxquels a participé l\'élève', bold: true, size: 24 })],
+        spacing: { after: 100 }
+    }));
+
+    children.push(new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Intitulé(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 35, type: WidthType.PERCENTAGE} }),
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Implication, participation, compétences, tâches, etc. de l\'élève', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'D9D9D9'}, width: {size: 65, type: WidthType.PERCENTAGE} })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Skills', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Fit for life', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Projet', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Stage en entreprise', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Atelier ...', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            }),
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Option ...', size: 22})]})], borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+                ]
+            })
+        ],
+        width: { size: 100, type: WidthType.PERCENTAGE }
+    }));
+
+    const doc = new Document({
+        styles: {
+            default: {
+                document: {
+                    run: { font: "Calibri", size: 22 },
+                    paragraph: { spacing: { line: 276 } }
+                }
+            }
+        },
+        sections: [{
+            properties: {
+                page: { margin: { top: 720, bottom: 720, left: 720, right: 720 } }
+            },
+            children
+        }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `Complement_${stammdaten.schueler_name || 'export'}_Trim${stammdaten.trimester}.docx`);
 }
 
 function downloadAsWord(html, filename) {
