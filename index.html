@@ -1433,6 +1433,168 @@ function getItemColor(prefix, nr) {
     return 'FFFFFF'; // white
 }
 
+// Pädagogische Interventionen Datenbank
+const INTERVENTIONEN = {
+    // VERHALTEN (V-1 bis V-33)
+    'V-1': ['Blickkontakt beim Ansprechen herstellen', 'Sanfte Berührung zur Kontaktaufnahme', 'Visuelle Reize in Augenhöhe präsentieren'],
+    'V-2': ['Reize langsam und deutlich präsentieren', 'Aufmerksamkeit durch Geräusche lenken', 'Zeigen und Benennen kombinieren'],
+    'V-3': ['Kurze, klare Anweisungen geben', 'Interessante Materialien nutzen', 'Aufmerksamkeitsspanne schrittweise erhöhen'],
+    'V-4': ['Hand-über-Hand Führung anbieten', 'Einfache Handlungsaufforderungen geben', 'Erfolg unmittelbar loben'],
+    'V-5': ['Komplexere Spielangebote machen', 'Verbale Impulse mit Gesten unterstützen', 'Modellieren der erwarteten Handlung'],
+    'V-6': ['Routinen für Selbsthilfe etablieren', 'Visuelle Ablaufpläne nutzen', 'Teilschritte einzeln üben'],
+    'V-7': ['Materialien strukturiert anbieten', 'Ordnungssysteme einführen', 'Aufräumrituale etablieren'],
+    'V-8': ['Tagesstruktur visualisieren', 'Übergänge ankündigen', 'Rituale wiederholen und festigen'],
+    'V-9': ['Regeln für Materialnutzung erklären', 'Sachgerechten Umgang modellieren', 'Konsequent auf Regeleinhaltung achten'],
+    'V-10': ['Wartezeiten kurz halten und steigern', 'Wartespiele einführen', 'Erfolg beim Warten sofort loben'],
+    'V-11': ['Bewegungspausen einplanen', 'Sitzposition optimieren', 'Fidget-Tools erlauben'],
+    'V-12': ['Bewegungsangebote attraktiv gestalten', 'Mitmachen ohne Zwang ermöglichen', 'Schrittweise Beteiligung erhöhen'],
+    'V-13': ['Zur Teilnahme einladen', 'Einfache Beteiligungsmöglichkeiten schaffen', 'Initiative positiv verstärken'],
+    'V-14': ['Lob dosiert und authentisch geben', 'Auf Überreaktion vorbereiten', 'Erfolge angemessen feiern'],
+    'V-15': ['Aufgaben in Teilschritte gliedern', 'Zeitrahmen visualisieren', 'Fertigstellung konkret würdigen'],
+    'V-16': ['Regeln gemeinsam erarbeiten', 'Regeln visualisieren und aushängen', 'Regelmäßig an Regeln erinnern'],
+    'V-17': ['Regelverständnis durch Beispiele fördern', 'Konsequenzen erklären', 'Sinn von Regeln besprechen'],
+    'V-18': ['Handlungsalternativen gemeinsam sammeln', 'Rollenspiele nutzen', 'Wahlmöglichkeiten anbieten'],
+    'V-19': ['Gruppenentscheidungen üben', 'Akzeptanz von Mehrheitsentscheidungen thematisieren', 'Führungsrollen rotieren'],
+    'V-20': ['Selbstkontrolltechniken üben', 'Ablenkungsstrategien anbieten', 'Nicht-Reaktion positiv verstärken'],
+    'V-21': ['Übergänge strukturieren', 'Entspannungstechniken einführen', 'Selbstregulation unterstützen'],
+    'V-22': ['Fortschritte dokumentieren und zeigen', 'Vergleich mit früherem Verhalten', 'Reflexionsgespräche führen'],
+    'V-23': ['Ziele gemeinsam setzen', 'Fortschritte visualisieren', 'Selbstbewertung ermöglichen'],
+    'V-24': ['Perspektivübernahme üben', 'Konsequenzen für andere besprechen', 'Empathie fördern'],
+    'V-25': ['Konstruktive Kritik modellieren', 'Feedbackregeln einführen', 'Kritikfähigkeit üben'],
+    'V-26': ['Problemlösestrategien vermitteln', 'Konfliktsituationen nachbesprechen', 'Mediationsangebote machen'],
+    'V-27': ['Selbstständigkeit fördern', 'Verantwortung übertragen', 'Erfolgserlebnisse ermöglichen'],
+    'V-28': ['Ressourcen des Kindes nutzen', 'Stärken in Gruppen einbringen', 'Peer-Learning fördern'],
+    'V-29': ['Gruppenarbeit strukturieren', 'Rollen verteilen', 'Kooperationsspiele einsetzen'],
+    'V-30': ['Führungskompetenzen entwickeln', 'Verantwortung für andere übernehmen', 'Vorbildfunktion stärken'],
+    'V-31': ['Komplexe Projekte begleiten', 'Selbstorganisation unterstützen', 'Reflexion einplanen'],
+    'V-32': ['Mentoring-Aufgaben vergeben', 'Soziale Verantwortung übertragen', 'Engagement würdigen'],
+    'V-33': ['Selbstständige Problemlösung fördern', 'Beratende Rolle einnehmen', 'Transfer auf neue Situationen üben'],
+
+    // KOMMUNIKATION (K-1 bis K-35)
+    'K-1': ['Blickkontakt herstellen und halten', 'Aufmerksamkeit durch Stimme gewinnen', 'Interesse an Kommunikation wecken'],
+    'K-2': ['Auf Kommunikationsversuche reagieren', 'Vokalisationen ermutigen', 'Turn-Taking üben'],
+    'K-3': ['Gesten modellieren', 'Körpersprache beobachten', 'Nonverbale Kommunikation verstärken'],
+    'K-4': ['Einfache Anweisungen geben', 'Verständnis überprüfen', 'Wiederholungen anbieten'],
+    'K-5': ['Wortschatz erweitern', 'Begriffe im Kontext einführen', 'Benennungsspiele spielen'],
+    'K-6': ['Aussprache modellieren', 'Korrektives Feedback geben', 'Artikulationsübungen einbauen'],
+    'K-7': ['Satzstrukturen modellieren', 'Sätze erweitern', 'Grammatik spielerisch üben'],
+    'K-8': ['Zum Sprechen ermutigen', 'Sprechanlässe schaffen', 'Redezeit geben'],
+    'K-9': ['Komplexere Anweisungen üben', 'Schrittfolgen verbal begleiten', 'Verstehen überprüfen'],
+    'K-10': ['Erzählanlässe schaffen', 'W-Fragen stellen', 'Nachfragen ermutigen'],
+    'K-11': ['Gefühle benennen', 'Emotionsvokabular erweitern', 'Gefühlskarten nutzen'],
+    'K-12': ['Bedürfnisse verbal ausdrücken üben', 'Ich-Botschaften modellieren', 'Bitten formulieren'],
+    'K-13': ['Gruppengesprache führen', 'Gesprächsregeln einführen', 'Aktives Zuhören üben'],
+    'K-14': ['Informationsaustausch üben', 'Berichte anfertigen', 'Sachlich kommunizieren'],
+    'K-15': ['Fragen stellen ermutigen', 'Fragekategorien einführen', 'Neugier fördern'],
+    'K-16': ['Erklärungen einfordern', 'Begründungen üben', 'Argumentation fördern'],
+    'K-17': ['Gesprächsführung üben', 'Themen vertiefen', 'Dialog-Struktur vermitteln'],
+    'K-18': ['Perspektiven austauschen', 'Andere Meinungen anhören', 'Diskussionen moderieren'],
+    'K-19': ['Abstrakte Begriffe einführen', 'Symbolverständnis fördern', 'Metaphern erklären'],
+    'K-20': ['Schriftsprache einführen', 'Lesen und Schreiben verbinden', 'Textverständnis fördern'],
+    'K-21': ['Komplexe Texte bearbeiten', 'Zusammenfassungen üben', 'Schlussfolgerungen ziehen'],
+    'K-22': ['Präsentationen üben', 'Vor Gruppe sprechen', 'Feedback geben und nehmen'],
+    'K-23': ['Überzeugend argumentieren', 'Rhetorik üben', 'Standpunkte vertreten'],
+    'K-24': ['Verhandeln üben', 'Kompromisse finden', 'Diplomatisch kommunizieren'],
+    'K-25': ['Komplexe Sachverhalte erklären', 'Fachsprache einführen', 'Präzise formulieren'],
+    'K-26': ['Kreatives Schreiben fördern', 'Textsorten kennenlernen', 'Schreibprozess begleiten'],
+    'K-27': ['Medienkompetenzen entwickeln', 'Digitale Kommunikation üben', 'Netiquette vermitteln'],
+    'K-28': ['Fremdsprachliche Elemente einführen', 'Interkulturelle Kommunikation', 'Mehrsprachigkeit wertschätzen'],
+    'K-29': ['Kommunikationsstrategien reflektieren', 'Missverständnisse klären', 'Metakommunikation üben'],
+    'K-30': ['Komplexe Diskussionen führen', 'Debatten strukturieren', 'Sachlich bleiben'],
+    'K-31': ['Kommunikative Führung übernehmen', 'Moderation üben', 'Gruppenprozesse leiten'],
+    'K-32': ['Kommunikation in Konflikten', 'Deeskalation üben', 'Vermittlerrolle einnehmen'],
+    'K-33': ['Öffentliches Sprechen üben', 'Lampenfieber bewältigen', 'Souverän auftreten'],
+    'K-34': ['Expertenwissen kommunizieren', 'Komplexes vereinfachen', 'Zielgruppengerecht sprechen'],
+    'K-35': ['Kommunikative Vorbildfunktion', 'Andere anleiten', 'Kommunikationskultur prägen'],
+
+    // SOZIALISATION (SOZ-1 bis SOZ-41)
+    'SOZ-1': ['Präsenz des Erwachsenen zeigen', 'Nähe anbieten', 'Sicherheit vermitteln'],
+    'SOZ-2': ['Auf Bedürfnisse reagieren', 'Verlässlichkeit zeigen', 'Bindung aufbauen'],
+    'SOZ-3': ['Positive Interaktionen initiieren', 'Spielangebote machen', 'Gemeinsame Aktivitäten'],
+    'SOZ-4': ['Körperkontakt ermöglichen', 'Trost spenden', 'Emotionale Sicherheit geben'],
+    'SOZ-5': ['Kontakt zu Peers ermöglichen', 'Parallelspiel fördern', 'Nähe zu anderen Kindern'],
+    'SOZ-6': ['Gemeinsames Spiel anregen', 'Spielpartner vermitteln', 'Kooperation anbahnen'],
+    'SOZ-7': ['Teilen üben', 'Abwechseln einführen', 'Fairness thematisieren'],
+    'SOZ-8': ['Hilfsbereitschaft modellieren', 'Unterstützung anregen', 'Prosoziales Verhalten loben'],
+    'SOZ-9': ['Freundschaften unterstützen', 'Kontaktpflege ermöglichen', 'Soziale Netzwerke fördern'],
+    'SOZ-10': ['Gruppenregeln einführen', 'Gemeinsame Normen entwickeln', 'Zugehörigkeit stärken'],
+    'SOZ-11': ['Empathie entwickeln', 'Gefühle anderer erkennen', 'Mitgefühl zeigen'],
+    'SOZ-12': ['Konflikte begleiten', 'Streitschlichtung üben', 'Kompromisse finden'],
+    'SOZ-13': ['Kooperationsspiele einsetzen', 'Teamarbeit üben', 'Gemeinsame Ziele verfolgen'],
+    'SOZ-14': ['Soziale Rollen erkunden', 'Rollenspiele anbieten', 'Perspektiven wechseln'],
+    'SOZ-15': ['Gruppendynamik beobachten', 'Integration fördern', 'Ausgrenzung verhindern'],
+    'SOZ-16': ['Verantwortung für andere', 'Patenschaften etablieren', 'Fürsorge zeigen'],
+    'SOZ-17': ['Soziale Normen vermitteln', 'Höflichkeit üben', 'Respekt zeigen'],
+    'SOZ-18': ['Diversität wertschätzen', 'Unterschiede akzeptieren', 'Inklusion leben'],
+    'SOZ-19': ['Gruppenidentität stärken', 'Wir-Gefühl entwickeln', 'Gemeinsame Erlebnisse schaffen'],
+    'SOZ-20': ['Konfliktlösung ohne Erwachsene', 'Selbstständigkeit fördern', 'Mediatorenrolle übergeben'],
+    'SOZ-21': ['Führungsqualitäten entwickeln', 'Verantwortung übernehmen', 'Andere anleiten'],
+    'SOZ-22': ['Demokratische Prozesse üben', 'Abstimmungen durchführen', 'Mehrheitsentscheidungen akzeptieren'],
+    'SOZ-23': ['Soziales Engagement fördern', 'Projekte für andere', 'Gemeinwohl thematisieren'],
+    'SOZ-24': ['Interkulturelle Kompetenz', 'Kulturelle Vielfalt erkunden', 'Vorurteile abbauen'],
+    'SOZ-25': ['Netzwerke aufbauen', 'Beziehungen pflegen', 'Soziale Ressourcen nutzen'],
+    'SOZ-26': ['Soziale Verantwortung', 'Ethisches Handeln', 'Konsequenzen bedenken'],
+    'SOZ-27': ['Gesellschaftliche Teilhabe', 'Bürgerschaftliches Engagement', 'Politisches Bewusstsein'],
+    'SOZ-28': ['Komplexe Gruppenprozesse', 'Organisationen verstehen', 'Strukturen erkennen'],
+    'SOZ-29': ['Soziale Gerechtigkeit', 'Ungleichheit thematisieren', 'Solidarität zeigen'],
+    'SOZ-30': ['Soziale Innovation', 'Probleme erkennen', 'Lösungen entwickeln'],
+    'SOZ-31': ['Mentoring übernehmen', 'Wissen weitergeben', 'Jüngere unterstützen'],
+    'SOZ-32': ['Soziale Führung', 'Vorbild sein', 'Einfluss positiv nutzen'],
+    'SOZ-33': ['Gesellschaftliche Verantwortung', 'Langfristig denken', 'Nachhaltigkeit leben'],
+    'SOZ-34': ['Soziale Netzwerke gestalten', 'Communities aufbauen', 'Verbindungen schaffen'],
+    'SOZ-35': ['Soziale Bewegungen', 'Veränderung anstoßen', 'Aktivismus begleiten'],
+    'SOZ-36': ['Globale Perspektive', 'Weltbürgerschaft', 'Internationale Solidarität'],
+    'SOZ-37': ['Soziale Unternehmertum', 'Impact schaffen', 'Soziale Probleme lösen'],
+    'SOZ-38': ['Generationenübergreifend', 'Erfahrungen austauschen', 'Brücken bauen'],
+    'SOZ-39': ['Soziale Systeme verstehen', 'Zusammenhänge erkennen', 'Systemisch denken'],
+    'SOZ-40': ['Soziale Resilienz', 'Krisen bewältigen', 'Gemeinschaft stärken'],
+    'SOZ-41': ['Soziale Weisheit', 'Erfahrung teilen', 'Ratgeber sein'],
+
+    // KOGNITION (KOG-1 bis KOG-62) - Auszug der wichtigsten
+    'KOG-1': ['Sensorische Erfahrungen ermöglichen', 'Materialien erkunden lassen', 'Sinne ansprechen'],
+    'KOG-2': ['Objektpermanenz üben', 'Versteckspiele', 'Wiederholung und Variation'],
+    'KOG-3': ['Ursache-Wirkung zeigen', 'Experimente durchführen', 'Zusammenhänge verdeutlichen'],
+    'KOG-4': ['Kategorisieren üben', 'Sortieren nach Eigenschaften', 'Gemeinsamkeiten finden'],
+    'KOG-5': ['Reihenfolgen bilden', 'Sequenzen üben', 'Abläufe strukturieren'],
+    'KOG-6': ['Muster erkennen', 'Regelmäßigkeiten finden', 'Vorhersagen machen'],
+    'KOG-7': ['Mengen vergleichen', 'Mehr/Weniger verstehen', 'Quantitäten einschätzen'],
+    'KOG-8': ['Zahlenverständnis aufbauen', 'Zählen üben', 'Zahlbegriff festigen'],
+    'KOG-9': ['Räumliches Denken fördern', 'Puzzle lösen', 'Konstruktionsspiele'],
+    'KOG-10': ['Zeitverständnis entwickeln', 'Tagesablauf visualisieren', 'Vorher/Nachher verstehen'],
+    'KOG-11': ['Symbolverständnis fördern', 'Zeichen deuten', 'Abstraktionen einführen'],
+    'KOG-12': ['Gedächtnis trainieren', 'Memory-Spiele', 'Wiederholung einsetzen'],
+    'KOG-13': ['Aufmerksamkeit fokussieren', 'Konzentration üben', 'Ablenkungen reduzieren'],
+    'KOG-14': ['Problemlösen anleiten', 'Strategien vermitteln', 'Lösungswege erkunden'],
+    'KOG-15': ['Planung üben', 'Schritte vorausdenken', 'Ziele setzen'],
+    'KOG-16': ['Flexibles Denken fördern', 'Alternative Wege finden', 'Perspektiven wechseln'],
+    'KOG-17': ['Kreativität anregen', 'Offene Aufgaben stellen', 'Fantasie ermutigen'],
+    'KOG-18': ['Logisches Denken schulen', 'Schlussfolgerungen ziehen', 'Wenn-Dann-Beziehungen'],
+    'KOG-19': ['Kritisches Denken fördern', 'Hinterfragen ermutigen', 'Begründungen einfordern'],
+    'KOG-20': ['Transferleistung üben', 'Gelerntes anwenden', 'Neue Kontexte erschließen']
+};
+
+// Fallback-Interventionen nach Bereich
+const INTERVENTIONEN_FALLBACK = {
+    verhalten: ['Verhaltensregeln visualisieren', 'Positive Verstärkung einsetzen', 'Strukturierte Lernumgebung schaffen', 'Klare Erwartungen kommunizieren'],
+    kommunikation: ['Sprachvorbild sein', 'Aktives Zuhören modellieren', 'Kommunikationsanlässe schaffen', 'Wortschatz im Kontext erweitern'],
+    sozialisation: ['Soziale Situationen besprechen', 'Rollenspiele durchführen', 'Kooperative Aktivitäten anbieten', 'Empathie fördern'],
+    kognition: ['Lernstrategien vermitteln', 'Scaffolding anbieten', 'Handlungsorientiert arbeiten', 'Differenzierte Materialien bereitstellen']
+};
+
+// Helper: Get interventions for an item
+function getInterventionen(code) {
+    if (INTERVENTIONEN[code]) {
+        return INTERVENTIONEN[code];
+    }
+    // Fallback based on domain
+    const prefix = code.split('-')[0];
+    if (prefix === 'V') return INTERVENTIONEN_FALLBACK.verhalten;
+    if (prefix === 'K') return INTERVENTIONEN_FALLBACK.kommunikation;
+    if (prefix === 'SOZ') return INTERVENTIONEN_FALLBACK.sozialisation;
+    if (prefix === 'KOG') return INTERVENTIONEN_FALLBACK.kognition;
+    return ['Individuell angepasste Förderung'];
+}
+
 // Generate PEI using docx.js for proper Word document
 async function generatePEI() {
     const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, VerticalAlign, PageBreak, ShadingType, HeadingLevel } = docx;
@@ -1456,7 +1618,7 @@ async function generatePEI() {
     const lastErreicht = {};
     for (const [bereich, items] of Object.entries(erreichte)) {
         const sorted = items.sort((a,b) => parseInt(b.code.split('-').pop()) - parseInt(a.code.split('-').pop()));
-        lastErreicht[bereich] = sorted[0] || null;
+        lastErreicht[bereich] = sorted.slice(0, 3); // Get last 3 items
     }
 
     const nameParts = (stammdaten.schueler_name || '').split(' ');
@@ -1773,7 +1935,7 @@ async function generatePEI() {
     children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences transversales', bold: true, size: 22 })], spacing: { after: 300 } }));
 
     // Helper function for competence table
-    function createCompetenceTable(domainName, grobzielText, goals, compActuelle) {
+    function createCompetenceTable(domainName, grobzielText, goals, erreichtItems) {
         const domainContent = [new Paragraph({children: [new TextRun({text: domainName, bold: true, size: 22})]})];
         if (grobzielText) {
             domainContent.push(new Paragraph({children: [new TextRun({text: grobzielText, italics: true, size: 18})]}));
@@ -1781,6 +1943,28 @@ async function generatePEI() {
         if (goals && goals.length > 0) {
             domainContent.push(new Paragraph({children: [new TextRun({text: `(${goals.map(g => g.code).join(', ')})`, size: 18})]}));
         }
+
+        // Compétences actuelles: Last 3 erreicht items
+        const competencesActuellesContent = erreichtItems && erreichtItems.length > 0
+            ? erreichtItems.map(item => new Paragraph({children: [new TextRun({text: `${item.code}: ${item.keyword}`, size: 20})]}))
+            : [new Paragraph(''), new Paragraph(''), new Paragraph('')];
+
+        // Objectifs: Zielitems with Ich-Ziele formulation
+        const objectifsContent = goals && goals.length > 0
+            ? goals.map(g => new Paragraph({children: [new TextRun({text: `${g.code}: "${g.zieltext}"`, size: 20})]}))
+            : [new Paragraph(''), new Paragraph(''), new Paragraph('')];
+
+        // Méthodes: Interventionen for each goal
+        const methodesContent = goals && goals.length > 0
+            ? goals.flatMap(g => {
+                const interventions = getInterventionen(g.code);
+                return [
+                    new Paragraph({children: [new TextRun({text: `${g.code}:`, bold: true, size: 18})]}),
+                    ...interventions.map(i => new Paragraph({children: [new TextRun({text: `• ${i}`, size: 18})]})),
+                    new Paragraph('')
+                ];
+            })
+            : [new Paragraph(''), new Paragraph(''), new Paragraph('')];
 
         return new Table({
             rows: [
@@ -1802,10 +1986,10 @@ async function generatePEI() {
                 ]}),
                 new TableRow({ children: [
                     new TableCell({ children: domainContent, borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph({children: [new TextRun({text: compActuelle || '', size: 22})]})], borders: cellBorders }),
-                    new TableCell({ children: goals && goals.length > 0 ? goals.map(g => new Paragraph({children: [new TextRun({text: `"${g.zieltext}"`, size: 22})]})) : [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders }),
-                    new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
+                    new TableCell({ children: competencesActuellesContent, borders: cellBorders }),
+                    new TableCell({ children: objectifsContent, borders: cellBorders }),
+                    new TableCell({ children: methodesContent, borders: cellBorders }),
+                    new TableCell({ children: [new Paragraph(''), new Paragraph(''), new Paragraph('')], borders: cellBorders })
                 ]})
             ],
             width: { size: 100, type: WidthType.PERCENTAGE }
@@ -1814,26 +1998,26 @@ async function generatePEI() {
 
     // Comportement - Page 5
     const verhaltenGoals = ziele.verhalten;
-    const verhaltenActuelle = lastErreicht.verhalten ? `${lastErreicht.verhalten.code}: ${lastErreicht.verhalten.keyword}` : '';
-    children.push(createCompetenceTable('Comportement', '(Grobziel p.ex COMP-10: attendre)', verhaltenGoals, verhaltenActuelle));
+    const verhaltenErreicht = lastErreicht.verhalten || [];
+    children.push(createCompetenceTable('Comportement', '(Grobziel p.ex COMP-10: attendre)', verhaltenGoals, verhaltenErreicht));
 
     // Page break - Communication - Page 6
     children.push(new Paragraph({ children: [new PageBreak()] }));
     const kommunikationGoals = ziele.kommunikation;
-    const kommunikationActuelle = lastErreicht.kommunikation ? `${lastErreicht.kommunikation.code}: ${lastErreicht.kommunikation.keyword}` : '';
-    children.push(createCompetenceTable('Communication', null, kommunikationGoals, kommunikationActuelle));
+    const kommunikationErreicht = lastErreicht.kommunikation || [];
+    children.push(createCompetenceTable('Communication', null, kommunikationGoals, kommunikationErreicht));
 
     // Page break - Socialisation - Page 7
     children.push(new Paragraph({ children: [new PageBreak()] }));
     const sozialisationGoals = ziele.sozialisation;
-    const sozialisationActuelle = lastErreicht.sozialisation ? `${lastErreicht.sozialisation.code}: ${lastErreicht.sozialisation.keyword}` : '';
-    children.push(createCompetenceTable('Socialisation', null, sozialisationGoals, sozialisationActuelle));
+    const sozialisationErreicht = lastErreicht.sozialisation || [];
+    children.push(createCompetenceTable('Socialisation', null, sozialisationGoals, sozialisationErreicht));
 
     // Page break - Cognition - Page 8
     children.push(new Paragraph({ children: [new PageBreak()] }));
     const kognitionGoals = ziele.kognition;
-    const kognitionActuelle = lastErreicht.kognition ? `${lastErreicht.kognition.code}: ${lastErreicht.kognition.keyword}` : '';
-    children.push(createCompetenceTable('Cognition', null, kognitionGoals, kognitionActuelle));
+    const kognitionErreicht = lastErreicht.kognition || [];
+    children.push(createCompetenceTable('Cognition', null, kognitionGoals, kognitionErreicht));
 
     // Page break - Démarches mentales etc. - Page 9
     children.push(new Paragraph({ children: [new PageBreak()] }));
