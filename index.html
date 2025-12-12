@@ -1210,12 +1210,12 @@ const ITEM_COUNTS = { verhalten: 33, kommunikation: 35, sozialisation: 41, kogni
 const state = {
     selections: {},
     zusaetzlicheZiele: {
-        demarches_mentales: [],
-        manieres_apprendre: [],
-        attitudes_relationnelles: [],
-        attitudes_affectives: [],
-        competences_essentielles: [],
-        culture_loisirs: []
+        demarches_mentales: {},      // { goalId: 'erreicht' | 'ziel' }
+        manieres_apprendre: {},
+        attitudes_relationnelles: {},
+        attitudes_affectives: {},
+        competences_essentielles: {},
+        culture_loisirs: {}
     }
 };
 
@@ -1263,7 +1263,10 @@ function initializeZusaetzlicheZiele() {
             container.innerHTML = ZUSAETZLICHE_ZIELE[category].map(goal => `
                 <div class="zusatz-item" id="zusatz-${goal.id}" style="padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9;">
                     <div style="display: flex; align-items: flex-start; gap: 10px;">
-                        <input type="checkbox" id="check-${goal.id}" onchange="toggleZusatzZiel('${category}', '${goal.id}')" style="margin-top: 5px;">
+                        <div style="display: flex; flex-direction: column; gap: 5px; min-width: 100px;">
+                            <button class="zusatz-btn erreicht" id="btn-erreicht-${goal.id}" onclick="selectZusatzStatus('${category}', '${goal.id}', 'erreicht')" style="padding: 5px 10px; border: 1px solid #28a745; background: white; color: #28a745; border-radius: 3px; cursor: pointer; font-size: 12px;">Erreicht</button>
+                            <button class="zusatz-btn ziel" id="btn-ziel-${goal.id}" onclick="selectZusatzStatus('${category}', '${goal.id}', 'ziel')" style="padding: 5px 10px; border: 1px solid #ffc107; background: white; color: #856404; border-radius: 3px; cursor: pointer; font-size: 12px;">Ziel</button>
+                        </div>
                         <div style="flex: 1;">
                             <strong>${goal.id}: ${goal.title}</strong>
                             <p style="margin: 5px 0; color: #333; font-style: italic;">"${goal.ziel}"</p>
@@ -1284,21 +1287,40 @@ function toggleCategory(category) {
     }
 }
 
-// Toggle zusätzliches Ziel selection
-function toggleZusatzZiel(category, goalId) {
-    const checkbox = document.getElementById(`check-${goalId}`);
+// Select status for zusätzliches Ziel (erreicht or ziel)
+function selectZusatzStatus(category, goalId, status) {
     const item = document.getElementById(`zusatz-${goalId}`);
+    const btnErreicht = document.getElementById(`btn-erreicht-${goalId}`);
+    const btnZiel = document.getElementById(`btn-ziel-${goalId}`);
 
-    if (checkbox.checked) {
-        if (!state.zusaetzlicheZiele[category].includes(goalId)) {
-            state.zusaetzlicheZiele[category].push(goalId);
-        }
-        item.style.background = '#d4edda';
-        item.style.borderColor = '#28a745';
-    } else {
-        state.zusaetzlicheZiele[category] = state.zusaetzlicheZiele[category].filter(id => id !== goalId);
+    // Check if same status is clicked again (toggle off)
+    if (state.zusaetzlicheZiele[category][goalId] === status) {
+        delete state.zusaetzlicheZiele[category][goalId];
         item.style.background = '#f9f9f9';
         item.style.borderColor = '#ddd';
+        btnErreicht.style.background = 'white';
+        btnErreicht.style.color = '#28a745';
+        btnZiel.style.background = 'white';
+        btnZiel.style.color = '#856404';
+    } else {
+        // Set new status
+        state.zusaetzlicheZiele[category][goalId] = status;
+
+        if (status === 'erreicht') {
+            item.style.background = '#d4edda';
+            item.style.borderColor = '#28a745';
+            btnErreicht.style.background = '#28a745';
+            btnErreicht.style.color = 'white';
+            btnZiel.style.background = 'white';
+            btnZiel.style.color = '#856404';
+        } else {
+            item.style.background = '#fff3cd';
+            item.style.borderColor = '#ffc107';
+            btnZiel.style.background = '#ffc107';
+            btnZiel.style.color = '#856404';
+            btnErreicht.style.background = 'white';
+            btnErreicht.style.color = '#28a745';
+        }
     }
 
     updateZusatzCount(category);
@@ -1309,14 +1331,34 @@ function toggleZusatzZiel(category, goalId) {
 function updateZusatzCount(category) {
     const countElement = document.getElementById(`count-${category}`);
     if (countElement) {
-        const count = state.zusaetzlicheZiele[category].length;
-        countElement.textContent = `(${count} ausgewählt)`;
+        const goals = state.zusaetzlicheZiele[category];
+        const erreichtCount = Object.values(goals).filter(s => s === 'erreicht').length;
+        const zielCount = Object.values(goals).filter(s => s === 'ziel').length;
+        countElement.textContent = `(${erreichtCount} erreicht, ${zielCount} Ziele)`;
     }
 }
 
 // Get zusätzliches Ziel by ID
 function getZusatzZielById(category, goalId) {
     return ZUSAETZLICHE_ZIELE[category]?.find(g => g.id === goalId);
+}
+
+// Get all erreicht goals for a category
+function getZusatzErreicht(category) {
+    const goals = state.zusaetzlicheZiele[category] || {};
+    return Object.entries(goals)
+        .filter(([id, status]) => status === 'erreicht')
+        .map(([id]) => getZusatzZielById(category, id))
+        .filter(Boolean);
+}
+
+// Get all ziel goals for a category
+function getZusatzZiele(category) {
+    const goals = state.zusaetzlicheZiele[category] || {};
+    return Object.entries(goals)
+        .filter(([id, status]) => status === 'ziel')
+        .map(([id]) => getZusatzZielById(category, id))
+        .filter(Boolean);
 }
 
 function createItemElement(item, bereichKey) {
@@ -1485,12 +1527,12 @@ function loadFromLocalStorage() {
         const data = JSON.parse(saved);
         state.selections = data.selections || {};
         state.zusaetzlicheZiele = data.zusaetzlicheZiele || {
-            demarches_mentales: [],
-            manieres_apprendre: [],
-            attitudes_relationnelles: [],
-            attitudes_affectives: [],
-            competences_essentielles: [],
-            culture_loisirs: []
+            demarches_mentales: {},
+            manieres_apprendre: {},
+            attitudes_relationnelles: {},
+            attitudes_affectives: {},
+            competences_essentielles: {},
+            culture_loisirs: {}
         };
 
         // Restore ELDiB selections
@@ -1508,17 +1550,31 @@ function loadFromLocalStorage() {
             }
         }
 
-        // Restore zusätzliche Ziele selections
-        for (const [category, goalIds] of Object.entries(state.zusaetzlicheZiele)) {
-            goalIds.forEach(goalId => {
-                const checkbox = document.getElementById(`check-${goalId}`);
-                const item = document.getElementById(`zusatz-${goalId}`);
-                if (checkbox) checkbox.checked = true;
-                if (item) {
-                    item.style.background = '#d4edda';
-                    item.style.borderColor = '#28a745';
+        // Restore zusätzliche Ziele selections (object format: { goalId: 'erreicht' | 'ziel' })
+        for (const [category, goals] of Object.entries(state.zusaetzlicheZiele)) {
+            if (typeof goals === 'object' && !Array.isArray(goals)) {
+                for (const [goalId, status] of Object.entries(goals)) {
+                    const item = document.getElementById(`zusatz-${goalId}`);
+                    const btnErreicht = document.getElementById(`btn-erreicht-${goalId}`);
+                    const btnZiel = document.getElementById(`btn-ziel-${goalId}`);
+
+                    if (item && status === 'erreicht') {
+                        item.style.background = '#d4edda';
+                        item.style.borderColor = '#28a745';
+                        if (btnErreicht) {
+                            btnErreicht.style.background = '#28a745';
+                            btnErreicht.style.color = 'white';
+                        }
+                    } else if (item && status === 'ziel') {
+                        item.style.background = '#fff3cd';
+                        item.style.borderColor = '#ffc107';
+                        if (btnZiel) {
+                            btnZiel.style.background = '#ffc107';
+                            btnZiel.style.color = '#856404';
+                        }
+                    }
                 }
-            });
+            }
             updateZusatzCount(category);
         }
 
@@ -2346,15 +2402,23 @@ async function generatePEI() {
 
     // Helper: Create table row for zusätzliche Ziele category
     function createZusatzZieleRow(categoryName, categoryKey) {
-        const selectedIds = state.zusaetzlicheZiele[categoryKey] || [];
-        const selectedGoals = selectedIds.map(id => ZUSAETZLICHE_ZIELE[categoryKey]?.find(g => g.id === id)).filter(Boolean);
+        const erreichtGoals = getZusatzErreicht(categoryKey);
+        const zielGoals = getZusatzZiele(categoryKey);
+        const allGoals = [...erreichtGoals, ...zielGoals];
 
-        const objectifsContent = selectedGoals.length > 0
-            ? selectedGoals.map(g => new Paragraph({children: [new TextRun({text: `${g.id}: "${g.ziel}"`, size: 18})]}))
+        // Compétences actuelles: erreicht items (Ressourcen)
+        const competencesContent = erreichtGoals.length > 0
+            ? erreichtGoals.map(g => new Paragraph({children: [new TextRun({text: `${g.id}: "${g.ziel}"`, size: 18})]}))
             : [new Paragraph('')];
 
-        const methodesContent = selectedGoals.length > 0
-            ? selectedGoals.flatMap(g => [
+        // Objectifs: ziel items
+        const objectifsContent = zielGoals.length > 0
+            ? zielGoals.map(g => new Paragraph({children: [new TextRun({text: `${g.id}: "${g.ziel}"`, size: 18})]}))
+            : [new Paragraph('')];
+
+        // Méthodes: interventions for ziel items only
+        const methodesContent = zielGoals.length > 0
+            ? zielGoals.flatMap(g => [
                 new Paragraph({children: [new TextRun({text: `${g.id}:`, bold: true, size: 16})]}),
                 ...g.intervention.map(i => new Paragraph({children: [new TextRun({text: `• ${i}`, size: 16})]}))
             ])
@@ -2362,7 +2426,7 @@ async function generatePEI() {
 
         return new TableRow({ children: [
             new TableCell({ children: [new Paragraph({children: [new TextRun({text: categoryName, bold: true, size: 20})]})], borders: cellBorders }),
-            new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
+            new TableCell({ children: competencesContent, borders: cellBorders }),
             new TableCell({ children: objectifsContent, borders: cellBorders }),
             new TableCell({ children: methodesContent, borders: cellBorders }),
             new TableCell({ children: [new Paragraph('')], borders: cellBorders })
@@ -2639,15 +2703,35 @@ async function generateComplement() {
 
     // Helper: Create row with selected goals for Complément
     function createZusatzRowComplement(categoryName, categoryKey) {
-        const selectedIds = state.zusaetzlicheZiele[categoryKey] || [];
-        const selectedGoals = selectedIds.map(id => ZUSAETZLICHE_ZIELE[categoryKey]?.find(g => g.id === id)).filter(Boolean);
+        const erreichtGoals = getZusatzErreicht(categoryKey);
+        const zielGoals = getZusatzZiele(categoryKey);
 
-        const goalsText = selectedGoals.length > 0
-            ? selectedGoals.map(g => `${g.id}: ${g.ziel}`).join('\n')
-            : '';
-
-        const hasGoals = selectedGoals.length > 0;
+        const hasGoals = erreichtGoals.length > 0 || zielGoals.length > 0;
         const checkbox = hasGoals ? '☑' : '☐';
+
+        // Build evaluation text with erreicht (Ressourcen) and ziel sections
+        const evaluationParagraphs = [];
+
+        if (erreichtGoals.length > 0) {
+            evaluationParagraphs.push(new Paragraph({children: [new TextRun({text: 'Ressourcen (erreicht):', bold: true, size: 20})]}));
+            erreichtGoals.forEach(g => {
+                evaluationParagraphs.push(new Paragraph({children: [new TextRun({text: `• ${g.id}: ${g.ziel}`, size: 18})]}));
+            });
+        }
+
+        if (zielGoals.length > 0) {
+            if (erreichtGoals.length > 0) {
+                evaluationParagraphs.push(new Paragraph({ spacing: { before: 100 } }));
+            }
+            evaluationParagraphs.push(new Paragraph({children: [new TextRun({text: 'Ziele:', bold: true, size: 20})]}));
+            zielGoals.forEach(g => {
+                evaluationParagraphs.push(new Paragraph({children: [new TextRun({text: `• ${g.id}: ${g.ziel}`, size: 18})]}));
+            });
+        }
+
+        if (evaluationParagraphs.length === 0) {
+            evaluationParagraphs.push(new Paragraph(''));
+        }
 
         return new TableRow({
             children: [
@@ -2657,7 +2741,7 @@ async function generateComplement() {
                     width: {size: 35, type: WidthType.PERCENTAGE}
                 }),
                 new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: goalsText, size: 20})]})],
+                    children: evaluationParagraphs,
                     borders: cellBorders,
                     width: {size: 65, type: WidthType.PERCENTAGE}
                 })
