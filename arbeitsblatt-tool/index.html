@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDSE Arbeitsblatt-Tool | Pädagogische Materialien für Jugendarbeit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            padding: 20px 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .hero {
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .intro-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .intro-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .intro-box p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .themen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .thema-karte {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .thema-karte:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .thema-header {
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .thema-header .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .thema-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .thema-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Individuelle Farben für jedes Thema */
+        .thema-mobbing .thema-header { background: linear-gradient(135deg, #e53935 0%, #d32f2f 100%); }
+        .thema-emotionen .thema-header { background: linear-gradient(135deg, #FF6B6B 0%, #ee5a5a 100%); }
+        .thema-konflikte .thema-header { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); }
+        .thema-kommunikation .thema-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .thema-selbstwert .thema-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .thema-teamarbeit .thema-header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .thema-freundschaft .thema-header { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+        .thema-respekt .thema-header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .thema-medien .thema-header { background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%); }
+
+        .thema-content {
+            padding: 25px;
+        }
+
+        .thema-content p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .arbeitsblatt-liste {
+            list-style: none;
+        }
+
+        .arbeitsblatt-liste li {
+            margin: 10px 0;
+        }
+
+        .arbeitsblatt-liste a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .arbeitsblatt-liste a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .arbeitsblatt-liste a::before {
+            content: "📄";
+        }
+
+        .badge {
+            background: #667eea;
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+
+        .footer {
+            background: rgba(0,0,0,0.2);
+            padding: 30px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .stat-item .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-info {
+                text-align: center;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .themen-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <div>
+                    <h1>CDSE Arbeitsblatt-Tool</h1>
+                    <p>Centre pour le Développement Socio-Emotionnel</p>
+                </div>
+            </div>
+            <div class="header-info">
+                <p>Pädagogische Materialien</p>
+                <p>für Jugendarbeit in Luxemburg</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>🎓 Interaktive Arbeitsblätter für wichtige Themen</h2>
+        <p>Hochwertige, pädagogisch fundierte Materialien für die Arbeit mit Jugendlichen -
+        kostenlos und sofort einsetzbar.</p>
+    </section>
+
+    <main class="main-content">
+        <div class="intro-box">
+            <h3>👋 Willkommen!</h3>
+            <p>Diese Sammlung bietet interaktive Arbeitsblätter zu den wichtigsten Themen der Jugendarbeit.
+            Jedes Arbeitsblatt wurde von erfahrenen Pädagogen entwickelt und enthält altersgerechte Übungen,
+            Reflexionsfragen und praktische Szenarien. Die Eingaben der Schüler werden automatisch im Browser
+            gespeichert - perfekt für mehrstündige Einheiten!</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="number">9</div>
+                <div class="label">Themenbereiche</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">10</div>
+                <div class="label">Arbeitsblätter</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">100%</div>
+                <div class="label">Kostenlos</div>
+            </div>
+        </div>
+
+        <div class="themen-grid">
+            <!-- Mobbing -->
+            <div class="thema-karte thema-mobbing">
+                <div class="thema-header">
+                    <div class="icon">🛑</div>
+                    <h3>Mobbing</h3>
+                    <p>Erkennen, verstehen, handeln</p>
+                </div>
+                <div class="thema-content">
+                    <p>Arbeitsblätter zum Thema Mobbing und Cybermobbing - von der Definition bis zur Prävention.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/mobbing/01-was-ist-mobbing.html">Was ist Mobbing?<span class="badge">Basis</span></a></li>
+                        <li><a href="arbeitsblaetter/mobbing/02-cybermobbing.html">Cybermobbing<span class="badge">Digital</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Emotionen -->
+            <div class="thema-karte thema-emotionen">
+                <div class="thema-header">
+                    <div class="icon">💭</div>
+                    <h3>Emotionen</h3>
+                    <p>Gefühle erkennen und verstehen</p>
+                </div>
+                <div class="thema-content">
+                    <p>Lerne, Gefühle zu erkennen, zu benennen und konstruktiv mit ihnen umzugehen.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/emotionen/01-gefuehle-erkennen.html">Gefühle erkennen<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Konflikte -->
+            <div class="thema-karte thema-konflikte">
+                <div class="thema-header">
+                    <div class="icon">⚡</div>
+                    <h3>Konflikte</h3>
+                    <p>Verstehen und lösen</p>
+                </div>
+                <div class="thema-content">
+                    <p>Strategien zur Konfliktlösung und gewaltfreien Kommunikation.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/konflikte/01-konflikte-verstehen.html">Konflikte verstehen<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Kommunikation -->
+            <div class="thema-karte thema-kommunikation">
+                <div class="thema-header">
+                    <div class="icon">🗣️</div>
+                    <h3>Kommunikation</h3>
+                    <p>Reden und Zuhören lernen</p>
+                </div>
+                <div class="thema-content">
+                    <p>Ich-Botschaften, aktives Zuhören und respektvolle Gesprächsführung.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/kommunikation/01-ich-botschaften.html">Ich-Botschaften<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Selbstwert -->
+            <div class="thema-karte thema-selbstwert">
+                <div class="thema-header">
+                    <div class="icon">💖</div>
+                    <h3>Selbstwert</h3>
+                    <p>Sich selbst wertschätzen</p>
+                </div>
+                <div class="thema-content">
+                    <p>Stärken entdecken, Selbstliebe entwickeln und ein positives Selbstbild aufbauen.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/selbstwert/01-mein-selbstwert.html">Mein Selbstwert<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Teamarbeit -->
+            <div class="thema-karte thema-teamarbeit">
+                <div class="thema-header">
+                    <div class="icon">🤝</div>
+                    <h3>Teamarbeit</h3>
+                    <p>Gemeinsam stark sein</p>
+                </div>
+                <div class="thema-content">
+                    <p>Rollen im Team, Zusammenarbeit und gemeinsame Problemlösung.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/teamarbeit/01-gemeinsam-stark.html">Gemeinsam stark<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Freundschaft -->
+            <div class="thema-karte thema-freundschaft">
+                <div class="thema-header">
+                    <div class="icon">👫</div>
+                    <h3>Freundschaft</h3>
+                    <p>Echte Freunde erkennen</p>
+                </div>
+                <div class="thema-content">
+                    <p>Was macht echte Freundschaft aus? Geben und Nehmen in Beziehungen.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/freundschaft/01-echte-freundschaft.html">Echte Freundschaft<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Respekt -->
+            <div class="thema-karte thema-respekt">
+                <div class="thema-header">
+                    <div class="icon">✊</div>
+                    <h3>Respekt</h3>
+                    <p>Würde und Anerkennung</p>
+                </div>
+                <div class="thema-content">
+                    <p>Respektvoller Umgang miteinander und Selbstrespekt.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/respekt/01-respekt-fuer-alle.html">Respekt für alle<span class="badge">Basis</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Medien -->
+            <div class="thema-karte thema-medien">
+                <div class="thema-header">
+                    <div class="icon">📱</div>
+                    <h3>Medienkompetenz</h3>
+                    <p>Sicher im digitalen Leben</p>
+                </div>
+                <div class="thema-content">
+                    <p>Fake News erkennen, Privatsphäre schützen und gesunde Mediennutzung.</p>
+                    <ul class="arbeitsblatt-liste">
+                        <li><a href="arbeitsblaetter/medien/01-medienkompetenz.html">Medienkompetenz<span class="badge">Digital</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><strong>CDSE Luxembourg</strong> | Arbeitsblatt-Tool für pädagogische Fachkräfte</p>
+        <p>Alle Materialien sind für den Einsatz in Schulen und Jugendeinrichtungen freigegeben.</p>
+        <p style="margin-top: 15px; font-size: 12px;">© 2024 CDSE Luxembourg - Centre pour le Développement Socio-Emotionnel</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Selbstwert - Wer bin ich und was macht mich wertvoll?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .arbeitsblatt {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e6 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #f5576c;
+        }
+
+        .intro-box h2 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .section {
+            margin: 35px 0;
+            padding: 25px;
+            background: #fafafa;
+            border-radius: 15px;
+        }
+
+        .section h2 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f093fb;
+            font-size: 24px;
+        }
+
+        .section h3 {
+            color: #f5576c;
+            margin: 20px 0 15px 0;
+            font-size: 18px;
+        }
+
+        /* Spiegel-Übung */
+        .spiegel-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .spiegel {
+            background: linear-gradient(135deg, #e0e5ec 0%, #f5f7fa 100%);
+            width: 250px;
+            height: 300px;
+            border-radius: 125px 125px 20px 20px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 8px solid #c0c0c0;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+        }
+
+        .spiegel-text {
+            font-size: 80px;
+        }
+
+        .spiegel-frage {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Stärken-Baum */
+        .baum-container {
+            background: linear-gradient(180deg, #87ceeb 0%, #90EE90 50%, #8B4513 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .baum-intro {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .wurzeln, .stamm, .krone {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .wurzeln h4 { color: #8B4513; }
+        .stamm h4 { color: #654321; }
+        .krone h4 { color: #228B22; }
+
+        .baum-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .baum-input input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .baum-input input:focus {
+            border-color: #f093fb;
+            outline: none;
+        }
+
+        /* Positiv vs Negativ */
+        .gedanken-vergleich {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .gedanken-box {
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .negativ-box {
+            background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
+            color: white;
+        }
+
+        .positiv-box {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .gedanken-box h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gedanken-beispiel {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .umwandlung-pfeil {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #f5576c;
+        }
+
+        /* Übungsbereich */
+        .uebung-box {
+            background: white;
+            border: 2px solid #f093fb;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .uebung-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .uebung-nummer {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #f093fb;
+        }
+
+        /* Komplimente-Box */
+        .komplimente-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .kompliment-karte {
+            background: linear-gradient(135deg, #fff 0%, #ffe0e6 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #f5576c;
+            transition: transform 0.3s;
+        }
+
+        .kompliment-karte:hover {
+            transform: scale(1.05);
+        }
+
+        .kompliment-karte .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .kompliment-karte label {
+            display: block;
+            cursor: pointer;
+        }
+
+        .kompliment-karte input[type="checkbox"] {
+            margin-top: 10px;
+            transform: scale(1.3);
+        }
+
+        /* Erfolgs-Tagebuch */
+        .erfolg-eintrag {
+            background: #fff5f5;
+            border-left: 4px solid #f5576c;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .erfolg-eintrag label {
+            font-weight: 600;
+            color: #e91e63;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Selbstliebe-Tipps */
+        .selbstliebe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .selbstliebe-karte {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #f5576c;
+        }
+
+        .selbstliebe-karte .nummer {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .selbstliebe-karte h4 {
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+
+        /* Brief an mich */
+        .brief-container {
+            background: #fffef5;
+            border: 2px solid #d4a574;
+            border-radius: 5px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .brief-container h3 {
+            font-family: 'Georgia', serif;
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .brief-container textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #d4a574;
+            border-radius: 0;
+            font-family: 'Georgia', serif;
+            font-size: 16px;
+            line-height: 2;
+        }
+
+        /* Affirmationen */
+        .affirmation-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .affirmation-liste {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .affirmation-liste li {
+            background: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .affirmation-liste li::before {
+            content: "⭐";
+            font-size: 20px;
+        }
+
+        /* Reflexion */
+        .reflexion-bereich {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .reflexion-frage {
+            margin: 20px 0;
+        }
+
+        .reflexion-frage p {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Skala */
+        .skala-container {
+            margin: 20px 0;
+        }
+
+        .skala-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .skala {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        .skala-punkt {
+            flex: 1;
+            text-align: center;
+        }
+
+        .skala-punkt input[type="radio"] {
+            display: none;
+        }
+
+        .skala-punkt label {
+            display: block;
+            padding: 15px 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .skala-punkt input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Print */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .arbeitsblatt {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gedanken-vergleich {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="arbeitsblatt">
+        <div class="header">
+            <h1>💖 Mein Selbstwert</h1>
+            <p>Entdecke, was dich einzigartig und wertvoll macht</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-box">
+                <h2>Was ist Selbstwert eigentlich?</h2>
+                <p>Selbstwert bedeutet, wie viel du dir selbst wert bist. Es geht darum, wie du über dich denkst
+                und fühlst - unabhängig davon, was andere sagen oder wie du in der Schule bist.</p>
+                <p style="margin-top: 15px;"><strong>Wichtig:</strong> Dein Wert als Mensch hängt NICHT davon ab,
+                wie du aussiehst, welche Noten du hast, wie viele Follower du hast oder was andere über dich denken.
+                Du bist wertvoll, einfach weil du DU bist.</p>
+            </div>
+
+            <div class="section">
+                <h2>🪞 Spiegel-Übung: Was siehst du?</h2>
+
+                <div class="spiegel-container">
+                    <p>Stell dir vor, du stehst vor einem Spiegel. Nicht um dein Aussehen zu checken,
+                    sondern um in dein Inneres zu schauen.</p>
+                    <div class="spiegel">
+                        <span class="spiegel-text">🫵</span>
+                    </div>
+                    <div class="spiegel-frage">
+                        <p><strong>Die Person im Spiegel ist einzigartig.</strong><br>
+                        Es gibt sie nur einmal auf der ganzen Welt. Was macht sie besonders?</p>
+                    </div>
+                </div>
+
+                <div class="uebung-box">
+                    <p><strong>Schreibe 5 Dinge auf, die dich einzigartig machen:</strong></p>
+                    <p style="color: #666; font-size: 14px; margin: 10px 0;">
+                        (Das können Eigenschaften, Talente, Erfahrungen oder auch "Macken" sein)</p>
+                    <div style="margin-top: 15px;">
+                        <input type="text" placeholder="1. Ich bin einzigartig, weil..." style="margin-bottom: 10px;">
+                        <input type="text" placeholder="2. Ich bin einzigartig, weil..." style="margin-bottom: 10px;">
+                        <input type="text" placeholder="3. Ich bin einzigartig, weil..." style="margin-bottom: 10px;">
+                        <input type="text" placeholder="4. Ich bin einzigartig, weil..." style="margin-bottom: 10px;">
+                        <input type="text" placeholder="5. Ich bin einzigartig, weil...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🌳 Mein Stärken-Baum</h2>
+                <p>Ein Baum braucht starke Wurzeln, um zu wachsen. Genau wie du!</p>
+
+                <div class="baum-container">
+                    <div class="baum-intro">
+                        <strong>Fülle deinen persönlichen Stärken-Baum aus:</strong>
+                    </div>
+
+                    <div class="krone">
+                        <h4>🌿 Die Krone: Meine Träume & Ziele</h4>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Was möchtest du erreichen? Wovon träumst du?</p>
+                        <div class="baum-input">
+                            <input type="text" placeholder="Traum 1">
+                            <input type="text" placeholder="Traum 2">
+                            <input type="text" placeholder="Traum 3">
+                        </div>
+                    </div>
+
+                    <div class="stamm">
+                        <h4>🪵 Der Stamm: Meine Stärken & Talente</h4>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Was kannst du gut? Wofür wirst du gelobt?</p>
+                        <div class="baum-input">
+                            <input type="text" placeholder="Stärke 1">
+                            <input type="text" placeholder="Stärke 2">
+                            <input type="text" placeholder="Stärke 3">
+                            <input type="text" placeholder="Stärke 4">
+                        </div>
+                    </div>
+
+                    <div class="wurzeln">
+                        <h4>🌱 Die Wurzeln: Was mich trägt</h4>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Menschen, Orte, Aktivitäten, die dir Kraft geben</p>
+                        <div class="baum-input">
+                            <input type="text" placeholder="Kraftquelle 1">
+                            <input type="text" placeholder="Kraftquelle 2">
+                            <input type="text" placeholder="Kraftquelle 3">
+                            <input type="text" placeholder="Kraftquelle 4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔄 Gedanken umwandeln</h2>
+                <p>Unser innerer Kritiker kann sehr laut sein. Aber wir können lernen, negative Gedanken in positive umzuwandeln!</p>
+
+                <div class="gedanken-vergleich">
+                    <div class="gedanken-box negativ-box">
+                        <h4>🌧️ Der innere Kritiker sagt:</h4>
+                        <div class="gedanken-beispiel">"Ich bin nicht gut genug."</div>
+                        <div class="gedanken-beispiel">"Alle anderen sind besser als ich."</div>
+                        <div class="gedanken-beispiel">"Ich schaffe das sowieso nicht."</div>
+                        <div class="gedanken-beispiel">"Niemand mag mich wirklich."</div>
+                    </div>
+
+                    <div class="gedanken-box positiv-box">
+                        <h4>☀️ Mein Unterstützer antwortet:</h4>
+                        <div class="gedanken-beispiel">"Ich bin genug, so wie ich bin."</div>
+                        <div class="gedanken-beispiel">"Jeder hat eigene Stärken - ich auch!"</div>
+                        <div class="gedanken-beispiel">"Ich kann es versuchen und daraus lernen."</div>
+                        <div class="gedanken-beispiel">"Es gibt Menschen, die mich schätzen."</div>
+                    </div>
+                </div>
+
+                <div class="uebung-box">
+                    <div class="uebung-header">
+                        <span class="uebung-nummer">✏️</span>
+                        <span><strong>Übung: Wandle deine negativen Gedanken um</strong></span>
+                    </div>
+
+                    <div style="margin: 15px 0;">
+                        <label style="font-weight: 600; color: #636e72;">Ein negativer Gedanke, den ich oft habe:</label>
+                        <textarea rows="2" placeholder="Zum Beispiel: Ich bin nicht schlau genug für..." style="margin-top: 8px;"></textarea>
+                    </div>
+
+                    <div class="umwandlung-pfeil">⬇️ wird zu ⬇️</div>
+
+                    <div style="margin: 15px 0;">
+                        <label style="font-weight: 600; color: #00b894;">Die positive Antwort darauf:</label>
+                        <textarea rows="2" placeholder="Zum Beispiel: Ich lerne jeden Tag dazu und..." style="margin-top: 8px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎁 Was ich an mir mag</h2>
+                <p>Kreuze an, was auf dich zutrifft - und füge eigene Punkte hinzu!</p>
+
+                <div class="komplimente-grid">
+                    <div class="kompliment-karte">
+                        <div class="icon">🎨</div>
+                        <label>
+                            Ich bin kreativ
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">💪</div>
+                        <label>
+                            Ich gebe nicht auf
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🤝</div>
+                        <label>
+                            Ich bin hilfsbereit
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">😄</div>
+                        <label>
+                            Ich kann andere zum Lachen bringen
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">👂</div>
+                        <label>
+                            Ich bin ein guter Zuhörer
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🧠</div>
+                        <label>
+                            Ich bin neugierig und lerne gern
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🦁</div>
+                        <label>
+                            Ich bin mutig
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🌈</div>
+                        <label>
+                            Ich sehe das Positive
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🎯</div>
+                        <label>
+                            Ich bin zielstrebig
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">💝</div>
+                        <label>
+                            Ich bin einfühlsam
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">⚡</div>
+                        <label>
+                            Ich bin sportlich/aktiv
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                    <div class="kompliment-karte">
+                        <div class="icon">🔧</div>
+                        <label>
+                            Ich finde Lösungen
+                            <input type="checkbox">
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600;">Weitere Dinge, die ich an mir mag:</label>
+                    <textarea rows="3" placeholder="Was magst du noch an dir? Was können andere an dir schätzen?" style="margin-top: 10px;"></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Mein Erfolgs-Tagebuch</h2>
+                <p>Wir vergessen oft unsere Erfolge und erinnern uns hauptsächlich an Misserfolge.
+                Hier kannst du Erfolge festhalten - auch kleine!</p>
+
+                <div class="erfolg-eintrag">
+                    <label>🏆 Ein Erfolg aus dieser Woche:</label>
+                    <textarea rows="2" placeholder="Was hast du geschafft, worauf du stolz sein kannst?"></textarea>
+                </div>
+
+                <div class="erfolg-eintrag">
+                    <label>💪 Eine Herausforderung, die ich gemeistert habe:</label>
+                    <textarea rows="2" placeholder="Was war schwierig, aber du hast es trotzdem geschafft?"></textarea>
+                </div>
+
+                <div class="erfolg-eintrag">
+                    <label>🌟 Etwas Nettes, das jemand über mich gesagt hat:</label>
+                    <textarea rows="2" placeholder="Welches Kompliment hast du bekommen?"></textarea>
+                </div>
+
+                <div class="erfolg-eintrag">
+                    <label>🎯 Etwas, das ich zum ersten Mal gemacht habe:</label>
+                    <textarea rows="2" placeholder="Hast du etwas Neues ausprobiert?"></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💝 Selbstliebe-Tipps für jeden Tag</h2>
+
+                <div class="selbstliebe-grid">
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">1</div>
+                        <h4>Sprich freundlich mit dir</h4>
+                        <p>Behandle dich selbst so, wie du einen guten Freund behandeln würdest.
+                        Kein Beschimpfen, kein Fertigmachen!</p>
+                    </div>
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">2</div>
+                        <h4>Vergleiche dich weniger</h4>
+                        <p>Social Media zeigt nur die Highlights. Vergleiche dein "Behind the Scenes"
+                        nicht mit dem "Showreel" anderer.</p>
+                    </div>
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">3</div>
+                        <h4>Feiere kleine Erfolge</h4>
+                        <p>Du hast eine schwierige Aufgabe erledigt? Eine Prüfung bestanden?
+                        Jemandem geholfen? Das verdient Anerkennung!</p>
+                    </div>
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">4</div>
+                        <h4>Erlaube dir Fehler</h4>
+                        <p>Fehler sind keine Zeichen von Schwäche, sondern Zeichen, dass du etwas versuchst.
+                        Aus Fehlern lernt man!</p>
+                    </div>
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">5</div>
+                        <h4>Sage "Nein" wenn nötig</h4>
+                        <p>Du musst nicht allen gefallen. Es ist okay, Grenzen zu setzen
+                        und auf deine Bedürfnisse zu achten.</p>
+                    </div>
+                    <div class="selbstliebe-karte">
+                        <div class="nummer">6</div>
+                        <h4>Tu dir regelmäßig Gutes</h4>
+                        <p>Gönne dir Zeit für Dinge, die dir Freude machen.
+                        Selbstfürsorge ist kein Egoismus!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✉️ Brief an mich selbst</h2>
+                <p>Schreibe einen aufmunternden Brief an dein zukünftiges Ich - für Tage, an denen du dich nicht so gut fühlst.</p>
+
+                <div class="brief-container">
+                    <h3>Liebe/r [dein Name],</h3>
+                    <textarea rows="10" placeholder="Wenn du das hier liest, geht es dir vielleicht gerade nicht so gut. Ich möchte, dass du weißt...
+
+Erinnere dich daran, dass du schon so viel geschafft hast, zum Beispiel...
+
+Deine Stärken sind...
+
+Menschen, die dich lieben und unterstützen, sind...
+
+Du bist wertvoll, weil...
+
+In Liebe, [dein Name]"></textarea>
+                </div>
+            </div>
+
+            <div class="affirmation-box">
+                <h3>⭐ Positive Sätze für dich</h3>
+                <p>Lies diese Sätze laut vor - am besten jeden Morgen vor dem Spiegel!</p>
+                <ul class="affirmation-liste">
+                    <li>Ich bin genug, genau so wie ich bin.</li>
+                    <li>Ich verdiene Liebe und Respekt.</li>
+                    <li>Meine Gefühle sind wichtig und berechtigt.</li>
+                    <li>Ich darf Fehler machen - daraus lerne ich.</li>
+                    <li>Ich bin auf meinem eigenen Weg - Vergleiche bringen nichts.</li>
+                    <li>Ich werde jeden Tag ein bisschen stärker.</li>
+                </ul>
+            </div>
+
+            <div class="reflexion-bereich">
+                <h2>🔍 Reflexion: Wo stehe ich?</h2>
+
+                <div class="reflexion-frage">
+                    <p>Wie würdest du deinen Selbstwert gerade einschätzen?</p>
+                    <div class="skala-container">
+                        <div class="skala-labels">
+                            <span>Sehr niedrig</span>
+                            <span>Sehr hoch</span>
+                        </div>
+                        <div class="skala">
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw1" value="1">
+                                <label for="sw1">1</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw2" value="2">
+                                <label for="sw2">2</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw3" value="3">
+                                <label for="sw3">3</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw4" value="4">
+                                <label for="sw4">4</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw5" value="5">
+                                <label for="sw5">5</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw6" value="6">
+                                <label for="sw6">6</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw7" value="7">
+                                <label for="sw7">7</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw8" value="8">
+                                <label for="sw8">8</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw9" value="9">
+                                <label for="sw9">9</label>
+                            </div>
+                            <div class="skala-punkt">
+                                <input type="radio" name="selbstwert" id="sw10" value="10">
+                                <label for="sw10">10</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reflexion-frage">
+                    <p>Was hat dein Selbstwertgefühl in der Vergangenheit gestärkt?</p>
+                    <textarea rows="3" placeholder="Denke an Momente, in denen du dich gut gefühlt hast..."></textarea>
+                </div>
+
+                <div class="reflexion-frage">
+                    <p>Was möchtest du ändern, um dich besser zu fühlen?</p>
+                    <textarea rows="3" placeholder="Welchen kleinen Schritt könntest du heute machen?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>CDSE Luxembourg</strong> | Arbeitsblatt-Tool für pädagogische Fachkräfte</p>
+            <p>Thema: Selbstwert | Du bist wertvoll - genau so wie du bist! 💖</p>
+        </div>
+    </div>
+
+    <script>
+        // Automatisches Speichern aller Eingaben
+        document.querySelectorAll('input, textarea').forEach((element, index) => {
+            const key = 'selbstwert_' + (element.id || element.name || 'element_' + index);
+
+            // Lade gespeicherte Werte
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                if (element.type === 'checkbox') {
+                    element.checked = saved === 'true';
+                } else if (element.type === 'radio') {
+                    if (saved === element.value) {
+                        element.checked = true;
+                    }
+                } else {
+                    element.value = saved;
+                }
+            }
+
+            // Speichere bei Änderung
+            element.addEventListener('change', () => {
+                if (element.type === 'checkbox') {
+                    localStorage.setItem(key, element.checked);
+                } else if (element.type === 'radio') {
+                    localStorage.setItem(key, element.value);
+                } else {
+                    localStorage.setItem(key, element.value);
+                }
+            });
+
+            if (element.type !== 'checkbox' && element.type !== 'radio') {
+                element.addEventListener('input', () => {
+                    localStorage.setItem(key, element.value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

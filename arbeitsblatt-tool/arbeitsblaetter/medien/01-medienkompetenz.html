@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medienkompetenz - Sicher und smart im digitalen Leben</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .arbeitsblatt {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #302b63;
+        }
+
+        .intro-box h2 {
+            color: #302b63;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .section {
+            margin: 35px 0;
+            padding: 25px;
+            background: #fafafa;
+            border-radius: 15px;
+        }
+
+        .section h2 {
+            color: #302b63;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c4dff;
+            font-size: 24px;
+        }
+
+        /* Social Media Grid */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .social-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .social-item:hover {
+            transform: scale(1.05);
+        }
+
+        .social-item.selected {
+            border-color: #7c4dff;
+            background: #ede7f6;
+        }
+
+        .social-item .icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .social-item .name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Bildschirmzeit */
+        .zeit-container {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .zeit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .zeit-item {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .zeit-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .zeit-item select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        /* Gefahren Box */
+        .gefahren-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .gefahr-karte {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid #e53935;
+        }
+
+        .gefahr-karte .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .gefahr-karte h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+
+        .gefahr-karte p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .gefahr-karte .schutz {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+
+        .gefahr-karte .schutz strong {
+            color: #1b5e20;
+        }
+
+        /* Fake News Section */
+        .fakenews-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .fakenews-check {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .fakenews-check h4 {
+            color: #673ab7;
+            margin-bottom: 15px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .check-item input[type="checkbox"] {
+            margin-top: 3px;
+            transform: scale(1.3);
+        }
+
+        /* Szenario Box */
+        .szenario-box {
+            background: white;
+            border: 2px solid #302b63;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .szenario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .szenario-nummer {
+            background: linear-gradient(135deg, #302b63 0%, #7c4dff 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .szenario-text {
+            background: #ede7f6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #7c4dff;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #7c4dff;
+        }
+
+        /* Digitale Identität */
+        .identitaet-box {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .identitaet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .identitaet-seite {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .identitaet-seite h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .identitaet-seite.online h4 { color: #1976d2; }
+        .identitaet-seite.offline h4 { color: #388e3c; }
+
+        .identitaet-seite ul {
+            margin-left: 20px;
+        }
+
+        .identitaet-seite li {
+            margin: 8px 0;
+            color: #666;
+        }
+
+        /* Privatsphäre Checkliste */
+        .privacy-box {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #ff9800;
+        }
+
+        .privacy-box h3 {
+            color: #e65100;
+            margin-bottom: 20px;
+        }
+
+        .privacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .privacy-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .privacy-item input[type="checkbox"] {
+            margin-top: 3px;
+            transform: scale(1.3);
+        }
+
+        /* Digital Detox */
+        .detox-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .detox-tipps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detox-tipp {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .detox-tipp .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .detox-tipp h4 {
+            color: #673ab7;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detox-tipp p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Reflexion */
+        .reflexion-frage {
+            background: white;
+            border-left: 4px solid #302b63;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .reflexion-frage p {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Medien-Vertrag */
+        .vertrag-container {
+            background: #f5f5f5;
+            border: 3px solid #302b63;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .vertrag-container h3 {
+            text-align: center;
+            color: #302b63;
+            margin-bottom: 20px;
+        }
+
+        .vertrag-punkt {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .vertrag-punkt:last-of-type {
+            border-bottom: none;
+        }
+
+        .vertrag-punkt input[type="checkbox"] {
+            margin-top: 3px;
+            transform: scale(1.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Print */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .arbeitsblatt {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .identitaet-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="arbeitsblatt">
+        <div class="header">
+            <h1>📱 Medienkompetenz</h1>
+            <p>Sicher und smart im digitalen Leben</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-box">
+                <h2>Warum ist Medienkompetenz wichtig?</h2>
+                <p>Digitale Medien sind aus unserem Leben nicht mehr wegzudenken - und das ist auch okay!
+                Aber wie bei allem kommt es darauf an, WIE wir sie nutzen.</p>
+                <p style="margin-top: 15px;"><strong>Medienkompetenz</strong> bedeutet, Medien bewusst,
+                kritisch und verantwortungsvoll zu nutzen - und zu wissen, wann es Zeit ist, sie auch
+                mal auszuschalten.</p>
+            </div>
+
+            <div class="section">
+                <h2>📊 Meine Mediennutzung</h2>
+                <p>Welche Plattformen und Apps nutzt du? Klicke an, was auf dich zutrifft:</p>
+
+                <div class="social-grid">
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">📸</div>
+                        <div class="name">Instagram</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">🎵</div>
+                        <div class="name">TikTok</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">📺</div>
+                        <div class="name">YouTube</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">👻</div>
+                        <div class="name">Snapchat</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">💬</div>
+                        <div class="name">WhatsApp</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">🎮</div>
+                        <div class="name">Gaming</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">🐦</div>
+                        <div class="name">Twitter/X</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">💻</div>
+                        <div class="name">Discord</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">🎬</div>
+                        <div class="name">Netflix/Streaming</div>
+                    </div>
+                    <div class="social-item" onclick="this.classList.toggle('selected')">
+                        <div class="icon">🔵</div>
+                        <div class="name">BeReal</div>
+                    </div>
+                </div>
+
+                <div class="zeit-container">
+                    <h3>⏱️ Wie viel Zeit verbringst du täglich mit...</h3>
+                    <div class="zeit-grid">
+                        <div class="zeit-item">
+                            <label>📱 Smartphone gesamt</label>
+                            <select>
+                                <option value="">Auswählen...</option>
+                                <option value="1">Weniger als 1 Stunde</option>
+                                <option value="2">1-2 Stunden</option>
+                                <option value="3">2-4 Stunden</option>
+                                <option value="4">4-6 Stunden</option>
+                                <option value="5">Mehr als 6 Stunden</option>
+                            </select>
+                        </div>
+                        <div class="zeit-item">
+                            <label>📺 Social Media</label>
+                            <select>
+                                <option value="">Auswählen...</option>
+                                <option value="1">Weniger als 1 Stunde</option>
+                                <option value="2">1-2 Stunden</option>
+                                <option value="3">2-4 Stunden</option>
+                                <option value="4">4-6 Stunden</option>
+                                <option value="5">Mehr als 6 Stunden</option>
+                            </select>
+                        </div>
+                        <div class="zeit-item">
+                            <label>🎮 Gaming</label>
+                            <select>
+                                <option value="">Auswählen...</option>
+                                <option value="0">Gar nicht</option>
+                                <option value="1">Weniger als 1 Stunde</option>
+                                <option value="2">1-2 Stunden</option>
+                                <option value="3">2-4 Stunden</option>
+                                <option value="4">Mehr als 4 Stunden</option>
+                            </select>
+                        </div>
+                        <div class="zeit-item">
+                            <label>🎬 Streaming/Videos</label>
+                            <select>
+                                <option value="">Auswählen...</option>
+                                <option value="1">Weniger als 1 Stunde</option>
+                                <option value="2">1-2 Stunden</option>
+                                <option value="3">2-4 Stunden</option>
+                                <option value="4">Mehr als 4 Stunden</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600;">Überrascht dich deine Bildschirmzeit? Was denkst du darüber?</label>
+                    <textarea rows="3" placeholder="Ist es mehr oder weniger als du gedacht hast?" style="margin-top: 10px;"></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ Gefahren im Netz erkennen</h2>
+
+                <div class="gefahren-grid">
+                    <div class="gefahr-karte">
+                        <div class="icon">🎭</div>
+                        <h4>Catfishing / Fake-Profile</h4>
+                        <p>Menschen geben sich online als jemand anderes aus - mit gefälschten Fotos und erfundenen Geschichten.</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> Niemals persönliche Daten an Unbekannte. Videochat vorschlagen. Bei Misstrauen: Bilder rückwärts suchen.
+                        </div>
+                    </div>
+
+                    <div class="gefahr-karte">
+                        <div class="icon">🔗</div>
+                        <h4>Phishing</h4>
+                        <p>Gefälschte Nachrichten oder Websites, die deine Daten stehlen wollen (Passwörter, Bankdaten).</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> Nie auf verdächtige Links klicken. URL prüfen. Keine Daten per Chat/Mail teilen.
+                        </div>
+                    </div>
+
+                    <div class="gefahr-karte">
+                        <div class="icon">😢</div>
+                        <h4>Cybermobbing</h4>
+                        <p>Beleidigungen, Ausgrenzung, Bloßstellung über digitale Kanäle - oft anonym und rund um die Uhr.</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> Screenshots machen. Blockieren & melden. Mit Vertrauensperson reden. Nicht reagieren.
+                        </div>
+                    </div>
+
+                    <div class="gefahr-karte">
+                        <div class="icon">🔞</div>
+                        <h4>Cybergrooming</h4>
+                        <p>Erwachsene, die online Vertrauen zu Jugendlichen aufbauen, um sie zu manipulieren oder zu missbrauchen.</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> Niemals allein treffen! Bei komischen Fragen sofort blocken. Einem Erwachsenen erzählen.
+                        </div>
+                    </div>
+
+                    <div class="gefahr-karte">
+                        <div class="icon">🎰</div>
+                        <h4>Sucht & FOMO</h4>
+                        <p>Ständiger Drang, online zu sein. Angst, etwas zu verpassen (Fear Of Missing Out). Unruhe ohne Handy.</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> Bildschirmzeit-Limits setzen. Handyfreie Zeiten. Offline-Aktivitäten planen.
+                        </div>
+                    </div>
+
+                    <div class="gefahr-karte">
+                        <div class="icon">💸</div>
+                        <h4>Kostenfallen</h4>
+                        <p>In-App-Käufe, Abofallen, versteckte Kosten bei "kostenlosen" Spielen und Apps.</p>
+                        <div class="schutz">
+                            <strong>Schutz:</strong> In-App-Käufe deaktivieren. AGB lesen. Bei Abos vorsichtig sein. Mit Eltern sprechen.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Fake News erkennen</h2>
+
+                <div class="fakenews-container">
+                    <h3 style="margin-bottom: 20px;">Nicht alles, was im Internet steht, ist wahr!</h3>
+                    <p>Fake News (Falschnachrichten) verbreiten sich oft schneller als die Wahrheit.
+                    Mit diesen Checks kannst du sie entlarven:</p>
+
+                    <div class="fakenews-check">
+                        <h4>✅ Der Fake-News-Check</h4>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn1">
+                            <label for="fn1"><strong>Quelle prüfen:</strong> Wer hat das veröffentlicht?
+                            Ist es eine seriöse Nachrichtenseite oder ein unbekannter Blog?</label>
+                        </div>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn2">
+                            <label for="fn2"><strong>Autor checken:</strong> Gibt es einen Autor?
+                            Existiert diese Person wirklich? Was hat sie sonst veröffentlicht?</label>
+                        </div>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn3">
+                            <label for="fn3"><strong>Datum beachten:</strong> Ist der Artikel aktuell
+                            oder wird eine alte Geschichte als neu verkauft?</label>
+                        </div>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn4">
+                            <label for="fn4"><strong>Andere Quellen suchen:</strong> Berichten andere
+                            seriöse Medien das Gleiche? Wenn nur einer berichtet: Vorsicht!</label>
+                        </div>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn5">
+                            <label for="fn5"><strong>Bilder überprüfen:</strong> Bilder können manipuliert
+                            oder aus anderem Kontext sein. Rückwärts-Bildersuche nutzen!</label>
+                        </div>
+
+                        <div class="check-item">
+                            <input type="checkbox" id="fn6">
+                            <label for="fn6"><strong>Emotionen hinterfragen:</strong> Macht dich die
+                            Nachricht wütend oder ängstlich? Das ist oft Absicht bei Fake News!</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎭 Was würdest du tun?</h2>
+
+                <div class="szenario-box">
+                    <div class="szenario-header">
+                        <span class="szenario-nummer">1</span>
+                        <span><strong>Die Freundschaftsanfrage</strong></span>
+                    </div>
+                    <div class="szenario-text">
+                        Du bekommst eine Freundschaftsanfrage von jemandem, den du nicht kennst.
+                        Das Profil sieht echt aus - schöne Fotos, viele Freunde. Die Person schreibt,
+                        sie kenne dich von einem Freund und möchte dich kennenlernen.
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600;">Was machst du?</label>
+                        <textarea rows="3" placeholder="Wie würdest du reagieren? Worauf würdest du achten?"></textarea>
+                    </div>
+                </div>
+
+                <div class="szenario-box">
+                    <div class="szenario-header">
+                        <span class="szenario-nummer">2</span>
+                        <span><strong>Das peinliche Video</strong></span>
+                    </div>
+                    <div class="szenario-text">
+                        Ein peinliches Video von einem Mitschüler wird in der Klassen-Gruppe geteilt.
+                        Alle lachen und teilen es weiter. Jemand sagt dir, du sollst es auch teilen,
+                        sonst bist du "uncool".
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600;">Was machst du?</label>
+                        <textarea rows="3" placeholder="Wie würdest du reagieren?"></textarea>
+                    </div>
+                </div>
+
+                <div class="szenario-box">
+                    <div class="szenario-header">
+                        <span class="szenario-nummer">3</span>
+                        <span><strong>Die schockierende Nachricht</strong></span>
+                    </div>
+                    <div class="szenario-text">
+                        Du siehst einen Artikel mit der Überschrift: "SCHOCKIEREND: [Berühmte Person]
+                        gestorben!" Der Link sieht komisch aus. Deine Freunde teilen es schon alle
+                        und sind aufgeregt.
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600;">Was machst du?</label>
+                        <textarea rows="3" placeholder="Wie würdest du die Nachricht überprüfen?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>👤 Deine digitale Identität</h2>
+
+                <div class="identitaet-box">
+                    <h3 style="margin-bottom: 15px;">Online vs. Offline - Wer bist du wirklich?</h3>
+                    <p>Viele Menschen zeigen online eine andere Version von sich selbst. Das ist normal -
+                    aber es kann auch problematisch werden.</p>
+
+                    <div class="identitaet-grid">
+                        <div class="identitaet-seite online">
+                            <h4>🌐 Online-Ich</h4>
+                            <ul>
+                                <li>Zeigt oft nur die "Highlights"</li>
+                                <li>Bearbeite Fotos/Filter</li>
+                                <li>Kann sich anders darstellen</li>
+                                <li>Wird von anderen bewertet (Likes)</li>
+                                <li>Bleibt "für immer" im Internet</li>
+                            </ul>
+                        </div>
+                        <div class="identitaet-seite offline">
+                            <h4>🏠 Echtes Ich</h4>
+                            <ul>
+                                <li>Mit allen Höhen und Tiefen</li>
+                                <li>Echtes Aussehen</li>
+                                <li>Authentisch mit Stärken & Schwächen</li>
+                                <li>Wird von echten Beziehungen getragen</li>
+                                <li>Kann Fehler machen und lernen</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600;">Wie unterscheidet sich dein Online-Ich von deinem echten Ich?</label>
+                    <textarea rows="3" placeholder="Zeigst du online alles von dir? Was hältst du zurück?" style="margin-top: 10px;"></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔒 Privatsphäre-Check</h2>
+
+                <div class="privacy-box">
+                    <h3>Checkst du regelmäßig deine Privatsphäre-Einstellungen?</h3>
+                    <p style="margin-bottom: 20px;">Geh diese Liste durch und hake ab, was du schon erledigt hast:</p>
+
+                    <div class="privacy-grid">
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p1">
+                            <label for="p1">Mein Profil ist auf <strong>privat</strong> gestellt</label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p2">
+                            <label for="p2">Ich habe ein <strong>sicheres Passwort</strong> (mind. 12 Zeichen)</label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p3">
+                            <label for="p3">Ich nutze <strong>2-Faktor-Authentifizierung</strong></label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p4">
+                            <label for="p4">Mein Standort ist <strong>nicht öffentlich</strong> sichtbar</label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p5">
+                            <label for="p5">Ich akzeptiere nicht <strong>jeden als Freund</strong></label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p6">
+                            <label for="p6">Ich teile keine <strong>Adresse/Telefon</strong> öffentlich</label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p7">
+                            <label for="p7">Ich überlege, <strong>bevor ich poste</strong></label>
+                        </div>
+                        <div class="privacy-item">
+                            <input type="checkbox" id="p8">
+                            <label for="p8">Ich nutze <strong>verschiedene Passwörter</strong> für verschiedene Accounts</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🌿 Digital Detox - Zeit für eine Pause</h2>
+
+                <div class="detox-box">
+                    <p style="margin-bottom: 15px;"><strong>Manchmal ist weniger mehr!</strong>
+                    Diese Tipps helfen dir, eine gesunde Balance zu finden:</p>
+
+                    <div class="detox-tipps">
+                        <div class="detox-tipp">
+                            <div class="icon">🛏️</div>
+                            <h4>Handy aus dem Schlafzimmer</h4>
+                            <p>Kein Scrollen vor dem Schlafen - besserer Schlaf!</p>
+                        </div>
+                        <div class="detox-tipp">
+                            <div class="icon">⏰</div>
+                            <h4>Bildschirmzeit-Limits</h4>
+                            <p>Setze dir tägliche Limits für Apps</p>
+                        </div>
+                        <div class="detox-tipp">
+                            <div class="icon">🔕</div>
+                            <h4>Benachrichtigungen aus</h4>
+                            <p>Weniger Ablenkung, mehr Ruhe</p>
+                        </div>
+                        <div class="detox-tipp">
+                            <div class="icon">🏃</div>
+                            <h4>Offline-Aktivitäten</h4>
+                            <p>Sport, Freunde treffen, Hobbys ohne Screen</p>
+                        </div>
+                        <div class="detox-tipp">
+                            <div class="icon">🍽️</div>
+                            <h4>Handyfreie Mahlzeiten</h4>
+                            <p>Beim Essen das Handy weglegen</p>
+                        </div>
+                        <div class="detox-tipp">
+                            <div class="icon">📵</div>
+                            <h4>Handyfreie Stunden</h4>
+                            <p>Feste Zeiten ohne digitale Geräte</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600;">Welchen Digital-Detox-Tipp könntest du diese Woche ausprobieren?</label>
+                    <textarea rows="2" placeholder="Nimm dir etwas Konkretes vor..." style="margin-top: 10px;"></textarea>
+                </div>
+            </div>
+
+            <div class="vertrag-container">
+                <h3>📱 Mein Medien-Vertrag mit mir selbst</h3>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v1">
+                    <label for="v1">Ich überprüfe Informationen, bevor ich sie teile.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v2">
+                    <label for="v2">Ich behandle andere online so, wie ich behandelt werden möchte.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v3">
+                    <label for="v3">Ich teile keine peinlichen Fotos/Videos von anderen.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v4">
+                    <label for="v4">Ich schütze meine persönlichen Daten und Passwörter.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v5">
+                    <label for="v5">Ich erzähle einem Erwachsenen, wenn mir online etwas komisch vorkommt.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v6">
+                    <label for="v6">Ich nehme mir regelmäßig Auszeiten von Bildschirmen.</label>
+                </div>
+
+                <div class="vertrag-punkt">
+                    <input type="checkbox" id="v7">
+                    <label for="v7">Ich vergleiche mich nicht ständig mit anderen auf Social Media.</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Reflexion</h2>
+
+                <div class="reflexion-frage">
+                    <p>Was ist das Beste an digitalen Medien für dich?</p>
+                    <textarea rows="2" placeholder="Was magst du daran?"></textarea>
+                </div>
+
+                <div class="reflexion-frage">
+                    <p>Was ist das Schwierigste oder Nervigste?</p>
+                    <textarea rows="2" placeholder="Was stört dich manchmal?"></textarea>
+                </div>
+
+                <div class="reflexion-frage">
+                    <p>Hast du schon mal eine negative Erfahrung online gemacht? Was hast du daraus gelernt?</p>
+                    <textarea rows="3" placeholder="Teile deine Erfahrung, wenn du möchtest..."></textarea>
+                </div>
+
+                <div class="reflexion-frage">
+                    <p>Wie möchtest du in Zukunft mit digitalen Medien umgehen?</p>
+                    <textarea rows="2" placeholder="Was möchtest du beibehalten oder ändern?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>CDSE Luxembourg</strong> | Arbeitsblatt-Tool für pädagogische Fachkräfte</p>
+            <p>Thema: Medienkompetenz | Smart und sicher im digitalen Leben 📱</p>
+        </div>
+    </div>
+
+    <script>
+        // Automatisches Speichern
+        document.querySelectorAll('input, textarea, select').forEach((element, index) => {
+            const key = 'medien_' + (element.id || element.name || 'element_' + index);
+
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                if (element.type === 'checkbox') {
+                    element.checked = saved === 'true';
+                } else if (element.type === 'radio') {
+                    if (saved === element.value) {
+                        element.checked = true;
+                    }
+                } else {
+                    element.value = saved;
+                }
+            }
+
+            element.addEventListener('change', () => {
+                if (element.type === 'checkbox') {
+                    localStorage.setItem(key, element.checked);
+                } else if (element.type === 'radio') {
+                    localStorage.setItem(key, element.value);
+                } else {
+                    localStorage.setItem(key, element.value);
+                }
+            });
+
+            if (element.tagName === 'TEXTAREA') {
+                element.addEventListener('input', () => {
+                    localStorage.setItem(key, element.value);
+                });
+            }
+        });
+
+        // Social Media Auswahl speichern
+        document.querySelectorAll('.social-item').forEach((item, index) => {
+            const key = 'medien_social_' + index;
+            const saved = localStorage.getItem(key);
+            if (saved === 'true') {
+                item.classList.add('selected');
+            }
+
+            item.addEventListener('click', () => {
+                setTimeout(() => {
+                    localStorage.setItem(key, item.classList.contains('selected'));
+                }, 10);
+            });
+        });
+    </script>
+</body>
+</html>
