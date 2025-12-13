@@ -1,0 +1,295 @@
+{
+  "uebungstypen": [
+    {
+      "typ": "selbstreflexion",
+      "name": "Selbstreflexion",
+      "beschreibung": "Übungen zur Selbstwahrnehmung und Reflexion",
+      "vorlagen": [
+        {
+          "id": "reflexion_gefuehle",
+          "titel": "Meine Gefühle heute",
+          "anleitung": "Kreuze an, wie du dich heute fühlst und beschreibe warum.",
+          "elemente": [
+            {"typ": "gefuehlsskala", "label": "Wie geht es dir?", "optionen": ["sehr gut", "gut", "mittelmäßig", "nicht so gut", "schlecht"]},
+            {"typ": "textfeld", "label": "Was ist der Grund dafür?", "zeilen": 3},
+            {"typ": "textfeld", "label": "Was könnte dir helfen, dich besser zu fühlen?", "zeilen": 2}
+          ]
+        },
+        {
+          "id": "reflexion_verhalten",
+          "titel": "Mein Verhalten reflektieren",
+          "anleitung": "Denke über eine Situation nach, in der du anders reagiert hast als du wolltest.",
+          "elemente": [
+            {"typ": "textfeld", "label": "Beschreibe die Situation:", "zeilen": 3},
+            {"typ": "textfeld", "label": "Wie hast du reagiert?", "zeilen": 2},
+            {"typ": "textfeld", "label": "Wie hättest du reagieren wollen?", "zeilen": 2},
+            {"typ": "textfeld", "label": "Was kannst du nächstes Mal anders machen?", "zeilen": 2}
+          ]
+        },
+        {
+          "id": "reflexion_staerken",
+          "titel": "Meine Stärken und Schwächen",
+          "anleitung": "Schreibe auf, was du gut kannst und woran du noch arbeiten möchtest.",
+          "elemente": [
+            {"typ": "liste", "label": "Meine Stärken:", "anzahl": 5},
+            {"typ": "liste", "label": "Das möchte ich verbessern:", "anzahl": 3},
+            {"typ": "textfeld", "label": "So kann ich an mir arbeiten:", "zeilen": 3}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "situationsanalyse",
+      "name": "Situationsanalyse",
+      "beschreibung": "Analyse von sozialen Situationen und Konflikten",
+      "vorlagen": [
+        {
+          "id": "konflikt_analyse",
+          "titel": "Konflikt analysieren",
+          "anleitung": "Analysiere einen Konflikt, den du erlebt hast.",
+          "elemente": [
+            {"typ": "textfeld", "label": "Was ist passiert?", "zeilen": 3},
+            {"typ": "textfeld", "label": "Wer war beteiligt?", "zeilen": 1},
+            {"typ": "textfeld", "label": "Was wolltest du?", "zeilen": 2},
+            {"typ": "textfeld", "label": "Was wollte die andere Person?", "zeilen": 2},
+            {"typ": "textfeld", "label": "Was war das Ergebnis?", "zeilen": 2},
+            {"typ": "auswahl", "label": "Wie zufrieden bist du mit dem Ergebnis?", "optionen": ["sehr zufrieden", "zufrieden", "teils/teils", "unzufrieden", "sehr unzufrieden"]},
+            {"typ": "textfeld", "label": "Was könntest du nächstes Mal anders machen?", "zeilen": 3}
+          ]
+        },
+        {
+          "id": "perspektiven_wechsel",
+          "titel": "Perspektivenwechsel",
+          "anleitung": "Versuche, eine Situation aus verschiedenen Blickwinkeln zu betrachten.",
+          "elemente": [
+            {"typ": "textfeld", "label": "Beschreibe die Situation:", "zeilen": 3},
+            {"typ": "textfeld", "label": "Meine Sichtweise:", "zeilen": 3},
+            {"typ": "textfeld", "label": "So könnte Person A es sehen:", "zeilen": 3},
+            {"typ": "textfeld", "label": "So könnte Person B es sehen:", "zeilen": 3},
+            {"typ": "textfeld", "label": "Was habe ich durch den Perspektivenwechsel gelernt?", "zeilen": 2}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "ich_botschaften",
+      "name": "Ich-Botschaften",
+      "beschreibung": "Übungen zur gewaltfreien Kommunikation",
+      "vorlagen": [
+        {
+          "id": "ich_botschaft_ueben",
+          "titel": "Ich-Botschaften formulieren",
+          "anleitung": "Wandle Du-Botschaften in Ich-Botschaften um.",
+          "beispiel": {
+            "du_botschaft": "Du nervst mich total!",
+            "ich_botschaft": "Ich fühle mich gestresst, wenn du laut bist, weil ich mich dann nicht konzentrieren kann. Ich wünsche mir, dass du leiser bist."
+          },
+          "elemente": [
+            {"typ": "erklaerung", "text": "Ich-Botschaft Formel: Ich fühle... + wenn du... + weil ich... + Ich wünsche mir..."},
+            {"typ": "uebung", "label": "Du-Botschaft 1:", "vorgabe": "Du hörst mir nie zu!"},
+            {"typ": "textfeld", "label": "Deine Ich-Botschaft:", "zeilen": 2},
+            {"typ": "uebung", "label": "Du-Botschaft 2:", "vorgabe": "Du bist so gemein!"},
+            {"typ": "textfeld", "label": "Deine Ich-Botschaft:", "zeilen": 2},
+            {"typ": "uebung", "label": "Du-Botschaft 3:", "vorgabe": "Du machst alles kaputt!"},
+            {"typ": "textfeld", "label": "Deine Ich-Botschaft:", "zeilen": 2}
+          ]
+        },
+        {
+          "id": "gfk_vier_schritte",
+          "titel": "Die 4 Schritte der Gewaltfreien Kommunikation",
+          "anleitung": "Übe die 4 Schritte nach Marshall Rosenberg.",
+          "elemente": [
+            {"typ": "erklaerung", "text": "1. Beobachtung (ohne Bewertung)\n2. Gefühl\n3. Bedürfnis\n4. Bitte"},
+            {"typ": "textfeld", "label": "Situation, die mich beschäftigt:", "zeilen": 2},
+            {"typ": "textfeld", "label": "1. Beobachtung - Was ist konkret passiert?", "zeilen": 2},
+            {"typ": "textfeld", "label": "2. Gefühl - Wie fühle ich mich dabei?", "zeilen": 1},
+            {"typ": "textfeld", "label": "3. Bedürfnis - Was brauche ich?", "zeilen": 1},
+            {"typ": "textfeld", "label": "4. Bitte - Was wünsche ich mir?", "zeilen": 2}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "gruppenarbeit",
+      "name": "Gruppenarbeit",
+      "beschreibung": "Arbeitsblätter für Gruppenaktivitäten",
+      "vorlagen": [
+        {
+          "id": "gruppenregeln",
+          "titel": "Unsere Gruppenregeln",
+          "anleitung": "Erarbeitet gemeinsam Regeln für eure Gruppe.",
+          "elemente": [
+            {"typ": "textfeld", "label": "Name der Gruppe:", "zeilen": 1},
+            {"typ": "liste", "label": "So gehen wir miteinander um:", "anzahl": 5},
+            {"typ": "liste", "label": "Das wollen wir vermeiden:", "anzahl": 3},
+            {"typ": "textfeld", "label": "Konsequenz bei Regelverletzung:", "zeilen": 2},
+            {"typ": "unterschriften", "label": "Wir halten uns an diese Regeln:", "anzahl": 10}
+          ]
+        },
+        {
+          "id": "team_reflexion",
+          "titel": "Team-Reflexion",
+          "anleitung": "Reflektiert gemeinsam eure Zusammenarbeit.",
+          "elemente": [
+            {"typ": "skala", "label": "Wie gut war unsere Zusammenarbeit?", "min": 1, "max": 10},
+            {"typ": "textfeld", "label": "Das hat gut funktioniert:", "zeilen": 3},
+            {"typ": "textfeld", "label": "Das war schwierig:", "zeilen": 3},
+            {"typ": "textfeld", "label": "Das nehmen wir uns für nächstes Mal vor:", "zeilen": 3}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "quiz",
+      "name": "Quiz & Wissenstest",
+      "beschreibung": "Interaktive Wissensabfragen",
+      "vorlagen": [
+        {
+          "id": "mobbing_quiz",
+          "titel": "Quiz: Mobbing erkennen",
+          "anleitung": "Teste dein Wissen über Mobbing.",
+          "fragen": [
+            {
+              "frage": "Was ist der Unterschied zwischen Konflikt und Mobbing?",
+              "optionen": [
+                "Es gibt keinen Unterschied",
+                "Mobbing geschieht wiederholt und über längere Zeit, Konflikte sind eher einmalig",
+                "Konflikte sind schlimmer als Mobbing",
+                "Mobbing passiert nur online"
+              ],
+              "richtig": 1
+            },
+            {
+              "frage": "Wer ist beim Mobbing beteiligt?",
+              "optionen": [
+                "Nur Täter und Opfer",
+                "Täter, Opfer, Mitläufer, Zuschauer und Verteidiger",
+                "Nur die Lehrkräfte",
+                "Nur die Eltern"
+              ],
+              "richtig": 1
+            },
+            {
+              "frage": "Was solltest du tun, wenn du Mobbing beobachtest?",
+              "optionen": [
+                "Wegschauen und nichts sagen",
+                "Selbst mitmachen",
+                "Hilfe holen und das Opfer unterstützen",
+                "Das Opfer auslachen"
+              ],
+              "richtig": 2
+            }
+          ]
+        },
+        {
+          "id": "gefuehle_quiz",
+          "titel": "Quiz: Gefühle erkennen",
+          "anleitung": "Wie gut kannst du Gefühle erkennen?",
+          "fragen": [
+            {
+              "frage": "Welches Gefühl zeigt ein zusammengezogener Mund und hochgezogene Schultern?",
+              "optionen": ["Freude", "Wut", "Angst", "Traurigkeit"],
+              "richtig": 2
+            },
+            {
+              "frage": "Was ist KEIN Grundgefühl?",
+              "optionen": ["Freude", "Traurigkeit", "Eifersucht", "Wut"],
+              "richtig": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "rollenspiel",
+      "name": "Rollenspiel",
+      "beschreibung": "Anleitungen für Rollenspiele",
+      "vorlagen": [
+        {
+          "id": "rollenspiel_konflikt",
+          "titel": "Rollenspiel: Konfliktlösung",
+          "anleitung": "Spielt die folgende Situation und findet eine Lösung.",
+          "elemente": [
+            {"typ": "szenario", "titel": "Die Situation:", "text": ""},
+            {"typ": "rollen", "anzahl": 3},
+            {"typ": "beobachtungsaufgaben", "label": "Beobachter achten auf:", "punkte": ["Körpersprache", "Tonfall", "Lösungsvorschläge"]},
+            {"typ": "reflexion", "label": "Nach dem Rollenspiel:", "fragen": ["Was ist gut gelaufen?", "Was war schwierig?", "Welche Alternativen gäbe es?"]}
+          ]
+        },
+        {
+          "id": "rollenspiel_nein_sagen",
+          "titel": "Rollenspiel: Nein sagen",
+          "anleitung": "Übe, selbstbewusst Nein zu sagen.",
+          "szenarien": [
+            {"titel": "Gruppendruck", "beschreibung": "Freunde wollen, dass du bei etwas mitmachst, das du nicht willst."},
+            {"titel": "Grenzen setzen", "beschreibung": "Jemand kommt dir körperlich zu nah."},
+            {"titel": "Überforderung", "beschreibung": "Man verlangt zu viel von dir."}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "kreativ",
+      "name": "Kreative Aufgaben",
+      "beschreibung": "Kreative Ausdrucksformen",
+      "vorlagen": [
+        {
+          "id": "gefuehlscollage",
+          "titel": "Meine Gefühls-Collage",
+          "anleitung": "Erstelle eine Collage, die deine aktuellen Gefühle zeigt.",
+          "materialien": ["Zeitschriften", "Schere", "Kleber", "Papier", "Stifte"],
+          "elemente": [
+            {"typ": "anleitung", "schritte": [
+              "Sammle Bilder, die zu deinen Gefühlen passen",
+              "Schneide sie aus und ordne sie an",
+              "Klebe sie auf das Papier",
+              "Schreibe Wörter oder Sätze dazu"
+            ]},
+            {"typ": "reflexion", "fragen": ["Was drückt meine Collage aus?", "Welches Bild ist am wichtigsten?"]}
+          ]
+        },
+        {
+          "id": "persoenliches_wappen",
+          "titel": "Mein persönliches Wappen",
+          "anleitung": "Gestalte ein Wappen, das dich und deine Werte zeigt.",
+          "elemente": [
+            {"typ": "wappen_vorlage", "felder": 4},
+            {"typ": "anleitung", "text": "Feld 1: Meine größte Stärke\nFeld 2: Was mir wichtig ist\nFeld 3: Ein Ziel für die Zukunft\nFeld 4: Was mich glücklich macht"},
+            {"typ": "textfeld", "label": "Mein Motto:", "zeilen": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "typ": "checkliste",
+      "name": "Checklisten",
+      "beschreibung": "Praktische Checklisten für verschiedene Situationen",
+      "vorlagen": [
+        {
+          "id": "checkliste_konflikt",
+          "titel": "Checkliste: Vor einem schwierigen Gespräch",
+          "punkte": [
+            {"text": "Ich habe mir überlegt, was ich sagen möchte", "checkbox": true},
+            {"text": "Ich habe Ich-Botschaften vorbereitet", "checkbox": true},
+            {"text": "Ich weiß, was mein Ziel ist", "checkbox": true},
+            {"text": "Ich habe einen ruhigen Ort gewählt", "checkbox": true},
+            {"text": "Ich habe genug Zeit eingeplant", "checkbox": true},
+            {"text": "Ich bin bereit, auch zuzuhören", "checkbox": true}
+          ]
+        },
+        {
+          "id": "checkliste_selbstfuersorge",
+          "titel": "Checkliste: Selbstfürsorge",
+          "punkte": [
+            {"text": "Ich habe heute genug geschlafen", "checkbox": true},
+            {"text": "Ich habe etwas Gesundes gegessen", "checkbox": true},
+            {"text": "Ich habe mich bewegt", "checkbox": true},
+            {"text": "Ich habe Zeit für mich genommen", "checkbox": true},
+            {"text": "Ich habe mit jemandem gesprochen", "checkbox": true},
+            {"text": "Ich habe etwas gemacht, das mir Freude bereitet", "checkbox": true}
+          ]
+        }
+      ]
+    }
+  ]
+}

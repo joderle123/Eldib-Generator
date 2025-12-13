@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELDiB Arbeitsblatt-Generator | CDSE Luxembourg</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--gray);
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        .themen-liste {
+            list-style: none;
+        }
+
+        .themen-liste li {
+            margin: 5px 0;
+        }
+
+        .themen-liste button {
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: var(--light);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .themen-liste button:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .themen-liste button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .themen-liste .icon {
+            font-size: 1.2em;
+        }
+
+        .kategorie-titel {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin: 20px 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .content-header h2 {
+            font-size: 1.8em;
+            color: var(--dark);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: var(--light);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .badge.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: var(--light);
+        }
+
+        .tab.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .uebung-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .uebung-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .uebung-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .uebung-card p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #27ae60;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .stufen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stufe-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stufe-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stufe-card h4 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .stufe-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .items-liste {
+            margin-top: 20px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--light);
+        }
+
+        .item-code {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .item-beschreibung {
+            color: var(--gray);
+            font-size: 13px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Arbeitsblatt Preview */
+        .preview-container {
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group textarea,
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group textarea:focus,
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .radio-option {
+            padding: 10px 20px;
+            background: var(--light);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .radio-option.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 ELDiB Arbeitsblatt-Generator</h1>
+            <p>Interaktive Arbeitsblätter für pädagogische Fachkräfte | Basierend auf ETEP</p>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>📋 Themenbereiche</h2>
+
+                <p class="kategorie-titel">ELDiB Bereiche</p>
+                <ul class="themen-liste" id="eldib-themen">
+                    <li><button onclick="selectThema('verhalten')" data-thema="verhalten"><span class="icon">🎯</span> Verhalten</button></li>
+                    <li><button onclick="selectThema('kommunikation')" data-thema="kommunikation"><span class="icon">💬</span> Kommunikation</button></li>
+                    <li><button onclick="selectThema('sozialisation')" data-thema="sozialisation"><span class="icon">👥</span> Sozialisation</button></li>
+                </ul>
+
+                <p class="kategorie-titel">Zusatzthemen</p>
+                <ul class="themen-liste" id="zusatz-themen">
+                    <li><button onclick="selectThema('mobbing')" data-thema="mobbing"><span class="icon">🛡️</span> Mobbing</button></li>
+                    <li><button onclick="selectThema('konflikte')" data-thema="konflikte"><span class="icon">⚖️</span> Konflikte</button></li>
+                    <li><button onclick="selectThema('emotionen')" data-thema="emotionen"><span class="icon">💭</span> Gefühle</button></li>
+                    <li><button onclick="selectThema('selbstwert')" data-thema="selbstwert"><span class="icon">⭐</span> Selbstwert</button></li>
+                    <li><button onclick="selectThema('medien')" data-thema="medien"><span class="icon">📱</span> Medien</button></li>
+                    <li><button onclick="selectThema('sucht')" data-thema="sucht"><span class="icon">🚫</span> Suchtprävention</button></li>
+                    <li><button onclick="selectThema('respekt')" data-thema="respekt"><span class="icon">🤝</span> Respekt & Toleranz</button></li>
+                    <li><button onclick="selectThema('freundschaft')" data-thema="freundschaft"><span class="icon">❤️</span> Freundschaft</button></li>
+                    <li><button onclick="selectThema('gewalt')" data-thema="gewalt"><span class="icon">✋</span> Gewaltprävention</button></li>
+                    <li><button onclick="selectThema('teamarbeit')" data-thema="teamarbeit"><span class="icon">🏆</span> Teamwork</button></li>
+                </ul>
+            </aside>
+
+            <main class="content-area" id="content-area">
+                <div class="welcome-screen" id="welcome-screen">
+                    <h2>Willkommen beim ELDiB Arbeitsblatt-Generator! 👋</h2>
+                    <p style="margin: 20px 0; color: var(--gray);">
+                        Wählen Sie links ein Thema aus, um interaktive Arbeitsblätter für Ihre pädagogische Arbeit zu erstellen.
+                    </p>
+
+                    <div style="margin-top: 40px;">
+                        <h3 style="margin-bottom: 20px;">🎯 Was ist ELDiB?</h3>
+                        <p style="color: var(--gray); line-height: 1.8;">
+                            Der <strong>Entwicklungstherapeutische/entwicklungspädagogische Lernziel-Diagnose-Bogen (ELDiB)</strong>
+                            ist ein Instrument zur Einschätzung und Förderung von Kindern und Jugendlichen in den Bereichen
+                            Verhalten, Kommunikation, Sozialisation und Kognition. Er basiert auf dem ETEP-Ansatz
+                            (Entwicklungstherapie/Entwicklungspädagogik).
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 40px;">
+                        <h3 style="margin-bottom: 20px;">📚 Verfügbare Themenbereiche</h3>
+                        <div class="stufen-grid">
+                            <div class="stufe-card" onclick="selectThema('verhalten')">
+                                <h4>🎯 Verhalten</h4>
+                                <p>Selbststeuerung & Impulskontrolle</p>
+                            </div>
+                            <div class="stufe-card" onclick="selectThema('kommunikation')">
+                                <h4>💬 Kommunikation</h4>
+                                <p>Sprachliche Kompetenzen</p>
+                            </div>
+                            <div class="stufe-card" onclick="selectThema('sozialisation')">
+                                <h4>👥 Sozialisation</h4>
+                                <p>Soziale Fähigkeiten</p>
+                            </div>
+                            <div class="stufe-card" onclick="selectThema('mobbing')">
+                                <h4>🛡️ Mobbing</h4>
+                                <p>Prävention & Intervention</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="thema-content" style="display: none;">
+                    <!-- Dynamischer Inhalt wird hier eingefügt -->
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <p>© 2024 CDSE Luxembourg | ELDiB Arbeitsblatt-Generator</p>
+            <p>Basierend auf dem ETEP-Ansatz | Institut für Entwicklungstherapie/Entwicklungspädagogik e.V.</p>
+        </footer>
+    </div>
+
+    <!-- Modal für Arbeitsblatt-Generator -->
+    <div class="modal" id="generator-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Arbeitsblatt erstellen</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Formular wird hier eingefügt -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datenbank der Themen und Übungen
+        const themenDaten = {
+            verhalten: {
+                name: "Verhalten",
+                icon: "🎯",
+                beschreibung: "Entwicklung von Verhaltenskompetenzen und Selbststeuerung",
+                stufen: [
+                    {
+                        stufe: 1,
+                        titel: "Mit Freude auf die Umwelt reagieren",
+                        ziel: "Den eigenen körperlichen Fähigkeiten vertrauen",
+                        alter: "0-2 Jahre / Basiskompetenzen",
+                        items: [
+                            {code: "V-1", name: "Wahrnehmung", beschreibung: "Erkennt sensorische Reize"},
+                            {code: "V-2", name: "Orientierung", beschreibung: "Wendet sich Reizquellen zu"},
+                            {code: "V-3", name: "Aufmerksamkeit", beschreibung: "Hält Aufmerksamkeit kurz aufrecht"}
+                        ]
+                    },
+                    {
+                        stufe: 2,
+                        titel: "Erfolgreich auf die Umwelt reagieren",
+                        ziel: "An Routineabläufen teilnehmen",
+                        alter: "2-5 Jahre / Frühe Kindheit"
+                    },
+                    {
+                        stufe: 3,
+                        titel: "Erfolgreiche Teilnahme in Gruppen",
+                        ziel: "Eigenes Verhalten in Gruppen steuern",
+                        alter: "6-9 Jahre / Grundschulalter"
+                    },
+                    {
+                        stufe: 4,
+                        titel: "Sich einbringen in Gruppenprozesse",
+                        ziel: "Zum Gruppenerfolg beitragen",
+                        alter: "9-12 Jahre / Späte Kindheit"
+                    },
+                    {
+                        stufe: 5,
+                        titel: "Fähigkeiten in neuen Situationen anwenden",
+                        ziel: "Konstruktives Verhalten im echten Leben",
+                        alter: "12-16+ Jahre / Jugendalter"
+                    }
+                ]
+            },
+            kommunikation: {
+                name: "Kommunikation",
+                icon: "💬",
+                beschreibung: "Entwicklung von sprachlichen und kommunikativen Fähigkeiten",
+                stufen: [
+                    {stufe: 1, titel: "Mit Freude reagieren", ziel: "Wörter für Bedürfnisse nutzen", alter: "0-2 Jahre"},
+                    {stufe: 2, titel: "Erfolgreich reagieren", ziel: "Andere konstruktiv beeinflussen", alter: "2-5 Jahre"},
+                    {stufe: 3, titel: "Teilnahme in Gruppen", ziel: "In Gruppen konstruktiv äußern", alter: "6-9 Jahre"},
+                    {stufe: 4, titel: "Gruppenprozesse", ziel: "Gefühle und Verhalten verstehen", alter: "9-12 Jahre"},
+                    {stufe: 5, titel: "Neue Situationen", ziel: "Beziehungen pflegen", alter: "12-16+ Jahre"}
+                ]
+            },
+            sozialisation: {
+                name: "Sozialisation",
+                icon: "👥",
+                beschreibung: "Entwicklung sozialer Kompetenzen und Beziehungsfähigkeit",
+                stufen: [
+                    {stufe: 1, titel: "Mit Freude reagieren", ziel: "Vertrauen zu Erwachsenen", alter: "0-2 Jahre"},
+                    {stufe: 2, titel: "Erfolgreich reagieren", ziel: "An Aktivitäten beteiligen", alter: "2-5 Jahre"},
+                    {stufe: 3, titel: "Teilnahme in Gruppen", ziel: "Gruppen als befriedigend erleben", alter: "6-9 Jahre"},
+                    {stufe: 4, titel: "Gruppenprozesse", ziel: "Als Gruppenmitglied teilnehmen", alter: "9-12 Jahre"},
+                    {stufe: 5, titel: "Neue Situationen", ziel: "Dauerhafte Beziehungen pflegen", alter: "12-16+ Jahre"}
+                ]
+            },
+            mobbing: {
+                name: "Mobbing & Cybermobbing",
+                icon: "🛡️",
+                beschreibung: "Prävention und Intervention bei Mobbing",
+                zielgruppe: "10-18 Jahre",
+                unterthemen: [
+                    {name: "Was ist Mobbing?", uebungen: ["Fallanalyse", "Checkliste", "Rollenspiel"]},
+                    {name: "Cybermobbing", uebungen: ["Quiz", "Digitaler Fußabdruck", "Hilfe holen"]},
+                    {name: "Intervention", uebungen: ["Eingreifen üben", "Notfallplan", "Kampagne erstellen"]}
+                ]
+            },
+            konflikte: {
+                name: "Konflikte & Konfliktlösung",
+                icon: "⚖️",
+                beschreibung: "Konstruktiver Umgang mit Konflikten",
+                zielgruppe: "8-18 Jahre",
+                unterthemen: [
+                    {name: "Konflikte verstehen", uebungen: ["Selbstreflexion", "Konfliktanalyse"]},
+                    {name: "Lösungsstrategien", uebungen: ["Ich-Botschaften", "Mediation", "6 Schritte"]},
+                    {name: "Gewaltfreie Kommunikation", uebungen: ["Beobachtung vs. Bewertung", "Bedürfnisse"]}
+                ]
+            },
+            emotionen: {
+                name: "Gefühle & Emotionen",
+                icon: "💭",
+                beschreibung: "Umgang mit und Regulation von Gefühlen",
+                zielgruppe: "6-18 Jahre",
+                unterthemen: [
+                    {name: "Gefühle erkennen", uebungen: ["Gefühle-Memory", "Gefühlsbarometer"]},
+                    {name: "Mit Wut umgehen", uebungen: ["Wut-Vulkan", "Stopp-Techniken"]},
+                    {name: "Stress bewältigen", uebungen: ["Stress-Protokoll", "Entspannung"]}
+                ]
+            },
+            selbstwert: {
+                name: "Selbstwert & Identität",
+                icon: "⭐",
+                beschreibung: "Stärkung des Selbstwertgefühls",
+                zielgruppe: "10-18 Jahre",
+                unterthemen: [
+                    {name: "Wer bin ich?", uebungen: ["Persönliches Wappen", "Stärken-Analyse"]},
+                    {name: "Selbstwert stärken", uebungen: ["Innerer Kritiker", "Erfolgstagebuch"]},
+                    {name: "Körperbild", uebungen: ["Schönheitsideale", "Body-Positivity"]}
+                ]
+            },
+            medien: {
+                name: "Medienkompetenz",
+                icon: "📱",
+                beschreibung: "Kritischer Umgang mit Medien",
+                zielgruppe: "10-18 Jahre",
+                unterthemen: [
+                    {name: "Social Media", uebungen: ["Konsum-Analyse", "Fake News Quiz"]},
+                    {name: "Gaming & Sucht", uebungen: ["Gaming-Tagebuch", "Medienplan"]},
+                    {name: "Datenschutz", uebungen: ["Datenschutz-Check", "Recht am Bild"]}
+                ]
+            },
+            sucht: {
+                name: "Suchtprävention",
+                icon: "🚫",
+                beschreibung: "Prävention von Suchtverhalten",
+                zielgruppe: "12-18 Jahre",
+                unterthemen: [
+                    {name: "Was ist Sucht?", uebungen: ["Definition", "Mythen-Quiz"]},
+                    {name: "Nein sagen lernen", uebungen: ["Rollenspiel", "Ausreden-Liste"]},
+                    {name: "Hilfe finden", uebungen: ["Hilfsangebote", "Warnzeichen"]}
+                ]
+            },
+            respekt: {
+                name: "Respekt & Toleranz",
+                icon: "🤝",
+                beschreibung: "Förderung von Respekt und Vielfalt",
+                zielgruppe: "8-18 Jahre",
+                unterthemen: [
+                    {name: "Vielfalt verstehen", uebungen: ["Vorurteile", "Perspektivenwechsel"]},
+                    {name: "Respektvoller Umgang", uebungen: ["Grenzen setzen", "Respekt-Regeln"]},
+                    {name: "Zivilcourage", uebungen: ["Situationen bewerten", "Eingreifen üben"]}
+                ]
+            },
+            freundschaft: {
+                name: "Freundschaft & Beziehungen",
+                icon: "❤️",
+                beschreibung: "Aufbau und Pflege von Freundschaften",
+                zielgruppe: "8-18 Jahre",
+                unterthemen: [
+                    {name: "Was ist Freundschaft?", uebungen: ["Freundschafts-Landkarte", "Brief"]},
+                    {name: "Freunde finden", uebungen: ["Gespräche beginnen", "Small Talk"]},
+                    {name: "Konflikte in Freundschaften", uebungen: ["Streit schlichten", "Entschuldigung"]}
+                ]
+            },
+            gewalt: {
+                name: "Gewaltprävention",
+                icon: "✋",
+                beschreibung: "Prävention von Gewalt",
+                zielgruppe: "10-18 Jahre",
+                unterthemen: [
+                    {name: "Formen von Gewalt", uebungen: ["Was ist Gewalt?", "Selbstreflexion"]},
+                    {name: "Deeskalation", uebungen: ["Deeskalation üben", "Cool-down"]},
+                    {name: "Hilfe holen", uebungen: ["Anlaufstellen", "Notfallplan"]}
+                ]
+            },
+            teamarbeit: {
+                name: "Teamwork & Kooperation",
+                icon: "🏆",
+                beschreibung: "Entwicklung von Teamfähigkeit",
+                zielgruppe: "8-18 Jahre",
+                unterthemen: [
+                    {name: "Was macht ein gutes Team?", uebungen: ["Team-Rollen-Test", "Teambuilding"]},
+                    {name: "Gemeinsam Ziele erreichen", uebungen: ["Team-Challenge", "Projekt-Plan"]},
+                    {name: "Feedback im Team", uebungen: ["Feedback-Regeln", "Team-Reflexion"]}
+                ]
+            }
+        };
+
+        let currentThema = null;
+
+        function selectThema(themaId) {
+            currentThema = themaId;
+
+            // Button-Styling aktualisieren
+            document.querySelectorAll('.themen-liste button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.thema === themaId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Inhalt anzeigen
+            document.getElementById('welcome-screen').style.display = 'none';
+            const contentDiv = document.getElementById('thema-content');
+            contentDiv.style.display = 'block';
+
+            const thema = themenDaten[themaId];
+            if (!thema) return;
+
+            let html = `
+                <div class="content-header">
+                    <div>
+                        <h2>${thema.icon} ${thema.name}</h2>
+                        <p style="color: var(--gray); margin-top: 5px;">${thema.beschreibung}</p>
+                    </div>
+                    <div>
+                        ${thema.zielgruppe ? `<span class="badge">👤 ${thema.zielgruppe}</span>` : ''}
+                    </div>
+                </div>
+            `;
+
+            // ELDiB-Bereiche mit Stufen
+            if (thema.stufen) {
+                html += `
+                    <h3 style="margin-bottom: 20px;">📊 Entwicklungsstufen</h3>
+                    <div class="stufen-grid">
+                        ${thema.stufen.map(stufe => `
+                            <div class="stufe-card" onclick="showStufe('${themaId}', ${stufe.stufe})">
+                                <h4>Stufe ${stufe.stufe}</h4>
+                                <p>${stufe.titel}</p>
+                                <p style="margin-top: 10px; font-size: 11px; opacity: 0.8;">📅 ${stufe.alter}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Zusatzthemen mit Unterthemen
+            if (thema.unterthemen) {
+                html += `
+                    <h3 style="margin-bottom: 20px;">📝 Unterthemen & Übungen</h3>
+                    <div>
+                        ${thema.unterthemen.map((ut, index) => `
+                            <div class="uebung-card">
+                                <h4>${index + 1}. ${ut.name}</h4>
+                                <p>Verfügbare Übungen: ${ut.uebungen.join(', ')}</p>
+                                <button class="btn btn-primary" onclick="openGenerator('${themaId}', '${ut.name}')">
+                                    📝 Arbeitsblatt erstellen
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Allgemeiner Generator-Button
+            html += `
+                <div style="margin-top: 40px; padding: 20px; background: var(--light); border-radius: 12px; text-align: center;">
+                    <h3 style="margin-bottom: 15px;">🎨 Eigenes Arbeitsblatt erstellen</h3>
+                    <p style="color: var(--gray); margin-bottom: 20px;">
+                        Erstellen Sie ein individuelles Arbeitsblatt zu diesem Thema.
+                    </p>
+                    <button class="btn btn-secondary btn-lg" onclick="openCustomGenerator('${themaId}')">
+                        ✨ Jetzt erstellen
+                    </button>
+                </div>
+            `;
+
+            contentDiv.innerHTML = html;
+        }
+
+        function showStufe(themaId, stufeNr) {
+            const thema = themenDaten[themaId];
+            const stufe = thema.stufen.find(s => s.stufe === stufeNr);
+            if (!stufe) return;
+
+            openModal(`Stufe ${stufeNr}: ${stufe.titel}`, `
+                <div style="margin-bottom: 20px;">
+                    <p><strong>🎯 Bereichsziel:</strong> ${stufe.ziel}</p>
+                    <p><strong>📅 Altersgruppe:</strong> ${stufe.alter}</p>
+                </div>
+
+                ${stufe.items ? `
+                    <h4 style="margin: 20px 0 10px 0;">📋 Diagnose-Items</h4>
+                    <div class="items-liste">
+                        ${stufe.items.map(item => `
+                            <div class="item">
+                                <span class="item-code">${item.code}</span>
+                                <div>
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-beschreibung">${item.beschreibung}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="openGenerator('${themaId}', 'Stufe ${stufeNr}')">
+                        📝 Arbeitsblatt für diese Stufe erstellen
+                    </button>
+                </div>
+            `);
+        }
+
+        function openGenerator(themaId, unterthema) {
+            const thema = themenDaten[themaId];
+
+            openModal(`📝 Arbeitsblatt erstellen: ${unterthema}`, `
+                <form id="generator-form">
+                    <div class="form-group">
+                        <label>📌 Titel des Arbeitsblatts</label>
+                        <input type="text" id="ab-titel" value="${thema.name}: ${unterthema}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>👤 Name des Schülers/der Schülerin (optional)</label>
+                        <input type="text" id="ab-name" placeholder="Wird auf dem Arbeitsblatt eingefügt">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Übungstyp auswählen</label>
+                        <select id="ab-typ">
+                            <option value="selbstreflexion">Selbstreflexion</option>
+                            <option value="situationsanalyse">Situationsanalyse</option>
+                            <option value="ich_botschaften">Ich-Botschaften</option>
+                            <option value="gruppenarbeit">Gruppenarbeit</option>
+                            <option value="quiz">Quiz</option>
+                            <option value="rollenspiel">Rollenspiel</option>
+                            <option value="kreativ">Kreative Aufgabe</option>
+                            <option value="checkliste">Checkliste</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📅 Altersgruppe</label>
+                        <div class="radio-group" id="alter-group">
+                            <label class="radio-option">
+                                <input type="radio" name="altersgruppe" value="6-9" onclick="selectRadio(this)">
+                                6-9 Jahre
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="altersgruppe" value="9-12" onclick="selectRadio(this)" checked>
+                                9-12 Jahre
+                            </label>
+                            <label class="radio-option selected">
+                                <input type="radio" name="altersgruppe" value="12-16" onclick="selectRadio(this)">
+                                12-16 Jahre
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="altersgruppe" value="16+" onclick="selectRadio(this)">
+                                16+ Jahre
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Zusätzliche Anweisungen (optional)</label>
+                        <textarea id="ab-anweisungen" rows="3" placeholder="Spezielle Anweisungen für dieses Arbeitsblatt..."></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 30px;">
+                        <button type="button" class="btn btn-primary" onclick="generateArbeitsblatt()">
+                            ✨ Arbeitsblatt generieren
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal()">
+                            Abbrechen
+                        </button>
+                    </div>
+                </form>
+            `);
+        }
+
+        function openCustomGenerator(themaId) {
+            openGenerator(themaId, 'Benutzerdefiniert');
+        }
+
+        function selectRadio(radio) {
+            document.querySelectorAll('#alter-group .radio-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            radio.parentElement.classList.add('selected');
+        }
+
+        function generateArbeitsblatt() {
+            const titel = document.getElementById('ab-titel').value;
+            const name = document.getElementById('ab-name').value;
+            const typ = document.getElementById('ab-typ').value;
+            const altersgruppe = document.querySelector('input[name="altersgruppe"]:checked')?.value || '12-16';
+            const anweisungen = document.getElementById('ab-anweisungen').value;
+
+            // Hier würde normalerweise die Server-Generierung stattfinden
+            // Für die Demo erstellen wir ein einfaches HTML-Arbeitsblatt
+
+            const arbeitsblattHTML = generateArbeitsblattHTML({
+                titel,
+                name,
+                typ,
+                altersgruppe,
+                anweisungen,
+                thema: currentThema
+            });
+
+            // Öffne in neuem Tab
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(arbeitsblattHTML);
+            newWindow.document.close();
+
+            closeModal();
+        }
+
+        function generateArbeitsblattHTML(options) {
+            const uebungsInhalte = getUebungInhalt(options.typ);
+
+            return `<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${options.titel}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; }
+        .meta { display: flex; justify-content: space-between; color: #888; font-size: 14px; }
+        .name-field { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+        .name-field label { font-weight: bold; }
+        .name-field input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-top: 5px; }
+        .uebung { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 10px; border-left: 4px solid #3498db; }
+        .uebung h3 { color: #2c3e50; margin-bottom: 10px; }
+        .uebung p { color: #666; margin-bottom: 15px; font-style: italic; }
+        .form-element { margin: 15px 0; }
+        .form-element label { display: block; font-weight: 600; margin-bottom: 5px; }
+        .form-element textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .form-element input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .skala { display: flex; gap: 10px; flex-wrap: wrap; }
+        .skala label { padding: 8px 15px; background: #eee; border-radius: 20px; cursor: pointer; }
+        .skala input { display: none; }
+        .skala input:checked + span { background: #3498db; color: white; padding: 8px 15px; margin: -8px -15px; border-radius: 20px; }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+        .checkbox-item input { width: 20px; height: 20px; }
+        .footer { margin-top: 40px; text-align: center; color: #888; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px; }
+        .print-btn { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: #3498db; color: white; border: none; border-radius: 30px; cursor: pointer; }
+        @media print { .print-btn { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>${options.titel}</h1>
+        <div class="meta">
+            <span>Thema: ${themenDaten[options.thema]?.name || options.thema}</span>
+            <span>Altersgruppe: ${options.altersgruppe} Jahre</span>
+            <span>Datum: ${new Date().toLocaleDateString('de-DE')}</span>
+        </div>
+    </div>
+
+    <div class="name-field">
+        <label>Name:</label>
+        <input type="text" value="${options.name || ''}" placeholder="Dein Name...">
+    </div>
+
+    ${options.anweisungen ? `<div style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;"><strong>📋 Anweisungen:</strong> ${options.anweisungen}</div>` : ''}
+
+    ${uebungsInhalte}
+
+    <div class="footer">
+        <p>Erstellt mit dem ELDiB Arbeitsblatt-Generator | CDSE Luxembourg</p>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Drucken</button>
+</body>
+</html>`;
+        }
+
+        function getUebungInhalt(typ) {
+            const uebungen = {
+                selbstreflexion: `
+                    <div class="uebung">
+                        <h3>1. Selbstreflexion</h3>
+                        <p>Nimm dir Zeit, über dich selbst nachzudenken.</p>
+
+                        <div class="form-element">
+                            <label>Wie geht es dir heute?</label>
+                            <div class="skala">
+                                <label><input type="radio" name="gefuehl"><span>😊 Sehr gut</span></label>
+                                <label><input type="radio" name="gefuehl"><span>🙂 Gut</span></label>
+                                <label><input type="radio" name="gefuehl"><span>😐 Mittel</span></label>
+                                <label><input type="radio" name="gefuehl"><span>😕 Nicht so gut</span></label>
+                                <label><input type="radio" name="gefuehl"><span>😢 Schlecht</span></label>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was beschäftigt dich gerade?</label>
+                            <textarea rows="4" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was hat heute gut geklappt?</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was möchtest du verbessern?</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+                    </div>
+                `,
+                situationsanalyse: `
+                    <div class="uebung">
+                        <h3>1. Situationsanalyse</h3>
+                        <p>Analysiere eine Situation, die dich beschäftigt.</p>
+
+                        <div class="form-element">
+                            <label>Was ist passiert? Beschreibe die Situation genau:</label>
+                            <textarea rows="4" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Wer war beteiligt?</label>
+                            <input type="text" placeholder="Namen oder Rollen...">
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was wolltest du in dieser Situation?</label>
+                            <textarea rows="2" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was wollte die andere Person?</label>
+                            <textarea rows="2" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Wie hast du dich dabei gefühlt?</label>
+                            <textarea rows="2" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was könntest du beim nächsten Mal anders machen?</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+                    </div>
+                `,
+                ich_botschaften: `
+                    <div class="uebung">
+                        <h3>1. Ich-Botschaften üben</h3>
+                        <p>Lerne, deine Gefühle und Bedürfnisse klar auszudrücken.</p>
+
+                        <div style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <strong>Die Formel:</strong><br>
+                            "Ich fühle mich... wenn du... weil ich... Ich wünsche mir..."
+                        </div>
+
+                        <div style="background: #e8f8f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <strong>Beispiel:</strong><br>
+                            <em>Du-Botschaft:</em> "Du nervst mich!"<br>
+                            <em>Ich-Botschaft:</em> "Ich fühle mich gestört, wenn du so laut bist, weil ich mich nicht konzentrieren kann. Ich wünsche mir, dass du leiser bist."
+                        </div>
+
+                        <div class="form-element">
+                            <label>Übung 1: "Du hörst mir nie zu!"</label>
+                            <textarea rows="3" placeholder="Wandle diese Du-Botschaft in eine Ich-Botschaft um..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Übung 2: "Du bist so gemein!"</label>
+                            <textarea rows="3" placeholder="Wandle diese Du-Botschaft in eine Ich-Botschaft um..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Übung 3: Schreibe eine eigene Situation und formuliere eine Ich-Botschaft:</label>
+                            <textarea rows="4" placeholder="Schreibe hier..."></textarea>
+                        </div>
+                    </div>
+                `,
+                gruppenarbeit: `
+                    <div class="uebung">
+                        <h3>1. Gruppenarbeit</h3>
+                        <p>Arbeitet gemeinsam an dieser Aufgabe.</p>
+
+                        <div class="form-element">
+                            <label>Namen der Gruppenmitglieder:</label>
+                            <input type="text" placeholder="Name 1, Name 2, Name 3...">
+                        </div>
+
+                        <div class="form-element">
+                            <label>Unsere Gruppenregeln:</label>
+                            <textarea rows="4" placeholder="1. &#10;2. &#10;3. &#10;4."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Wie war unsere Zusammenarbeit? (1-10)</label>
+                            <div class="skala">
+                                ${[1,2,3,4,5,6,7,8,9,10].map(n => `<label><input type="radio" name="zusammenarbeit"><span>${n}</span></label>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Das hat gut funktioniert:</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Das war schwierig:</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+                    </div>
+                `,
+                quiz: `
+                    <div class="uebung">
+                        <h3>1. Quiz</h3>
+                        <p>Teste dein Wissen!</p>
+
+                        <div class="form-element">
+                            <label><strong>Frage 1:</strong> Was ist der Unterschied zwischen einem Konflikt und Mobbing?</label>
+                            <div style="margin-top: 10px;">
+                                <div class="checkbox-item"><input type="radio" name="q1"> Es gibt keinen Unterschied</div>
+                                <div class="checkbox-item"><input type="radio" name="q1"> Mobbing passiert wiederholt über längere Zeit</div>
+                                <div class="checkbox-item"><input type="radio" name="q1"> Konflikte sind immer schlimmer</div>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label><strong>Frage 2:</strong> Was solltest du tun, wenn du Mobbing beobachtest?</label>
+                            <div style="margin-top: 10px;">
+                                <div class="checkbox-item"><input type="radio" name="q2"> Wegschauen</div>
+                                <div class="checkbox-item"><input type="radio" name="q2"> Mitmachen</div>
+                                <div class="checkbox-item"><input type="radio" name="q2"> Hilfe holen und das Opfer unterstützen</div>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label><strong>Frage 3:</strong> Was bedeutet "Ich-Botschaft"?</label>
+                            <textarea rows="3" placeholder="Erkläre mit eigenen Worten..."></textarea>
+                        </div>
+                    </div>
+                `,
+                rollenspiel: `
+                    <div class="uebung">
+                        <h3>1. Rollenspiel</h3>
+                        <p>Bereite dich auf das Rollenspiel vor.</p>
+
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <strong>🎭 Szenario:</strong><br>
+                            Ein/e Mitschüler/in wird von anderen ausgelacht. Du beobachtest die Situation.
+                        </div>
+
+                        <div class="form-element">
+                            <label>Welche Rolle übernimmst du?</label>
+                            <div style="margin-top: 10px;">
+                                <div class="checkbox-item"><input type="radio" name="rolle"> Person, die ausgelacht wird</div>
+                                <div class="checkbox-item"><input type="radio" name="rolle"> Person, die auslacht</div>
+                                <div class="checkbox-item"><input type="radio" name="rolle"> Beobachter/in</div>
+                                <div class="checkbox-item"><input type="radio" name="rolle"> Helfer/in</div>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was könnte deine Figur sagen oder tun?</label>
+                            <textarea rows="4" placeholder="Notiere hier deine Ideen..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Reflexion nach dem Rollenspiel:</label>
+                            <textarea rows="4" placeholder="Wie hat es sich angefühlt? Was hast du gelernt?"></textarea>
+                        </div>
+                    </div>
+                `,
+                kreativ: `
+                    <div class="uebung">
+                        <h3>1. Kreative Aufgabe</h3>
+                        <p>Drücke dich kreativ aus!</p>
+
+                        <div class="form-element">
+                            <label>🎨 Mein persönliches Wappen</label>
+                            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">Zeichne ein Wappen mit 4 Feldern:</p>
+                            <div style="border: 2px solid #ddd; height: 200px; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
+                                <div style="border: 1px solid #eee; padding: 10px; font-size: 12px; color: #888;">Feld 1: Meine größte Stärke</div>
+                                <div style="border: 1px solid #eee; padding: 10px; font-size: 12px; color: #888;">Feld 2: Was mir wichtig ist</div>
+                                <div style="border: 1px solid #eee; padding: 10px; font-size: 12px; color: #888;">Feld 3: Mein Ziel</div>
+                                <div style="border: 1px solid #eee; padding: 10px; font-size: 12px; color: #888;">Feld 4: Was mich glücklich macht</div>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Mein Motto / Leitsatz:</label>
+                            <input type="text" placeholder="Was ist dein persönliches Motto?">
+                        </div>
+
+                        <div class="form-element">
+                            <label>Erkläre dein Wappen:</label>
+                            <textarea rows="4" placeholder="Was bedeuten die Symbole für dich?"></textarea>
+                        </div>
+                    </div>
+                `,
+                checkliste: `
+                    <div class="uebung">
+                        <h3>1. Checkliste</h3>
+                        <p>Gehe die Liste durch und hake ab, was zutrifft.</p>
+
+                        <div class="form-element">
+                            <label>✅ Checkliste: Selbstfürsorge</label>
+                            <div style="margin-top: 10px;">
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe heute genug geschlafen</div>
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe etwas Gesundes gegessen</div>
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe mich bewegt</div>
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe Zeit für mich genommen</div>
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe mit jemandem gesprochen</div>
+                                <div class="checkbox-item"><input type="checkbox"> Ich habe etwas gemacht, das mir Freude macht</div>
+                            </div>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Was möchte ich morgen anders machen?</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+
+                        <div class="form-element">
+                            <label>Worauf bin ich heute stolz?</label>
+                            <textarea rows="3" placeholder="Schreibe hier..."></textarea>
+                        </div>
+                    </div>
+                `
+            };
+
+            return uebungen[typ] || uebungen.selbstreflexion;
+        }
+
+        function openModal(title, content) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = content;
+            document.getElementById('generator-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('generator-modal').classList.remove('show');
+        }
+
+        // Modal schließen bei Klick außerhalb
+        document.getElementById('generator-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ESC-Taste zum Schließen
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

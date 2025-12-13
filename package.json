@@ -1,0 +1,29 @@
+{
+  "name": "eldib-arbeitsblatt-generator",
+  "version": "1.0.0",
+  "description": "Interaktiver Arbeitsblatt-Generator basierend auf ELDiB/ETEP für pädagogische Fachkräfte",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "build": "node src/build.js",
+    "generate": "node src/cli.js",
+    "serve": "npx http-server dist -p 3000 -o"
+  },
+  "keywords": [
+    "eldib",
+    "etep",
+    "arbeitsblatt",
+    "pädagogik",
+    "sozialisation",
+    "kommunikation",
+    "jugendarbeit",
+    "worksheet",
+    "generator"
+  ],
+  "author": "CDSE Luxembourg",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

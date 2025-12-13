@@ -1,0 +1,96 @@
+{
+  "bereich": "Sozialisation",
+  "beschreibung": "Entwicklung sozialer Kompetenzen und Beziehungsfähigkeit",
+  "stufen": [
+    {
+      "stufe": 1,
+      "stufenziel": "Mit Freude auf die Umwelt reagieren",
+      "bereichsziel": "Einem Erwachsenen genügend vertrauen, um auf ihn zu reagieren",
+      "altersbereich": "0-2 Jahre / Basiskompetenzen",
+      "items": [
+        {"code": "SOZ-1", "name": "Gegenwart", "beschreibung": "Ist sich der Gegenwart anderer bewusst"},
+        {"code": "SOZ-2", "name": "Gerichtetheit", "beschreibung": "Richtet Aufmerksamkeit auf Handlungen anderer"},
+        {"code": "SOZ-3", "name": "Eigenname", "beschreibung": "Reagiert, wenn der eigene Name genannt wird"},
+        {"code": "SOZ-4", "name": "Spiel – allein", "beschreibung": "Beschäftigt sich mit organisiertem Spiel allein"},
+        {"code": "SOZ-5", "name": "Nonverbale Interaktion", "beschreibung": "Interagiert nonverbal um Bedürfnisse auszudrücken"},
+        {"code": "SOZ-6", "name": "Kommen", "beschreibung": "Reagiert auf Aufforderungen, zu kommen"},
+        {"code": "SOZ-7", "name": "Aufforderungen", "beschreibung": "Versteht verbale Aufforderungen"},
+        {"code": "SOZ-8", "name": "Wörter – Erwachsener", "beschreibung": "Produziert Wörter für Reaktionen von Erwachsenen"},
+        {"code": "SOZ-9", "name": "Selbst-Bewusstheit", "beschreibung": "Zeigt beginnende Herausbildung des Selbst"},
+        {"code": "SOZ-10", "name": "Spiel – parallel", "beschreibung": "Nimmt an parallelem Spiel teil"},
+        {"code": "SOZ-11", "name": "Wörter – Peer", "beschreibung": "Produziert Wörter für Gleichaltrige"},
+        {"code": "SOZ-12", "name": "Kontaktsuche", "beschreibung": "Sucht Kontakt mit vertrauten Erwachsenen"}
+      ]
+    },
+    {
+      "stufe": 2,
+      "stufenziel": "Erfolgreich auf die Umwelt reagieren",
+      "bereichsziel": "Sich erfolgreich an Aktivitäten beteiligen",
+      "altersbereich": "2-5 Jahre / Frühe Kindheit",
+      "items": [
+        {"code": "SOZ-13", "name": "Fantasie", "beschreibung": "Beschäftigt sich mit Fantasie- und So-tun-als-ob-Spielen"},
+        {"code": "SOZ-14", "name": "Warten", "beschreibung": "Wartet ohne körperliche Steuerungshilfe"},
+        {"code": "SOZ-15", "name": "Kontakt", "beschreibung": "Zeigt Ansätze für angemessenen sozialen Kontakt"},
+        {"code": "SOZ-16", "name": "Teilen", "beschreibung": "Beteiligt sich an Aktivitäten, die Teilen erfordern"},
+        {"code": "SOZ-17", "name": "Spiel interaktiv", "beschreibung": "Beteiligt sich erfolgreich an interaktivem Spiel"},
+        {"code": "SOZ-18", "name": "Kooperation", "beschreibung": "Kooperiert selbstständig mit anderen Kindern"}
+      ]
+    },
+    {
+      "stufe": 3,
+      "stufenziel": "Erwerben von Fähigkeiten zur erfolgreichen Teilnahme in Gruppen",
+      "bereichsziel": "Gruppenaktivitäten als befriedigend erleben",
+      "altersbereich": "6-9 Jahre / Grundschulalter",
+      "items": [
+        {"code": "SOZ-19", "name": "Abwechseln", "beschreibung": "Teilt und wechselt sich ohne Hinweise ab"},
+        {"code": "SOZ-20", "name": "Nachahmen", "beschreibung": "Ahmt angemessenes Verhalten anderer nach"},
+        {"code": "SOZ-21", "name": "Werten", "beschreibung": "Bewertet soziale Situationen (richtig/falsch, fair/unfair)"},
+        {"code": "SOZ-22", "name": "Leiten", "beschreibung": "Leitet eine Gruppenaktivität"},
+        {"code": "SOZ-23", "name": "Vorschlag – andere", "beschreibung": "Nimmt an Aktivitäten teil, die andere vorgeschlagen haben"},
+        {"code": "SOZ-24", "name": "Erfahrungen", "beschreibung": "Beschreibt eigene Erfahrungen chronologisch"},
+        {"code": "SOZ-25", "name": "Vorliebe", "beschreibung": "Lässt beginnende Freundschaft erkennen"},
+        {"code": "SOZ-26", "name": "Unterstützung", "beschreibung": "Sucht Hilfe oder Lob von Gleichaltrigen"},
+        {"code": "SOZ-27", "name": "Gruppenregeln", "beschreibung": "Hilft anderen bei der Einhaltung von Gruppenregeln"}
+      ]
+    },
+    {
+      "stufe": 4,
+      "stufenziel": "Sich einbringen in Gruppenprozesse",
+      "bereichsziel": "Nimmt erfolgreich als Gruppenmitglied an Aktivitäten teil",
+      "altersbereich": "9-12 Jahre / Späte Kindheit",
+      "items": [
+        {"code": "SOZ-28", "name": "Identifizieren", "beschreibung": "Identifiziert sich mit Vorbildern"},
+        {"code": "SOZ-29", "name": "Gruppenerfahrung", "beschreibung": "Beschreibt soziale Gruppenerfahrungen chronologisch"},
+        {"code": "SOZ-30", "name": "Gruppenaktivität", "beschreibung": "Schlägt geeignete Gruppenaktivitäten vor"},
+        {"code": "SOZ-31", "name": "Verschiedenheit", "beschreibung": "Erkennt Unterschiede im eigenen sozialen Handeln"},
+        {"code": "SOZ-32", "name": "Respekt", "beschreibung": "Hört und respektiert die Meinungen anderer"},
+        {"code": "SOZ-33", "name": "Interesse", "beschreibung": "Bekundet Interesse an der Meinung Gleichaltriger"},
+        {"code": "SOZ-34", "name": "Lösungsvorschlag", "beschreibung": "Reagiert auf Probleme mit konstruktiven Lösungsvorschlägen"},
+        {"code": "SOZ-35", "name": "Wertvorstellung", "beschreibung": "Erkennt gegensätzliche Werte in sozialen Situationen"},
+        {"code": "SOZ-36", "name": "Schlussfolgerungen", "beschreibung": "Zieht Schlussfolgerungen aus sozialen Situationen"}
+      ]
+    },
+    {
+      "stufe": 5,
+      "stufenziel": "Anwenden von individuellen und gruppenbezogenen Fähigkeiten in neuen Situationen",
+      "bereichsziel": "Beginnt und pflegt selbständig dauerhafte und tragfähige Beziehungen",
+      "altersbereich": "12-16+ Jahre / Jugendalter",
+      "items": [
+        {"code": "SOZ-37", "name": "Empathie", "beschreibung": "Versteht und achtet Gefühle und Sichtweisen anderer"},
+        {"code": "SOZ-38", "name": "Verschiedene Rollen", "beschreibung": "Interagiert erfolgreich in verschiedenen sozialen Rollen"},
+        {"code": "SOZ-39", "name": "Prinzipien", "beschreibung": "Trifft Entscheidungen aufgrund eigener Wertvorstellungen"},
+        {"code": "SOZ-40", "name": "Selbstverständnis", "beschreibung": "Zeigt realistisches Selbstverständnis mit Zielen und Schwächen"},
+        {"code": "SOZ-41", "name": "Interpersonalität", "beschreibung": "Zeigt Fähigkeit zu dauerhaften und tragfähigen Beziehungen"}
+      ]
+    }
+  ],
+  "uebungstypen": [
+    "Kooperationsspiele",
+    "Rollenspiele",
+    "Gruppenübungen",
+    "Vertrauensübungen",
+    "Empathietraining",
+    "Konfliktlösung",
+    "Teambuilding"
+  ]
+}

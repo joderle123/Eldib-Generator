@@ -1,0 +1,87 @@
+{
+  "bereich": "Verhalten",
+  "beschreibung": "Entwicklung von Verhaltenskompetenzen und Selbststeuerung",
+  "stufen": [
+    {
+      "stufe": 1,
+      "stufenziel": "Mit Freude auf die Umwelt reagieren",
+      "bereichsziel": "Den eigenen körperlichen Fähigkeiten vertrauen",
+      "altersbereich": "0-2 Jahre / Basiskompetenzen",
+      "items": [
+        {"code": "V-1", "name": "Wahrnehmung", "beschreibung": "Lässt Wahrnehmung eines sensorischen Reizes erkennen"},
+        {"code": "V-2", "name": "Orientierung", "beschreibung": "Reagiert auf sensorischen Reiz mit Zuwendung zur Reizquelle"},
+        {"code": "V-3", "name": "Aufmerksamkeit", "beschreibung": "Reagiert auf einen Reiz mit kurzzeitig anhaltender Aufmerksamkeit"},
+        {"code": "V-4", "name": "Motorische Reaktion", "beschreibung": "Reagiert von sich aus auf einfache Umgebungsreize mit motorischer Handlung"},
+        {"code": "V-5", "name": "Komplexe Reaktion", "beschreibung": "Reagiert auf komplexe Umgebungsreize und verbale Impulse"},
+        {"code": "V-6", "name": "Selbsthilfe", "beschreibung": "Beteiligt sich aktiv am Erlernen von Selbsthilfe-Fähigkeiten"},
+        {"code": "V-7", "name": "Spielmaterial", "beschreibung": "Reagiert eigenständig auf verschiedene Spielmaterialien"},
+        {"code": "V-8", "name": "Routineabläufe", "beschreibung": "Zeigt Wiedererkennen von Routineabläufen"}
+      ]
+    },
+    {
+      "stufe": 2,
+      "stufenziel": "Erfolgreich auf die Umwelt reagieren",
+      "bereichsziel": "Erfolgreich an Routineabläufen und Aktivitäten teilnehmen",
+      "altersbereich": "2-5 Jahre / Frühe Kindheit",
+      "items": [
+        {"code": "V-9", "name": "Spielerfahrung", "beschreibung": "Geht mit Spielmaterialien sachgerecht um"},
+        {"code": "V-10", "name": "Warten", "beschreibung": "Wartet ohne körperliche Steuerungshilfe"},
+        {"code": "V-11", "name": "Sitzen", "beschreibung": "Beteiligt sich an Aktivitäten im Sitzen"},
+        {"code": "V-12", "name": "Bewegung", "beschreibung": "Beteiligt sich an Bewegungsaktivitäten"},
+        {"code": "V-13", "name": "Aktivitäten", "beschreibung": "Nimmt von sich aus an Aktivitäten teil"},
+        {"code": "V-14", "name": "Lob/Erfolg", "beschreibung": "Akzeptiert Lob oder Erfolg ohne unangemessenes Verhalten"}
+      ]
+    },
+    {
+      "stufe": 3,
+      "stufenziel": "Erwerben von Fähigkeiten zur erfolgreichen Teilnahme in Gruppen",
+      "bereichsziel": "Erworbene Fähigkeiten anwenden, um innerhalb einer Gruppe das eigene Verhalten erfolgreich zu steuern",
+      "altersbereich": "6-9 Jahre / Grundschulalter",
+      "items": [
+        {"code": "V-15", "name": "Beenden", "beschreibung": "Beendet kurze, individuelle Aufgaben selbstständig"},
+        {"code": "V-16", "name": "Erwartungen", "beschreibung": "Lässt Bewusstsein für Verhaltenserwartungen erkennen"},
+        {"code": "V-17", "name": "Begründungen", "beschreibung": "Nennt Gründe für Verhaltenserwartungen"},
+        {"code": "V-18", "name": "Alternativen", "beschreibung": "Beschreibt alternative, angemessenere Verhaltensmöglichkeiten"},
+        {"code": "V-19", "name": "Gruppenwahl", "beschreibung": "Reagiert angemessen auf Gruppenwahl als Anführer oder Teilnehmer"},
+        {"code": "V-20", "name": "Zurückhalten", "beschreibung": "Hält sich von inakzeptablem Verhalten zurück"},
+        {"code": "V-21", "name": "Kontrolle", "beschreibung": "Behält akzeptable Selbstkontrolle während Gruppenaktivitäten"}
+      ]
+    },
+    {
+      "stufe": 4,
+      "stufenziel": "Sich einbringen in Gruppenprozesse",
+      "bereichsziel": "Persönliche Fähigkeiten einsetzen, um zum Gruppenerfolg beizutragen",
+      "altersbereich": "9-12 Jahre / Späte Kindheit",
+      "items": [
+        {"code": "V-22", "name": "Fortschritt", "beschreibung": "Zeigt Bewusstsein für eigenen Verhaltensfortschritt"},
+        {"code": "V-23", "name": "Flexibilität", "beschreibung": "Lässt Flexibilität bei Änderungen erkennen"},
+        {"code": "V-24", "name": "Neue Erfahrungen", "beschreibung": "Beteiligt sich kontrolliert an neuen Erfahrungen"},
+        {"code": "V-25", "name": "Anwenden", "beschreibung": "Wendet alternative, sozial akzeptable Verhaltensweisen an"},
+        {"code": "V-26", "name": "Provokation", "beschreibung": "Reagiert auf Provokationen mit kontrolliertem Verhalten"},
+        {"code": "V-27", "name": "Verantwortung", "beschreibung": "Akzeptiert Verantwortung für die Folgen des eigenen Verhaltens"},
+        {"code": "V-28", "name": "Lösungsvorschlag", "beschreibung": "Reagiert auf Probleme mit konstruktiven Lösungsvorschlägen"}
+      ]
+    },
+    {
+      "stufe": 5,
+      "stufenziel": "Anwenden von individuellen und gruppenbezogenen Fähigkeiten in neuen Situationen",
+      "bereichsziel": "Realen Lebenserfahrungen mit konstruktivem Verhalten begegnen",
+      "altersbereich": "12-16+ Jahre / Jugendalter",
+      "items": [
+        {"code": "V-29", "name": "Gewohnheiten", "beschreibung": "Entwickelt neue persönliche Gewohnheiten mit Bezug zur Arbeitswelt"},
+        {"code": "V-30", "name": "Positive Rolle", "beschreibung": "Sucht und entwickelt eine positive Rolle innerhalb einer Gruppe"},
+        {"code": "V-31", "name": "Recht/Ordnung", "beschreibung": "Zeigt Verständnis und Akzeptanz von Rechts- und Ordnungsprinzipien"},
+        {"code": "V-32", "name": "Selbstverantwortung", "beschreibung": "Befürwortet Verfahren zur Selbstverantwortung"},
+        {"code": "V-33", "name": "Einsicht", "beschreibung": "Löst persönliche Probleme anhand von Einsicht und Analyse"}
+      ]
+    }
+  ],
+  "uebungstypen": [
+    "Verhaltensbeobachtung",
+    "Rollenspiel",
+    "Selbstreflexion",
+    "Situationsanalyse",
+    "Verhaltensplanung",
+    "Impulskontrollübungen"
+  ]
+}

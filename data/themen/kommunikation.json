@@ -1,0 +1,90 @@
+{
+  "bereich": "Kommunikation",
+  "beschreibung": "Entwicklung von sprachlichen und kommunikativen Fähigkeiten",
+  "stufen": [
+    {
+      "stufe": 1,
+      "stufenziel": "Mit Freude auf die Umwelt reagieren",
+      "bereichsziel": "Gebraucht Wörter, um Bedürfnisse zu befriedigen",
+      "altersbereich": "0-2 Jahre / Basiskompetenzen",
+      "items": [
+        {"code": "K-1", "name": "Laute", "beschreibung": "Produziert Laute zur sozialen Äußerung"},
+        {"code": "K-2", "name": "Sprecher", "beschreibung": "Richtet die Aufmerksamkeit auf eine sprechende Person"},
+        {"code": "K-3", "name": "Verbaler Impuls", "beschreibung": "Reagiert auf einen verbalen Impuls mit Bewegung oder Handlung"},
+        {"code": "K-4", "name": "Wort-Annäherung", "beschreibung": "Reagiert verbal mit erkennbaren Wort-Annäherungen"},
+        {"code": "K-5", "name": "Wörter spontan", "beschreibung": "Verwendet von sich aus erkennbare Wörter"},
+        {"code": "K-6", "name": "Wörter Erwachsener", "beschreibung": "Produziert Wörter für Reaktionen von Erwachsenen"},
+        {"code": "K-7", "name": "Wörter Peer", "beschreibung": "Produziert Wörter für Reaktionen von Gleichaltrigen"},
+        {"code": "K-8", "name": "Wortreihung", "beschreibung": "Produziert sinnvolle Wortsequenzen"}
+      ]
+    },
+    {
+      "stufe": 2,
+      "stufenziel": "Erfolgreich auf die Umwelt reagieren",
+      "bereichsziel": "Gebraucht Wörter, um andere in konstruktiver Weise zu beeinflussen",
+      "altersbereich": "2-5 Jahre / Frühe Kindheit",
+      "items": [
+        {"code": "K-9", "name": "Beantworten", "beschreibung": "Beantwortet Fragen mit sinnvollen Wörtern"},
+        {"code": "K-10", "name": "Vokabular", "beschreibung": "Zeigt altersgemäßes rezeptives Vokabular"},
+        {"code": "K-11", "name": "Wortsequenzen", "beschreibung": "Verwendet Wortsequenzen zum Fordern oder Erbitten"},
+        {"code": "K-12", "name": "Austausch – Erwachsene", "beschreibung": "Initiiert Informationsaustausch mit Erwachsenen"},
+        {"code": "K-13", "name": "Merkmale", "beschreibung": "Beschreibt konkrete Merkmale von sich und anderen"},
+        {"code": "K-14", "name": "Austausch – Kind", "beschreibung": "Initiiert Informationsaustausch mit Gleichaltrigen"}
+      ]
+    },
+    {
+      "stufe": 3,
+      "stufenziel": "Erwerben von Fähigkeiten zur erfolgreichen Teilnahme in Gruppen",
+      "bereichsziel": "Gebraucht Wörter, um sich auf konstruktive Weise innerhalb einer Gruppe zu äußern",
+      "altersbereich": "6-9 Jahre / Grundschulalter",
+      "items": [
+        {"code": "K-15", "name": "Persönliches", "beschreibung": "Beschreibt eigene Erfahrungen und Vorstellungen"},
+        {"code": "K-16", "name": "Gefühlsreaktionen", "beschreibung": "Zeigt angemessene Gefühlsreaktionen auf die Umgebung"},
+        {"code": "K-17", "name": "Gespräche", "beschreibung": "Beteiligt sich an Gruppengesprächen"},
+        {"code": "K-18", "name": "Stolz – ich", "beschreibung": "Zeigt Stolz auf eigene Arbeit"},
+        {"code": "K-19", "name": "Eigenschaften – ich", "beschreibung": "Beschreibt eigene Stärken und Schwächen"},
+        {"code": "K-20", "name": "Eigenschaften – du", "beschreibung": "Beschreibt Eigenschaften bei anderen"},
+        {"code": "K-21", "name": "Gefühle – du", "beschreibung": "Erkennt Gefühle anderer"},
+        {"code": "K-22", "name": "Stolz – wir", "beschreibung": "Drückt Stolz auf Gruppenleistungen aus"}
+      ]
+    },
+    {
+      "stufe": 4,
+      "stufenziel": "Sich einbringen in Gruppenprozesse",
+      "bereichsziel": "Verwendet Wörter, um Verständnis von Gefühlen und Verhaltensweisen zu zeigen",
+      "altersbereich": "9-12 Jahre / Späte Kindheit",
+      "items": [
+        {"code": "K-23", "name": "Kreativität", "beschreibung": "Kanalisiert Gefühle durch kreative Ausdrucksmittel"},
+        {"code": "K-24", "name": "Fortschritt", "beschreibung": "Zeigt Bewusstsein für eigenen Verhaltensfortschritt"},
+        {"code": "K-25", "name": "Beeinflussung", "beschreibung": "Erklärt, wie eigenes Verhalten andere beeinflusst"},
+        {"code": "K-26", "name": "Gefühle – ich", "beschreibung": "Drückt eigene Gefühle angemessen aus"},
+        {"code": "K-27", "name": "Beziehung", "beschreibung": "Knüpft positive Beziehungen an"},
+        {"code": "K-28", "name": "Unterstützen", "beschreibung": "Lobt oder unterstützt andere"},
+        {"code": "K-29", "name": "Relationen", "beschreibung": "Beschreibt Ursache-Wirkungs-Zusammenhänge von Gefühlen"}
+      ]
+    },
+    {
+      "stufe": 5,
+      "stufenziel": "Anwenden von individuellen und gruppenbezogenen Fähigkeiten in neuen Situationen",
+      "bereichsziel": "Verwendet Wörter, um Beziehungen auszubauen und zu pflegen",
+      "altersbereich": "12-16+ Jahre / Jugendalter",
+      "items": [
+        {"code": "K-30", "name": "Komplexe Aussagen", "beschreibung": "Formuliert komplexe und abstrakte Aussagen"},
+        {"code": "K-31", "name": "Ausgleich", "beschreibung": "Wählt versöhnlichen Sprachgebrauch bei Provokationen"},
+        {"code": "K-32", "name": "Anerkennung", "beschreibung": "Unterstützt andere durch Anerkennung ihrer Beiträge"},
+        {"code": "K-33", "name": "Motive", "beschreibung": "Beschreibt verschiedene Motive und Wertvorstellungen"},
+        {"code": "K-34", "name": "Ideale", "beschreibung": "Beschreibt eigene Wertvorstellungen und Überzeugungen"},
+        {"code": "K-35", "name": "Erhalt/Pflege", "beschreibung": "Verwendet Kommunikation zur Beziehungspflege"}
+      ]
+    }
+  ],
+  "uebungstypen": [
+    "Gesprächsübungen",
+    "Ich-Botschaften",
+    "Aktives Zuhören",
+    "Feedback geben/nehmen",
+    "Konfliktkommunikation",
+    "Gewaltfreie Kommunikation",
+    "Präsentationsübungen"
+  ]
+}

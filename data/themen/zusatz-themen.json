@@ -1,0 +1,484 @@
+{
+  "zusatzthemen": [
+    {
+      "id": "mobbing",
+      "name": "Mobbing & Cybermobbing",
+      "beschreibung": "Prävention und Intervention bei Mobbing und Cybermobbing",
+      "zielgruppe": "10-18 Jahre",
+      "bereiche": ["Sozialisation", "Kommunikation", "Verhalten"],
+      "unterthemen": [
+        {
+          "name": "Was ist Mobbing?",
+          "lernziele": [
+            "Definition von Mobbing verstehen",
+            "Unterschied zwischen Konflikt und Mobbing erkennen",
+            "Rollen im Mobbing-Prozess kennen (Täter, Opfer, Mitläufer, Zuschauer)"
+          ],
+          "uebungen": [
+            {"typ": "Diskussion", "titel": "Fallbeispiele analysieren"},
+            {"typ": "Arbeitsblatt", "titel": "Mobbing erkennen - Checkliste"},
+            {"typ": "Rollenspiel", "titel": "Die verschiedenen Rollen"}
+          ]
+        },
+        {
+          "name": "Cybermobbing",
+          "lernziele": [
+            "Formen von Cybermobbing kennen",
+            "Rechtliche Konsequenzen verstehen",
+            "Schutzstrategien entwickeln"
+          ],
+          "uebungen": [
+            {"typ": "Quiz", "titel": "Cybermobbing - Was ist was?"},
+            {"typ": "Arbeitsblatt", "titel": "Mein digitaler Fußabdruck"},
+            {"typ": "Gruppenarbeit", "titel": "Hilfe holen - Anlaufstellen"}
+          ]
+        },
+        {
+          "name": "Intervention & Prävention",
+          "lernziele": [
+            "Handlungsmöglichkeiten kennen",
+            "Zivilcourage entwickeln",
+            "Hilfsangebote nutzen"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Eingreifen - aber wie?"},
+            {"typ": "Arbeitsblatt", "titel": "Mein Notfallplan"},
+            {"typ": "Projekt", "titel": "Anti-Mobbing-Kampagne erstellen"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "konflikte",
+      "name": "Konflikte & Konfliktlösung",
+      "beschreibung": "Konstruktiver Umgang mit Konflikten",
+      "zielgruppe": "8-18 Jahre",
+      "bereiche": ["Kommunikation", "Verhalten", "Sozialisation"],
+      "unterthemen": [
+        {
+          "name": "Konflikte verstehen",
+          "lernziele": [
+            "Ursachen von Konflikten erkennen",
+            "Eigene Konfliktmuster reflektieren",
+            "Eskalationsstufen verstehen"
+          ],
+          "uebungen": [
+            {"typ": "Selbstreflexion", "titel": "Mein Konfliktverhalten"},
+            {"typ": "Arbeitsblatt", "titel": "Konfliktanalyse"},
+            {"typ": "Diskussion", "titel": "Fallbeispiele besprechen"}
+          ]
+        },
+        {
+          "name": "Konfliktlösungsstrategien",
+          "lernziele": [
+            "Win-Win-Lösungen finden",
+            "Ich-Botschaften formulieren",
+            "Kompromisse schließen"
+          ],
+          "uebungen": [
+            {"typ": "Übung", "titel": "Ich-Botschaften formulieren"},
+            {"typ": "Rollenspiel", "titel": "Mediation üben"},
+            {"typ": "Arbeitsblatt", "titel": "Die 6 Schritte der Konfliktlösung"}
+          ]
+        },
+        {
+          "name": "Gewaltfreie Kommunikation",
+          "lernziele": [
+            "4 Schritte der GFK kennen",
+            "Bedürfnisse erkennen und benennen",
+            "Empathisch zuhören"
+          ],
+          "uebungen": [
+            {"typ": "Übung", "titel": "Beobachtung vs. Bewertung"},
+            {"typ": "Arbeitsblatt", "titel": "Gefühle und Bedürfnisse"},
+            {"typ": "Rollenspiel", "titel": "GFK in der Praxis"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "selbstwert",
+      "name": "Selbstwert & Identität",
+      "beschreibung": "Stärkung des Selbstwertgefühls und der Identitätsentwicklung",
+      "zielgruppe": "10-18 Jahre",
+      "bereiche": ["Kommunikation", "Sozialisation"],
+      "unterthemen": [
+        {
+          "name": "Wer bin ich?",
+          "lernziele": [
+            "Eigene Stärken und Schwächen erkennen",
+            "Persönliche Werte identifizieren",
+            "Selbstbild reflektieren"
+          ],
+          "uebungen": [
+            {"typ": "Selbstreflexion", "titel": "Mein persönliches Wappen"},
+            {"typ": "Arbeitsblatt", "titel": "Stärken-Schwächen-Analyse"},
+            {"typ": "Kreativ", "titel": "Meine Lebenslinie"}
+          ]
+        },
+        {
+          "name": "Selbstwert stärken",
+          "lernziele": [
+            "Positive Selbstgespräche führen",
+            "Mit Kritik umgehen",
+            "Erfolge wahrnehmen und feiern"
+          ],
+          "uebungen": [
+            {"typ": "Übung", "titel": "Der innere Kritiker"},
+            {"typ": "Tagebuch", "titel": "Erfolgstagebuch"},
+            {"typ": "Arbeitsblatt", "titel": "Komplimente annehmen"}
+          ]
+        },
+        {
+          "name": "Körperbild & Selbstakzeptanz",
+          "lernziele": [
+            "Unrealistische Schönheitsideale erkennen",
+            "Den eigenen Körper akzeptieren",
+            "Medieneinflüsse kritisch hinterfragen"
+          ],
+          "uebungen": [
+            {"typ": "Diskussion", "titel": "Schönheitsideale in den Medien"},
+            {"typ": "Arbeitsblatt", "titel": "Mein Körper - mein Freund"},
+            {"typ": "Kreativ", "titel": "Body-Positivity-Collage"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emotionen",
+      "name": "Gefühle & Emotionsregulation",
+      "beschreibung": "Umgang mit und Regulation von Gefühlen",
+      "zielgruppe": "6-18 Jahre",
+      "bereiche": ["Verhalten", "Kommunikation"],
+      "unterthemen": [
+        {
+          "name": "Gefühle erkennen",
+          "lernziele": [
+            "Grundgefühle benennen",
+            "Körperliche Signale von Gefühlen erkennen",
+            "Gefühle bei anderen erkennen"
+          ],
+          "uebungen": [
+            {"typ": "Spiel", "titel": "Gefühle-Memory"},
+            {"typ": "Arbeitsblatt", "titel": "Mein Gefühlsbarometer"},
+            {"typ": "Übung", "titel": "Gefühle pantomimisch darstellen"}
+          ]
+        },
+        {
+          "name": "Mit Wut umgehen",
+          "lernziele": [
+            "Wut-Auslöser erkennen",
+            "Gesunde Ventile finden",
+            "Selbstberuhigungstechniken anwenden"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Mein Wut-Vulkan"},
+            {"typ": "Übung", "titel": "Stopp-Techniken"},
+            {"typ": "Entspannung", "titel": "Atemübungen"}
+          ]
+        },
+        {
+          "name": "Angst & Stress bewältigen",
+          "lernziele": [
+            "Stressoren identifizieren",
+            "Entspannungstechniken lernen",
+            "Resilenz aufbauen"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Mein Stress-Protokoll"},
+            {"typ": "Entspannung", "titel": "Progressive Muskelentspannung"},
+            {"typ": "Übung", "titel": "Mein persönlicher Notfallkoffer"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "medien",
+      "name": "Medienkompetenz",
+      "beschreibung": "Kritischer und verantwortungsvoller Umgang mit Medien",
+      "zielgruppe": "10-18 Jahre",
+      "bereiche": ["Kognition", "Sozialisation"],
+      "unterthemen": [
+        {
+          "name": "Social Media",
+          "lernziele": [
+            "Vor- und Nachteile von Social Media kennen",
+            "Privatsphäre-Einstellungen verstehen",
+            "Fake News erkennen"
+          ],
+          "uebungen": [
+            {"typ": "Analyse", "titel": "Mein Social-Media-Konsum"},
+            {"typ": "Quiz", "titel": "Fake News erkennen"},
+            {"typ": "Projekt", "titel": "Sichere Passwörter erstellen"}
+          ]
+        },
+        {
+          "name": "Gaming & Sucht",
+          "lernziele": [
+            "Suchtpotenzial von Spielen verstehen",
+            "Eigenes Spielverhalten reflektieren",
+            "Zeitmanagement entwickeln"
+          ],
+          "uebungen": [
+            {"typ": "Selbstreflexion", "titel": "Mein Gaming-Tagebuch"},
+            {"typ": "Diskussion", "titel": "Wann wird Spielen zum Problem?"},
+            {"typ": "Plan", "titel": "Mein Mediennutzungsplan"}
+          ]
+        },
+        {
+          "name": "Datenschutz & Privatsphäre",
+          "lernziele": [
+            "Bedeutung von Datenschutz verstehen",
+            "Eigene Daten schützen",
+            "Recht am eigenen Bild kennen"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Was weiß das Internet über mich?"},
+            {"typ": "Checkliste", "titel": "Datenschutz-Check"},
+            {"typ": "Quiz", "titel": "Recht am eigenen Bild"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sucht",
+      "name": "Suchtprävention",
+      "beschreibung": "Prävention von Suchtverhalten",
+      "zielgruppe": "12-18 Jahre",
+      "bereiche": ["Verhalten", "Kognition"],
+      "unterthemen": [
+        {
+          "name": "Was ist Sucht?",
+          "lernziele": [
+            "Definition und Arten von Sucht kennen",
+            "Suchtentwicklung verstehen",
+            "Risikofaktoren erkennen"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Sucht - Was ist das?"},
+            {"typ": "Diskussion", "titel": "Fallbeispiele analysieren"},
+            {"typ": "Quiz", "titel": "Mythen und Fakten"}
+          ]
+        },
+        {
+          "name": "Nein sagen lernen",
+          "lernziele": [
+            "Gruppendruck widerstehen",
+            "Selbstbewusst ablehnen",
+            "Alternativen finden"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Nein sagen - So geht's"},
+            {"typ": "Arbeitsblatt", "titel": "Meine Ausreden"},
+            {"typ": "Übung", "titel": "Alternativen zum Rausch"}
+          ]
+        },
+        {
+          "name": "Hilfe finden",
+          "lernziele": [
+            "Hilfsangebote kennen",
+            "Warnzeichen erkennen",
+            "Freunden helfen"
+          ],
+          "uebungen": [
+            {"typ": "Recherche", "titel": "Hilfsangebote in meiner Nähe"},
+            {"typ": "Arbeitsblatt", "titel": "Warnzeichen erkennen"},
+            {"typ": "Rollenspiel", "titel": "Ein Gespräch beginnen"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "respekt",
+      "name": "Respekt & Toleranz",
+      "beschreibung": "Förderung von Respekt, Toleranz und Vielfalt",
+      "zielgruppe": "8-18 Jahre",
+      "bereiche": ["Sozialisation", "Kommunikation"],
+      "unterthemen": [
+        {
+          "name": "Vielfalt verstehen",
+          "lernziele": [
+            "Verschiedene Lebensformen kennen",
+            "Vorurteile erkennen",
+            "Diskriminierung verstehen"
+          ],
+          "uebungen": [
+            {"typ": "Diskussion", "titel": "Was bedeutet Vielfalt?"},
+            {"typ": "Arbeitsblatt", "titel": "Vorurteile hinterfragen"},
+            {"typ": "Spiel", "titel": "Perspektivenwechsel"}
+          ]
+        },
+        {
+          "name": "Respektvoller Umgang",
+          "lernziele": [
+            "Respekt zeigen und einfordern",
+            "Grenzen setzen und akzeptieren",
+            "Höflichkeitsformen kennen"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Grenzen setzen"},
+            {"typ": "Arbeitsblatt", "titel": "Respekt-Regeln für unsere Klasse"},
+            {"typ": "Übung", "titel": "Wertschätzende Sprache"}
+          ]
+        },
+        {
+          "name": "Zivilcourage",
+          "lernziele": [
+            "Unrecht erkennen",
+            "Sicher eingreifen",
+            "Hilfe holen"
+          ],
+          "uebungen": [
+            {"typ": "Fallanalyse", "titel": "Situationen bewerten"},
+            {"typ": "Rollenspiel", "titel": "Eingreifen üben"},
+            {"typ": "Arbeitsblatt", "titel": "Mein Zivilcourage-Plan"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "freundschaft",
+      "name": "Freundschaft & Beziehungen",
+      "beschreibung": "Aufbau und Pflege von Freundschaften und Beziehungen",
+      "zielgruppe": "8-18 Jahre",
+      "bereiche": ["Sozialisation", "Kommunikation"],
+      "unterthemen": [
+        {
+          "name": "Was ist Freundschaft?",
+          "lernziele": [
+            "Eigenschaften guter Freundschaft benennen",
+            "Echte von oberflächlichen Freundschaften unterscheiden",
+            "Eigene Freundschaften reflektieren"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Meine Freundschafts-Landkarte"},
+            {"typ": "Diskussion", "titel": "Was macht gute Freunde aus?"},
+            {"typ": "Kreativ", "titel": "Brief an meinen besten Freund"}
+          ]
+        },
+        {
+          "name": "Freunde finden",
+          "lernziele": [
+            "Kontakt aufnehmen lernen",
+            "Gemeinsame Interessen finden",
+            "Schüchternheit überwinden"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Gespräche beginnen"},
+            {"typ": "Arbeitsblatt", "titel": "Meine Interessen"},
+            {"typ": "Übung", "titel": "Small Talk üben"}
+          ]
+        },
+        {
+          "name": "Konflikte in Freundschaften",
+          "lernziele": [
+            "Konflikte ansprechen",
+            "Verzeihen lernen",
+            "Grenzen setzen"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Streit schlichten"},
+            {"typ": "Arbeitsblatt", "titel": "Entschuldigung schreiben"},
+            {"typ": "Übung", "titel": "Grenzen kommunizieren"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gewalt",
+      "name": "Gewaltprävention",
+      "beschreibung": "Prävention von Gewalt und Förderung gewaltfreier Konfliktlösung",
+      "zielgruppe": "10-18 Jahre",
+      "bereiche": ["Verhalten", "Kommunikation", "Sozialisation"],
+      "unterthemen": [
+        {
+          "name": "Formen von Gewalt",
+          "lernziele": [
+            "Verschiedene Gewaltformen erkennen",
+            "Gewalt von Konflikt unterscheiden",
+            "Eigenes Gewaltverhalten reflektieren"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Was ist Gewalt?"},
+            {"typ": "Diskussion", "titel": "Grenzen erkennen"},
+            {"typ": "Selbstreflexion", "titel": "Mein Umgang mit Gewalt"}
+          ]
+        },
+        {
+          "name": "Deeskalation",
+          "lernziele": [
+            "Eskalation erkennen",
+            "Deeskalationstechniken anwenden",
+            "Situationen entschärfen"
+          ],
+          "uebungen": [
+            {"typ": "Rollenspiel", "titel": "Deeskalation üben"},
+            {"typ": "Arbeitsblatt", "titel": "Die Eskalationstreppe"},
+            {"typ": "Übung", "titel": "Cool-down-Strategien"}
+          ]
+        },
+        {
+          "name": "Hilfe holen",
+          "lernziele": [
+            "Hilfe rechtzeitig holen",
+            "Anlaufstellen kennen",
+            "Als Zeuge handeln"
+          ],
+          "uebungen": [
+            {"typ": "Recherche", "titel": "Anlaufstellen sammeln"},
+            {"typ": "Rollenspiel", "titel": "Hilfe holen üben"},
+            {"typ": "Arbeitsblatt", "titel": "Notfallplan erstellen"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teamarbeit",
+      "name": "Teamwork & Kooperation",
+      "beschreibung": "Entwicklung von Teamfähigkeit und Kooperationskompetenzen",
+      "zielgruppe": "8-18 Jahre",
+      "bereiche": ["Sozialisation", "Kommunikation"],
+      "unterthemen": [
+        {
+          "name": "Was macht ein gutes Team aus?",
+          "lernziele": [
+            "Merkmale guter Teams kennen",
+            "Eigene Rolle im Team reflektieren",
+            "Teamrollen verstehen"
+          ],
+          "uebungen": [
+            {"typ": "Arbeitsblatt", "titel": "Team-Rollen-Test"},
+            {"typ": "Diskussion", "titel": "Was braucht ein gutes Team?"},
+            {"typ": "Spiel", "titel": "Teambuilding-Übungen"}
+          ]
+        },
+        {
+          "name": "Gemeinsam Ziele erreichen",
+          "lernziele": [
+            "Gemeinsame Ziele definieren",
+            "Aufgaben verteilen",
+            "Zusammenarbeit organisieren"
+          ],
+          "uebungen": [
+            {"typ": "Projekt", "titel": "Team-Challenge"},
+            {"typ": "Arbeitsblatt", "titel": "Unser Projekt-Plan"},
+            {"typ": "Übung", "titel": "Aufgaben fair verteilen"}
+          ]
+        },
+        {
+          "name": "Feedback im Team",
+          "lernziele": [
+            "Konstruktives Feedback geben",
+            "Feedback annehmen",
+            "Reflexion im Team"
+          ],
+          "uebungen": [
+            {"typ": "Übung", "titel": "Feedback-Regeln"},
+            {"typ": "Arbeitsblatt", "titel": "Team-Reflexion"},
+            {"typ": "Spiel", "titel": "Warmer Regen"}
+          ]
+        }
+      ]
+    }
+  ]
+}
