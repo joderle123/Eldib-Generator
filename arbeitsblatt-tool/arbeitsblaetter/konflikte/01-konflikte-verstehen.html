@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konflikte verstehen und lösen - Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #fff;
+        }
+        .header {
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 { color: #d68910; font-size: 28px; }
+        .meta { display: flex; justify-content: space-between; color: #777; font-size: 14px; margin-top: 10px; }
+        .name-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 20px;
+        }
+        .name-box label { font-weight: 600; }
+        .name-box input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+        .info-box {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .aufgabe {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .aufgabe h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .aufgabe-nummer {
+            background: #f39c12;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .schreibfeld {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+        .schreibfeld:focus { outline: none; border-color: #f39c12; }
+        .eskalations-treppe {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 20px 0;
+        }
+        .stufe {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .stufe-nummer {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        .stufe:nth-child(1) .stufe-nummer { background: #27ae60; }
+        .stufe:nth-child(2) .stufe-nummer { background: #f1c40f; }
+        .stufe:nth-child(3) .stufe-nummer { background: #e67e22; }
+        .stufe:nth-child(4) .stufe-nummer { background: #e74c3c; }
+        .stufe:nth-child(5) .stufe-nummer { background: #c0392b; }
+        .stufe-inhalt {
+            flex: 1;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .stufe:nth-child(1) .stufe-inhalt { border-color: #27ae60; }
+        .stufe:nth-child(2) .stufe-inhalt { border-color: #f1c40f; }
+        .stufe:nth-child(3) .stufe-inhalt { border-color: #e67e22; }
+        .stufe:nth-child(4) .stufe-inhalt { border-color: #e74c3c; }
+        .stufe:nth-child(5) .stufe-inhalt { border-color: #c0392b; }
+        .konflikt-arten {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .konflikt-art {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .konflikt-art .icon { font-size: 30px; margin-bottom: 10px; }
+        .konflikt-art h4 { color: #d68910; margin-bottom: 8px; }
+        .konflikt-art p { font-size: 13px; color: #666; }
+        .ich-botschaft-box {
+            background: #e8f8f5;
+            border: 2px solid #1abc9c;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .ich-botschaft-box h3 { color: #16a085; margin-bottom: 15px; }
+        .formel {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .formel span {
+            background: #1abc9c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 0 3px;
+        }
+        .beispiel-vergleich {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .beispiel {
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .beispiel.schlecht {
+            background: #fadbd8;
+            border: 2px solid #e74c3c;
+        }
+        .beispiel.gut {
+            background: #d4efdf;
+            border: 2px solid #27ae60;
+        }
+        .loesungs-schritte {
+            counter-reset: schritt;
+            list-style: none;
+            margin: 15px 0;
+        }
+        .loesungs-schritte li {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            position: relative;
+            padding-left: 60px;
+        }
+        .loesungs-schritte li::before {
+            counter-increment: schritt;
+            content: counter(schritt);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: #f39c12;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+        @media print { .aufgabe { break-inside: avoid; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚖️ Konflikte verstehen und lösen</h1>
+        <p>Streiten kann man lernen – und zwar fair!</p>
+        <div class="meta">
+            <span>Altersgruppe: 10-16 Jahre</span>
+            <span>Einzelarbeit / Partnerarbeit</span>
+        </div>
+    </div>
+
+    <div class="name-box">
+        <label>Name:</label>
+        <input type="text" placeholder="Dein Name">
+        <label>Datum:</label>
+        <input type="date">
+    </div>
+
+    <div class="info-box">
+        <h3>💡 Was ist ein Konflikt?</h3>
+        <p>Ein <strong>Konflikt</strong> entsteht, wenn zwei oder mehr Menschen unterschiedliche Wünsche, Meinungen oder Bedürfnisse haben. Das ist <strong>ganz normal</strong> und gehört zum Leben dazu! Wichtig ist nur, <strong>wie</strong> wir mit Konflikten umgehen.</p>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">1</span> Worüber streiten wir eigentlich?</h3>
+        <p>Es gibt verschiedene Arten von Konflikten:</p>
+
+        <div class="konflikt-arten">
+            <div class="konflikt-art">
+                <div class="icon">🎯</div>
+                <h4>Sachkonflikt</h4>
+                <p>„Wir sind uns nicht einig über Fakten oder Lösungen."</p>
+                <p style="margin-top: 5px; font-style: italic;">z.B. Wie soll das Projekt aussehen?</p>
+            </div>
+            <div class="konflikt-art">
+                <div class="icon">💔</div>
+                <h4>Beziehungskonflikt</h4>
+                <p>„Zwischen uns stimmt etwas nicht mehr."</p>
+                <p style="margin-top: 5px; font-style: italic;">z.B. Du hörst mir nie zu!</p>
+            </div>
+            <div class="konflikt-art">
+                <div class="icon">🏆</div>
+                <h4>Verteilungskonflikt</h4>
+                <p>„Wir wollen beide das Gleiche haben."</p>
+                <p style="margin-top: 5px; font-style: italic;">z.B. Wer darf am Computer?</p>
+            </div>
+            <div class="konflikt-art">
+                <div class="icon">💭</div>
+                <h4>Wertekonflikt</h4>
+                <p>„Wir haben unterschiedliche Überzeugungen."</p>
+                <p style="margin-top: 5px; font-style: italic;">z.B. Was ist fair und gerecht?</p>
+            </div>
+        </div>
+
+        <p><strong>Denke an einen Konflikt, den du mal hattest. Um welche Art ging es?</strong></p>
+        <textarea class="schreibfeld" placeholder="Ich hatte mal einen Konflikt mit... Es war ein... weil..."></textarea>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">2</span> Die Eskalations-Treppe</h3>
+        <p>Konflikte können immer schlimmer werden, wenn man nicht aufpasst:</p>
+
+        <div class="eskalations-treppe">
+            <div class="stufe">
+                <div class="stufe-nummer">1</div>
+                <div class="stufe-inhalt">
+                    <strong>Meinungsverschiedenheit</strong><br>
+                    <span style="font-size: 13px; color: #666;">„Ich sehe das anders als du."</span>
+                </div>
+            </div>
+            <div class="stufe">
+                <div class="stufe-nummer">2</div>
+                <div class="stufe-inhalt">
+                    <strong>Verbale Auseinandersetzung</strong><br>
+                    <span style="font-size: 13px; color: #666;">„Wir streiten und werden lauter."</span>
+                </div>
+            </div>
+            <div class="stufe">
+                <div class="stufe-nummer">3</div>
+                <div class="stufe-inhalt">
+                    <strong>Feindseligkeit</strong><br>
+                    <span style="font-size: 13px; color: #666;">„Wir wollen den anderen verletzen."</span>
+                </div>
+            </div>
+            <div class="stufe">
+                <div class="stufe-nummer">4</div>
+                <div class="stufe-inhalt">
+                    <strong>Drohungen</strong><br>
+                    <span style="font-size: 13px; color: #666;">„Wenn du nicht..., dann...!"</span>
+                </div>
+            </div>
+            <div class="stufe">
+                <div class="stufe-nummer">5</div>
+                <div class="stufe-inhalt">
+                    <strong>Gewalt</strong><br>
+                    <span style="font-size: 13px; color: #666;">„Wir werden handgreiflich." ⚠️</span>
+                </div>
+            </div>
+        </div>
+
+        <p><strong>Ab welcher Stufe sollte man unbedingt Hilfe holen?</strong></p>
+        <textarea class="schreibfeld" placeholder="Ich denke, ab Stufe... sollte man Hilfe holen, weil..."></textarea>
+    </div>
+
+    <div class="ich-botschaft-box">
+        <h3>🗣️ Ich-Botschaften statt Du-Vorwürfe</h3>
+        <p>Der wichtigste Trick für faire Gespräche: Sprich über DEINE Gefühle, statt den anderen anzugreifen!</p>
+
+        <div class="formel">
+            <span>Ich fühle mich...</span> + <span>wenn du...</span> + <span>weil ich...</span> + <span>Ich wünsche mir...</span>
+        </div>
+
+        <div class="beispiel-vergleich">
+            <div class="beispiel schlecht">
+                <h4>❌ Du-Botschaft</h4>
+                <p>„Du bist so ein Egoist! Du nimmst nie Rücksicht auf andere!"</p>
+                <p style="margin-top: 10px; font-size: 12px;"><strong>Problem:</strong> Der andere fühlt sich angegriffen und geht in Verteidigung.</p>
+            </div>
+            <div class="beispiel gut">
+                <h4>✅ Ich-Botschaft</h4>
+                <p>„Ich fühle mich übergangen, wenn du ohne mich entscheidest, weil mir deine Meinung wichtig ist. Ich wünsche mir, dass wir vorher reden."</p>
+                <p style="margin-top: 10px; font-size: 12px;"><strong>Vorteil:</strong> Der andere versteht dein Gefühl und fühlt sich nicht angegriffen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">3</span> Ich-Botschaften üben</h3>
+        <p>Wandle diese Du-Vorwürfe in Ich-Botschaften um:</p>
+
+        <div style="margin-top: 15px;">
+            <p><strong>A) „Du lügst immer!"</strong></p>
+            <textarea class="schreibfeld" placeholder="Ich fühle mich..., wenn..., weil... Ich wünsche mir..."></textarea>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <p><strong>B) „Du bist voll unfair!"</strong></p>
+            <textarea class="schreibfeld" placeholder="Ich fühle mich..., wenn..., weil... Ich wünsche mir..."></textarea>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <p><strong>C) Denke an einen eigenen Konflikt und formuliere eine Ich-Botschaft:</strong></p>
+            <textarea class="schreibfeld" style="min-height: 100px;" placeholder="Situation: ...
+
+Meine Ich-Botschaft: Ich fühle mich..., wenn..., weil... Ich wünsche mir..."></textarea>
+        </div>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">4</span> Die 6 Schritte zur Konfliktlösung</h3>
+
+        <ol class="loesungs-schritte">
+            <li>
+                <strong>Abkühlen</strong><br>
+                <span style="color: #666;">Wenn du wütend bist, warte erstmal ab. Atme tief durch.</span>
+            </li>
+            <li>
+                <strong>Zuhören</strong><br>
+                <span style="color: #666;">Lass den anderen ausreden. Versuche zu verstehen, wie er sich fühlt.</span>
+            </li>
+            <li>
+                <strong>Ich-Botschaft</strong><br>
+                <span style="color: #666;">Erkläre deine eigenen Gefühle und Wünsche ohne Vorwürfe.</span>
+            </li>
+            <li>
+                <strong>Lösungen sammeln</strong><br>
+                <span style="color: #666;">Überlegt gemeinsam: Was könnten wir tun? Alle Ideen sind erstmal erlaubt!</span>
+            </li>
+            <li>
+                <strong>Beste Lösung wählen</strong><br>
+                <span style="color: #666;">Welche Lösung ist für beide okay? Gibt es einen Kompromiss?</span>
+            </li>
+            <li>
+                <strong>Abmachung treffen</strong><br>
+                <span style="color: #666;">Was genau machen wir jetzt? Woran merken wir, dass es klappt?</span>
+            </li>
+        </ol>
+
+        <p style="margin-top: 20px;"><strong>Welcher Schritt ist für dich am schwierigsten? Warum?</strong></p>
+        <textarea class="schreibfeld" placeholder="Für mich ist Schritt... am schwierigsten, weil..."></textarea>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">5</span> Ein Konflikt zum Üben</h3>
+        <p>Lies die Situation und wende die 6 Schritte an:</p>
+
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <strong>📖 Situation:</strong><br>
+            Max und Lisa müssen zusammen ein Referat machen. Max findet, Lisa macht zu wenig und er muss alles alleine machen. Lisa findet, Max lässt sie nie zu Wort kommen und macht alles, wie er will.
+        </div>
+
+        <p><strong>Wie würdest du diesen Konflikt lösen?</strong></p>
+        <textarea class="schreibfeld" style="min-height: 150px;" placeholder="1. Abkühlen: ...
+
+2. Zuhören: Max' Sicht ist... / Lisas Sicht ist...
+
+3. Ich-Botschaften: Max könnte sagen... / Lisa könnte sagen...
+
+4. Lösungsideen: ...
+
+5. Beste Lösung: ...
+
+6. Abmachung: ..."></textarea>
+    </div>
+
+    <div class="aufgabe">
+        <h3><span class="aufgabe-nummer">6</span> Mein persönlicher Konflikt-Plan</h3>
+        <p>Was nimmst du dir für zukünftige Konflikte vor?</p>
+
+        <textarea class="schreibfeld" style="min-height: 100px;" placeholder="Wenn ich das nächste Mal in einen Streit gerate, werde ich...
+
+Ich will darauf achten, dass...
+
+Mir hilft es, wenn..."></textarea>
+    </div>
+
+    <div class="footer">
+        <p>Arbeitsblatt: Konflikte verstehen und lösen | CDSE Luxembourg</p>
+        <p style="margin-top: 5px;">Konflikte sind Chancen – sie helfen uns, uns selbst und andere besser zu verstehen! 🤝</p>
+    </div>
+</body>
+</html>
