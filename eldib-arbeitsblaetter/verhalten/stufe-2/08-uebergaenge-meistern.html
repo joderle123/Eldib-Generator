@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Übergänge meistern - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff6b6b; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .transition-timeline { display: flex; justify-content: space-between; align-items: center; padding: 30px 20px; background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #11998e 100%); border-radius: 15px; margin: 20px 0; position: relative; }
+        .transition-timeline::before { content: ''; position: absolute; top: 50%; left: 15%; right: 15%; height: 4px; background: rgba(255,255,255,0.3); }
+        .transition-point { text-align: center; position: relative; z-index: 1; cursor: pointer; }
+        .point-circle { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.3); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.8em; transition: all 0.3s; }
+        .transition-point.active .point-circle { background: white; }
+        .point-label { color: white; font-size: 0.85em; }
+        .transition-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .transition-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .transition-card:hover { transform: translateY(-5px); border-color: #ff6b6b; }
+        .transition-card.easy { border-color: #4CAF50; background: #e8f5e9; }
+        .transition-card.hard { border-color: #f44336; background: #ffebee; }
+        .transition-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .transition-card .label { font-weight: bold; margin-bottom: 5px; }
+        .transition-card .desc { font-size: 0.85em; color: #666; }
+        .strategies { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; justify-content: center; }
+        .strategy-chip { padding: 12px 20px; background: white; border: 3px solid #e0e0e0; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+        .strategy-chip:hover { border-color: #ff6b6b; }
+        .strategy-chip.selected { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff6b6b; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .transition-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Übergänge meistern</h1>
+            <p>Von einer Aktivität zur nächsten wechseln</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-8/V-9)</h3>
+                <p>Das Kind kann von einer Aktivität zur anderen wechseln. Es akzeptiert Übergänge und passt sich an neue Situationen an.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Ein Tag voller Übergänge</h3>
+                <p>Klicke auf die Übergänge, die du heute geschafft hast:</p>
+                <div class="transition-timeline">
+                    <div class="transition-point" onclick="toggleTransition(this)"><div class="point-circle">🛏️</div><div class="point-label">Aufstehen</div></div>
+                    <div class="transition-point" onclick="toggleTransition(this)"><div class="point-circle">🏫</div><div class="point-label">Zur Schule</div></div>
+                    <div class="transition-point" onclick="toggleTransition(this)"><div class="point-circle">📚</div><div class="point-label">Unterricht</div></div>
+                    <div class="transition-point" onclick="toggleTransition(this)"><div class="point-circle">🏠</div><div class="point-label">Nach Hause</div></div>
+                    <div class="transition-point" onclick="toggleTransition(this)"><div class="point-circle">😴</div><div class="point-label">Schlafen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Welche Übergänge sind leicht/schwer?</h3>
+                <p>Klicke einmal = leicht (grün), zweimal = schwer (rot):</p>
+                <div class="transition-cards">
+                    <div class="transition-card" onclick="toggleDifficulty(this)"><div class="icon">🎮➡️📚</div><div class="label">Spielen → Lernen</div><div class="desc">Vom Spielen zum Arbeiten</div></div>
+                    <div class="transition-card" onclick="toggleDifficulty(this)"><div class="icon">🏠➡️🚌</div><div class="label">Zuhause → Unterwegs</div><div class="desc">Das Haus verlassen</div></div>
+                    <div class="transition-card" onclick="toggleDifficulty(this)"><div class="icon">🎉➡️😴</div><div class="label">Aktivität → Ruhe</div><div class="desc">Aufhören und ruhig werden</div></div>
+                    <div class="transition-card" onclick="toggleDifficulty(this)"><div class="icon">👤➡️👥</div><div class="label">Alleine → Gruppe</div><div class="desc">Zu anderen dazukommen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Was hilft mir bei Übergängen?</h3>
+                <p>Wähle die Strategien, die dir helfen:</p>
+                <div class="strategies">
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">⏰ Vorwarnung bekommen</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">🎵 Ein Übergangslied</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">📅 Den Plan kennen</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">🧸 Etwas Vertrautes mitnehmen</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">🌬️ Tief durchatmen</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">🔢 Countdown zählen</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">🤝 Begleitung haben</div>
+                    <div class="strategy-chip" onclick="toggleStrategy(this)">⭐ Belohnung erwarten</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Übergänge fallen leicht/schwer? Welche Strategien helfen? Wie reagiert das Kind auf Ankündigungen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleTransition(el) { el.classList.toggle('active'); saveData(); }
+        function toggleDifficulty(el) {
+            if (el.classList.contains('hard')) { el.classList.remove('hard'); }
+            else if (el.classList.contains('easy')) { el.classList.remove('easy'); el.classList.add('hard'); }
+            else { el.classList.add('easy'); }
+            saveData();
+        }
+        function toggleStrategy(el) { el.classList.toggle('selected'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                transitions: document.querySelectorAll('.transition-point.active').length,
+                easy: document.querySelectorAll('.transition-card.easy').length,
+                hard: document.querySelectorAll('.transition-card.hard').length,
+                strategies: document.querySelectorAll('.strategy-chip.selected').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_uebergaenge', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_uebergaenge');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const points = document.querySelectorAll('.transition-point');
+                for (let i = 0; i < (data.transitions || 0); i++) { if (points[i]) points[i].classList.add('active'); }
+                const cards = document.querySelectorAll('.transition-card');
+                for (let i = 0; i < (data.easy || 0); i++) { if (cards[i]) cards[i].classList.add('easy'); }
+                const chips = document.querySelectorAll('.strategy-chip');
+                for (let i = 0; i < (data.strategies || 0); i++) { if (chips[i]) chips[i].classList.add('selected'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

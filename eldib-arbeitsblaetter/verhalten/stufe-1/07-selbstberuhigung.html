@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sich selbst beruhigen - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #66a6ff;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .breathing-exercise {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+            margin: 20px 0;
+        }
+        .breath-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 4s ease-in-out;
+        }
+        .breath-circle.inhale {
+            transform: scale(1.5);
+            background: rgba(255,255,255,0.6);
+        }
+        .breath-circle.exhale {
+            transform: scale(1);
+            background: rgba(255,255,255,0.3);
+        }
+        .breath-instruction {
+            font-size: 1.5em;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .calming-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .calming-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .calming-card:hover {
+            transform: translateY(-5px);
+            border-color: #66a6ff;
+        }
+        .calming-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .calming-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .calming-card .title { font-weight: bold; margin-bottom: 5px; }
+        .calming-card .desc { font-size: 0.85em; color: #666; }
+        .emotion-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .emotion-point {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .emotion-point:hover { background: #e0e0e0; }
+        .emotion-point.selected { background: #e3f2fd; }
+        .emotion-point .icon { font-size: 2.5em; }
+        .emotion-point .label { font-size: 0.8em; margin-top: 5px; }
+        .safe-place {
+            position: relative;
+            height: 250px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .safe-place-items {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .draggable-item {
+            position: absolute;
+            font-size: 2.5em;
+            cursor: move;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .draggable-item:hover { transform: scale(1.2); }
+        .item-tray {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .tray-item {
+            font-size: 2em;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e0e0e0;
+        }
+        .tray-item:hover {
+            transform: scale(1.1);
+            border-color: #66a6ff;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #66a6ff; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .calming-methods { grid-template-columns: 1fr; }
+            .emotion-scale { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Sich selbst beruhigen</h1>
+            <p>Wege finden, um ruhig zu werden</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-7)</h3>
+                <p>Das Kind entwickelt Strategien, um sich selbst zu beruhigen. Es lernt, was ihm hilft, wenn es aufgeregt oder unruhig ist.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🌬️</span> Atem-Übung</h3>
+                <p>Atme langsam mit dem Kreis ein und aus:</p>
+                <div class="breathing-exercise">
+                    <div class="breath-circle" id="breathCircle">
+                        Bereit?
+                    </div>
+                    <div class="breath-instruction" id="breathInstruction"></div>
+                    <button class="btn" onclick="startBreathing()">Übung starten</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">😌</span> Was hilft mir, ruhig zu werden?</h3>
+                <p>Wähle aus, was dir hilft:</p>
+                <div class="calming-methods">
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🧸</div>
+                        <div class="title">Kuscheltier</div>
+                        <div class="desc">Etwas Weiches festhalten</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🎵</div>
+                        <div class="title">Musik</div>
+                        <div class="desc">Ruhige Musik hören</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🤗</div>
+                        <div class="title">Umarmung</div>
+                        <div class="desc">Von jemandem gehalten werden</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🛋️</div>
+                        <div class="title">Ruhiger Ort</div>
+                        <div class="desc">An einen stillen Platz gehen</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🌬️</div>
+                        <div class="title">Tief atmen</div>
+                        <div class="desc">Langsam ein- und ausatmen</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">💧</div>
+                        <div class="title">Wasser</div>
+                        <div class="desc">Einen Schluck trinken</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🚶</div>
+                        <div class="title">Bewegung</div>
+                        <div class="desc">Ein bisschen laufen</div>
+                    </div>
+                    <div class="calming-card" onclick="toggleCalming(this)">
+                        <div class="icon">🎨</div>
+                        <div class="title">Malen</div>
+                        <div class="desc">Etwas zeichnen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Wie fühle ich mich jetzt?</h3>
+                <div class="emotion-scale">
+                    <div class="emotion-point" onclick="selectEmotion(this, 1)">
+                        <div class="icon">😢</div>
+                        <div class="label">Sehr aufgeregt</div>
+                    </div>
+                    <div class="emotion-point" onclick="selectEmotion(this, 2)">
+                        <div class="icon">😟</div>
+                        <div class="label">Aufgeregt</div>
+                    </div>
+                    <div class="emotion-point" onclick="selectEmotion(this, 3)">
+                        <div class="icon">😐</div>
+                        <div class="label">Okay</div>
+                    </div>
+                    <div class="emotion-point" onclick="selectEmotion(this, 4)">
+                        <div class="icon">🙂</div>
+                        <div class="label">Ruhig</div>
+                    </div>
+                    <div class="emotion-point" onclick="selectEmotion(this, 5)">
+                        <div class="icon">😊</div>
+                        <div class="label">Sehr ruhig</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🏠</span> Mein sicherer Ort</h3>
+                <p>Gestalte deinen eigenen ruhigen Ort - klicke auf Dinge, um sie hinzuzufügen:</p>
+                <div class="safe-place" id="safePlace">
+                    <div class="safe-place-items" id="safePlaceItems"></div>
+                </div>
+                <div class="item-tray">
+                    <span class="tray-item" onclick="addToPlace('🧸')">🧸</span>
+                    <span class="tray-item" onclick="addToPlace('🛋️')">🛋️</span>
+                    <span class="tray-item" onclick="addToPlace('🌸')">🌸</span>
+                    <span class="tray-item" onclick="addToPlace('⭐')">⭐</span>
+                    <span class="tray-item" onclick="addToPlace('🌈')">🌈</span>
+                    <span class="tray-item" onclick="addToPlace('☁️')">☁️</span>
+                    <span class="tray-item" onclick="addToPlace('🌺')">🌺</span>
+                    <span class="tray-item" onclick="addToPlace('🎈')">🎈</span>
+                </div>
+                <button class="btn" onclick="clearPlace()" style="margin-top: 15px;">Leeren</button>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Beruhigungsstrategien nutzt das Kind? Was hilft am besten? Wie lange braucht es, um sich zu beruhigen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let breathingInterval = null;
+        let currentEmotion = 0;
+        const placeItems = [];
+
+        function startBreathing() {
+            const circle = document.getElementById('breathCircle');
+            const instruction = document.getElementById('breathInstruction');
+            let phase = 0;
+
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+            }
+
+            function breathe() {
+                if (phase % 2 === 0) {
+                    circle.classList.remove('exhale');
+                    circle.classList.add('inhale');
+                    circle.textContent = '😮';
+                    instruction.textContent = 'Einatmen...';
+                } else {
+                    circle.classList.remove('inhale');
+                    circle.classList.add('exhale');
+                    circle.textContent = '😌';
+                    instruction.textContent = 'Ausatmen...';
+                }
+                phase++;
+
+                if (phase >= 8) {
+                    clearInterval(breathingInterval);
+                    circle.textContent = '😊';
+                    instruction.textContent = 'Gut gemacht!';
+                    circle.classList.remove('inhale', 'exhale');
+                }
+            }
+
+            breathe();
+            breathingInterval = setInterval(breathe, 4000);
+        }
+
+        function toggleCalming(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function selectEmotion(el, value) {
+            document.querySelectorAll('.emotion-point').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            currentEmotion = value;
+            saveData();
+        }
+
+        function addToPlace(emoji) {
+            const container = document.getElementById('safePlaceItems');
+            const item = document.createElement('div');
+            item.className = 'draggable-item';
+            item.textContent = emoji;
+            item.style.left = Math.random() * 200 + 50 + 'px';
+            item.style.top = Math.random() * 150 + 30 + 'px';
+
+            // Make draggable
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            item.onmousedown = (e) => {
+                isDragging = true;
+                offsetX = e.clientX - item.offsetLeft;
+                offsetY = e.clientY - item.offsetTop;
+            };
+
+            document.onmousemove = (e) => {
+                if (isDragging) {
+                    const rect = container.getBoundingClientRect();
+                    item.style.left = (e.clientX - rect.left - 20) + 'px';
+                    item.style.top = (e.clientY - rect.top - 20) + 'px';
+                }
+            };
+
+            document.onmouseup = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    saveData();
+                }
+            };
+
+            container.appendChild(item);
+            placeItems.push({ emoji, x: item.style.left, y: item.style.top });
+            saveData();
+        }
+
+        function clearPlace() {
+            document.getElementById('safePlaceItems').innerHTML = '';
+            placeItems.length = 0;
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const items = Array.from(document.querySelectorAll('.draggable-item')).map(item => ({
+                emoji: item.textContent,
+                x: item.style.left,
+                y: item.style.top
+            }));
+
+            const data = {
+                calming: Array.from(document.querySelectorAll('.calming-card.selected')).map(c => c.querySelector('.title').textContent),
+                emotion: currentEmotion,
+                placeItems: items,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_beruhigen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_beruhigen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.calming-card').forEach(card => {
+                    if (data.calming && data.calming.includes(card.querySelector('.title').textContent)) {
+                        card.classList.add('selected');
+                    }
+                });
+
+                if (data.emotion) {
+                    const emotions = document.querySelectorAll('.emotion-point');
+                    if (emotions[data.emotion - 1]) {
+                        emotions[data.emotion - 1].classList.add('selected');
+                    }
+                    currentEmotion = data.emotion;
+                }
+
+                if (data.placeItems) {
+                    const container = document.getElementById('safePlaceItems');
+                    data.placeItems.forEach(({ emoji, x, y }) => {
+                        const item = document.createElement('div');
+                        item.className = 'draggable-item';
+                        item.textContent = emoji;
+                        item.style.left = x;
+                        item.style.top = y;
+                        container.appendChild(item);
+                    });
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

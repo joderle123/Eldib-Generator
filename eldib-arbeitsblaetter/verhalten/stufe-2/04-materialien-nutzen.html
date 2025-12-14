@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materialien richtig nutzen - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .material-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .material-card:hover { transform: translateY(-5px); border-color: #11998e; }
+        .material-card.learned { border-color: #4CAF50; background: #e8f5e9; }
+        .material-card .icon { font-size: 2.5em; margin-bottom: 5px; }
+        .material-card .label { font-size: 0.85em; }
+        .matching-game { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .match-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .match-item { font-size: 2em; }
+        .match-options { display: flex; gap: 10px; flex: 1; justify-content: flex-end; }
+        .match-option { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .match-option:hover { border-color: #11998e; }
+        .match-option.correct { border-color: #4CAF50; background: #e8f5e9; }
+        .match-option.wrong { border-color: #f44336; background: #ffebee; }
+        .rules-list { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .rule-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .rule-item:hover { border-color: #11998e; }
+        .rule-item.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .rule-item .icon { font-size: 2em; }
+        .rule-item .checkbox { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-left: auto; }
+        .understood .checkbox { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .materials-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Materialien richtig nutzen</h1>
+            <p>Mit Gegenständen sachgerecht umgehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-11)</h3>
+                <p>Das Kind nutzt Materialien und Gegenstände sachgerecht. Es weiß, wie man mit verschiedenen Dingen umgeht und geht sorgsam damit um.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎨</span> Diese Materialien kenne ich</h3>
+                <p>Klicke auf die Materialien, mit denen du richtig umgehen kannst:</p>
+                <div class="materials-grid">
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">✏️</div><div class="label">Stifte</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">✂️</div><div class="label">Schere</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">📚</div><div class="label">Bücher</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">🖌️</div><div class="label">Pinsel</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">🧱</div><div class="label">Bausteine</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">🧩</div><div class="label">Puzzle</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">⚽</div><div class="label">Ball</div></div>
+                    <div class="material-card" onclick="toggleMaterial(this)"><div class="icon">🎲</div><div class="label">Spiele</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔗</span> Was gehört zusammen?</h3>
+                <p>Wähle das passende Bild für jedes Material:</p>
+                <div class="matching-game">
+                    <div class="match-row">
+                        <div class="match-item">✏️</div>
+                        <span>Stifte gehören...</span>
+                        <div class="match-options">
+                            <div class="match-option" onclick="checkMatch(this, true)">📦 in die Box</div>
+                            <div class="match-option" onclick="checkMatch(this, false)">🗑️ in den Müll</div>
+                        </div>
+                    </div>
+                    <div class="match-row">
+                        <div class="match-item">📚</div>
+                        <span>Bücher stellt man...</span>
+                        <div class="match-options">
+                            <div class="match-option" onclick="checkMatch(this, true)">📚 ins Regal</div>
+                            <div class="match-option" onclick="checkMatch(this, false)">🪜 auf den Boden</div>
+                        </div>
+                    </div>
+                    <div class="match-row">
+                        <div class="match-item">✂️</div>
+                        <span>Mit der Schere...</span>
+                        <div class="match-options">
+                            <div class="match-option" onclick="checkMatch(this, false)">🏃 rennen</div>
+                            <div class="match-option" onclick="checkMatch(this, true)">🪑 sitzen bleiben</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Regeln für Materialien</h3>
+                <p>Markiere die Regeln, die du verstanden hast:</p>
+                <div class="rules-list">
+                    <div class="rule-item" onclick="toggleRule(this)">
+                        <div class="icon">🧹</div>
+                        <div>Ich räume auf, wenn ich fertig bin</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="rule-item" onclick="toggleRule(this)">
+                        <div class="icon">🤲</div>
+                        <div>Ich gehe vorsichtig mit Sachen um</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="rule-item" onclick="toggleRule(this)">
+                        <div class="icon">🙋</div>
+                        <div>Ich frage, bevor ich etwas nehme</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="rule-item" onclick="toggleRule(this)">
+                        <div class="icon">↩️</div>
+                        <div>Ich bringe Sachen zurück an ihren Platz</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="rule-item" onclick="toggleRule(this)">
+                        <div class="icon">🤝</div>
+                        <div>Ich teile mit anderen</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie geht das Kind mit Materialien um? Räumt es auf? Welche Unterstützung braucht es?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleMaterial(el) { el.classList.toggle('learned'); saveData(); }
+        function toggleRule(el) { el.classList.toggle('understood'); saveData(); }
+        function checkMatch(el, correct) {
+            el.classList.add(correct ? 'correct' : 'wrong');
+            setTimeout(() => { if (!correct) el.classList.remove('wrong'); }, 1000);
+            saveData();
+        }
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+        function saveData() {
+            const data = {
+                materials: document.querySelectorAll('.material-card.learned').length,
+                rules: document.querySelectorAll('.rule-item.understood').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_materialien', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_materialien');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const materials = document.querySelectorAll('.material-card');
+                for (let i = 0; i < (data.materials || 0); i++) { if (materials[i]) materials[i].classList.add('learned'); }
+                const rules = document.querySelectorAll('.rule-item');
+                for (let i = 0; i < (data.rules || 0); i++) { if (rules[i]) rules[i].classList.add('understood'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

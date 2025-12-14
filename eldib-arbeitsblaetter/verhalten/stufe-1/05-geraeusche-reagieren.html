@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auf Geräusche reagieren - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #fff5cc 0%, #ffe6cc 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #fa709a;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .sound-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .sound-card:hover {
+            transform: scale(1.05);
+            border-color: #fa709a;
+        }
+        .sound-card.playing {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            animation: soundPulse 0.5s ease-in-out;
+        }
+        @keyframes soundPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .sound-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .sound-card .label { font-weight: bold; color: #333; }
+        .reaction-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .reaction-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+        .reaction-option:hover { border-color: #fa709a; }
+        .reaction-option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .reaction-option .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .matching-game {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 15px;
+        }
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .match-item {
+            padding: 15px 25px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .match-item:hover { border-color: #fa709a; }
+        .match-item.selected { border-color: #2196F3; background: #e3f2fd; }
+        .match-item.matched { border-color: #4CAF50; background: #e8f5e9; }
+        .listening-exercise {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+        }
+        .volume-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            height: 100px;
+            margin: 20px 0;
+        }
+        .volume-bar {
+            width: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .checklist li:hover { background: #f5f5f5; }
+        .checklist li.checked {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checked .checkbox {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #fa709a; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .sound-grid { grid-template-columns: repeat(2, 1fr); }
+            .reaction-options { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Auf Geräusche reagieren</h1>
+            <p>Die Umwelt mit den Ohren entdecken</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-5)</h3>
+                <p>Das Kind reagiert auf Geräusche in seiner Umgebung. Es wendet sich zur Quelle eines Geräuschs und zeigt Interesse an verschiedenen Klängen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔊</span> Welche Geräusche kennst du?</h3>
+                <p>Klicke auf die Geräusche, die du kennst:</p>
+                <div class="sound-grid">
+                    <div class="sound-card" onclick="playSound(this, 'hund')">
+                        <div class="icon">🐕</div>
+                        <div class="label">Hund</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'katze')">
+                        <div class="icon">🐱</div>
+                        <div class="label">Katze</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'vogel')">
+                        <div class="icon">🐦</div>
+                        <div class="label">Vogel</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'auto')">
+                        <div class="icon">🚗</div>
+                        <div class="label">Auto</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'glocke')">
+                        <div class="icon">🔔</div>
+                        <div class="label">Glocke</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'regen')">
+                        <div class="icon">🌧️</div>
+                        <div class="label">Regen</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'musik')">
+                        <div class="icon">🎵</div>
+                        <div class="label">Musik</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'klopfen')">
+                        <div class="icon">🚪</div>
+                        <div class="label">Klopfen</div>
+                    </div>
+                    <div class="sound-card" onclick="playSound(this, 'lachen')">
+                        <div class="icon">😄</div>
+                        <div class="label">Lachen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👂</span> Hör-Übung</h3>
+                <p>Schließe die Augen und höre genau hin. Was hörst du gerade?</p>
+                <div class="listening-exercise">
+                    <div class="volume-indicator" id="volumeIndicator">
+                        <div class="volume-bar" style="height: 20px;"></div>
+                        <div class="volume-bar" style="height: 40px;"></div>
+                        <div class="volume-bar" style="height: 60px;"></div>
+                        <div class="volume-bar" style="height: 40px;"></div>
+                        <div class="volume-bar" style="height: 20px;"></div>
+                    </div>
+                    <p style="font-size: 1.2em; margin-bottom: 20px;">Konzentriere dich auf die Geräusche um dich herum</p>
+                    <button class="btn" onclick="startListening()">30 Sekunden zuhören</button>
+                    <div id="listeningTimer" style="margin-top: 15px; font-size: 2em;"></div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Wie reagiere ich auf Geräusche?</h3>
+                <p>Wähle aus, wie du auf Geräusche reagierst:</p>
+                <div class="reaction-options">
+                    <div class="reaction-option" onclick="selectReaction(this)">
+                        <div class="icon">👀</div>
+                        <div>Ich schaue hin</div>
+                    </div>
+                    <div class="reaction-option" onclick="selectReaction(this)">
+                        <div class="icon">🔄</div>
+                        <div>Ich drehe mich um</div>
+                    </div>
+                    <div class="reaction-option" onclick="selectReaction(this)">
+                        <div class="icon">😊</div>
+                        <div>Ich lächle</div>
+                    </div>
+                    <div class="reaction-option" onclick="selectReaction(this)">
+                        <div class="icon">👂</div>
+                        <div>Ich höre genau hin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Diese Geräusche erkenne ich</h3>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Meinen Namen, wenn jemand mich ruft</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Die Türklingel</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Musik aus dem Radio</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn jemand mit mir spricht</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Tiergeräusche</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Laute Geräusche (Sirene, Hupen)</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Auf welche Geräusche reagiert das Kind? Wie schnell wendet es sich zur Quelle? Gibt es Geräusche, die es besonders interessieren oder erschrecken?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let listeningInterval = null;
+
+        function playSound(el, sound) {
+            el.classList.add('playing');
+            setTimeout(() => el.classList.remove('playing'), 500);
+            saveData();
+        }
+
+        function selectReaction(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            saveData();
+        }
+
+        function startListening() {
+            let seconds = 30;
+            const timerDisplay = document.getElementById('listeningTimer');
+            const bars = document.querySelectorAll('.volume-bar');
+
+            if (listeningInterval) {
+                clearInterval(listeningInterval);
+            }
+
+            listeningInterval = setInterval(() => {
+                timerDisplay.textContent = seconds + 's';
+
+                // Animate volume bars
+                bars.forEach(bar => {
+                    const randomHeight = 20 + Math.random() * 60;
+                    bar.style.height = randomHeight + 'px';
+                    bar.style.background = `rgba(255,255,255,${0.3 + Math.random() * 0.7})`;
+                });
+
+                seconds--;
+                if (seconds < 0) {
+                    clearInterval(listeningInterval);
+                    timerDisplay.textContent = 'Fertig! 🎉';
+                    bars.forEach(bar => {
+                        bar.style.height = '40px';
+                        bar.style.background = 'rgba(255,255,255,0.5)';
+                    });
+                }
+            }, 1000);
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                reactions: Array.from(document.querySelectorAll('.reaction-option.selected')).map(r => r.textContent.trim()),
+                checklist: Array.from(document.querySelectorAll('.checklist li.checked')).map(li => li.querySelector('span').textContent),
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_geraeusche', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_geraeusche');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.reaction-option').forEach(opt => {
+                    if (data.reactions && data.reactions.includes(opt.textContent.trim())) {
+                        opt.classList.add('selected');
+                    }
+                });
+
+                document.querySelectorAll('.checklist li').forEach(li => {
+                    if (data.checklist && data.checklist.includes(li.querySelector('span').textContent)) {
+                        li.classList.add('checked');
+                    }
+                });
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

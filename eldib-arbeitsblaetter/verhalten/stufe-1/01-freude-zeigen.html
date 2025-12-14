@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freude zeigen - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #f5576c;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .face-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .face-option {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 3em;
+        }
+        .face-option:hover {
+            transform: scale(1.1);
+            border-color: #f5576c;
+        }
+        .face-option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .drawing-area {
+            border: 3px dashed #ccc;
+            border-radius: 15px;
+            min-height: 300px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .drawing-area canvas {
+            border-radius: 12px;
+            background: white;
+            cursor: crosshair;
+        }
+        .drawing-tools {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .color-btn.active { border-color: #333; transform: scale(1.2); }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .checklist li:hover { background: #f0f0f0; }
+        .checklist li.checked {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+        .checked .checkbox {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+            .btn, .drawing-tools { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Freude zeigen</h1>
+            <p>Mit Freude auf die Umwelt reagieren</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-1)</h3>
+                <p>Das Kind zeigt mit seinem Gesichtsausdruck, dass es Freude empfindet, wenn jemand in seiner Nähe ist oder mit ihm spricht.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Welches Gesicht zeigt Freude?</h3>
+                <p>Klicke auf alle Gesichter, die Freude zeigen:</p>
+                <div class="face-grid">
+                    <div class="face-option" data-emotion="happy" onclick="toggleFace(this)">😀</div>
+                    <div class="face-option" data-emotion="sad" onclick="toggleFace(this)">😢</div>
+                    <div class="face-option" data-emotion="happy" onclick="toggleFace(this)">😊</div>
+                    <div class="face-option" data-emotion="angry" onclick="toggleFace(this)">😠</div>
+                    <div class="face-option" data-emotion="happy" onclick="toggleFace(this)">🥰</div>
+                    <div class="face-option" data-emotion="scared" onclick="toggleFace(this)">😨</div>
+                    <div class="face-option" data-emotion="happy" onclick="toggleFace(this)">😄</div>
+                    <div class="face-option" data-emotion="neutral" onclick="toggleFace(this)">😐</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎨</span> Male ein fröhliches Gesicht</h3>
+                <p>Zeichne ein Gesicht, das Freude zeigt:</p>
+                <div class="drawing-area">
+                    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+                    <div class="drawing-tools">
+                        <button class="color-btn active" style="background: #333;" onclick="setColor('#333', this)"></button>
+                        <button class="color-btn" style="background: #f44336;" onclick="setColor('#f44336', this)"></button>
+                        <button class="color-btn" style="background: #ff9800;" onclick="setColor('#ff9800', this)"></button>
+                        <button class="color-btn" style="background: #ffeb3b;" onclick="setColor('#ffeb3b', this)"></button>
+                        <button class="color-btn" style="background: #4CAF50;" onclick="setColor('#4CAF50', this)"></button>
+                        <button class="color-btn" style="background: #2196F3;" onclick="setColor('#2196F3', this)"></button>
+                        <button class="color-btn" style="background: #9c27b0;" onclick="setColor('#9c27b0', this)"></button>
+                        <button class="btn" onclick="clearCanvas()">Neu beginnen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Was macht mich froh?</h3>
+                <p>Wähle aus, was dich fröhlich macht:</p>
+                <ul class="checklist" id="happyList">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn jemand mich anlächelt</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn ich spiele</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn jemand mit mir spricht</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn ich Musik höre</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn ich draußen bin</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Wenn ich kuschle</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen (für Begleitperson)</h3>
+                <textarea id="notes" placeholder="Notieren Sie hier Ihre Beobachtungen: Wie zeigt das Kind Freude? Welche Situationen lösen Freude aus?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentColor = '#333';
+
+        // Drawing functionality
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouchMove);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+            saveData();
+        }
+
+        function setColor(color, btn) {
+            currentColor = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            saveData();
+        }
+
+        function toggleFace(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                faces: Array.from(document.querySelectorAll('.face-option.selected')).map(f => f.dataset.emotion),
+                checklist: Array.from(document.querySelectorAll('.checklist li.checked')).map(li => li.querySelector('span').textContent),
+                notes: document.getElementById('notes').value,
+                drawing: canvas.toDataURL()
+            };
+            localStorage.setItem('eldib_v1_freude', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_freude');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('notes').value = data.notes || '';
+
+                if (data.drawing) {
+                    const img = new Image();
+                    img.onload = () => ctx.drawImage(img, 0, 0);
+                    img.src = data.drawing;
+                }
+
+                document.querySelectorAll('.checklist li').forEach(li => {
+                    if (data.checklist && data.checklist.includes(li.querySelector('span').textContent)) {
+                        li.classList.add('checked');
+                    }
+                });
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

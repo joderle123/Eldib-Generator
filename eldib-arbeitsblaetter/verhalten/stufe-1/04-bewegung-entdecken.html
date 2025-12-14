@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewegung entdecken - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4facfe;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .body-parts {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .body-part {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .body-part:hover {
+            transform: scale(1.1);
+            border-color: #4facfe;
+        }
+        .body-part.active {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .body-part .icon { font-size: 2em; }
+        .body-part .label { font-size: 0.8em; color: #666; }
+        .movement-game {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+        }
+        .movement-instruction {
+            font-size: 2em;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn.primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .movement-tracker {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .movement-item {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .movement-item:hover { border-color: #4facfe; }
+        .movement-item.done {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .movement-item .icon { font-size: 2em; }
+        .movement-item .label { font-size: 0.75em; color: #666; margin-top: 5px; }
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .star {
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e0e0e0;
+        }
+        .star:hover, .star.active { color: #FFD700; transform: scale(1.2); }
+        .progress-bar {
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .movement-tracker { grid-template-columns: repeat(3, 1fr); }
+            .body-part { width: 80px; height: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Bewegung entdecken</h1>
+            <p>Den eigenen Körper und seine Fähigkeiten kennenlernen</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-4)</h3>
+                <p>Das Kind bewegt sich spontan und entdeckt, was sein Körper alles kann. Es entwickelt Vertrauen in seine körperlichen Fähigkeiten.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🦵</span> Welchen Körperteil bewegst du gerade?</h3>
+                <p>Klicke auf den Körperteil, den du bewegen möchtest:</p>
+                <div class="body-parts">
+                    <div class="body-part" onclick="toggleBodyPart(this)" data-part="kopf">
+                        <div class="icon">🙂</div>
+                        <div class="label">Kopf</div>
+                    </div>
+                    <div class="body-part" onclick="toggleBodyPart(this)" data-part="arme">
+                        <div class="icon">💪</div>
+                        <div class="label">Arme</div>
+                    </div>
+                    <div class="body-part" onclick="toggleBodyPart(this)" data-part="haende">
+                        <div class="icon">✋</div>
+                        <div class="label">Hände</div>
+                    </div>
+                    <div class="body-part" onclick="toggleBodyPart(this)" data-part="beine">
+                        <div class="icon">🦵</div>
+                        <div class="label">Beine</div>
+                    </div>
+                    <div class="body-part" onclick="toggleBodyPart(this)" data-part="fuesse">
+                        <div class="icon">🦶</div>
+                        <div class="label">Füße</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎲</span> Bewegungs-Spiel</h3>
+                <p>Drücke den Knopf und mache die Bewegung!</p>
+                <div class="movement-game">
+                    <div class="movement-instruction" id="movementDisplay">
+                        Drücke "Neue Bewegung"!
+                    </div>
+                    <button class="btn" onclick="newMovement()">Neue Bewegung!</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Diese Bewegungen kann ich schon</h3>
+                <p>Markiere alle Bewegungen, die du machen kannst:</p>
+                <div class="movement-tracker">
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">👏</div>
+                        <div class="label">Klatschen</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">👋</div>
+                        <div class="label">Winken</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">🚶</div>
+                        <div class="label">Gehen</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">🏃</div>
+                        <div class="label">Rennen</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">🦘</div>
+                        <div class="label">Hüpfen</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">🔄</div>
+                        <div class="label">Drehen</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">⬇️</div>
+                        <div class="label">Bücken</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">⬆️</div>
+                        <div class="label">Strecken</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">🧘</div>
+                        <div class="label">Balancieren</div>
+                    </div>
+                    <div class="movement-item" onclick="toggleMovement(this)">
+                        <div class="icon">⚽</div>
+                        <div class="label">Kicken</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Wie gerne bewegst du dich?</h3>
+                <div class="star-rating">
+                    <span class="star" onclick="setStars(1)">★</span>
+                    <span class="star" onclick="setStars(2)">★</span>
+                    <span class="star" onclick="setStars(3)">★</span>
+                    <span class="star" onclick="setStars(4)">★</span>
+                    <span class="star" onclick="setStars(5)">★</span>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Bewegungen macht das Kind gerne? Welche motorischen Fähigkeiten sind vorhanden? Gibt es Bewegungen, die noch schwer fallen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        const movements = [
+            "👏 Klatsche 3 mal in die Hände!",
+            "🦵 Stampfe mit den Füßen!",
+            "💪 Strecke die Arme hoch!",
+            "🔄 Drehe dich einmal im Kreis!",
+            "👋 Winke mit beiden Händen!",
+            "🦘 Hüpfe auf der Stelle!",
+            "🙂 Nicke mit dem Kopf!",
+            "✋ Öffne und schließe die Hände!",
+            "⬇️ Bücke dich zum Boden!",
+            "🧘 Steh auf einem Bein!",
+            "👐 Mache dich ganz groß!",
+            "🐢 Mache dich ganz klein!",
+            "🎭 Wackel mit dem Po!",
+            "👃 Berühre deine Nase!",
+            "👂 Berühre deine Ohren!"
+        ];
+
+        let stars = 0;
+
+        function toggleBodyPart(el) {
+            el.classList.toggle('active');
+            saveData();
+        }
+
+        function newMovement() {
+            const display = document.getElementById('movementDisplay');
+            const randomMovement = movements[Math.floor(Math.random() * movements.length)];
+            display.textContent = randomMovement;
+            display.style.animation = 'none';
+            display.offsetHeight;
+            display.style.animation = 'pulse 0.5s';
+        }
+
+        function toggleMovement(el) {
+            el.classList.toggle('done');
+            updateProgress();
+            saveData();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.movement-item').length;
+            const done = document.querySelectorAll('.movement-item.done').length;
+            const percent = Math.round((done / total) * 100);
+            const fill = document.getElementById('progressFill');
+            fill.style.width = percent + '%';
+            fill.textContent = percent + '%';
+        }
+
+        function setStars(count) {
+            stars = count;
+            document.querySelectorAll('.star').forEach((star, index) => {
+                star.classList.toggle('active', index < count);
+            });
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                bodyParts: Array.from(document.querySelectorAll('.body-part.active')).map(p => p.dataset.part),
+                movements: Array.from(document.querySelectorAll('.movement-item.done')).map(m => m.querySelector('.label').textContent),
+                stars,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_bewegung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_bewegung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.body-part').forEach(part => {
+                    if (data.bodyParts && data.bodyParts.includes(part.dataset.part)) {
+                        part.classList.add('active');
+                    }
+                });
+
+                document.querySelectorAll('.movement-item').forEach(item => {
+                    if (data.movements && data.movements.includes(item.querySelector('.label').textContent)) {
+                        item.classList.add('done');
+                    }
+                });
+
+                if (data.stars) setStars(data.stars);
+                document.getElementById('notes').value = data.notes || '';
+                updateProgress();
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blickkontakt aufnehmen - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #11998e;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .eye-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+        }
+        .eye {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            border: 5px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .pupil {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s;
+        }
+        .pupil::after {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        .counter-box {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .counter {
+            font-size: 4em;
+            font-weight: bold;
+        }
+        .counter-label { font-size: 1.2em; margin-top: 10px; }
+        .btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .situation-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .situation-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .situation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .situation-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .situation-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 15px;
+        }
+        .progress-day {
+            text-align: center;
+            flex: 1;
+        }
+        .progress-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .progress-circle.done {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .situation-cards { grid-template-columns: 1fr; }
+            .eye { width: 80px; height: 80px; }
+            .pupil { width: 30px; height: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Blickkontakt aufnehmen</h1>
+            <p>Aufmerksamkeit auf ein Gesicht richten</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-2)</h3>
+                <p>Das Kind schaut in das Gesicht einer Person, die mit ihm spricht oder ihm etwas zeigt. Es hält den Blickkontakt für kurze Zeit.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👀</span> Augen-Übung</h3>
+                <p>Bewege die Maus oder deinen Finger - die Augen folgen dir!</p>
+                <div class="eye-tracker">
+                    <div class="eye">
+                        <div class="pupil" id="pupil1"></div>
+                    </div>
+                    <div class="eye">
+                        <div class="pupil" id="pupil2"></div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666;">Übe, den Augen zu folgen und Blickkontakt zu halten!</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⏱️</span> Blickkontakt-Zähler</h3>
+                <p>Wie lange kannst du jemandem in die Augen schauen? Drücke Start und stoppe, wenn du wegschaust.</p>
+                <div class="counter-box">
+                    <div class="counter" id="timer">0</div>
+                    <div class="counter-label">Sekunden</div>
+                </div>
+                <div style="text-align: center;">
+                    <button class="btn" id="startBtn" onclick="toggleTimer()">Start</button>
+                    <button class="btn secondary" onclick="resetTimer()">Zurücksetzen</button>
+                </div>
+                <p style="text-align: center; margin-top: 15px; color: #666;">
+                    Bester Versuch: <strong id="bestTime">0</strong> Sekunden
+                </p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Wann schaue ich jemanden an?</h3>
+                <p>Wähle die Situationen, in denen du Blickkontakt hältst:</p>
+                <div class="situation-cards">
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">👋</div>
+                        <div>Beim Begrüßen</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">🗣️</div>
+                        <div>Beim Sprechen</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">👂</div>
+                        <div>Beim Zuhören</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">🎮</div>
+                        <div>Beim Spielen</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">🍽️</div>
+                        <div>Beim Essen</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleCard(this)">
+                        <div class="icon">📖</div>
+                        <div>Beim Vorlesen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Wochentracker</h3>
+                <p>Markiere jeden Tag, an dem du Blickkontakt geübt hast:</p>
+                <div class="progress-tracker">
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Mo</div>
+                        <small>Montag</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Di</div>
+                        <small>Dienstag</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Mi</div>
+                        <small>Mittwoch</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Do</div>
+                        <small>Donnerstag</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Fr</div>
+                        <small>Freitag</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">Sa</div>
+                        <small>Samstag</small>
+                    </div>
+                    <div class="progress-day">
+                        <div class="progress-circle" onclick="toggleDay(this)">So</div>
+                        <small>Sonntag</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie Beobachtungen: Wie lange hält das Kind Blickkontakt? In welchen Situationen fällt es leichter/schwerer?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let timerInterval = null;
+        let currentTime = 0;
+        let bestTime = 0;
+        let isRunning = false;
+
+        // Eye tracking
+        document.addEventListener('mousemove', moveEyes);
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            moveEyes({ clientX: touch.clientX, clientY: touch.clientY });
+        });
+
+        function moveEyes(e) {
+            const eyes = document.querySelectorAll('.eye');
+            eyes.forEach(eye => {
+                const pupil = eye.querySelector('.pupil');
+                const rect = eye.getBoundingClientRect();
+                const eyeCenterX = rect.left + rect.width / 2;
+                const eyeCenterY = rect.top + rect.height / 2;
+
+                const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+                const distance = Math.min(25, Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 10);
+
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            });
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('startBtn');
+            if (isRunning) {
+                clearInterval(timerInterval);
+                btn.textContent = 'Start';
+                isRunning = false;
+                if (currentTime > bestTime) {
+                    bestTime = currentTime;
+                    document.getElementById('bestTime').textContent = bestTime;
+                }
+                saveData();
+            } else {
+                timerInterval = setInterval(() => {
+                    currentTime++;
+                    document.getElementById('timer').textContent = currentTime;
+                }, 1000);
+                btn.textContent = 'Stop';
+                isRunning = true;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            currentTime = 0;
+            isRunning = false;
+            document.getElementById('timer').textContent = '0';
+            document.getElementById('startBtn').textContent = 'Start';
+        }
+
+        function toggleCard(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function toggleDay(el) {
+            el.classList.toggle('done');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                bestTime: bestTime,
+                situations: Array.from(document.querySelectorAll('.situation-card.selected')).map(c => c.textContent.trim()),
+                days: Array.from(document.querySelectorAll('.progress-circle.done')).map(d => d.textContent),
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_blickkontakt', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_blickkontakt');
+            if (saved) {
+                const data = JSON.parse(saved);
+                bestTime = data.bestTime || 0;
+                document.getElementById('bestTime').textContent = bestTime;
+                document.getElementById('notes').value = data.notes || '';
+
+                document.querySelectorAll('.situation-card').forEach(card => {
+                    if (data.situations && data.situations.includes(card.textContent.trim())) {
+                        card.classList.add('selected');
+                    }
+                });
+
+                document.querySelectorAll('.progress-circle').forEach(circle => {
+                    if (data.days && data.days.includes(circle.textContent)) {
+                        circle.classList.add('done');
+                    }
+                });
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

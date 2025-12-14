@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routinen verstehen - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff6b6b;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .routine-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 20px 0;
+        }
+        .routine-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .routine-step:first-child { border-radius: 15px 15px 0 0; }
+        .routine-step:last-child { border-radius: 0 0 15px 15px; }
+        .routine-step:hover { background: #f5f5f5; }
+        .routine-step.completed {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .completed .step-number {
+            background: #4CAF50;
+            color: white;
+        }
+        .step-icon { font-size: 2em; }
+        .step-info { flex: 1; }
+        .step-title { font-weight: bold; }
+        .step-time { font-size: 0.85em; color: #666; }
+        .routine-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .routine-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .routine-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b6b;
+        }
+        .routine-card.active {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .routine-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .sorting-game {
+            background: #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .sort-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px dashed #ccc;
+        }
+        .sort-item {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            cursor: move;
+            font-size: 1.5em;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        .sort-item:hover { transform: scale(1.1); }
+        .sort-item.placed { opacity: 0.5; }
+        .drop-zones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .drop-zone {
+            flex: 1;
+            min-width: 80px;
+            height: 80px;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-size: 0.9em;
+            color: #999;
+            transition: all 0.3s;
+        }
+        .drop-zone.filled {
+            border-style: solid;
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            font-size: 2em;
+        }
+        .drop-zone.highlight {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .checklist li:hover { background: #f5f5f5; }
+        .checklist li.checked {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checked .checkbox {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #ff6b6b; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .routine-selector { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Routinen verstehen</h1>
+            <p>Tagesabläufe kennen und mitmachen</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-8)</h3>
+                <p>Das Kind nimmt erfolgreich an Routineabläufen teil. Es kennt den Tagesablauf und weiß, was als Nächstes kommt.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🌅</span> Mein Morgen</h3>
+                <p>Klicke auf jeden Schritt, den du morgens machst:</p>
+                <div class="routine-timeline" id="morningRoutine">
+                    <div class="routine-step" onclick="toggleStep(this)">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">😴</div>
+                        <div class="step-info">
+                            <div class="step-title">Aufwachen</div>
+                            <div class="step-time">Wenn der Wecker klingelt</div>
+                        </div>
+                    </div>
+                    <div class="routine-step" onclick="toggleStep(this)">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🚿</div>
+                        <div class="step-info">
+                            <div class="step-title">Waschen</div>
+                            <div class="step-time">Gesicht und Hände waschen</div>
+                        </div>
+                    </div>
+                    <div class="routine-step" onclick="toggleStep(this)">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">👕</div>
+                        <div class="step-info">
+                            <div class="step-title">Anziehen</div>
+                            <div class="step-time">Kleidung anziehen</div>
+                        </div>
+                    </div>
+                    <div class="routine-step" onclick="toggleStep(this)">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">🥣</div>
+                        <div class="step-info">
+                            <div class="step-title">Frühstücken</div>
+                            <div class="step-time">Am Tisch essen</div>
+                        </div>
+                    </div>
+                    <div class="routine-step" onclick="toggleStep(this)">
+                        <div class="step-number">5</div>
+                        <div class="step-icon">🦷</div>
+                        <div class="step-info">
+                            <div class="step-title">Zähne putzen</div>
+                            <div class="step-time">Nach dem Essen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Welche Routine?</h3>
+                <p>Wähle eine Routine aus, die du gut kennst:</p>
+                <div class="routine-selector">
+                    <div class="routine-card" onclick="selectRoutine(this, 'morgen')">
+                        <div class="icon">🌅</div>
+                        <div>Morgen-Routine</div>
+                    </div>
+                    <div class="routine-card" onclick="selectRoutine(this, 'essen')">
+                        <div class="icon">🍽️</div>
+                        <div>Essens-Routine</div>
+                    </div>
+                    <div class="routine-card" onclick="selectRoutine(this, 'abend')">
+                        <div class="icon">🌙</div>
+                        <div>Abend-Routine</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧩</span> Reihenfolge-Spiel</h3>
+                <p>Bringe die Schritte in die richtige Reihenfolge (ziehe in die Felder):</p>
+                <div class="sorting-game">
+                    <div class="sort-items" id="sortItems">
+                        <div class="sort-item" draggable="true" data-order="2">🦷</div>
+                        <div class="sort-item" draggable="true" data-order="1">🍽️</div>
+                        <div class="sort-item" draggable="true" data-order="3">😴</div>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Abend-Routine: Essen → Zähne putzen → Schlafen</p>
+                    <div class="drop-zones">
+                        <div class="drop-zone" data-position="1">1.</div>
+                        <div class="drop-zone" data-position="2">2.</div>
+                        <div class="drop-zone" data-position="3">3.</div>
+                    </div>
+                    <button class="btn" onclick="resetSorting()" style="margin-top: 15px;">Neu versuchen</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Das kann ich schon bei Routinen</h3>
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Ich weiß, was als Nächstes kommt</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Ich warte, bis ich an der Reihe bin</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Ich mache bei Übergängen mit</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Ich folge einfachen Anweisungen</span>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox">✓</div>
+                        <span>Ich räume auf, wenn es Zeit ist</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut folgt das Kind Routinen? Welche Übergänge fallen schwer? Braucht es Erinnerungen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let selectedRoutine = '';
+
+        function toggleStep(el) {
+            el.classList.toggle('completed');
+            saveData();
+        }
+
+        function selectRoutine(el, routine) {
+            document.querySelectorAll('.routine-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            selectedRoutine = routine;
+            saveData();
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            saveData();
+        }
+
+        // Drag and drop
+        const sortItems = document.querySelectorAll('.sort-item');
+        const dropZones = document.querySelectorAll('.drop-zone');
+
+        sortItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', item.dataset.order);
+                item.classList.add('placed');
+            });
+            item.addEventListener('dragend', () => {
+                item.classList.remove('placed');
+            });
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('highlight');
+            });
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('highlight');
+            });
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('highlight');
+                const order = e.dataTransfer.getData('text/plain');
+                const item = document.querySelector(`[data-order="${order}"]`);
+                zone.textContent = item.textContent;
+                zone.classList.add('filled');
+                item.style.display = 'none';
+                saveData();
+            });
+        });
+
+        function resetSorting() {
+            sortItems.forEach(item => {
+                item.style.display = 'block';
+                item.classList.remove('placed');
+            });
+            dropZones.forEach(zone => {
+                zone.textContent = zone.dataset.position + '.';
+                zone.classList.remove('filled');
+            });
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                morningSteps: document.querySelectorAll('.routine-step.completed').length,
+                selectedRoutine,
+                checklist: Array.from(document.querySelectorAll('.checklist li.checked')).map(li => li.querySelector('span').textContent),
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_routinen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_routinen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                const steps = document.querySelectorAll('.routine-step');
+                for (let i = 0; i < (data.morningSteps || 0); i++) {
+                    if (steps[i]) steps[i].classList.add('completed');
+                }
+
+                if (data.selectedRoutine) {
+                    const routineMap = { 'morgen': 0, 'essen': 1, 'abend': 2 };
+                    document.querySelectorAll('.routine-card')[routineMap[data.selectedRoutine]]?.classList.add('active');
+                    selectedRoutine = data.selectedRoutine;
+                }
+
+                document.querySelectorAll('.checklist li').forEach(li => {
+                    if (data.checklist && data.checklist.includes(li.querySelector('span').textContent)) {
+                        li.classList.add('checked');
+                    }
+                });
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nachahmung - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #fda085;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .mirror-game {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .mirror-side {
+            text-align: center;
+            color: white;
+        }
+        .mirror-face {
+            font-size: 6em;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .mirror-label { font-size: 1.2em; }
+        .mirror-divider {
+            width: 5px;
+            height: 150px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 5px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        .action-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.4); }
+        .imitation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .imitation-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .imitation-card:hover {
+            transform: translateY(-5px);
+            border-color: #fda085;
+        }
+        .imitation-card.mastered {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .imitation-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .imitation-card .label { font-weight: bold; }
+        .sequence-game {
+            text-align: center;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .sequence-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            min-height: 80px;
+            align-items: center;
+        }
+        .sequence-item {
+            font-size: 3em;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .progress-tracker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .progress-star {
+            font-size: 2.5em;
+            cursor: pointer;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+        .progress-star.earned { opacity: 1; }
+        .progress-star:hover { transform: scale(1.2); }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #fda085; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .imitation-grid { grid-template-columns: repeat(2, 1fr); }
+            .mirror-game { flex-direction: column; gap: 20px; }
+            .mirror-divider { width: 150px; height: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Nachahmung</h1>
+            <p>Andere beobachten und nachmachen</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-1/V-2)</h3>
+                <p>Das Kind beobachtet andere und ahmt einfache Handlungen, Gesten und Gesichtsausdrücke nach. Es lernt durch Beobachtung und Imitation.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Spiegel-Spiel</h3>
+                <p>Klicke auf ein Gesicht und mache es nach!</p>
+                <div class="mirror-game">
+                    <div class="mirror-side">
+                        <div class="mirror-face" id="modelFace">😊</div>
+                        <div class="mirror-label">Vorbild</div>
+                    </div>
+                    <div class="mirror-divider"></div>
+                    <div class="mirror-side">
+                        <div class="mirror-face" id="mirrorFace">🪞</div>
+                        <div class="mirror-label">Du</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="setFace('😊')">😊</button>
+                    <button class="action-btn" onclick="setFace('😮')">😮</button>
+                    <button class="action-btn" onclick="setFace('😢')">😢</button>
+                    <button class="action-btn" onclick="setFace('😠')">😠</button>
+                    <button class="action-btn" onclick="setFace('🤪')">🤪</button>
+                    <button class="action-btn" onclick="setFace('😴')">😴</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👐</span> Was kann ich nachmachen?</h3>
+                <p>Markiere, was du schon nachmachen kannst:</p>
+                <div class="imitation-grid">
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">👏</div>
+                        <div class="label">Klatschen</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">👋</div>
+                        <div class="label">Winken</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">🙂</div>
+                        <div class="label">Lächeln</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">😮</div>
+                        <div class="label">Staunen</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">🙆</div>
+                        <div class="label">Arme hoch</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">🤷</div>
+                        <div class="label">Achselzucken</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">👆</div>
+                        <div class="label">Zeigen</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">🙅</div>
+                        <div class="label">Kopfschütteln</div>
+                    </div>
+                    <div class="imitation-card" onclick="toggleImitation(this)">
+                        <div class="icon">🙋</div>
+                        <div class="label">Nicken</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Bewegungs-Folge</h3>
+                <p>Merke dir die Reihenfolge und mache sie nach:</p>
+                <div class="sequence-game">
+                    <div class="sequence-display" id="sequenceDisplay">
+                        <span style="color: #666;">Drücke "Neue Folge"!</span>
+                    </div>
+                    <button class="btn" onclick="newSequence()">Neue Folge</button>
+                    <button class="btn" onclick="checkSequence()" id="checkBtn" style="display: none;">Geschafft!</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Meine Nachahmungs-Sterne</h3>
+                <p>Sammle Sterne für jede Nachahmung, die du gelernt hast:</p>
+                <div class="progress-tracker">
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                    <span class="progress-star" onclick="toggleStar(this)">⭐</span>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Was ahmt das Kind nach? Beobachtet es andere aufmerksam? Welche Gesten/Handlungen kann es schon imitieren?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        const actions = ['👏', '👋', '🙆', '👆', '🤷', '🙅'];
+        let currentSequence = [];
+
+        function setFace(face) {
+            document.getElementById('modelFace').textContent = face;
+            document.getElementById('mirrorFace').textContent = face;
+            saveData();
+        }
+
+        function toggleImitation(el) {
+            el.classList.toggle('mastered');
+            saveData();
+        }
+
+        function newSequence() {
+            const length = 2 + Math.floor(Math.random() * 2); // 2-3 actions
+            currentSequence = [];
+            for (let i = 0; i < length; i++) {
+                currentSequence.push(actions[Math.floor(Math.random() * actions.length)]);
+            }
+
+            const display = document.getElementById('sequenceDisplay');
+            display.innerHTML = currentSequence.map(a => `<span class="sequence-item">${a}</span>`).join('');
+            document.getElementById('checkBtn').style.display = 'inline-block';
+        }
+
+        function checkSequence() {
+            alert('Super! Du hast es nachgemacht! 🎉');
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('sequenceDisplay').innerHTML = '<span style="color: #4CAF50; font-size: 1.5em;">Gut gemacht! ⭐</span>';
+            saveData();
+        }
+
+        function toggleStar(el) {
+            el.classList.toggle('earned');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                imitations: Array.from(document.querySelectorAll('.imitation-card.mastered')).map(c => c.querySelector('.label').textContent),
+                stars: document.querySelectorAll('.progress-star.earned').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_nachahmung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_nachahmung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.imitation-card').forEach(card => {
+                    if (data.imitations && data.imitations.includes(card.querySelector('.label').textContent)) {
+                        card.classList.add('mastered');
+                    }
+                });
+
+                const stars = document.querySelectorAll('.progress-star');
+                for (let i = 0; i < (data.stars || 0); i++) {
+                    if (stars[i]) stars[i].classList.add('earned');
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regeln akzeptieren - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .rules-board { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .rule-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 15px; }
+        .rule-card:hover { transform: translateY(-3px); border-color: #667eea; }
+        .rule-card.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .rule-card .icon { font-size: 2em; }
+        .rule-card .text { flex: 1; }
+        .rule-card .check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .understood .check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .rule-game { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .scenario { font-size: 1.3em; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .option-btn { padding: 15px 25px; border-radius: 25px; border: none; font-size: 1em; cursor: pointer; transition: all 0.3s; background: white; color: #333; }
+        .option-btn:hover { transform: scale(1.05); }
+        .option-btn.correct { background: #4CAF50; color: white; }
+        .option-btn.wrong { background: #f44336; color: white; }
+        .btn { background: white; color: #667eea; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .score { margin-top: 15px; font-size: 1.2em; }
+        .reasons { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .reason-item { display: flex; align-items: center; gap: 10px; padding: 15px; background: white; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .reason-item:hover { border-color: #667eea; }
+        .reason-item.selected { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .rules-board { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Regeln akzeptieren</h1>
+            <p>Verstehen, warum Regeln wichtig sind</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-10/V-11)</h3>
+                <p>Das Kind akzeptiert einfache Regeln und versteht, warum sie wichtig sind. Es hält sich an Vereinbarungen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Unsere Regeln</h3>
+                <p>Markiere die Regeln, die du verstehst:</p>
+                <div class="rules-board">
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">🚶</div><div class="text">Im Raum gehen wir langsam</div><div class="check">✓</div></div>
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">🗣️</div><div class="text">Wir sprechen leise</div><div class="check">✓</div></div>
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">🤝</div><div class="text">Wir sind freundlich zueinander</div><div class="check">✓</div></div>
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">👂</div><div class="text">Wir hören zu, wenn jemand spricht</div><div class="check">✓</div></div>
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">🧹</div><div class="text">Wir räumen auf</div><div class="check">✓</div></div>
+                    <div class="rule-card" onclick="toggleRule(this)"><div class="icon">⏰</div><div class="text">Wir warten, bis wir dran sind</div><div class="check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Regel-Quiz</h3>
+                <p>Was ist die richtige Antwort?</p>
+                <div class="rule-game">
+                    <div class="scenario" id="scenario">Im Flur soll ich...</div>
+                    <div class="options" id="options">
+                        <button class="option-btn" onclick="checkAnswer(this, true)">🚶 Langsam gehen</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">🏃 Rennen</button>
+                    </div>
+                    <button class="btn" onclick="nextQuestion()" style="margin-top: 20px;">Nächste Frage</button>
+                    <div class="score">Richtige Antworten: <strong id="score">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Warum haben wir Regeln?</h3>
+                <p>Wähle die Gründe, die du verstehst:</p>
+                <div class="reasons">
+                    <div class="reason-item" onclick="toggleReason(this)"><span>🛡️</span> Damit alle sicher sind</div>
+                    <div class="reason-item" onclick="toggleReason(this)"><span>😊</span> Damit alle sich wohlfühlen</div>
+                    <div class="reason-item" onclick="toggleReason(this)"><span>⚖️</span> Damit es fair ist</div>
+                    <div class="reason-item" onclick="toggleReason(this)"><span>🎯</span> Damit wir lernen können</div>
+                    <div class="reason-item" onclick="toggleReason(this)"><span>🤝</span> Damit wir zusammenarbeiten können</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Regeln akzeptiert das Kind? Wo braucht es Erklärungen? Wie reagiert es auf Grenzen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const questions = [
+            { q: "Im Flur soll ich...", correct: "🚶 Langsam gehen", wrong: "🏃 Rennen" },
+            { q: "Wenn jemand spricht, dann...", correct: "👂 Höre ich zu", wrong: "🗣️ Rede ich auch" },
+            { q: "Nach dem Spielen...", correct: "🧹 Räume ich auf", wrong: "🚶 Gehe ich einfach" },
+            { q: "Wenn ich etwas will...", correct: "🙋 Frage ich", wrong: "✊ Nehme ich es" },
+        ];
+        let currentQuestion = 0, score = 0;
+        function toggleRule(el) { el.classList.toggle('understood'); saveData(); }
+        function toggleReason(el) { el.classList.toggle('selected'); saveData(); }
+        function checkAnswer(btn, isCorrect) {
+            btn.classList.add(isCorrect ? 'correct' : 'wrong');
+            if (isCorrect) { score++; document.getElementById('score').textContent = score; }
+            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            saveData();
+        }
+        function nextQuestion() {
+            currentQuestion = (currentQuestion + 1) % questions.length;
+            const q = questions[currentQuestion];
+            document.getElementById('scenario').textContent = q.q;
+            const opts = document.getElementById('options');
+            const shuffle = Math.random() > 0.5;
+            opts.innerHTML = `
+                <button class="option-btn" onclick="checkAnswer(this, ${shuffle})">${shuffle ? q.correct : q.wrong}</button>
+                <button class="option-btn" onclick="checkAnswer(this, ${!shuffle})">${shuffle ? q.wrong : q.correct}</button>
+            `;
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { rules: document.querySelectorAll('.rule-card.understood').length, score, reasons: document.querySelectorAll('.reason-item.selected').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v2_regeln', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_regeln');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const rules = document.querySelectorAll('.rule-card');
+                for (let i = 0; i < (data.rules || 0); i++) { if (rules[i]) rules[i].classList.add('understood'); }
+                score = data.score || 0;
+                document.getElementById('score').textContent = score;
+                const reasons = document.querySelectorAll('.reason-item');
+                for (let i = 0; i < (data.reasons || 0); i++) { if (reasons[i]) reasons[i].classList.add('selected'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

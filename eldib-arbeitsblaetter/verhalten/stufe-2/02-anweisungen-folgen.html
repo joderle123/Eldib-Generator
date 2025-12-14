@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anweisungen folgen - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .instruction-game {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+        }
+        .instruction-display {
+            font-size: 1.8em;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .instruction-icon {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn.success {
+            background: #4CAF50;
+            color: white;
+        }
+        .steps-counter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .step-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        .step-dot.completed { background: white; }
+        .instruction-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .instruction-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .instruction-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+        .instruction-card.mastered {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .instruction-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .instruction-card .title { font-weight: bold; margin-bottom: 5px; }
+        .instruction-card .example { font-size: 0.85em; color: #666; }
+        .simon-says {
+            background: #f0f0f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .simon-character {
+            font-size: 5em;
+            margin: 15px 0;
+        }
+        .simon-instruction {
+            font-size: 1.5em;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+        .response-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .response-btn {
+            padding: 15px 40px;
+            border-radius: 25px;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .response-btn.do { background: #4CAF50; color: white; }
+        .response-btn.dont { background: #f44336; color: white; }
+        .response-btn:hover { transform: scale(1.05); }
+        .score-display {
+            font-size: 1.5em;
+            margin-top: 15px;
+            color: #667eea;
+        }
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .difficulty-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .difficulty-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .instruction-types { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Anweisungen folgen</h1>
+            <p>Einfache Anweisungen verstehen und ausführen</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-9)</h3>
+                <p>Das Kind versteht und befolgt einfache Anweisungen von Erwachsenen. Es kann Ein- und Mehrschritt-Anweisungen umsetzen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Anweisungs-Spiel</h3>
+                <p>Klicke auf "Neue Anweisung" und führe sie aus!</p>
+                <div class="instruction-game">
+                    <div class="instruction-icon" id="instructionIcon">🎮</div>
+                    <div class="instruction-display" id="instructionDisplay">Drücke "Neue Anweisung"!</div>
+                    <div class="steps-counter" id="stepsCounter"></div>
+                    <button class="btn" onclick="newInstruction()">Neue Anweisung</button>
+                    <button class="btn success" onclick="markDone()">Geschafft! ✓</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📚</span> Arten von Anweisungen</h3>
+                <p>Welche Anweisungen kannst du schon befolgen? Markiere sie:</p>
+                <div class="instruction-types">
+                    <div class="instruction-card" onclick="toggleInstruction(this)">
+                        <div class="icon">👆</div>
+                        <div class="title">Ein-Schritt</div>
+                        <div class="example">"Setz dich hin."</div>
+                    </div>
+                    <div class="instruction-card" onclick="toggleInstruction(this)">
+                        <div class="icon">✌️</div>
+                        <div class="title">Zwei-Schritte</div>
+                        <div class="example">"Hol dein Buch und setz dich."</div>
+                    </div>
+                    <div class="instruction-card" onclick="toggleInstruction(this)">
+                        <div class="icon">🖐️</div>
+                        <div class="title">Drei-Schritte</div>
+                        <div class="example">"Räum auf, wasch dir die Hände und komm essen."</div>
+                    </div>
+                    <div class="instruction-card" onclick="toggleInstruction(this)">
+                        <div class="icon">⏰</div>
+                        <div class="title">Mit Warten</div>
+                        <div class="example">"Warte, bis du an der Reihe bist."</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Simon sagt</h3>
+                <p>Mache nur mit, wenn "Simon sagt" dabei steht!</p>
+                <div class="simon-says">
+                    <div class="simon-character">🧙‍♂️</div>
+                    <div class="simon-instruction" id="simonInstruction">Drücke "Spielen"!</div>
+                    <div class="response-buttons" id="responseButtons" style="display: none;">
+                        <button class="response-btn do" onclick="simonResponse(true)">Mitmachen!</button>
+                        <button class="response-btn dont" onclick="simonResponse(false)">Nicht machen!</button>
+                    </div>
+                    <button class="btn" onclick="playSimon()" id="simonPlayBtn">Spielen</button>
+                    <div class="score-display">Punkte: <span id="simonScore">0</span></div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie viele Schritte kann das Kind befolgen? Braucht es Wiederholungen? Welche Anweisungen fallen schwer?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        const instructions = [
+            { text: "Klatsche 3 mal in die Hände!", icon: "👏", steps: 1 },
+            { text: "Steh auf und dreh dich einmal!", icon: "🔄", steps: 2 },
+            { text: "Berühre deine Nase!", icon: "👃", steps: 1 },
+            { text: "Hüpfe auf der Stelle!", icon: "🦘", steps: 1 },
+            { text: "Winke mit beiden Händen!", icon: "👋", steps: 1 },
+            { text: "Steh auf, hüpfe 2 mal und setz dich wieder!", icon: "⭐", steps: 3 },
+            { text: "Zeige auf etwas Rotes!", icon: "🔴", steps: 1 },
+            { text: "Mache dich groß wie ein Baum!", icon: "🌳", steps: 1 },
+            { text: "Geh zur Tür und komm zurück!", icon: "🚶", steps: 2 }
+        ];
+
+        const simonInstructions = [
+            { text: "Simon sagt: Klatsche!", isSimon: true },
+            { text: "Stampfe mit den Füßen!", isSimon: false },
+            { text: "Simon sagt: Berühre deine Ohren!", isSimon: true },
+            { text: "Hüpfe!", isSimon: false },
+            { text: "Simon sagt: Winke!", isSimon: true },
+            { text: "Dreh dich um!", isSimon: false },
+            { text: "Simon sagt: Mach dich klein!", isSimon: true },
+            { text: "Strecke die Arme aus!", isSimon: false }
+        ];
+
+        let completedInstructions = 0;
+        let simonScore = 0;
+        let currentSimon = null;
+
+        function newInstruction() {
+            const inst = instructions[Math.floor(Math.random() * instructions.length)];
+            document.getElementById('instructionIcon').textContent = inst.icon;
+            document.getElementById('instructionDisplay').textContent = inst.text;
+
+            // Show steps
+            const counter = document.getElementById('stepsCounter');
+            counter.innerHTML = '';
+            for (let i = 0; i < inst.steps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'step-dot';
+                counter.appendChild(dot);
+            }
+        }
+
+        function markDone() {
+            completedInstructions++;
+            document.querySelectorAll('.step-dot').forEach(dot => dot.classList.add('completed'));
+            saveData();
+        }
+
+        function toggleInstruction(el) {
+            el.classList.toggle('mastered');
+            saveData();
+        }
+
+        function playSimon() {
+            currentSimon = simonInstructions[Math.floor(Math.random() * simonInstructions.length)];
+            document.getElementById('simonInstruction').textContent = currentSimon.text;
+            document.getElementById('responseButtons').style.display = 'flex';
+            document.getElementById('simonPlayBtn').style.display = 'none';
+        }
+
+        function simonResponse(didAction) {
+            const correct = (currentSimon.isSimon && didAction) || (!currentSimon.isSimon && !didAction);
+
+            if (correct) {
+                simonScore++;
+                document.getElementById('simonScore').textContent = simonScore;
+                document.getElementById('simonInstruction').textContent = '✓ Richtig! Super!';
+            } else {
+                document.getElementById('simonInstruction').textContent = '✗ Ups! ' + (currentSimon.isSimon ? 'Simon hat es gesagt!' : 'Simon hat es NICHT gesagt!');
+            }
+
+            document.getElementById('responseButtons').style.display = 'none';
+            document.getElementById('simonPlayBtn').style.display = 'inline-block';
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                completed: completedInstructions,
+                types: Array.from(document.querySelectorAll('.instruction-card.mastered')).map(c => c.querySelector('.title').textContent),
+                simonScore,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_anweisungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_anweisungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                completedInstructions = data.completed || 0;
+                simonScore = data.simonScore || 0;
+                document.getElementById('simonScore').textContent = simonScore;
+
+                document.querySelectorAll('.instruction-card').forEach(card => {
+                    if (data.types && data.types.includes(card.querySelector('.title').textContent)) {
+                        card.classList.add('mastered');
+                    }
+                });
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

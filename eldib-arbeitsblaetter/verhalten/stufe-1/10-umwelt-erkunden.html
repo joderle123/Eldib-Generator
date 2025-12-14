@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umwelt erkunden - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #43e97b;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .senses-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .sense-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .sense-card:hover {
+            transform: translateY(-5px);
+            border-color: #43e97b;
+        }
+        .sense-card.active {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .sense-card .icon { font-size: 2.5em; }
+        .sense-card .label { font-size: 0.85em; margin-top: 5px; }
+        .exploration-map {
+            position: relative;
+            height: 350px;
+            background: linear-gradient(180deg, #87CEEB 0%, #90EE90 50%, #8B4513 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .map-item {
+            position: absolute;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .map-item:hover { transform: scale(1.2); }
+        .map-item.discovered {
+            animation: bounce 0.5s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        .discovery-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .texture-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .texture-item {
+            aspect-ratio: 1;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid transparent;
+        }
+        .texture-item:hover { transform: scale(1.05); }
+        .texture-item.touched { border-color: #4CAF50; }
+        .texture-item .icon { font-size: 2.5em; }
+        .texture-item .label { font-size: 0.8em; margin-top: 5px; }
+        .texture-soft { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+        .texture-rough { background: linear-gradient(135deg, #d4a373, #bc6c25); color: white; }
+        .texture-smooth { background: linear-gradient(135deg, #a8dadc, #457b9d); color: white; }
+        .texture-cold { background: linear-gradient(135deg, #caf0f8, #90e0ef); }
+        .texture-warm { background: linear-gradient(135deg, #ffccd5, #ff8fab); }
+        .texture-wet { background: linear-gradient(135deg, #48cae4, #0077b6); color: white; }
+        .texture-hard { background: linear-gradient(135deg, #adb5bd, #6c757d); color: white; }
+        .texture-light { background: linear-gradient(135deg, #fff3b0, #ffe066); }
+        .discovery-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .discovery-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .discovery-item:hover { background: #f5f5f5; }
+        .discovery-item.found {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .discovery-item .icon { font-size: 2em; }
+        .discovery-item .checkbox {
+            width: 30px; height: 30px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+        .discovery-item.found .checkbox {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        .btn {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #43e97b; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .senses-grid { grid-template-columns: repeat(3, 1fr); }
+            .texture-gallery { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Umwelt erkunden</h1>
+            <p>Die Welt mit allen Sinnen entdecken</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-4 bis V-7)</h3>
+                <p>Das Kind erkundet seine Umwelt aktiv mit allen Sinnen. Es zeigt Neugier und reagiert auf neue Reize in seiner Umgebung.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👁️</span> Meine fünf Sinne</h3>
+                <p>Mit welchen Sinnen erkundest du die Welt? Klicke auf alle, die du benutzt:</p>
+                <div class="senses-grid">
+                    <div class="sense-card" onclick="toggleSense(this)" data-sense="sehen">
+                        <div class="icon">👁️</div>
+                        <div class="label">Sehen</div>
+                    </div>
+                    <div class="sense-card" onclick="toggleSense(this)" data-sense="hoeren">
+                        <div class="icon">👂</div>
+                        <div class="label">Hören</div>
+                    </div>
+                    <div class="sense-card" onclick="toggleSense(this)" data-sense="fuehlen">
+                        <div class="icon">✋</div>
+                        <div class="label">Fühlen</div>
+                    </div>
+                    <div class="sense-card" onclick="toggleSense(this)" data-sense="riechen">
+                        <div class="icon">👃</div>
+                        <div class="label">Riechen</div>
+                    </div>
+                    <div class="sense-card" onclick="toggleSense(this)" data-sense="schmecken">
+                        <div class="icon">👅</div>
+                        <div class="label">Schmecken</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🗺️</span> Entdeckungs-Karte</h3>
+                <p>Klicke auf die Dinge, um sie zu entdecken!</p>
+                <div class="exploration-map" id="explorationMap">
+                    <div class="discovery-counter">Entdeckt: <span id="discoveryCount">0</span>/12</div>
+                    <div class="map-item" style="top: 20px; left: 30px;" onclick="discover(this)">☀️</div>
+                    <div class="map-item" style="top: 40px; left: 150px;" onclick="discover(this)">☁️</div>
+                    <div class="map-item" style="top: 30px; left: 280px;" onclick="discover(this)">🌈</div>
+                    <div class="map-item" style="top: 80px; left: 80px;" onclick="discover(this)">🐦</div>
+                    <div class="map-item" style="top: 120px; left: 200px;" onclick="discover(this)">🦋</div>
+                    <div class="map-item" style="top: 150px; left: 40px;" onclick="discover(this)">🌳</div>
+                    <div class="map-item" style="top: 160px; left: 320px;" onclick="discover(this)">🌻</div>
+                    <div class="map-item" style="top: 200px; left: 150px;" onclick="discover(this)">🐿️</div>
+                    <div class="map-item" style="top: 220px; left: 260px;" onclick="discover(this)">🍄</div>
+                    <div class="map-item" style="top: 270px; left: 50px;" onclick="discover(this)">🪨</div>
+                    <div class="map-item" style="top: 280px; left: 180px;" onclick="discover(this)">🐛</div>
+                    <div class="map-item" style="top: 260px; left: 300px;" onclick="discover(this)">🌾</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✋</span> Wie fühlt sich das an?</h3>
+                <p>Klicke auf die Dinge, die du schon angefasst hast:</p>
+                <div class="texture-gallery">
+                    <div class="texture-item texture-soft" onclick="toggleTexture(this)">
+                        <div class="icon">🧸</div>
+                        <div class="label">Weich</div>
+                    </div>
+                    <div class="texture-item texture-rough" onclick="toggleTexture(this)">
+                        <div class="icon">🪵</div>
+                        <div class="label">Rau</div>
+                    </div>
+                    <div class="texture-item texture-smooth" onclick="toggleTexture(this)">
+                        <div class="icon">🥚</div>
+                        <div class="label">Glatt</div>
+                    </div>
+                    <div class="texture-item texture-cold" onclick="toggleTexture(this)">
+                        <div class="icon">🧊</div>
+                        <div class="label">Kalt</div>
+                    </div>
+                    <div class="texture-item texture-warm" onclick="toggleTexture(this)">
+                        <div class="icon">☕</div>
+                        <div class="label">Warm</div>
+                    </div>
+                    <div class="texture-item texture-wet" onclick="toggleTexture(this)">
+                        <div class="icon">💧</div>
+                        <div class="label">Nass</div>
+                    </div>
+                    <div class="texture-item texture-hard" onclick="toggleTexture(this)">
+                        <div class="icon">🪨</div>
+                        <div class="label">Hart</div>
+                    </div>
+                    <div class="texture-item texture-light" onclick="toggleTexture(this)">
+                        <div class="icon">🪶</div>
+                        <div class="label">Leicht</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔍</span> Was habe ich heute entdeckt?</h3>
+                <div class="discovery-list">
+                    <div class="discovery-item" onclick="toggleDiscovery(this)">
+                        <div class="icon">🌺</div>
+                        <div>Etwas Buntes</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="discovery-item" onclick="toggleDiscovery(this)">
+                        <div class="icon">🎵</div>
+                        <div>Ein schönes Geräusch</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="discovery-item" onclick="toggleDiscovery(this)">
+                        <div class="icon">🌿</div>
+                        <div>Etwas aus der Natur</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="discovery-item" onclick="toggleDiscovery(this)">
+                        <div class="icon">✨</div>
+                        <div>Etwas Neues</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                    <div class="discovery-item" onclick="toggleDiscovery(this)">
+                        <div class="icon">🤗</div>
+                        <div>Etwas Angenehmes</div>
+                        <div class="checkbox">✓</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Was erkundet das Kind? Wie reagiert es auf neue Reize? Welche Sinne nutzt es am meisten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let discoveryCount = 0;
+
+        function toggleSense(el) {
+            el.classList.toggle('active');
+            saveData();
+        }
+
+        function discover(el) {
+            if (!el.classList.contains('discovered')) {
+                el.classList.add('discovered');
+                discoveryCount++;
+                document.getElementById('discoveryCount').textContent = discoveryCount;
+                saveData();
+            }
+        }
+
+        function toggleTexture(el) {
+            el.classList.toggle('touched');
+            saveData();
+        }
+
+        function toggleDiscovery(el) {
+            el.classList.toggle('found');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                senses: Array.from(document.querySelectorAll('.sense-card.active')).map(s => s.dataset.sense),
+                discoveries: discoveryCount,
+                textures: Array.from(document.querySelectorAll('.texture-item.touched')).map(t => t.querySelector('.label').textContent),
+                dailyDiscoveries: document.querySelectorAll('.discovery-item.found').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_umwelt', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_umwelt');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.sense-card').forEach(card => {
+                    if (data.senses && data.senses.includes(card.dataset.sense)) {
+                        card.classList.add('active');
+                    }
+                });
+
+                discoveryCount = data.discoveries || 0;
+                document.getElementById('discoveryCount').textContent = discoveryCount;
+
+                const mapItems = document.querySelectorAll('.map-item');
+                for (let i = 0; i < discoveryCount && i < mapItems.length; i++) {
+                    mapItems[i].classList.add('discovered');
+                }
+
+                document.querySelectorAll('.texture-item').forEach(item => {
+                    if (data.textures && data.textures.includes(item.querySelector('.label').textContent)) {
+                        item.classList.add('touched');
+                    }
+                });
+
+                const discoveries = document.querySelectorAll('.discovery-item');
+                for (let i = 0; i < (data.dailyDiscoveries || 0); i++) {
+                    if (discoveries[i]) discoveries[i].classList.add('found');
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

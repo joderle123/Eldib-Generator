@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spielzeug greifen - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #a18cd1;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .grab-game {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .floating-toy {
+            position: absolute;
+            font-size: 3em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+        .floating-toy:hover { transform: scale(1.2); }
+        .floating-toy.grabbed {
+            animation: grabbed 0.5s forwards;
+        }
+        @keyframes grabbed {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        .score-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .toy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .toy-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .toy-card:hover {
+            transform: translateY(-5px);
+            border-color: #a18cd1;
+        }
+        .toy-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .toy-card .icon { font-size: 2.5em; }
+        .toy-card .label { margin-top: 10px; font-size: 0.9em; color: #666; }
+        .grip-types {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .grip-type {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+        .grip-type:hover { border-color: #a18cd1; }
+        .grip-type.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .grip-type .icon { font-size: 3em; margin-bottom: 10px; }
+        .progress-section {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .progress-item .icon { font-size: 2em; }
+        .progress-bar-bg {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        .btn {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #a18cd1; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .toy-grid { grid-template-columns: repeat(2, 1fr); }
+            .grip-types { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Spielzeug greifen</h1>
+            <p>Gegenstände gezielt greifen und festhalten</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-6)</h3>
+                <p>Das Kind greift gezielt nach Gegenständen, die es interessieren. Es kann Spielzeug festhalten und damit hantieren.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Fang-Spiel</h3>
+                <p>Klicke schnell auf die Spielzeuge, um sie zu fangen!</p>
+                <div class="grab-game" id="grabGame">
+                    <div class="score-display">Gefangen: <span id="score">0</span></div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="btn" onclick="startGame()">Neues Spiel</button>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧸</span> Meine Lieblingsspielzeuge</h3>
+                <p>Wähle die Spielzeuge, die du gerne greifst:</p>
+                <div class="toy-grid">
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🧸</div>
+                        <div class="label">Teddy</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">⚽</div>
+                        <div class="label">Ball</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🧱</div>
+                        <div class="label">Bausteine</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🚗</div>
+                        <div class="label">Auto</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🎨</div>
+                        <div class="label">Stifte</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">📚</div>
+                        <div class="label">Bücher</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🧩</div>
+                        <div class="label">Puzzle</div>
+                    </div>
+                    <div class="toy-card" onclick="toggleToy(this)">
+                        <div class="icon">🪀</div>
+                        <div class="label">Puppe</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✋</span> Wie greife ich?</h3>
+                <p>Wähle aus, wie du Dinge greifst:</p>
+                <div class="grip-types">
+                    <div class="grip-type" onclick="selectGrip(this)">
+                        <div class="icon">✊</div>
+                        <div>Mit der ganzen Hand</div>
+                    </div>
+                    <div class="grip-type" onclick="selectGrip(this)">
+                        <div class="icon">🤏</div>
+                        <div>Mit zwei Fingern</div>
+                    </div>
+                    <div class="grip-type" onclick="selectGrip(this)">
+                        <div class="icon">👐</div>
+                        <div>Mit beiden Händen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine Greif-Fortschritte</h3>
+                <div class="progress-section">
+                    <div class="progress-item">
+                        <div class="icon">🎯</div>
+                        <div style="flex: 1;">
+                            <div style="margin-bottom: 5px;">Gezielt greifen</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="progress1" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" onchange="updateProgress(1, this.value)">
+                    </div>
+                    <div class="progress-item">
+                        <div class="icon">💪</div>
+                        <div style="flex: 1;">
+                            <div style="margin-bottom: 5px;">Festhalten</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="progress2" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" onchange="updateProgress(2, this.value)">
+                    </div>
+                    <div class="progress-item">
+                        <div class="icon">🔄</div>
+                        <div style="flex: 1;">
+                            <div style="margin-bottom: 5px;">Weitergeben</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="progress3" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <input type="range" min="0" max="100" value="0" onchange="updateProgress(3, this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie greift das Kind nach Gegenständen? Welche Griffe verwendet es? Wie lange kann es Dinge festhalten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        const toys = ['🧸', '⚽', '🎾', '🚗', '🎈', '⭐', '🌟', '🎁', '🧩', '🔔'];
+        let score = 0;
+        let gameInterval = null;
+        const progress = { 1: 0, 2: 0, 3: 0 };
+
+        function startGame() {
+            const game = document.getElementById('grabGame');
+            score = 0;
+            document.getElementById('score').textContent = '0';
+
+            // Clear existing toys
+            game.querySelectorAll('.floating-toy').forEach(t => t.remove());
+
+            if (gameInterval) clearInterval(gameInterval);
+
+            // Spawn toys periodically
+            let spawned = 0;
+            gameInterval = setInterval(() => {
+                if (spawned < 15) {
+                    spawnToy();
+                    spawned++;
+                } else {
+                    clearInterval(gameInterval);
+                }
+            }, 800);
+        }
+
+        function spawnToy() {
+            const game = document.getElementById('grabGame');
+            const toy = document.createElement('div');
+            toy.className = 'floating-toy';
+            toy.textContent = toys[Math.floor(Math.random() * toys.length)];
+            toy.style.left = Math.random() * (game.offsetWidth - 60) + 'px';
+            toy.style.top = Math.random() * (game.offsetHeight - 60) + 'px';
+
+            toy.onclick = () => grabToy(toy);
+
+            game.appendChild(toy);
+
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (toy.parentElement) {
+                    toy.style.opacity = '0';
+                    setTimeout(() => toy.remove(), 300);
+                }
+            }, 3000);
+        }
+
+        function grabToy(toy) {
+            toy.classList.add('grabbed');
+            score++;
+            document.getElementById('score').textContent = score;
+            setTimeout(() => toy.remove(), 500);
+            saveData();
+        }
+
+        function toggleToy(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function selectGrip(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function updateProgress(num, value) {
+            progress[num] = parseInt(value);
+            document.getElementById('progress' + num).style.width = value + '%';
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                highScore: Math.max(score, parseInt(localStorage.getItem('eldib_v1_greifen_highscore') || 0)),
+                toys: Array.from(document.querySelectorAll('.toy-card.selected')).map(t => t.querySelector('.label').textContent),
+                grips: Array.from(document.querySelectorAll('.grip-type.selected')).map(g => g.textContent.trim()),
+                progress,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_greifen', JSON.stringify(data));
+            localStorage.setItem('eldib_v1_greifen_highscore', data.highScore);
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_greifen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                document.querySelectorAll('.toy-card').forEach(card => {
+                    if (data.toys && data.toys.includes(card.querySelector('.label').textContent)) {
+                        card.classList.add('selected');
+                    }
+                });
+
+                document.querySelectorAll('.grip-type').forEach(grip => {
+                    if (data.grips && data.grips.includes(grip.textContent.trim())) {
+                        grip.classList.add('selected');
+                    }
+                });
+
+                if (data.progress) {
+                    Object.entries(data.progress).forEach(([num, value]) => {
+                        progress[num] = value;
+                        document.getElementById('progress' + num).style.width = value + '%';
+                        document.querySelector(`[onchange="updateProgress(${num}, this.value)"]`).value = value;
+                    });
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

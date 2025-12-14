@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Körperliche Nähe - Verhalten Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff9a9e;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .zone-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .person-center {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            z-index: 4;
+        }
+        .zone {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .zone:hover { transform: scale(1.05); }
+        .zone.selected { border-width: 5px !important; }
+        .zone-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zone-1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 3px solid #4CAF50;
+        }
+        .zone-2 {
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 193, 7, 0.3);
+            border: 3px solid #FFC107;
+        }
+        .zone-3 {
+            width: 150px;
+            height: 150px;
+            background: rgba(244, 67, 54, 0.3);
+            border: 3px solid #f44336;
+        }
+        .zone-labels {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .zone-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .zone-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        .touch-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .touch-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .touch-item:hover { background: #f5f5f5; }
+        .touch-item .icon { font-size: 2em; }
+        .touch-item .info { flex: 1; }
+        .touch-item .title { font-weight: bold; color: #333; }
+        .touch-item .desc { font-size: 0.9em; color: #666; }
+        .rating-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.2s;
+        }
+        .rating-btn:hover { transform: scale(1.1); }
+        .rating-btn.active-green { background: #4CAF50; border-color: #4CAF50; }
+        .rating-btn.active-yellow { background: #FFC107; border-color: #FFC107; }
+        .rating-btn.active-red { background: #f44336; border-color: #f44336; }
+        .comfort-meter {
+            margin: 20px 0;
+        }
+        .meter-track {
+            height: 30px;
+            background: linear-gradient(to right, #f44336, #FFC107, #4CAF50);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+        .meter-thumb {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 4px solid #333;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            transform: translateX(-50%);
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #666;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #ff9a9e; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .zone-container { width: 280px; height: 280px; }
+            .zone-1 { width: 280px; height: 280px; }
+            .zone-2 { width: 200px; height: 200px; }
+            .zone-3 { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe I</div>
+            <h1>Körperliche Nähe zulassen</h1>
+            <p>Vertrauen durch angenehme Berührung aufbauen</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-3)</h3>
+                <p>Das Kind lässt körperliche Nähe zu und reagiert positiv auf angemessene Berührungen. Es entwickelt ein Gefühl dafür, welche Nähe angenehm ist.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Meine Komfort-Zonen</h3>
+                <p>Jeder Mensch hat verschiedene Zonen um sich herum. Klicke auf die Zone, die sich für dich am besten anfühlt:</p>
+                <div class="zone-diagram">
+                    <div class="zone-container">
+                        <div class="zone zone-1" onclick="selectZone(this, 'fern')"></div>
+                        <div class="zone zone-2" onclick="selectZone(this, 'mittel')" style="position: absolute;"></div>
+                        <div class="zone zone-3" onclick="selectZone(this, 'nah')" style="position: absolute;"></div>
+                        <div class="person-center" style="position: absolute;">👤</div>
+                    </div>
+                </div>
+                <div class="zone-labels">
+                    <div class="zone-label">
+                        <div class="zone-color" style="background: #f44336;"></div>
+                        <span>Sehr nah (Familie)</span>
+                    </div>
+                    <div class="zone-label">
+                        <div class="zone-color" style="background: #FFC107;"></div>
+                        <span>Mittel (Freunde)</span>
+                    </div>
+                    <div class="zone-label">
+                        <div class="zone-color" style="background: #4CAF50;"></div>
+                        <span>Weiter weg (Bekannte)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✋</span> Welche Berührungen mag ich?</h3>
+                <p>Bewerte jede Art von Berührung:</p>
+                <div class="touch-scale">
+                    <div class="touch-item" data-type="handhalten">
+                        <div class="icon">🤝</div>
+                        <div class="info">
+                            <div class="title">Hand halten</div>
+                            <div class="desc">Wenn jemand meine Hand hält</div>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn" onclick="setRating(this, 'green')">😊</button>
+                            <button class="rating-btn" onclick="setRating(this, 'yellow')">😐</button>
+                            <button class="rating-btn" onclick="setRating(this, 'red')">😟</button>
+                        </div>
+                    </div>
+                    <div class="touch-item" data-type="umarmung">
+                        <div class="icon">🤗</div>
+                        <div class="info">
+                            <div class="title">Umarmung</div>
+                            <div class="desc">Wenn mich jemand umarmt</div>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn" onclick="setRating(this, 'green')">😊</button>
+                            <button class="rating-btn" onclick="setRating(this, 'yellow')">😐</button>
+                            <button class="rating-btn" onclick="setRating(this, 'red')">😟</button>
+                        </div>
+                    </div>
+                    <div class="touch-item" data-type="schulterklopfen">
+                        <div class="icon">👋</div>
+                        <div class="info">
+                            <div class="title">Schulter klopfen</div>
+                            <div class="desc">Wenn jemand mir auf die Schulter klopft</div>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn" onclick="setRating(this, 'green')">😊</button>
+                            <button class="rating-btn" onclick="setRating(this, 'yellow')">😐</button>
+                            <button class="rating-btn" onclick="setRating(this, 'red')">😟</button>
+                        </div>
+                    </div>
+                    <div class="touch-item" data-type="kopfstreicheln">
+                        <div class="icon">🙆</div>
+                        <div class="info">
+                            <div class="title">Kopf streicheln</div>
+                            <div class="desc">Wenn jemand meinen Kopf streichelt</div>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn" onclick="setRating(this, 'green')">😊</button>
+                            <button class="rating-btn" onclick="setRating(this, 'yellow')">😐</button>
+                            <button class="rating-btn" onclick="setRating(this, 'red')">😟</button>
+                        </div>
+                    </div>
+                    <div class="touch-item" data-type="nebeneinander">
+                        <div class="icon">👥</div>
+                        <div class="info">
+                            <div class="title">Nebeneinander sitzen</div>
+                            <div class="desc">Wenn jemand nah neben mir sitzt</div>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn" onclick="setRating(this, 'green')">😊</button>
+                            <button class="rating-btn" onclick="setRating(this, 'yellow')">😐</button>
+                            <button class="rating-btn" onclick="setRating(this, 'red')">😟</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Wie fühle ich mich gerade mit Nähe?</h3>
+                <p>Ziehe den Regler dorthin, wie wohl du dich gerade mit Nähe fühlst:</p>
+                <div class="comfort-meter">
+                    <div class="meter-track" id="meterTrack">
+                        <div class="meter-thumb" id="meterThumb">😊</div>
+                    </div>
+                    <div class="meter-labels">
+                        <span>Unwohl</span>
+                        <span>Neutral</span>
+                        <span>Wohl</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie Beobachtungen: Wie reagiert das Kind auf Nähe? Welche Berührungen werden akzeptiert? Gibt es Fortschritte?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let selectedZone = null;
+        let comfortLevel = 50;
+        const ratings = {};
+
+        function selectZone(el, zone) {
+            document.querySelectorAll('.zone').forEach(z => z.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedZone = zone;
+            saveData();
+        }
+
+        function setRating(btn, rating) {
+            const item = btn.closest('.touch-item');
+            const type = item.dataset.type;
+
+            item.querySelectorAll('.rating-btn').forEach(b => {
+                b.classList.remove('active-green', 'active-yellow', 'active-red');
+            });
+
+            btn.classList.add('active-' + rating);
+            ratings[type] = rating;
+            saveData();
+        }
+
+        // Comfort meter drag functionality
+        const track = document.getElementById('meterTrack');
+        const thumb = document.getElementById('meterThumb');
+        let isDragging = false;
+
+        function updateThumbPosition(percent) {
+            comfortLevel = Math.max(0, Math.min(100, percent));
+            thumb.style.left = comfortLevel + '%';
+
+            if (comfortLevel < 33) {
+                thumb.textContent = '😟';
+            } else if (comfortLevel < 66) {
+                thumb.textContent = '😐';
+            } else {
+                thumb.textContent = '😊';
+            }
+        }
+
+        track.addEventListener('mousedown', startDrag);
+        track.addEventListener('touchstart', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchend', stopDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            drag(e);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const rect = track.getBoundingClientRect();
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const percent = ((clientX - rect.left) / rect.width) * 100;
+
+            updateThumbPosition(percent);
+        }
+
+        function stopDrag() {
+            if (isDragging) {
+                isDragging = false;
+                saveData();
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                selectedZone,
+                ratings,
+                comfortLevel,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v1_naehe', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_naehe');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.selectedZone) {
+                    selectedZone = data.selectedZone;
+                    const zoneMap = { 'nah': '.zone-3', 'mittel': '.zone-2', 'fern': '.zone-1' };
+                    document.querySelector(zoneMap[selectedZone])?.classList.add('selected');
+                }
+
+                if (data.ratings) {
+                    Object.entries(data.ratings).forEach(([type, rating]) => {
+                        const item = document.querySelector(`[data-type="${type}"]`);
+                        if (item) {
+                            const btns = item.querySelectorAll('.rating-btn');
+                            const index = { 'green': 0, 'yellow': 1, 'red': 2 }[rating];
+                            btns[index]?.classList.add('active-' + rating);
+                            ratings[type] = rating;
+                        }
+                    });
+                }
+
+                if (data.comfortLevel !== undefined) {
+                    updateThumbPosition(data.comfortLevel);
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        updateThumbPosition(50);
+        loadData();
+    </script>
+</body>
+</html>

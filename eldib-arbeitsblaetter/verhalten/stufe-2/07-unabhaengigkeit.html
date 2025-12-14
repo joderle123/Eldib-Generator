@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unabhängigkeit entwickeln - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #a18cd1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .independence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .independence-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; position: relative; }
+        .independence-card:hover { transform: translateY(-5px); border-color: #a18cd1; }
+        .independence-card.can-do { border-color: #4CAF50; background: #e8f5e9; }
+        .independence-card.learning { border-color: #FFC107; background: #FFF8E1; }
+        .independence-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .independence-card .label { font-weight: bold; font-size: 0.9em; }
+        .level-indicator { position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: white; }
+        .can-do .level-indicator { background: #4CAF50; }
+        .learning .level-indicator { background: #FFC107; }
+        .star-progress { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .star { font-size: 3em; cursor: pointer; opacity: 0.3; transition: all 0.3s; }
+        .star.earned { opacity: 1; animation: pulse 0.5s; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .daily-tasks { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .task-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .task-item:hover { border-color: #a18cd1; }
+        .task-item.done { border-color: #4CAF50; background: #e8f5e9; }
+        .task-item .icon { font-size: 2em; }
+        .task-item .checkbox { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: auto; }
+        .done .checkbox { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #a18cd1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .independence-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Unabhängigkeit entwickeln</h1>
+            <p>Dinge selbst tun lernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-14)</h3>
+                <p>Das Kind entwickelt Selbstständigkeit bei alltäglichen Aufgaben. Es lernt, Dinge ohne Hilfe zu tun und zeigt Initiative.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💪</span> Das kann ich schon alleine</h3>
+                <p>Klicke einmal = ich lerne es noch (gelb), zweimal = ich kann es (grün):</p>
+                <div class="independence-grid">
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">👕</div><div class="label">Anziehen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🧥</div><div class="label">Jacke anziehen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">👟</div><div class="label">Schuhe anziehen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🍽️</div><div class="label">Alleine essen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🚽</div><div class="label">Zur Toilette gehen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🧼</div><div class="label">Hände waschen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🦷</div><div class="label">Zähne putzen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🎒</div><div class="label">Tasche packen</div><div class="level-indicator">✓</div></div>
+                    <div class="independence-card" onclick="toggleIndependence(this)"><div class="icon">🧹</div><div class="label">Aufräumen</div><div class="level-indicator">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Meine Selbstständigkeits-Sterne</h3>
+                <p>Verdiene Sterne für jede Aufgabe, die du alleine schaffst:</p>
+                <div class="star-progress">
+                    <span class="star" onclick="toggleStar(this)">⭐</span>
+                    <span class="star" onclick="toggleStar(this)">⭐</span>
+                    <span class="star" onclick="toggleStar(this)">⭐</span>
+                    <span class="star" onclick="toggleStar(this)">⭐</span>
+                    <span class="star" onclick="toggleStar(this)">⭐</span>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Tagesaufgaben</h3>
+                <p>Markiere, was du heute alleine gemacht hast:</p>
+                <div class="daily-tasks">
+                    <div class="task-item" onclick="toggleTask(this)"><div class="icon">🌅</div><div>Morgens alleine aufgestanden</div><div class="checkbox">✓</div></div>
+                    <div class="task-item" onclick="toggleTask(this)"><div class="icon">👕</div><div>Mich selbst angezogen</div><div class="checkbox">✓</div></div>
+                    <div class="task-item" onclick="toggleTask(this)"><div class="icon">🥣</div><div>Alleine gegessen</div><div class="checkbox">✓</div></div>
+                    <div class="task-item" onclick="toggleTask(this)"><div class="icon">🧹</div><div>Meine Sachen aufgeräumt</div><div class="checkbox">✓</div></div>
+                    <div class="task-item" onclick="toggleTask(this)"><div class="icon">🙋</div><div>Um Hilfe gebeten wenn nötig</div><div class="checkbox">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Aufgaben erledigt das Kind selbstständig? Wo braucht es noch Hilfe? Zeigt es Initiative?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleIndependence(el) {
+            if (el.classList.contains('can-do')) { el.classList.remove('can-do'); }
+            else if (el.classList.contains('learning')) { el.classList.remove('learning'); el.classList.add('can-do'); }
+            else { el.classList.add('learning'); }
+            saveData();
+        }
+        function toggleStar(el) { el.classList.toggle('earned'); saveData(); }
+        function toggleTask(el) { el.classList.toggle('done'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                canDo: document.querySelectorAll('.independence-card.can-do').length,
+                learning: document.querySelectorAll('.independence-card.learning').length,
+                stars: document.querySelectorAll('.star.earned').length,
+                tasks: document.querySelectorAll('.task-item.done').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_unabhaengigkeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_unabhaengigkeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const cards = document.querySelectorAll('.independence-card');
+                for (let i = 0; i < (data.learning || 0); i++) { if (cards[i]) cards[i].classList.add('learning'); }
+                for (let i = 0; i < (data.canDo || 0); i++) { if (cards[i]) { cards[i].classList.remove('learning'); cards[i].classList.add('can-do'); } }
+                const stars = document.querySelectorAll('.star');
+                for (let i = 0; i < (data.stars || 0); i++) { if (stars[i]) stars[i].classList.add('earned'); }
+                const tasks = document.querySelectorAll('.task-item');
+                for (let i = 0; i < (data.tasks || 0); i++) { if (tasks[i]) tasks[i].classList.add('done'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

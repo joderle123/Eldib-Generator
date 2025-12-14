@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktivitäten abschließen - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4facfe; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .task-tracker { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .task-title { font-size: 1.3em; margin-bottom: 15px; text-align: center; }
+        .task-steps { display: flex; justify-content: space-between; margin: 20px 0; position: relative; }
+        .task-steps::before { content: ''; position: absolute; top: 25px; left: 10%; right: 10%; height: 4px; background: rgba(255,255,255,0.3); }
+        .task-step { text-align: center; position: relative; z-index: 1; cursor: pointer; }
+        .step-circle { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.3); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; transition: all 0.3s; }
+        .task-step.done .step-circle { background: #4CAF50; }
+        .step-label { font-size: 0.8em; }
+        .btn { background: white; color: #667eea; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; transition: transform 0.2s; margin: 5px; }
+        .btn:hover { transform: scale(1.05); }
+        .completion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .completion-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .completion-card:hover { transform: translateY(-5px); border-color: #4facfe; }
+        .completion-card.completed { border-color: #4CAF50; background: #e8f5e9; }
+        .completion-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .completion-card .label { font-weight: bold; }
+        .progress-section { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-item { margin-bottom: 20px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); border-radius: 10px; transition: width 0.5s; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .completion-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Aktivitäten abschließen</h1>
+            <p>Angefangene Aufgaben zu Ende bringen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-12)</h3>
+                <p>Das Kind kann eine begonnene Aktivität zu Ende führen. Es lernt, bei einer Aufgabe zu bleiben und sie abzuschließen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Aufgaben-Tracker</h3>
+                <p>Klicke auf jeden Schritt, wenn du ihn geschafft hast:</p>
+                <div class="task-tracker">
+                    <div class="task-title">Beispiel: Ein Bild malen</div>
+                    <div class="task-steps">
+                        <div class="task-step" onclick="toggleTaskStep(this)">
+                            <div class="step-circle">1️⃣</div>
+                            <div class="step-label">Material holen</div>
+                        </div>
+                        <div class="task-step" onclick="toggleTaskStep(this)">
+                            <div class="step-circle">2️⃣</div>
+                            <div class="step-label">Malen</div>
+                        </div>
+                        <div class="task-step" onclick="toggleTaskStep(this)">
+                            <div class="step-circle">3️⃣</div>
+                            <div class="step-label">Fertig malen</div>
+                        </div>
+                        <div class="task-step" onclick="toggleTaskStep(this)">
+                            <div class="step-circle">4️⃣</div>
+                            <div class="step-label">Aufräumen</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="btn" onclick="resetTask()">Neue Aufgabe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Das kann ich zu Ende bringen</h3>
+                <p>Markiere die Aktivitäten, die du abschließen kannst:</p>
+                <div class="completion-grid">
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">🎨</div><div class="label">Ein Bild malen</div></div>
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">🧩</div><div class="label">Ein Puzzle</div></div>
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">📚</div><div class="label">Ein Buch anschauen</div></div>
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">🧱</div><div class="label">Etwas bauen</div></div>
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">🍽️</div><div class="label">Aufessen</div></div>
+                    <div class="completion-card" onclick="toggleCompletion(this)"><div class="icon">👕</div><div class="label">Mich anziehen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine Fortschritte diese Woche</h3>
+                <div class="progress-section">
+                    <div class="progress-item">
+                        <div class="progress-label"><span>Aufgaben begonnen</span><span id="started">0</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="startedBar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label"><span>Aufgaben beendet</span><span id="finished">0</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="finishedBar" style="width: 0%;"></div></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="btn" onclick="addStarted()">+ Begonnen</button>
+                        <button class="btn" onclick="addFinished()">+ Beendet</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Aktivitäten schließt das Kind ab? Wo braucht es Unterstützung? Wie lange bleibt es bei einer Aufgabe?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let started = 0, finished = 0;
+        function toggleTaskStep(el) { el.classList.toggle('done'); saveData(); }
+        function resetTask() { document.querySelectorAll('.task-step').forEach(s => s.classList.remove('done')); }
+        function toggleCompletion(el) { el.classList.toggle('completed'); saveData(); }
+        function addStarted() { started++; updateProgress(); saveData(); }
+        function addFinished() { finished++; updateProgress(); saveData(); }
+        function updateProgress() {
+            document.getElementById('started').textContent = started;
+            document.getElementById('finished').textContent = finished;
+            document.getElementById('startedBar').style.width = Math.min(started * 10, 100) + '%';
+            document.getElementById('finishedBar').style.width = Math.min(finished * 10, 100) + '%';
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { taskSteps: document.querySelectorAll('.task-step.done').length, completions: document.querySelectorAll('.completion-card.completed').length, started, finished, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v2_abschliessen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_abschliessen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.task-step');
+                for (let i = 0; i < (data.taskSteps || 0); i++) { if (steps[i]) steps[i].classList.add('done'); }
+                const cards = document.querySelectorAll('.completion-card');
+                for (let i = 0; i < (data.completions || 0); i++) { if (cards[i]) cards[i].classList.add('completed'); }
+                started = data.started || 0; finished = data.finished || 0;
+                updateProgress();
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

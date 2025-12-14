@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotionen ausdrücken - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 30px; text-align: center; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff5cc 0%, #ffe6cc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fa709a; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .emotion-wheel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .emotion-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .emotion-card:hover { transform: scale(1.05); }
+        .emotion-card.selected { border-width: 5px; }
+        .emotion-card .icon { font-size: 3em; }
+        .emotion-card .label { margin-top: 5px; font-weight: bold; }
+        .emotion-happy { border-color: #FFD700; } .emotion-happy.selected { background: #FFFACD; }
+        .emotion-sad { border-color: #87CEEB; } .emotion-sad.selected { background: #E0F7FA; }
+        .emotion-angry { border-color: #FF6B6B; } .emotion-angry.selected { background: #FFEBEE; }
+        .emotion-scared { border-color: #9370DB; } .emotion-scared.selected { background: #F3E5F5; }
+        .emotion-surprised { border-color: #FFA500; } .emotion-surprised.selected { background: #FFF3E0; }
+        .emotion-calm { border-color: #90EE90; } .emotion-calm.selected { background: #E8F5E9; }
+        .emotion-tired { border-color: #A0A0A0; } .emotion-tired.selected { background: #F5F5F5; }
+        .emotion-excited { border-color: #FF69B4; } .emotion-excited.selected { background: #FCE4EC; }
+        .expression-game { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; margin: 20px 0; }
+        .current-emotion { font-size: 6em; margin: 20px 0; }
+        .expression-prompt { font-size: 1.3em; margin-bottom: 20px; }
+        .btn { background: white; color: #667eea; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; transition: transform 0.2s; margin: 5px; }
+        .btn:hover { transform: scale(1.05); }
+        .body-map { display: flex; justify-content: center; margin: 20px 0; }
+        .body-figure { position: relative; width: 200px; height: 350px; }
+        .body-part { position: absolute; cursor: pointer; transition: all 0.3s; opacity: 0.5; }
+        .body-part:hover, .body-part.active { opacity: 1; transform: scale(1.1); }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fa709a; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .emotion-wheel { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Emotionen ausdrücken</h1>
+            <p>Gefühle zeigen und benennen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-13)</h3>
+                <p>Das Kind kann seine Gefühle auf angemessene Weise zeigen. Es lernt, Emotionen zu benennen und auszudrücken.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Wie fühle ich mich heute?</h3>
+                <p>Klicke auf das Gefühl, das zu dir passt:</p>
+                <div class="emotion-wheel">
+                    <div class="emotion-card emotion-happy" onclick="selectEmotion(this, 'happy')"><div class="icon">😊</div><div class="label">Fröhlich</div></div>
+                    <div class="emotion-card emotion-sad" onclick="selectEmotion(this, 'sad')"><div class="icon">😢</div><div class="label">Traurig</div></div>
+                    <div class="emotion-card emotion-angry" onclick="selectEmotion(this, 'angry')"><div class="icon">😠</div><div class="label">Wütend</div></div>
+                    <div class="emotion-card emotion-scared" onclick="selectEmotion(this, 'scared')"><div class="icon">😨</div><div class="label">Ängstlich</div></div>
+                    <div class="emotion-card emotion-surprised" onclick="selectEmotion(this, 'surprised')"><div class="icon">😲</div><div class="label">Überrascht</div></div>
+                    <div class="emotion-card emotion-calm" onclick="selectEmotion(this, 'calm')"><div class="icon">😌</div><div class="label">Ruhig</div></div>
+                    <div class="emotion-card emotion-tired" onclick="selectEmotion(this, 'tired')"><div class="icon">😴</div><div class="label">Müde</div></div>
+                    <div class="emotion-card emotion-excited" onclick="selectEmotion(this, 'excited')"><div class="icon">🤩</div><div class="label">Aufgeregt</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Gefühle-Spiel</h3>
+                <p>Mache das Gesicht nach und zeige das Gefühl!</p>
+                <div class="expression-game">
+                    <div class="expression-prompt">Zeige dieses Gefühl:</div>
+                    <div class="current-emotion" id="currentEmotion">😊</div>
+                    <div id="emotionName">Fröhlich</div>
+                    <button class="btn" onclick="nextEmotion()">Nächstes Gefühl</button>
+                    <button class="btn" onclick="markShown()">Geschafft! ✓</button>
+                    <p style="margin-top: 15px;">Gezeigt: <strong id="shownCount">0</strong> Gefühle</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🫀</span> Wo spüre ich Gefühle?</h3>
+                <p>Klicke auf die Körperteile, wo du Gefühle spürst:</p>
+                <div class="body-map">
+                    <div class="body-figure">
+                        <div class="body-part" style="top: 0; left: 70px; font-size: 3em;" onclick="toggleBodyPart(this)">🙂</div>
+                        <div class="body-part" style="top: 100px; left: 60px; font-size: 2.5em;" onclick="toggleBodyPart(this)">❤️</div>
+                        <div class="body-part" style="top: 150px; left: 60px; font-size: 2em;" onclick="toggleBodyPart(this)">🫃</div>
+                        <div class="body-part" style="top: 100px; left: 10px; font-size: 2em;" onclick="toggleBodyPart(this)">💪</div>
+                        <div class="body-part" style="top: 100px; left: 130px; font-size: 2em;" onclick="toggleBodyPart(this)">💪</div>
+                        <div class="body-part" style="top: 230px; left: 40px; font-size: 2em;" onclick="toggleBodyPart(this)">🦵</div>
+                        <div class="body-part" style="top: 230px; left: 100px; font-size: 2em;" onclick="toggleBodyPart(this)">🦵</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; margin-top: 10px;">Wenn ich aufgeregt bin, spüre ich es im Bauch. Wenn ich wütend bin, werden meine Hände fest.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie drückt das Kind seine Gefühle aus? Kann es Emotionen benennen? Wie reagiert es auf verschiedene Gefühle?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const emotions = [{face: '😊', name: 'Fröhlich'}, {face: '😢', name: 'Traurig'}, {face: '😠', name: 'Wütend'}, {face: '😨', name: 'Ängstlich'}, {face: '😲', name: 'Überrascht'}, {face: '😌', name: 'Ruhig'}, {face: '😴', name: 'Müde'}, {face: '🤩', name: 'Aufgeregt'}];
+        let currentEmotionIndex = 0, shownCount = 0, selectedEmotion = '';
+        function selectEmotion(el, emotion) {
+            document.querySelectorAll('.emotion-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedEmotion = emotion;
+            saveData();
+        }
+        function nextEmotion() {
+            currentEmotionIndex = (currentEmotionIndex + 1) % emotions.length;
+            document.getElementById('currentEmotion').textContent = emotions[currentEmotionIndex].face;
+            document.getElementById('emotionName').textContent = emotions[currentEmotionIndex].name;
+        }
+        function markShown() { shownCount++; document.getElementById('shownCount').textContent = shownCount; saveData(); }
+        function toggleBodyPart(el) { el.classList.toggle('active'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { selectedEmotion, shownCount, bodyParts: document.querySelectorAll('.body-part.active').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v2_emotionen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_emotionen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                shownCount = data.shownCount || 0;
+                document.getElementById('shownCount').textContent = shownCount;
+                const parts = document.querySelectorAll('.body-part');
+                for (let i = 0; i < (data.bodyParts || 0); i++) { if (parts[i]) parts[i].classList.add('active'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

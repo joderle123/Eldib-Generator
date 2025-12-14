@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warten lernen - Verhalten Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .content { padding: 30px; }
+        .info-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #f5576c;
+        }
+        .activity h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji { font-size: 1.5em; }
+        .waiting-game {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+        }
+        .timer-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(rgba(255,255,255,0.8) 0deg, rgba(255,255,255,0.2) 0deg);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .timer-inner {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .timer-number {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .timer-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn.primary { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .time-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .time-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .time-btn:hover, .time-btn.active {
+            background: white;
+            color: #667eea;
+        }
+        .waiting-situations {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .situation-card {
+            background: white;
+            border: 4px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .situation-card:hover {
+            transform: translateY(-5px);
+            border-color: #f5576c;
+        }
+        .situation-card.can-wait {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .situation-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .situation-card .title { font-weight: bold; margin-bottom: 5px; }
+        .strategies {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .strategy-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            border: 3px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .strategy-item:hover { border-color: #f5576c; }
+        .strategy-item.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .strategy-item .icon { font-size: 2em; }
+        .strategy-item .info { flex: 1; }
+        .strategy-item .title { font-weight: bold; }
+        .strategy-item .desc { font-size: 0.85em; color: #666; }
+        .achievement-badges {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .badge-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            opacity: 0.3;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .badge-item.earned {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            opacity: 1;
+        }
+        .badge-item:hover { transform: scale(1.1); }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .waiting-situations { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe II</div>
+            <h1>Warten lernen</h1>
+            <p>Geduld üben und abwarten können</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-10)</h3>
+                <p>Das Kind kann warten, bis es an der Reihe ist. Es entwickelt Strategien, um mit Wartezeiten umzugehen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⏱️</span> Warte-Challenge</h3>
+                <p>Wie lange kannst du ruhig warten? Wähle eine Zeit und versuche es!</p>
+                <div class="waiting-game">
+                    <div class="time-selector">
+                        <button class="time-btn" onclick="setTime(10)">10 Sek</button>
+                        <button class="time-btn" onclick="setTime(20)">20 Sek</button>
+                        <button class="time-btn active" onclick="setTime(30)">30 Sek</button>
+                        <button class="time-btn" onclick="setTime(60)">1 Min</button>
+                    </div>
+                    <div class="timer-circle" id="timerCircle">
+                        <div class="timer-inner">
+                            <div class="timer-number" id="timerNumber">30</div>
+                            <div class="timer-label">Sekunden</div>
+                        </div>
+                    </div>
+                    <button class="btn" id="startBtn" onclick="startTimer()">Start!</button>
+                    <button class="btn" id="giveUpBtn" onclick="giveUp()" style="display: none;">Ich kann nicht mehr</button>
+                    <p style="margin-top: 15px;">Bester Versuch: <strong id="bestTime">0</strong> Sekunden</p>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🏫</span> Wann muss ich warten?</h3>
+                <p>Markiere die Situationen, in denen du schon gut warten kannst:</p>
+                <div class="waiting-situations">
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🚌</div>
+                        <div class="title">Auf den Bus warten</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🙋</div>
+                        <div class="title">Im Unterricht warten</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🍽️</div>
+                        <div class="title">Auf das Essen warten</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🎮</div>
+                        <div class="title">Beim Spielen warten</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🏥</div>
+                        <div class="title">Beim Arzt warten</div>
+                    </div>
+                    <div class="situation-card" onclick="toggleSituation(this)">
+                        <div class="icon">🛒</div>
+                        <div class="title">An der Kasse warten</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Was hilft mir beim Warten?</h3>
+                <p>Wähle die Strategien, die dir helfen:</p>
+                <div class="strategies">
+                    <div class="strategy-item" onclick="toggleStrategy(this)">
+                        <div class="icon">🌬️</div>
+                        <div class="info">
+                            <div class="title">Tief atmen</div>
+                            <div class="desc">Langsam ein- und ausatmen</div>
+                        </div>
+                    </div>
+                    <div class="strategy-item" onclick="toggleStrategy(this)">
+                        <div class="icon">🔢</div>
+                        <div class="info">
+                            <div class="title">Zählen</div>
+                            <div class="desc">Bis 10 oder 20 zählen</div>
+                        </div>
+                    </div>
+                    <div class="strategy-item" onclick="toggleStrategy(this)">
+                        <div class="icon">🎵</div>
+                        <div class="info">
+                            <div class="title">Ein Lied denken</div>
+                            <div class="desc">Ein Lieblingslied im Kopf singen</div>
+                        </div>
+                    </div>
+                    <div class="strategy-item" onclick="toggleStrategy(this)">
+                        <div class="icon">👀</div>
+                        <div class="info">
+                            <div class="title">Etwas beobachten</div>
+                            <div class="desc">Die Umgebung anschauen</div>
+                        </div>
+                    </div>
+                    <div class="strategy-item" onclick="toggleStrategy(this)">
+                        <div class="icon">✊</div>
+                        <div class="info">
+                            <div class="title">Hände drücken</div>
+                            <div class="desc">Die Hände zusammendrücken und loslassen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🏆</span> Meine Warte-Abzeichen</h3>
+                <p>Verdiene Abzeichen für geduldiges Warten:</p>
+                <div class="achievement-badges">
+                    <div class="badge-item" onclick="toggleBadge(this)" title="10 Sekunden">🥉</div>
+                    <div class="badge-item" onclick="toggleBadge(this)" title="30 Sekunden">🥈</div>
+                    <div class="badge-item" onclick="toggleBadge(this)" title="1 Minute">🥇</div>
+                    <div class="badge-item" onclick="toggleBadge(this)" title="Warte-Meister">🏆</div>
+                    <div class="badge-item" onclick="toggleBadge(this)" title="Super-Geduld">⭐</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie lange kann das Kind warten? Welche Situationen sind schwierig? Welche Strategien helfen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let totalTime = 30;
+        let currentTime = 30;
+        let bestTime = 0;
+        let timerInterval = null;
+
+        function setTime(seconds) {
+            totalTime = seconds;
+            currentTime = seconds;
+            document.getElementById('timerNumber').textContent = seconds;
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateTimerVisual(0);
+        }
+
+        function updateTimerVisual(elapsed) {
+            const percent = (elapsed / totalTime) * 360;
+            document.getElementById('timerCircle').style.background =
+                `conic-gradient(rgba(255,255,255,0.8) ${percent}deg, rgba(255,255,255,0.2) ${percent}deg)`;
+        }
+
+        function startTimer() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('giveUpBtn').style.display = 'inline-block';
+            document.querySelectorAll('.time-btn').forEach(btn => btn.disabled = true);
+
+            let elapsed = 0;
+            timerInterval = setInterval(() => {
+                elapsed++;
+                currentTime = totalTime - elapsed;
+                document.getElementById('timerNumber').textContent = currentTime;
+                updateTimerVisual(elapsed);
+
+                if (currentTime <= 0) {
+                    clearInterval(timerInterval);
+                    success();
+                }
+            }, 1000);
+        }
+
+        function giveUp() {
+            clearInterval(timerInterval);
+            const waited = totalTime - currentTime;
+            if (waited > bestTime) {
+                bestTime = waited;
+                document.getElementById('bestTime').textContent = bestTime;
+            }
+            reset();
+            saveData();
+        }
+
+        function success() {
+            if (totalTime > bestTime) {
+                bestTime = totalTime;
+                document.getElementById('bestTime').textContent = bestTime;
+            }
+            alert('🎉 Super! Du hast ' + totalTime + ' Sekunden gewartet!');
+            reset();
+            saveData();
+        }
+
+        function reset() {
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('giveUpBtn').style.display = 'none';
+            document.querySelectorAll('.time-btn').forEach(btn => btn.disabled = false);
+            currentTime = totalTime;
+            document.getElementById('timerNumber').textContent = totalTime;
+            updateTimerVisual(0);
+        }
+
+        function toggleSituation(el) {
+            el.classList.toggle('can-wait');
+            saveData();
+        }
+
+        function toggleStrategy(el) {
+            el.classList.toggle('selected');
+            saveData();
+        }
+
+        function toggleBadge(el) {
+            el.classList.toggle('earned');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                bestTime,
+                situations: document.querySelectorAll('.situation-card.can-wait').length,
+                strategies: document.querySelectorAll('.strategy-item.selected').length,
+                badges: document.querySelectorAll('.badge-item.earned').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v2_warten', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_warten');
+            if (saved) {
+                const data = JSON.parse(saved);
+                bestTime = data.bestTime || 0;
+                document.getElementById('bestTime').textContent = bestTime;
+
+                const situations = document.querySelectorAll('.situation-card');
+                for (let i = 0; i < (data.situations || 0); i++) {
+                    if (situations[i]) situations[i].classList.add('can-wait');
+                }
+
+                const strategies = document.querySelectorAll('.strategy-item');
+                for (let i = 0; i < (data.strategies || 0); i++) {
+                    if (strategies[i]) strategies[i].classList.add('selected');
+                }
+
+                const badges = document.querySelectorAll('.badge-item');
+                for (let i = 0; i < (data.badges || 0); i++) {
+                    if (badges[i]) badges[i].classList.add('earned');
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
