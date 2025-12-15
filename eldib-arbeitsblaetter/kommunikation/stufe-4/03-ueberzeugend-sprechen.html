@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Überzeugend sprechen - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .persuasion-elements { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .element-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .element-card:hover { border-color: #11998e; transform: translateY(-3px); }
+        .element-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .element-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .element-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .element-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .element-card .example { font-size: 0.8em; color: #999; text-align: center; font-style: italic; margin-top: 8px; }
+        .pitch-practice { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .pitch-scenario { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; text-align: center; }
+        .pitch-goal { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; }
+        .pitch-context { font-size: 0.95em; opacity: 0.9; }
+        .pitch-timer { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 20px 0; }
+        .timer-display { font-size: 3em; font-weight: bold; font-family: monospace; }
+        .timer-buttons { display: flex; gap: 10px; }
+        .timer-btn { width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2em; }
+        .timer-btn.start { background: white; color: #667eea; }
+        .timer-btn.reset { background: rgba(255,255,255,0.3); color: white; }
+        .pitch-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .pitch-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .pitch-btn.primary { background: white; color: #667eea; }
+        .techniques-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .technique-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .technique-item:hover { border-color: #11998e; }
+        .technique-item.used { border-color: #4CAF50; background: #e8f5e9; }
+        .technique-icon { font-size: 1.5em; }
+        .technique-content { flex: 1; }
+        .technique-name { font-weight: bold; }
+        .technique-example { font-size: 0.85em; color: #666; font-style: italic; }
+        .technique-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .used .technique-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .success-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center; }
+        .success-count { font-size: 3em; font-weight: bold; color: #11998e; }
+        .success-label { color: #666; margin-bottom: 15px; }
+        .success-buttons { display: flex; gap: 10px; justify-content: center; }
+        .success-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
+        .success-btn.add { background: #4CAF50; color: white; }
+        .success-btn.reset { background: #9e9e9e; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .persuasion-elements { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Überzeugend sprechen</h1>
+            <p>Andere von einer Idee überzeugen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-22/K-23)</h3>
+                <p>Das Kind kann überzeugend kommunizieren. Es nutzt Argumente, Beispiele und rhetorische Mittel, um andere von seiner Sichtweise zu überzeugen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Elemente überzeugender Kommunikation</h3>
+                <p>Diese Elemente nutzt das Kind:</p>
+                <div class="persuasion-elements">
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">📊</div>
+                        <div class="title">Fakten nennen</div>
+                        <div class="desc">Belege und Beispiele anführen</div>
+                        <div class="example">"Studien zeigen, dass..."</div>
+                    </div>
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">❤️</div>
+                        <div class="title">Gefühle ansprechen</div>
+                        <div class="desc">Emotionen einbeziehen</div>
+                        <div class="example">"Stell dir vor, wie toll..."</div>
+                    </div>
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">🎭</div>
+                        <div class="title">Geschichten erzählen</div>
+                        <div class="desc">Anschauliche Beispiele</div>
+                        <div class="example">"Einmal ist mir passiert..."</div>
+                    </div>
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">🎤</div>
+                        <div class="title">Stimme einsetzen</div>
+                        <div class="desc">Betonung und Pausen</div>
+                        <div class="example">Wichtiges betonen, Pausen machen</div>
+                    </div>
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">👥</div>
+                        <div class="title">Zuhörer einbeziehen</div>
+                        <div class="desc">Fragen stellen</div>
+                        <div class="example">"Kennst du das auch?"</div>
+                    </div>
+                    <div class="element-card" onclick="toggleElement(this)">
+                        <div class="icon">🔄</div>
+                        <div class="title">Gegenargumente entkräften</div>
+                        <div class="desc">Einwände vorwegnehmen</div>
+                        <div class="example">"Man könnte sagen..., aber..."</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎬</span> Überzeugungs-Pitch</h3>
+                <div class="pitch-practice">
+                    <p style="text-align: center;">Überzeuge jemanden in 60 Sekunden:</p>
+                    <div class="pitch-scenario">
+                        <div class="pitch-goal" id="pitchGoal">Überzeuge deine Eltern, dass du länger aufbleiben darfst.</div>
+                        <div class="pitch-context">Nutze Argumente, Beispiele und zeige Verständnis für die andere Seite.</div>
+                    </div>
+                    <div class="pitch-timer">
+                        <div class="timer-display" id="timerDisplay">1:00</div>
+                        <div class="timer-buttons">
+                            <button class="timer-btn start" id="timerBtn" onclick="toggleTimer()">▶</button>
+                            <button class="timer-btn reset" onclick="resetTimer()">↻</button>
+                        </div>
+                    </div>
+                    <div class="pitch-buttons">
+                        <button class="pitch-btn primary" onclick="newPitch()">🔄 Neues Szenario</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Überzeugungs-Techniken</h3>
+                <p>Diese Techniken hat das Kind angewendet:</p>
+                <div class="techniques-list">
+                    <div class="technique-item" onclick="toggleTechnique(this)">
+                        <div class="technique-icon">🔢</div>
+                        <div class="technique-content"><div class="technique-name">Dreierregel</div><div class="technique-example">"Es ist gut, es ist günstig, es ist einfach."</div></div>
+                        <div class="technique-check">✓</div>
+                    </div>
+                    <div class="technique-item" onclick="toggleTechnique(this)">
+                        <div class="technique-icon">❓</div>
+                        <div class="technique-content"><div class="technique-name">Rhetorische Fragen</div><div class="technique-example">"Wer möchte das nicht?"</div></div>
+                        <div class="technique-check">✓</div>
+                    </div>
+                    <div class="technique-item" onclick="toggleTechnique(this)">
+                        <div class="technique-icon">🎯</div>
+                        <div class="technique-content"><div class="technique-name">Klarer Aufruf zum Handeln</div><div class="technique-example">"Lass uns das zusammen machen!"</div></div>
+                        <div class="technique-check">✓</div>
+                    </div>
+                    <div class="technique-item" onclick="toggleTechnique(this)">
+                        <div class="technique-icon">🤝</div>
+                        <div class="technique-content"><div class="technique-name">Gemeinsame Basis betonen</div><div class="technique-example">"Wir wollen doch beide..."</div></div>
+                        <div class="technique-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏆</span> Überzeugungserfolge</h3>
+                <div class="success-tracker">
+                    <div class="success-label">Erfolgreiche Überzeugungen:</div>
+                    <div class="success-count" id="successCount">0</div>
+                    <div class="success-buttons">
+                        <button class="success-btn add" onclick="addSuccess()">+ Erfolg</button>
+                        <button class="success-btn reset" onclick="resetSuccess()">↻</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie überzeugend kann das Kind kommunizieren? Welche Techniken nutzt es? Wie reagiert es, wenn es nicht überzeugt?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const pitches = [
+            "Überzeuge deine Eltern, dass du länger aufbleiben darfst.",
+            "Überzeuge einen Freund, ein Spiel zu spielen, das du magst.",
+            "Überzeuge deine Lehrerin, einen Ausflug zu machen.",
+            "Überzeuge jemanden, ein Buch zu lesen, das dir gefallen hat.",
+            "Überzeuge deine Familie, Pizza zum Abendessen zu bestellen."
+        ];
+        let currentPitch = 0;
+        let timerSeconds = 60;
+        let timerInterval = null;
+        let isRunning = false;
+        let successCount = 0;
+        function toggleElement(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleTechnique(el) { el.classList.toggle('used'); saveData(); }
+        function newPitch() {
+            currentPitch = (currentPitch + 1) % pitches.length;
+            document.getElementById('pitchGoal').textContent = pitches[currentPitch];
+            resetTimer();
+        }
+        function toggleTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                document.getElementById('timerBtn').textContent = '▶';
+            } else {
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        document.getElementById('timerBtn').textContent = '▶';
+                        isRunning = false;
+                    }
+                }, 1000);
+                document.getElementById('timerBtn').textContent = '⏸';
+            }
+            isRunning = !isRunning;
+        }
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerSeconds = 60;
+            isRunning = false;
+            document.getElementById('timerBtn').textContent = '▶';
+            updateTimerDisplay();
+        }
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        function addSuccess() {
+            successCount++;
+            document.getElementById('successCount').textContent = successCount;
+            saveData();
+        }
+        function resetSuccess() {
+            successCount = 0;
+            document.getElementById('successCount').textContent = 0;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                elements: document.querySelectorAll('.element-card.mastered').length,
+                techniques: document.querySelectorAll('.technique-item.used').length,
+                successCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_ueberzeugend', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_ueberzeugend');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const elements = document.querySelectorAll('.element-card');
+                for (let i = 0; i < (data.elements || 0); i++) { if (elements[i]) elements[i].classList.add('mastered'); }
+                const techniques = document.querySelectorAll('.technique-item');
+                for (let i = 0; i < (data.techniques || 0); i++) { if (techniques[i]) techniques[i].classList.add('used'); }
+                successCount = data.successCount || 0;
+                document.getElementById('successCount').textContent = successCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

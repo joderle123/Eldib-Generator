@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesprächsstrategien - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4facfe; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .strategy-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .strategy-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .strategy-card:hover { border-color: #4facfe; transform: translateY(-3px); }
+        .strategy-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .strategy-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .strategy-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .strategy-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .conversation-builder { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .phase-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .phase-tab { padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 20px; color: white; cursor: pointer; transition: all 0.3s; }
+        .phase-tab:hover, .phase-tab.active { background: rgba(255,255,255,0.4); }
+        .phase-content { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; min-height: 150px; }
+        .phase-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; }
+        .phase-tips { list-style: none; }
+        .phase-tips li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .phase-tips li:last-child { border-bottom: none; }
+        .question-types { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .question-type { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .question-type:hover { border-color: #4facfe; }
+        .question-type.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .question-icon { font-size: 1.5em; }
+        .question-content { flex: 1; }
+        .question-name { font-weight: bold; }
+        .question-example { font-size: 0.9em; color: #666; font-style: italic; }
+        .question-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .practiced .question-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .active-listening { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .listening-skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+        .listening-skill { text-align: center; padding: 15px; background: white; border-radius: 10px; border: 3px solid #ffc107; cursor: pointer; transition: all 0.3s; }
+        .listening-skill:hover { transform: scale(1.05); }
+        .listening-skill.checked { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .listening-skill .skill-icon { font-size: 1.5em; margin-bottom: 5px; }
+        .listening-skill .skill-name { font-size: 0.85em; font-weight: bold; }
+        .practice-scenario { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scenario-prompt { font-weight: bold; margin-bottom: 15px; }
+        .scenario-situation { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #4facfe; }
+        .practice-responses { display: flex; flex-direction: column; gap: 10px; }
+        .practice-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .practice-input:focus { outline: none; border-color: #4facfe; }
+        .practice-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .strategy-cards { grid-template-columns: 1fr; } .listening-skills { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Gesprächsstrategien</h1>
+            <p>Gespräche bewusst gestalten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-21/K-22)</h3>
+                <p>Das Kind kennt und nutzt verschiedene Gesprächsstrategien. Es kann Gespräche strukturieren, angemessene Fragen stellen und aktiv zuhören.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Gesprächsstrategien</h3>
+                <p>Diese Strategien beherrscht das Kind:</p>
+                <div class="strategy-cards">
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">🎬</div><div class="title">Gespräch eröffnen</div><div class="desc">Angemessener Einstieg ins Gespräch</div></div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">🔄</div><div class="title">Thema wechseln</div><div class="desc">Überleitung zu neuem Thema</div></div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">⏸️</div><div class="title">Nachfragen</div><div class="desc">Verständnis sichern</div></div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">📌</div><div class="title">Zusammenfassen</div><div class="desc">Wichtiges auf den Punkt bringen</div></div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">🔚</div><div class="title">Gespräch beenden</div><div class="desc">Höflicher Abschluss</div></div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)"><div class="icon">↩️</div><div class="title">Zum Thema zurückführen</div><div class="desc">Bei Abschweifungen korrigieren</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Gesprächsphasen</h3>
+                <div class="conversation-builder">
+                    <div class="phase-tabs">
+                        <button class="phase-tab active" onclick="showPhase(0)">Einstieg</button>
+                        <button class="phase-tab" onclick="showPhase(1)">Hauptteil</button>
+                        <button class="phase-tab" onclick="showPhase(2)">Abschluss</button>
+                    </div>
+                    <div class="phase-content" id="phaseContent">
+                        <div class="phase-title">Einstieg</div>
+                        <ul class="phase-tips">
+                            <li>👋 Begrüßung und Blickkontakt</li>
+                            <li>😊 Freundlicher Einstieg („Hast du kurz Zeit?")</li>
+                            <li>🎯 Thema ankündigen („Ich möchte mit dir über... sprechen")</li>
+                            <li>❓ Interesse zeigen („Wie geht es dir?")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">❓</span> Fragearten</h3>
+                <p>Diese Fragearten kann das Kind gezielt einsetzen:</p>
+                <div class="question-types">
+                    <div class="question-type" onclick="toggleQuestion(this)">
+                        <div class="question-icon">🔓</div>
+                        <div class="question-content"><div class="question-name">Offene Fragen</div><div class="question-example">„Was denkst du darüber?" „Wie ist das passiert?"</div></div>
+                        <div class="question-check">✓</div>
+                    </div>
+                    <div class="question-type" onclick="toggleQuestion(this)">
+                        <div class="question-icon">🔒</div>
+                        <div class="question-content"><div class="question-name">Geschlossene Fragen</div><div class="question-example">„Hast du das verstanden?" „Kommst du mit?"</div></div>
+                        <div class="question-check">✓</div>
+                    </div>
+                    <div class="question-type" onclick="toggleQuestion(this)">
+                        <div class="question-icon">🔍</div>
+                        <div class="question-content"><div class="question-name">Nachfragen</div><div class="question-example">„Kannst du das genauer erklären?" „Was meinst du damit?"</div></div>
+                        <div class="question-check">✓</div>
+                    </div>
+                    <div class="question-type" onclick="toggleQuestion(this)">
+                        <div class="question-icon">🪞</div>
+                        <div class="question-content"><div class="question-name">Spiegelnde Fragen</div><div class="question-example">„Du fühlst dich also...?" „Meinst du, dass...?"</div></div>
+                        <div class="question-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👂</span> Aktives Zuhören</h3>
+                <div class="active-listening">
+                    <p style="text-align: center; margin-bottom: 15px;">Diese Elemente des aktiven Zuhörens zeigt das Kind:</p>
+                    <div class="listening-skills">
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">👀</div><div class="skill-name">Blickkontakt</div></div>
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">👍</div><div class="skill-name">Nicken</div></div>
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">🗣️</div><div class="skill-name">„Mhm", „Ja"</div></div>
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">🔁</div><div class="skill-name">Wiederholen</div></div>
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">❓</div><div class="skill-name">Nachfragen</div></div>
+                        <div class="listening-skill" onclick="toggleListening(this)"><div class="skill-icon">📝</div><div class="skill-name">Zusammenfassen</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Übungssituation</h3>
+                <div class="practice-scenario">
+                    <div class="scenario-prompt">Situation zum Üben:</div>
+                    <div class="scenario-situation">Du möchtest einen Freund fragen, ob er am Wochenende Zeit hat, gemeinsam etwas zu unternehmen.</div>
+                    <div class="practice-responses">
+                        <div>
+                            <div class="practice-label">Wie könntest du das Gespräch beginnen?</div>
+                            <input type="text" class="practice-input" id="practiceStart" placeholder="z.B. Hey, hast du kurz Zeit?" oninput="saveData()">
+                        </div>
+                        <div>
+                            <div class="practice-label">Wie fragst du nach seinen Plänen?</div>
+                            <input type="text" class="practice-input" id="practiceMain" placeholder="z.B. Hast du am Samstag schon was vor?" oninput="saveData()">
+                        </div>
+                        <div>
+                            <div class="practice-label">Wie beendest du das Gespräch höflich?</div>
+                            <input type="text" class="practice-input" id="practiceEnd" placeholder="z.B. Super, dann bis Samstag!" oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie strukturiert das Kind Gespräche? Welche Strategien nutzt es? Wie reagiert es auf Gesprächspartner?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const phases = [
+            { title: "Einstieg", tips: ["👋 Begrüßung und Blickkontakt", "😊 Freundlicher Einstieg („Hast du kurz Zeit?")", "🎯 Thema ankündigen („Ich möchte mit dir über... sprechen")", "❓ Interesse zeigen („Wie geht es dir?")"] },
+            { title: "Hauptteil", tips: ["💬 Eigene Gedanken klar äußern", "👂 Aufmerksam zuhören", "❓ Verständnisfragen stellen", "🔄 Auf den anderen eingehen", "📌 Wichtiges zusammenfassen"] },
+            { title: "Abschluss", tips: ["📋 Ergebnisse zusammenfassen", "✅ Vereinbarungen treffen", "👋 Sich verabschieden", "😊 Positiver Ausklang („Schön, dass wir geredet haben")"] }
+        ];
+        function toggleStrategy(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleQuestion(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleListening(el) { el.classList.toggle('checked'); saveData(); }
+        function showPhase(index) {
+            document.querySelectorAll('.phase-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+            const phase = phases[index];
+            document.getElementById('phaseContent').innerHTML = `
+                <div class="phase-title">${phase.title}</div>
+                <ul class="phase-tips">${phase.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+            `;
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                strategies: document.querySelectorAll('.strategy-card.mastered').length,
+                questions: document.querySelectorAll('.question-type.practiced').length,
+                listening: document.querySelectorAll('.listening-skill.checked').length,
+                practiceStart: document.getElementById('practiceStart').value,
+                practiceMain: document.getElementById('practiceMain').value,
+                practiceEnd: document.getElementById('practiceEnd').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_strategien', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_strategien');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const strategies = document.querySelectorAll('.strategy-card');
+                for (let i = 0; i < (data.strategies || 0); i++) { if (strategies[i]) strategies[i].classList.add('mastered'); }
+                const questions = document.querySelectorAll('.question-type');
+                for (let i = 0; i < (data.questions || 0); i++) { if (questions[i]) questions[i].classList.add('practiced'); }
+                const listening = document.querySelectorAll('.listening-skill');
+                for (let i = 0; i < (data.listening || 0); i++) { if (listening[i]) listening[i].classList.add('checked'); }
+                document.getElementById('practiceStart').value = data.practiceStart || '';
+                document.getElementById('practiceMain').value = data.practiceMain || '';
+                document.getElementById('practiceEnd').value = data.practiceEnd || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

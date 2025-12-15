@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfliktkommunikation - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f093fb; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .conflict-stages { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .stage-card { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .stage-card:hover { border-color: #f093fb; }
+        .stage-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .stage-number { width: 40px; height: 40px; background: #f093fb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; }
+        .stage-content { flex: 1; }
+        .stage-title { font-weight: bold; }
+        .stage-desc { font-size: 0.9em; color: #666; }
+        .stage-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .stage-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .conflict-simulator { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-box { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; }
+        .scenario-title { font-weight: bold; margin-bottom: 10px; }
+        .scenario-text { font-size: 1.1em; margin-bottom: 15px; }
+        .response-options { display: flex; flex-direction: column; gap: 10px; }
+        .response-btn { padding: 12px 20px; background: rgba(255,255,255,0.2); border: 2px solid transparent; border-radius: 10px; color: white; cursor: pointer; text-align: left; transition: all 0.3s; }
+        .response-btn:hover { background: rgba(255,255,255,0.3); }
+        .response-btn.correct { background: rgba(76, 175, 80, 0.5); border-color: #4CAF50; }
+        .response-btn.wrong { background: rgba(244, 67, 54, 0.5); border-color: #f44336; }
+        .sim-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .sim-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: white; color: #667eea; }
+        .ich-botschaft { background: #fff3e0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .ich-formula { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 15px 0; }
+        .formula-step { background: white; border: 3px solid #ff9800; border-radius: 12px; padding: 15px; text-align: center; }
+        .formula-step .number { background: #ff9800; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold; }
+        .formula-step .label { font-weight: bold; color: #ff9800; }
+        .formula-step .example { font-size: 0.85em; color: #666; font-style: italic; margin-top: 5px; }
+        .practice-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; margin-top: 10px; font-size: 1em; }
+        .practice-input:focus { outline: none; border-color: #ff9800; }
+        .deescalation-tips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .tip-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .tip-card:hover { border-color: #f093fb; }
+        .tip-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .tip-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .tip-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .tip-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .progress-tracker { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #f093fb, #f5576c); transition: width 0.5s; }
+        .progress-text { font-weight: bold; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f093fb; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .ich-formula, .deescalation-tips { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Konfliktkommunikation</h1>
+            <p>Konflikte konstruktiv lösen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-22/K-23)</h3>
+                <p>Das Kind kann in Konfliktsituationen angemessen kommunizieren. Es verwendet deeskalierende Sprache und sucht aktiv nach Lösungen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Konfliktlösungs-Schritte</h3>
+                <p>Welche Schritte der Konfliktlösung beherrscht das Kind?</p>
+                <div class="conflict-stages">
+                    <div class="stage-card" onclick="toggleStage(this)">
+                        <div class="stage-number">1</div>
+                        <div class="stage-content"><div class="stage-title">Stopp - Innehalten</div><div class="stage-desc">Impulsreaktion unterdrücken, tief durchatmen</div></div>
+                        <div class="stage-check">✓</div>
+                    </div>
+                    <div class="stage-card" onclick="toggleStage(this)">
+                        <div class="stage-number">2</div>
+                        <div class="stage-content"><div class="stage-title">Wahrnehmen</div><div class="stage-desc">Situation und Gefühle erkennen</div></div>
+                        <div class="stage-check">✓</div>
+                    </div>
+                    <div class="stage-card" onclick="toggleStage(this)">
+                        <div class="stage-number">3</div>
+                        <div class="stage-content"><div class="stage-title">Zuhören</div><div class="stage-desc">Die andere Seite verstehen wollen</div></div>
+                        <div class="stage-check">✓</div>
+                    </div>
+                    <div class="stage-card" onclick="toggleStage(this)">
+                        <div class="stage-number">4</div>
+                        <div class="stage-content"><div class="stage-title">Sprechen</div><div class="stage-desc">Eigene Sicht sachlich äußern</div></div>
+                        <div class="stage-check">✓</div>
+                    </div>
+                    <div class="stage-card" onclick="toggleStage(this)">
+                        <div class="stage-number">5</div>
+                        <div class="stage-content"><div class="stage-title">Lösung finden</div><div class="stage-desc">Gemeinsam nach Lösungen suchen</div></div>
+                        <div class="stage-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Konflikt-Simulation</h3>
+                <div class="conflict-simulator">
+                    <div class="scenario-box">
+                        <div class="scenario-title">Situation:</div>
+                        <div class="scenario-text" id="scenarioText">Ein Mitschüler hat ohne zu fragen deinen Stift genommen.</div>
+                        <div class="response-options" id="responseOptions">
+                            <button class="response-btn" onclick="checkResponse(this, false)">„Hey, das ist meiner! Gib sofort her!"</button>
+                            <button class="response-btn" onclick="checkResponse(this, true)">„Ich merke, du brauchst einen Stift. Das ist meiner - magst du ihn danach zurückgeben?"</button>
+                            <button class="response-btn" onclick="checkResponse(this, false)">Nichts sagen und sich ärgern</button>
+                        </div>
+                    </div>
+                    <div class="sim-controls">
+                        <button class="sim-btn" onclick="nextScenario()">➡️ Nächste Situation</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">Richtige Antworten: <strong id="correctCount">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Ich-Botschaften</h3>
+                <div class="ich-botschaft">
+                    <p style="text-align: center; margin-bottom: 15px;">So formuliert man Ich-Botschaften:</p>
+                    <div class="ich-formula">
+                        <div class="formula-step">
+                            <div class="number">1</div>
+                            <div class="label">Situation</div>
+                            <div class="example">„Wenn du..."</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="number">2</div>
+                            <div class="label">Gefühl</div>
+                            <div class="example">„...fühle ich mich..."</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="number">3</div>
+                            <div class="label">Auswirkung</div>
+                            <div class="example">„...weil..."</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="number">4</div>
+                            <div class="label">Wunsch</div>
+                            <div class="example">„Ich wünsche mir..."</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Übung:</strong> Formuliere eine Ich-Botschaft zu folgendem Konflikt: „Jemand hat dich im Spiel nicht mitspielen lassen."</p>
+                    <input type="text" class="practice-input" id="ichBotschaft" placeholder="Wenn du... fühle ich mich... weil... Ich wünsche mir..." oninput="saveData()">
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🕊️</span> Deeskalations-Techniken</h3>
+                <p>Diese Techniken kennt und nutzt das Kind:</p>
+                <div class="deescalation-tips">
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">🧘</div><div class="title">Ruhe bewahren</div><div class="desc">Tief atmen, Stimme senken</div></div>
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">👂</div><div class="title">Aktiv zuhören</div><div class="desc">Ausreden lassen, nachfragen</div></div>
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">🤝</div><div class="title">Gemeinsamkeiten suchen</div><div class="desc">„Wir wollen beide..."</div></div>
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">⏸️</div><div class="title">Pause vorschlagen</div><div class="desc">„Lass uns kurz durchatmen"</div></div>
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">🔄</div><div class="title">Perspektive wechseln</div><div class="desc">„Ich verstehe, dass du..."</div></div>
+                    <div class="tip-card" onclick="toggleTip(this)"><div class="icon">💡</div><div class="title">Lösungen anbieten</div><div class="desc">„Wie wäre es, wenn..."</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Fortschritt</h3>
+                <div class="progress-tracker">
+                    <p>Konfliktlösungs-Kompetenz</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0 von 11 Kompetenzen</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie verhält sich das Kind in Konfliktsituationen? Welche Strategien nutzt es? Wo braucht es noch Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: "Ein Mitschüler hat ohne zu fragen deinen Stift genommen.", responses: ["„Hey, das ist meiner! Gib sofort her!"", "„Ich merke, du brauchst einen Stift. Das ist meiner - magst du ihn danach zurückgeben?"", "Nichts sagen und sich ärgern"], correct: 1 },
+            { text: "Dein Freund sagt, du hättest geschummelt, obwohl das nicht stimmt.", responses: ["„Du lügst! Ich habe nicht geschummelt!"", "Weggehen und nicht mehr mitspielen", "„Ich habe nicht geschummelt. Kannst du mir sagen, warum du das denkst?""], correct: 2 },
+            { text: "Zwei Kinder wollen das gleiche Spielzeug benutzen.", responses: ["„Ich hatte es zuerst!"", "„Wie können wir das fair lösen? Vielleicht abwechselnd?"", "Das Spielzeug wegnehmen"], correct: 1 },
+            { text: "Jemand hat dich beim Sport versehentlich umgestoßen.", responses: ["Zurückschubsen", "„Das hat wehgetan. War das Absicht?"", "Schreien: „Pass doch auf!""], correct: 1 }
+        ];
+        let currentScenario = 0;
+        let correctCount = 0;
+        function toggleStage(el) { el.classList.toggle('mastered'); updateProgress(); saveData(); }
+        function toggleTip(el) { el.classList.toggle('practiced'); updateProgress(); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            const options = document.getElementById('responseOptions');
+            options.innerHTML = s.responses.map((r, i) =>
+                `<button class="response-btn" onclick="checkResponse(this, ${i === s.correct})">${r}</button>`
+            ).join('');
+        }
+        function checkResponse(btn, isCorrect) {
+            document.querySelectorAll('.response-btn').forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('correct');
+                correctCount++;
+                document.getElementById('correctCount').textContent = correctCount;
+            } else {
+                btn.classList.add('wrong');
+                document.querySelectorAll('.response-btn')[scenarios[currentScenario].correct].classList.add('correct');
+            }
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function updateProgress() {
+            const stages = document.querySelectorAll('.stage-card.mastered').length;
+            const tips = document.querySelectorAll('.tip-card.practiced').length;
+            const total = stages + tips;
+            const percent = Math.round((total / 11) * 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = total + ' von 11 Kompetenzen';
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                stages: document.querySelectorAll('.stage-card.mastered').length,
+                tips: document.querySelectorAll('.tip-card.practiced').length,
+                correctCount,
+                ichBotschaft: document.getElementById('ichBotschaft').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_konflikt', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_konflikt');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const stages = document.querySelectorAll('.stage-card');
+                for (let i = 0; i < (data.stages || 0); i++) { if (stages[i]) stages[i].classList.add('mastered'); }
+                const tips = document.querySelectorAll('.tip-card');
+                for (let i = 0; i < (data.tips || 0); i++) { if (tips[i]) tips[i].classList.add('practiced'); }
+                correctCount = data.correctCount || 0;
+                document.getElementById('correctCount').textContent = correctCount;
+                document.getElementById('ichBotschaft').value = data.ichBotschaft || '';
+                document.getElementById('notes').value = data.notes || '';
+                updateProgress();
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

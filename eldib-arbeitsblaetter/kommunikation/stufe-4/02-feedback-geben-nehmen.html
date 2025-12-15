@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback geben und nehmen - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .feedback-types { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .feedback-section { background: white; border-radius: 15px; padding: 20px; border: 3px solid #e0e0e0; }
+        .feedback-section h4 { text-align: center; margin-bottom: 15px; color: #333; }
+        .feedback-section.give { border-color: #4CAF50; }
+        .feedback-section.receive { border-color: #2196F3; }
+        .feedback-items { display: flex; flex-direction: column; gap: 10px; }
+        .feedback-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f5f5; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .feedback-item:hover { background: #e8e8e8; }
+        .feedback-item.done { background: #e8f5e9; }
+        .feedback-item .check { width: 24px; height: 24px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .done .check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .sandwich-method { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .sandwich { display: flex; flex-direction: column; gap: 0; max-width: 400px; margin: 20px auto; }
+        .sandwich-layer { padding: 20px; text-align: center; border-radius: 5px; cursor: pointer; transition: all 0.3s; }
+        .sandwich-layer:first-child { border-radius: 50px 50px 5px 5px; background: #D2691E; color: white; }
+        .sandwich-layer:last-child { border-radius: 5px 5px 50px 50px; background: #D2691E; color: white; }
+        .sandwich-layer:nth-child(2) { background: #90EE90; }
+        .sandwich-layer.active { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .sandwich-layer .title { font-weight: bold; }
+        .sandwich-layer .example { font-size: 0.85em; margin-top: 5px; font-style: italic; }
+        .practice-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-display { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; }
+        .scenario-context { font-size: 0.9em; margin-bottom: 10px; opacity: 0.9; }
+        .scenario-text { font-size: 1.1em; }
+        .feedback-input { margin: 15px 0; }
+        .feedback-input textarea { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 1em; min-height: 80px; resize: vertical; }
+        .practice-buttons { display: flex; gap: 15px; justify-content: center; }
+        .practice-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .practice-btn.primary { background: white; color: #667eea; }
+        .practice-btn.secondary { background: rgba(255,255,255,0.3); color: white; }
+        .reaction-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .reaction-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .reaction-card:hover { border-color: #f5576c; }
+        .reaction-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .reaction-card .icon { font-size: 2em; margin-bottom: 5px; }
+        .reaction-card .label { font-size: 0.9em; }
+        textarea.notes { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea.notes:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .feedback-types, .reaction-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Feedback geben und nehmen</h1>
+            <p>Konstruktive Rückmeldung</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-21/K-22)</h3>
+                <p>Das Kind kann konstruktiv Feedback geben und erhaltenes Feedback annehmen. Es formuliert Kritik wertschätzend und nutzt Rückmeldungen zur Verbesserung.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Feedback-Fähigkeiten</h3>
+                <div class="feedback-types">
+                    <div class="feedback-section give">
+                        <h4>✨ Feedback GEBEN</h4>
+                        <div class="feedback-items">
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Konkret sein</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Ich-Botschaften nutzen</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Verbesserung vorschlagen</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Positives erwähnen</span></div>
+                        </div>
+                    </div>
+                    <div class="feedback-section receive">
+                        <h4>👂 Feedback NEHMEN</h4>
+                        <div class="feedback-items">
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Ausreden lassen</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Nachfragen bei Unklarheit</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Danke sagen</span></div>
+                            <div class="feedback-item" onclick="toggleFeedback(this)"><div class="check">✓</div><span>Darüber nachdenken</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🥪</span> Die Sandwich-Methode</h3>
+                <div class="sandwich-method">
+                    <p style="text-align: center; margin-bottom: 15px;">So gibst du konstruktives Feedback:</p>
+                    <div class="sandwich">
+                        <div class="sandwich-layer" onclick="highlightLayer(this)">
+                            <div class="title">👍 Positives zuerst</div>
+                            <div class="example">"Das hast du gut gemacht..."</div>
+                        </div>
+                        <div class="sandwich-layer" onclick="highlightLayer(this)">
+                            <div class="title">💡 Verbesserungsvorschlag</div>
+                            <div class="example">"Beim nächsten Mal könntest du..."</div>
+                        </div>
+                        <div class="sandwich-layer" onclick="highlightLayer(this)">
+                            <div class="title">👍 Positiver Abschluss</div>
+                            <div class="example">"Insgesamt war es toll!"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Feedback-Übung</h3>
+                <div class="practice-section">
+                    <div class="scenario-display">
+                        <div class="scenario-context">Situation:</div>
+                        <div class="scenario-text" id="scenarioText">Dein Freund hat ein Bild gemalt. Es ist bunt, aber die Proportionen stimmen nicht ganz.</div>
+                    </div>
+                    <div class="feedback-input">
+                        <textarea id="feedbackText" placeholder="Wie würdest du Feedback geben? Nutze die Sandwich-Methode!"></textarea>
+                    </div>
+                    <div class="practice-buttons">
+                        <button class="practice-btn primary" onclick="newScenario()">🔄 Neue Situation</button>
+                        <button class="practice-btn secondary" onclick="saveFeedbackPractice()">💾 Speichern</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Reaktion auf Feedback</h3>
+                <p>Wie reagiert das Kind, wenn es Feedback erhält?</p>
+                <div class="reaction-cards">
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">👂</div><div class="label">Hört zu</div></div>
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">🤔</div><div class="label">Denkt nach</div></div>
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">❓</div><div class="label">Fragt nach</div></div>
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">🙏</div><div class="label">Bedankt sich</div></div>
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">✅</div><div class="label">Setzt um</div></div>
+                    <div class="reaction-card" onclick="toggleReaction(this)"><div class="icon">😌</div><div class="label">Bleibt ruhig</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea class="notes" id="notes" placeholder="Notieren Sie: Wie gibt das Kind Feedback? Wie reagiert es auf Kritik? Kann es die Sandwich-Methode anwenden?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            "Dein Freund hat ein Bild gemalt. Es ist bunt, aber die Proportionen stimmen nicht ganz.",
+            "Deine Schwester hat dir beim Aufräumen geholfen, aber einige Sachen liegen noch herum.",
+            "Ein Mitschüler hat eine Präsentation gehalten. Der Inhalt war gut, aber er hat zu leise gesprochen.",
+            "Dein Freund hat einen Text geschrieben. Die Ideen sind toll, aber es gibt viele Rechtschreibfehler.",
+            "Jemand hat dir beim Basteln geholfen. Das Ergebnis sieht anders aus als geplant."
+        ];
+        let currentScenario = 0;
+        function toggleFeedback(el) { el.classList.toggle('done'); saveData(); }
+        function toggleReaction(el) { el.classList.toggle('observed'); saveData(); }
+        function highlightLayer(el) {
+            document.querySelectorAll('.sandwich-layer').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+        }
+        function newScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            document.getElementById('scenarioText').textContent = scenarios[currentScenario];
+            document.getElementById('feedbackText').value = '';
+        }
+        function saveFeedbackPractice() {
+            saveData();
+            alert('Feedback-Übung gespeichert!');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                feedbackSkills: document.querySelectorAll('.feedback-item.done').length,
+                reactions: document.querySelectorAll('.reaction-card.observed').length,
+                feedbackText: document.getElementById('feedbackText').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_feedback', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_feedback');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const items = document.querySelectorAll('.feedback-item');
+                for (let i = 0; i < (data.feedbackSkills || 0); i++) { if (items[i]) items[i].classList.add('done'); }
+                const reactions = document.querySelectorAll('.reaction-card');
+                for (let i = 0; i < (data.reactions || 0); i++) { if (reactions[i]) reactions[i].classList.add('observed'); }
+                document.getElementById('feedbackText').value = data.feedbackText || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

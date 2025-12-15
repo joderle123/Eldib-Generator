@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verhandeln - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f2994a; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .negotiation-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .step-card { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .step-card:hover { border-color: #f2994a; }
+        .step-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .step-number { width: 45px; height: 45px; background: linear-gradient(135deg, #f2994a, #f2c94c); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.3em; flex-shrink: 0; }
+        .step-content { flex: 1; }
+        .step-title { font-weight: bold; }
+        .step-desc { font-size: 0.9em; color: #666; }
+        .step-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .step-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .negotiation-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .game-scenario { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; }
+        .scenario-title { font-weight: bold; margin-bottom: 10px; }
+        .scenario-text { font-size: 1.1em; margin-bottom: 15px; }
+        .game-options { display: flex; flex-direction: column; gap: 10px; }
+        .game-option { padding: 15px; background: rgba(255,255,255,0.2); border: 2px solid transparent; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .game-option:hover { background: rgba(255,255,255,0.3); }
+        .game-option.best { background: rgba(76, 175, 80, 0.4); border-color: #4CAF50; }
+        .game-option.okay { background: rgba(255, 193, 7, 0.4); border-color: #ffc107; }
+        .game-option.poor { background: rgba(244, 67, 54, 0.4); border-color: #f44336; }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: white; color: #667eea; }
+        .techniques-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .technique-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .technique-card:hover { border-color: #f2994a; }
+        .technique-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .technique-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .technique-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .technique-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .technique-card .example { font-size: 0.8em; color: #f2994a; text-align: center; font-style: italic; margin-top: 8px; }
+        .win-win-section { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .win-win-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.2em; }
+        .win-win-diagram { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 20px 0; }
+        .win-box { width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .win-box.person1 { background: linear-gradient(135deg, #f2994a, #f2c94c); }
+        .win-box.result { background: linear-gradient(135deg, #4CAF50, #8BC34A); width: 140px; height: 140px; }
+        .win-box.person2 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .win-arrow { font-size: 2em; color: #4CAF50; }
+        .practice-situation { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .situation-prompt { font-weight: bold; margin-bottom: 15px; }
+        .situation-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #f2994a; }
+        .practice-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; margin-top: 10px; }
+        .practice-input:focus { outline: none; border-color: #f2994a; }
+        .practice-label { font-size: 0.9em; color: #666; margin-top: 15px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f2994a; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .techniques-grid { grid-template-columns: 1fr; } .win-win-diagram { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Verhandeln</h1>
+            <p>Gemeinsam gute Lösungen finden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-22/K-23)</h3>
+                <p>Das Kind kann Verhandlungen führen, um gemeinsame Lösungen zu finden. Es versteht, dass beide Seiten gewinnen können (Win-Win).</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Verhandlungs-Schritte</h3>
+                <p>Diese Schritte einer Verhandlung beherrscht das Kind:</p>
+                <div class="negotiation-steps">
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-number">1</div>
+                        <div class="step-content"><div class="step-title">Wünsche klären</div><div class="step-desc">Was will ich? Was will der andere?</div></div>
+                        <div class="step-check">✓</div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-number">2</div>
+                        <div class="step-content"><div class="step-title">Interessen verstehen</div><div class="step-desc">Warum ist das wichtig für mich/den anderen?</div></div>
+                        <div class="step-check">✓</div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-number">3</div>
+                        <div class="step-content"><div class="step-title">Optionen sammeln</div><div class="step-desc">Welche Möglichkeiten gibt es?</div></div>
+                        <div class="step-check">✓</div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-number">4</div>
+                        <div class="step-content"><div class="step-title">Gemeinsam bewerten</div><div class="step-desc">Was ist für beide akzeptabel?</div></div>
+                        <div class="step-check">✓</div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-number">5</div>
+                        <div class="step-content"><div class="step-title">Vereinbarung treffen</div><div class="step-desc">Konkret festlegen, was gilt</div></div>
+                        <div class="step-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Verhandlungs-Simulation</h3>
+                <div class="negotiation-game">
+                    <div class="game-scenario">
+                        <div class="scenario-title">Situation:</div>
+                        <div class="scenario-text" id="scenarioText">Du und dein Freund wollt fernsehen. Du möchtest einen Film schauen, dein Freund eine Serie.</div>
+                        <div class="game-options" id="gameOptions">
+                            <div class="game-option" onclick="checkOption(this, 'poor')">„Ich war zuerst da, also bestimme ich!"</div>
+                            <div class="game-option" onclick="checkOption(this, 'okay')">„Okay, dann schauen wir halt deine Serie."</div>
+                            <div class="game-option" onclick="checkOption(this, 'best')">„Wie wäre es, wenn wir erst die Serie schauen und danach den Film?"</div>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn" onclick="nextScenario()">➡️ Nächste Situation</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏆</span> Win-Win-Prinzip</h3>
+                <div class="win-win-section">
+                    <div class="win-win-title">🤝 Beide gewinnen!</div>
+                    <div class="win-win-diagram">
+                        <div class="win-box person1">
+                            <span style="font-size: 1.5em;">😊</span>
+                            <span>Ich gewinne</span>
+                        </div>
+                        <div class="win-arrow">+</div>
+                        <div class="win-box person2">
+                            <span style="font-size: 1.5em;">😊</span>
+                            <span>Du gewinnst</span>
+                        </div>
+                        <div class="win-arrow">=</div>
+                        <div class="win-box result">
+                            <span style="font-size: 2em;">🎉</span>
+                            <span>WIN-WIN!</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #2e7d32;">Eine gute Verhandlung bedeutet: Alle sind zufrieden!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛠️</span> Verhandlungs-Techniken</h3>
+                <p>Diese Techniken nutzt das Kind:</p>
+                <div class="techniques-grid">
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">👂</div><div class="title">Aktiv zuhören</div><div class="desc">Verstehen, was der andere will</div><div class="example">„Du möchtest also..."</div></div>
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">💡</div><div class="title">Kreativ denken</div><div class="desc">Neue Lösungen vorschlagen</div><div class="example">„Was wäre, wenn wir..."</div></div>
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">⚖️</div><div class="title">Fair bleiben</div><div class="desc">Kompromisse eingehen</div><div class="example">„Ich gebe nach bei..."</div></div>
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">🎯</div><div class="title">Beim Thema bleiben</div><div class="desc">Nicht abschweifen</div><div class="example">„Lass uns zurück zu..."</div></div>
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">😌</div><div class="title">Ruhig bleiben</div><div class="desc">Auch bei Widerstand sachlich</div><div class="example">„Ich verstehe, dass..."</div></div>
+                    <div class="technique-card" onclick="toggleTechnique(this)"><div class="icon">🤝</div><div class="title">Vereinbarungen festhalten</div><div class="desc">Ergebnis klar benennen</div><div class="example">„Also, wir machen..."</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Übungssituation</h3>
+                <div class="practice-situation">
+                    <div class="situation-prompt">Übe eine Verhandlung:</div>
+                    <div class="situation-box">Du möchtest am Samstag zu einem Freund. Deine Eltern möchten, dass du erst dein Zimmer aufräumst.</div>
+                    <div class="practice-label">Was sind deine Wünsche?</div>
+                    <input type="text" class="practice-input" id="practice1" placeholder="Ich möchte..." oninput="saveData()">
+                    <div class="practice-label">Was sind die Wünsche deiner Eltern?</div>
+                    <input type="text" class="practice-input" id="practice2" placeholder="Meine Eltern möchten..." oninput="saveData()">
+                    <div class="practice-label">Welche Win-Win-Lösung könntest du vorschlagen?</div>
+                    <input type="text" class="practice-input" id="practice3" placeholder="Eine Lösung wäre..." oninput="saveData()">
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie verhält sich das Kind in Verhandlungssituationen? Kann es Kompromisse eingehen? Wie reagiert es, wenn es nicht seinen Willen bekommt?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: "Du und dein Freund wollt fernsehen. Du möchtest einen Film schauen, dein Freund eine Serie.", options: ["„Ich war zuerst da, also bestimme ich!"", "„Okay, dann schauen wir halt deine Serie."", "„Wie wäre es, wenn wir erst die Serie schauen und danach den Film?""], ratings: ["poor", "okay", "best"] },
+            { text: "Du willst das letzte Stück Kuchen. Dein Geschwister auch.", options: ["„Das ist meins!"", "„Hier, nimm du es."", "„Lass uns teilen, jeder die Hälfte?""], ratings: ["poor", "okay", "best"] },
+            { text: "Ihr wollt als Gruppe spielen. Die Hälfte möchte Fußball, die andere Hälfte Verstecken.", options: ["„Wir spielen, was die Mehrheit will!"", "„Mir ist es egal."", "„Erst Fußball, dann Verstecken? Jedes Spiel 15 Minuten?""], ratings: ["okay", "poor", "best"] },
+            { text: "Du brauchst den Computer für Hausaufgaben. Dein Geschwister spielt gerade.", options: ["Einfach den Computer wegnehmen", "Warten bis er/sie fertig ist (auch wenn es lange dauert)", "„Wie lange brauchst du noch? Ich brauche ihn für Hausaufgaben.""], ratings: ["poor", "okay", "best"] }
+        ];
+        let currentScenario = 0;
+        function toggleStep(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleTechnique(el) { el.classList.toggle('practiced'); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            const options = document.getElementById('gameOptions');
+            options.innerHTML = s.options.map((o, i) =>
+                `<div class="game-option" onclick="checkOption(this, '${s.ratings[i]}')">${o}</div>`
+            ).join('');
+        }
+        function checkOption(el, rating) {
+            document.querySelectorAll('.game-option').forEach(o => {
+                o.style.pointerEvents = 'none';
+            });
+            el.classList.add(rating);
+            // Show all ratings
+            const options = document.querySelectorAll('.game-option');
+            const s = scenarios[currentScenario];
+            options.forEach((o, i) => {
+                if (!o.classList.contains(s.ratings[i])) {
+                    o.style.opacity = '0.6';
+                }
+            });
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                steps: document.querySelectorAll('.step-card.mastered').length,
+                techniques: document.querySelectorAll('.technique-card.practiced').length,
+                practice1: document.getElementById('practice1').value,
+                practice2: document.getElementById('practice2').value,
+                practice3: document.getElementById('practice3').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_verhandeln', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_verhandeln');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.step-card');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('mastered'); }
+                const techniques = document.querySelectorAll('.technique-card');
+                for (let i = 0; i < (data.techniques || 0); i++) { if (techniques[i]) techniques[i].classList.add('practiced'); }
+                document.getElementById('practice1').value = data.practice1 || '';
+                document.getElementById('practice2').value = data.practice2 || '';
+                document.getElementById('practice3').value = data.practice3 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

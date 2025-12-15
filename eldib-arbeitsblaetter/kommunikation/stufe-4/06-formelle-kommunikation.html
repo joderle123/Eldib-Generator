@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formelle Kommunikation - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #3498db; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .context-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .context-box { border-radius: 15px; padding: 20px; }
+        .context-box.informal { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: white; }
+        .context-box.formal { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; }
+        .context-title { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .context-examples { list-style: none; }
+        .context-examples li { padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px; margin-bottom: 8px; font-size: 0.95em; }
+        .register-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .register-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .register-item:hover { border-color: #3498db; }
+        .register-item.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .register-icon { font-size: 2em; }
+        .register-content { flex: 1; }
+        .register-title { font-weight: bold; }
+        .register-desc { font-size: 0.9em; color: #666; }
+        .register-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .register-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .situation-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .situation-display { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; text-align: center; }
+        .situation-text { font-size: 1.1em; margin-bottom: 15px; }
+        .situation-buttons { display: flex; gap: 15px; justify-content: center; }
+        .sit-btn { padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1em; transition: all 0.3s; }
+        .sit-btn.informal { background: #a8e063; color: #333; }
+        .sit-btn.formal { background: #2c3e50; color: white; }
+        .sit-btn:hover { transform: scale(1.05); }
+        .sit-btn.correct { animation: pulse 0.5s; }
+        .sit-btn.wrong { opacity: 0.5; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .game-score { text-align: center; margin-top: 15px; }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: white; color: #667eea; }
+        .formal-phrases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .phrase-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .phrase-card:hover { border-color: #3498db; }
+        .phrase-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .phrase-category { font-size: 0.8em; color: #3498db; font-weight: bold; margin-bottom: 5px; }
+        .phrase-text { font-weight: bold; margin-bottom: 5px; }
+        .phrase-example { font-size: 0.85em; color: #666; font-style: italic; }
+        .letter-template { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; border: 2px dashed #ffc107; }
+        .letter-header { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; }
+        .letter-body { min-height: 100px; }
+        .letter-line { background: white; padding: 8px 12px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid #ffc107; font-size: 0.95em; }
+        .letter-line.editable { cursor: text; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #3498db; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .context-comparison, .formal-phrases { grid-template-columns: 1fr; } .situation-buttons { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Formelle Kommunikation</h1>
+            <p>Angemessen sprechen in verschiedenen Situationen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-22/K-23)</h3>
+                <p>Das Kind kann zwischen formeller und informeller Kommunikation unterscheiden und die Sprache situationsangemessen anpassen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Informell vs. Formell</h3>
+                <div class="context-comparison">
+                    <div class="context-box informal">
+                        <div class="context-title">😊 Informell</div>
+                        <ul class="context-examples">
+                            <li>„Hey, was geht?"</li>
+                            <li>„Klar, mach ich!"</li>
+                            <li>„Das ist voll cool!"</li>
+                            <li>„Bis später!"</li>
+                        </ul>
+                    </div>
+                    <div class="context-box formal">
+                        <div class="context-title">👔 Formell</div>
+                        <ul class="context-examples">
+                            <li>„Guten Tag, wie geht es Ihnen?"</li>
+                            <li>„Ja, das mache ich gerne."</li>
+                            <li>„Das finde ich sehr interessant."</li>
+                            <li>„Auf Wiedersehen!"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Register-Fähigkeiten</h3>
+                <p>Das Kind kann in diesen Situationen angemessen kommunizieren:</p>
+                <div class="register-skills">
+                    <div class="register-item" onclick="toggleRegister(this)">
+                        <div class="register-icon">👨‍🏫</div>
+                        <div class="register-content"><div class="register-title">Mit Lehrern/Erwachsenen</div><div class="register-desc">Höflich, respektvoll, „Sie"-Form</div></div>
+                        <div class="register-check">✓</div>
+                    </div>
+                    <div class="register-item" onclick="toggleRegister(this)">
+                        <div class="register-icon">👫</div>
+                        <div class="register-content"><div class="register-title">Mit Freunden</div><div class="register-desc">Locker, freundschaftlich, „Du"-Form</div></div>
+                        <div class="register-check">✓</div>
+                    </div>
+                    <div class="register-item" onclick="toggleRegister(this)">
+                        <div class="register-icon">📞</div>
+                        <div class="register-content"><div class="register-title">Am Telefon</div><div class="register-desc">Deutlich, mit Namen melden</div></div>
+                        <div class="register-check">✓</div>
+                    </div>
+                    <div class="register-item" onclick="toggleRegister(this)">
+                        <div class="register-icon">🏪</div>
+                        <div class="register-content"><div class="register-title">Im Geschäft</div><div class="register-desc">Höflich, kurze Sätze</div></div>
+                        <div class="register-check">✓</div>
+                    </div>
+                    <div class="register-item" onclick="toggleRegister(this)">
+                        <div class="register-icon">✉️</div>
+                        <div class="register-content"><div class="register-title">Schriftlich/E-Mail</div><div class="register-desc">Anrede, Grußformel, vollständige Sätze</div></div>
+                        <div class="register-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Situations-Quiz</h3>
+                <div class="situation-game">
+                    <p style="text-align: center;">Welches Register passt zu dieser Situation?</p>
+                    <div class="situation-display">
+                        <div class="situation-text" id="situationText">Du triffst deinen Schulleiter auf dem Flur und möchtest ihn grüßen.</div>
+                        <div class="situation-buttons">
+                            <button class="sit-btn informal" onclick="checkSituation(false)">😊 Informell</button>
+                            <button class="sit-btn formal" onclick="checkSituation(true)">👔 Formell</button>
+                        </div>
+                    </div>
+                    <div class="game-score">Richtige Antworten: <strong id="scoreCount">0</strong></div>
+                    <div class="game-controls">
+                        <button class="game-btn" onclick="nextSituation()">➡️ Nächste Situation</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Formelle Redewendungen</h3>
+                <p>Diese formellen Ausdrücke kennt das Kind:</p>
+                <div class="formal-phrases">
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Begrüßung</div><div class="phrase-text">„Guten Tag / Guten Morgen"</div><div class="phrase-example">statt „Hey" oder „Hallo"</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Bitte</div><div class="phrase-text">„Könnten Sie bitte..."</div><div class="phrase-example">statt „Kannst du mal..."</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Danke</div><div class="phrase-text">„Vielen Dank für..."</div><div class="phrase-example">statt „Danke, cool!"</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Entschuldigung</div><div class="phrase-text">„Entschuldigen Sie bitte..."</div><div class="phrase-example">statt „Sorry"</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Abschied</div><div class="phrase-text">„Auf Wiedersehen"</div><div class="phrase-example">statt „Tschüss" oder „Ciao"</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase-category">Frage</div><div class="phrase-text">„Dürfte ich fragen..."</div><div class="phrase-example">statt „Sag mal..."</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✉️</span> Formeller Brief (Vorlage)</h3>
+                <div class="letter-template">
+                    <div class="letter-header">
+                        <span>Ort, Datum</span>
+                        <span>📅</span>
+                    </div>
+                    <div class="letter-body">
+                        <div class="letter-line">Sehr geehrte/r Frau/Herr [Name],</div>
+                        <div class="letter-line">ich schreibe Ihnen, weil... [Grund]</div>
+                        <div class="letter-line">[Hauptinhalt des Briefes]</div>
+                        <div class="letter-line">Ich würde mich freuen, wenn... [Wunsch/Bitte]</div>
+                        <div class="letter-line">Mit freundlichen Grüßen</div>
+                        <div class="letter-line">[Dein Name]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Kann das Kind zwischen formellen und informellen Situationen unterscheiden? Wie passt es seine Sprache an? In welchen Situationen braucht es noch Übung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const situations = [
+            { text: "Du triffst deinen Schulleiter auf dem Flur und möchtest ihn grüßen.", formal: true },
+            { text: "Du schreibst deinem besten Freund eine Nachricht.", formal: false },
+            { text: "Du rufst beim Arzt an, um einen Termin zu machen.", formal: true },
+            { text: "Du spielst mit deinen Geschwistern im Garten.", formal: false },
+            { text: "Du schreibst eine E-Mail an einen Verein, um dich anzumelden.", formal: true },
+            { text: "Du unterhältst dich mit deiner Oma am Telefon.", formal: false },
+            { text: "Du fragst einen Polizisten nach dem Weg.", formal: true },
+            { text: "Du chattest mit Klassenkameraden in der Pause.", formal: false }
+        ];
+        let currentSituation = 0;
+        let scoreCount = 0;
+        function toggleRegister(el) { el.classList.toggle('mastered'); saveData(); }
+        function togglePhrase(el) { el.classList.toggle('practiced'); saveData(); }
+        function loadSituation() {
+            document.getElementById('situationText').textContent = situations[currentSituation].text;
+            document.querySelectorAll('.sit-btn').forEach(b => {
+                b.classList.remove('correct', 'wrong');
+                b.disabled = false;
+            });
+        }
+        function checkSituation(isFormal) {
+            const correct = situations[currentSituation].formal === isFormal;
+            document.querySelectorAll('.sit-btn').forEach(b => b.disabled = true);
+            const clickedBtn = isFormal ? document.querySelector('.sit-btn.formal') : document.querySelector('.sit-btn.informal');
+            const correctBtn = situations[currentSituation].formal ? document.querySelector('.sit-btn.formal') : document.querySelector('.sit-btn.informal');
+            if (correct) {
+                clickedBtn.classList.add('correct');
+                scoreCount++;
+                document.getElementById('scoreCount').textContent = scoreCount;
+            } else {
+                clickedBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+            }
+            saveData();
+        }
+        function nextSituation() {
+            currentSituation = (currentSituation + 1) % situations.length;
+            loadSituation();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                registers: document.querySelectorAll('.register-item.mastered').length,
+                phrases: document.querySelectorAll('.phrase-card.practiced').length,
+                scoreCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_formell', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_formell');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const registers = document.querySelectorAll('.register-item');
+                for (let i = 0; i < (data.registers || 0); i++) { if (registers[i]) registers[i].classList.add('mastered'); }
+                const phrases = document.querySelectorAll('.phrase-card');
+                for (let i = 0; i < (data.phrases || 0); i++) { if (phrases[i]) phrases[i].classList.add('practiced'); }
+                scoreCount = data.scoreCount || 0;
+                document.getElementById('scoreCount').textContent = scoreCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadSituation();
+        loadData();
+    </script>
+</body>
+</html>

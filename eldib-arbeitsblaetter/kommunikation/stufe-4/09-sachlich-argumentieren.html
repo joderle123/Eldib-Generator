@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachlich argumentieren - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .argument-structure { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .structure-pyramid { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 20px 0; }
+        .pyramid-level { padding: 15px 25px; border-radius: 10px; text-align: center; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+        .pyramid-level:hover { transform: scale(1.05); }
+        .pyramid-level.mastered { box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.8); }
+        .level-1 { background: rgba(255,255,255,0.9); color: #667eea; width: 200px; }
+        .level-2 { background: rgba(255,255,255,0.7); color: #667eea; width: 280px; }
+        .level-3 { background: rgba(255,255,255,0.5); color: #333; width: 360px; }
+        .level-label { font-size: 0.85em; opacity: 0.9; margin-top: 5px; font-weight: normal; }
+        .argument-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-card { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #11998e; }
+        .skill-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 2em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; }
+        .skill-desc { font-size: 0.9em; color: #666; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .fallacy-section { background: #ffebee; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #f44336; }
+        .fallacy-title { font-weight: bold; color: #c62828; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .fallacy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .fallacy-card { background: white; border-radius: 10px; padding: 15px; border: 2px solid #ffcdd2; }
+        .fallacy-name { font-weight: bold; color: #c62828; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .fallacy-example { font-size: 0.9em; color: #666; font-style: italic; }
+        .practice-game { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .game-prompt { text-align: center; margin-bottom: 15px; }
+        .game-statement { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; font-size: 1.1em; text-align: center; }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .game-btn.sachlich { background: #4CAF50; color: white; }
+        .game-btn.unsachlich { background: #f44336; color: white; }
+        .game-btn:hover { transform: scale(1.05); }
+        .game-btn.correct { animation: pulse 0.5s; }
+        .game-btn.wrong { opacity: 0.5; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .control-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: white; color: #f093fb; }
+        .game-score { text-align: center; margin-top: 15px; }
+        .argument-builder { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ffc107; }
+        .builder-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .builder-topic { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107; }
+        .builder-inputs { display: flex; flex-direction: column; gap: 15px; }
+        .builder-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .builder-input:focus { outline: none; border-color: #ffc107; }
+        .builder-label { font-size: 0.9em; color: #666; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .connector-words { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+        .connector { background: white; border: 2px solid #11998e; border-radius: 20px; padding: 8px 15px; cursor: pointer; transition: all 0.3s; font-size: 0.9em; }
+        .connector:hover { background: #e8f5e9; }
+        .connector.used { background: #11998e; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .fallacy-grid { grid-template-columns: 1fr; } .game-buttons { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Sachlich argumentieren</h1>
+            <p>Mit Fakten und Logik überzeugen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-21/K-22)</h3>
+                <p>Das Kind kann sachlich argumentieren. Es unterscheidet zwischen Fakten und Meinungen, begründet seine Standpunkte logisch und bleibt bei Gegenargumenten fair.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏗️</span> Aufbau eines Arguments</h3>
+                <div class="argument-structure">
+                    <p style="text-align: center; margin-bottom: 15px;">Ein gutes Argument hat drei Teile:</p>
+                    <div class="structure-pyramid">
+                        <div class="pyramid-level level-1" onclick="togglePyramid(this)">
+                            <div>🎯 These/Behauptung</div>
+                            <div class="level-label">„Ich finde, dass..."</div>
+                        </div>
+                        <div class="pyramid-level level-2" onclick="togglePyramid(this)">
+                            <div>📚 Begründung</div>
+                            <div class="level-label">„...weil..."</div>
+                        </div>
+                        <div class="pyramid-level level-3" onclick="togglePyramid(this)">
+                            <div>💡 Beispiel/Beweis</div>
+                            <div class="level-label">„Zum Beispiel..." / „Das zeigt sich daran, dass..."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Argumentations-Fähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind:</p>
+                <div class="argument-skills">
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🎯</div>
+                        <div class="skill-content"><div class="skill-title">Klare These formulieren</div><div class="skill-desc">Den eigenen Standpunkt deutlich benennen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🔗</div>
+                        <div class="skill-content"><div class="skill-title">Begründungen geben</div><div class="skill-desc">Mit „weil" erklären, warum</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">📊</div>
+                        <div class="skill-content"><div class="skill-title">Beispiele anführen</div><div class="skill-desc">Konkrete Situationen nennen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">⚖️</div>
+                        <div class="skill-content"><div class="skill-title">Fakten von Meinungen unterscheiden</div><div class="skill-desc">Was ist beweisbar, was ist Ansicht?</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🤔</div>
+                        <div class="skill-content"><div class="skill-title">Gegenargumente anerkennen</div><div class="skill-desc">„Du hast recht, dass... aber..."</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚠️</span> Unfaire Argumente erkennen</h3>
+                <div class="fallacy-section">
+                    <div class="fallacy-title">🚫 Das sind KEINE guten Argumente:</div>
+                    <div class="fallacy-grid">
+                        <div class="fallacy-card"><div class="fallacy-name">👤 Persönlicher Angriff</div><div class="fallacy-example">„Du hast ja keine Ahnung!"</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">👥 Alle sagen das</div><div class="fallacy-example">„Das machen doch alle so!"</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">😢 Mitleid wecken</div><div class="fallacy-example">„Aber ich bin doch so traurig..."</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">🔄 Thema wechseln</div><div class="fallacy-example">„Ja, aber du hast letzte Woche..."</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Sachlich oder unsachlich?</h3>
+                <div class="practice-game">
+                    <div class="game-prompt">Ist dieses Argument sachlich oder unsachlich?</div>
+                    <div class="game-statement" id="statementText">„Sport ist wichtig, weil er die Gesundheit fördert. Studien zeigen, dass Kinder, die Sport machen, weniger krank werden."</div>
+                    <div class="game-buttons">
+                        <button class="game-btn sachlich" onclick="checkStatement(true)">✅ Sachlich</button>
+                        <button class="game-btn unsachlich" onclick="checkStatement(false)">❌ Unsachlich</button>
+                    </div>
+                    <div class="game-controls">
+                        <button class="control-btn" onclick="nextStatement()">➡️ Nächste Aussage</button>
+                    </div>
+                    <div class="game-score">Richtig erkannt: <strong id="scoreCount">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔗</span> Verknüpfungswörter</h3>
+                <p>Diese Wörter helfen beim Argumentieren:</p>
+                <div class="connector-words">
+                    <span class="connector" onclick="toggleConnector(this)">weil</span>
+                    <span class="connector" onclick="toggleConnector(this)">deshalb</span>
+                    <span class="connector" onclick="toggleConnector(this)">daher</span>
+                    <span class="connector" onclick="toggleConnector(this)">außerdem</span>
+                    <span class="connector" onclick="toggleConnector(this)">zum Beispiel</span>
+                    <span class="connector" onclick="toggleConnector(this)">einerseits... andererseits</span>
+                    <span class="connector" onclick="toggleConnector(this)">obwohl</span>
+                    <span class="connector" onclick="toggleConnector(this)">trotzdem</span>
+                    <span class="connector" onclick="toggleConnector(this)">zusammenfassend</span>
+                    <span class="connector" onclick="toggleConnector(this)">ich denke</span>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✍️</span> Argument-Baukasten</h3>
+                <div class="argument-builder">
+                    <div class="builder-title">Baue ein vollständiges Argument:</div>
+                    <div class="builder-topic">Thema: „Sollten Kinder mehr draußen spielen?"</div>
+                    <div class="builder-inputs">
+                        <div>
+                            <div class="builder-label">🎯 Deine These (Ich finde, dass...):</div>
+                            <input type="text" class="builder-input" id="thesis" placeholder="z.B. Kinder sollten mehr draußen spielen" oninput="saveData()">
+                        </div>
+                        <div>
+                            <div class="builder-label">📚 Deine Begründung (weil...):</div>
+                            <input type="text" class="builder-input" id="reason" placeholder="z.B. weil Bewegung gesund ist" oninput="saveData()">
+                        </div>
+                        <div>
+                            <div class="builder-label">💡 Dein Beispiel (Zum Beispiel...):</div>
+                            <input type="text" class="builder-input" id="example" placeholder="z.B. Wenn ich draußen spiele, bin ich abends müde" oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie argumentiert das Kind? Kann es Begründungen geben? Bleibt es sachlich bei Gegenargumenten? Verwendet es Beispiele?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const statements = [
+            { text: "„Sport ist wichtig, weil er die Gesundheit fördert. Studien zeigen, dass Kinder, die Sport machen, weniger krank werden."", sachlich: true },
+            { text: "„Du verstehst das sowieso nicht, weil du zu dumm bist!"", sachlich: false },
+            { text: "„Ich finde Lesen besser als Fernsehen, weil man dabei selbst denken muss und die Fantasie anregt."", sachlich: true },
+            { text: "„Alle meine Freunde dürfen das, also muss es richtig sein!"", sachlich: false },
+            { text: "„Haustiere können Kindern helfen, Verantwortung zu lernen, zum Beispiel durch regelmäßiges Füttern."", sachlich: true },
+            { text: "„Wenn du nicht meiner Meinung bist, bist du kein echter Freund!"", sachlich: false },
+            { text: "„Frühes Aufstehen kann schwer sein, aber es lässt mehr Zeit für Aktivitäten. Ich schaffe dann mehr."", sachlich: true },
+            { text: "„Das ist total blöd, was du sagst! Jeder weiß das!"", sachlich: false }
+        ];
+        let currentStatement = 0;
+        let scoreCount = 0;
+        function togglePyramid(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleConnector(el) { el.classList.toggle('used'); saveData(); }
+        function loadStatement() {
+            document.getElementById('statementText').textContent = statements[currentStatement].text;
+            document.querySelectorAll('.game-btn').forEach(b => {
+                b.classList.remove('correct', 'wrong');
+                b.disabled = false;
+            });
+        }
+        function checkStatement(isSachlich) {
+            const correct = statements[currentStatement].sachlich === isSachlich;
+            document.querySelectorAll('.game-btn').forEach(b => b.disabled = true);
+            const clickedBtn = isSachlich ? document.querySelector('.game-btn.sachlich') : document.querySelector('.game-btn.unsachlich');
+            if (correct) {
+                clickedBtn.classList.add('correct');
+                scoreCount++;
+                document.getElementById('scoreCount').textContent = scoreCount;
+            } else {
+                clickedBtn.classList.add('wrong');
+            }
+            saveData();
+        }
+        function nextStatement() {
+            currentStatement = (currentStatement + 1) % statements.length;
+            loadStatement();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                pyramid: document.querySelectorAll('.pyramid-level.mastered').length,
+                skills: document.querySelectorAll('.skill-card.achieved').length,
+                connectors: document.querySelectorAll('.connector.used').length,
+                scoreCount,
+                thesis: document.getElementById('thesis').value,
+                reason: document.getElementById('reason').value,
+                example: document.getElementById('example').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_argumentieren', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_argumentieren');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const pyramid = document.querySelectorAll('.pyramid-level');
+                for (let i = 0; i < (data.pyramid || 0); i++) { if (pyramid[i]) pyramid[i].classList.add('mastered'); }
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const connectors = document.querySelectorAll('.connector');
+                for (let i = 0; i < (data.connectors || 0); i++) { if (connectors[i]) connectors[i].classList.add('used'); }
+                scoreCount = data.scoreCount || 0;
+                document.getElementById('scoreCount').textContent = scoreCount;
+                document.getElementById('thesis').value = data.thesis || '';
+                document.getElementById('reason').value = data.reason || '';
+                document.getElementById('example').value = data.example || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadStatement();
+        loadData();
+    </script>
+</body>
+</html>

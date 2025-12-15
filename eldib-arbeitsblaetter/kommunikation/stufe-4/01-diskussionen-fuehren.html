@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diskussionen führen - Kommunikation Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .discussion-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #667eea; transform: translateY(-3px); }
+        .skill-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .skill-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .discussion-simulation { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .topic-display { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; text-align: center; }
+        .topic-text { font-size: 1.3em; font-weight: bold; }
+        .participants { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .participant { text-align: center; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .participant:hover { background: rgba(255,255,255,0.3); }
+        .participant.speaking { background: rgba(255,255,255,0.4); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .participant .icon { font-size: 2.5em; }
+        .participant .role { font-size: 0.9em; margin-top: 5px; }
+        .sim-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .sim-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .sim-btn.primary { background: white; color: #11998e; }
+        .sim-btn.secondary { background: rgba(255,255,255,0.3); color: white; }
+        .discussion-rules { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .rule-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .rule-item:hover { border-color: #667eea; }
+        .rule-item.followed { border-color: #4CAF50; background: #e8f5e9; }
+        .rule-icon { font-size: 1.5em; }
+        .rule-text { flex: 1; }
+        .rule-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .followed .rule-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .rating-section { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .rating-title { font-weight: bold; text-align: center; margin-bottom: 15px; }
+        .rating-scale { display: flex; justify-content: center; gap: 10px; }
+        .rating-star { font-size: 2.5em; cursor: pointer; transition: all 0.2s; color: #ddd; }
+        .rating-star:hover, .rating-star.active { color: #ffc107; transform: scale(1.1); }
+        .rating-label { text-align: center; margin-top: 10px; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .discussion-skills { grid-template-columns: 1fr; } .participants { flex-wrap: wrap; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe IV</div>
+            <h1>Diskussionen führen</h1>
+            <p>Meinungen austauschen und debattieren</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-20/K-21)</h3>
+                <p>Das Kind kann an Diskussionen teilnehmen und diese mitgestalten. Es bringt eigene Argumente ein, reagiert auf andere und bleibt beim Thema.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Diskussions-Fähigkeiten</h3>
+                <p>Welche Fähigkeiten zeigt das Kind in Diskussionen?</p>
+                <div class="discussion-skills">
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🗣️</div><div class="title">Standpunkt vertreten</div><div class="desc">Eigene Meinung klar äußern</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">👂</div><div class="title">Aktiv zuhören</div><div class="desc">Andere Meinungen aufnehmen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🔗</div><div class="title">Bezug nehmen</div><div class="desc">Auf Vorredner eingehen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">❓</div><div class="title">Nachfragen</div><div class="desc">Verständnisfragen stellen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">⚖️</div><div class="title">Abwägen</div><div class="desc">Pro und Contra sehen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🤝</div><div class="title">Kompromisse finden</div><div class="desc">Gemeinsame Lösungen suchen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Diskussions-Simulation</h3>
+                <div class="discussion-simulation">
+                    <p style="text-align: center;">Übe eine Diskussion zu diesem Thema:</p>
+                    <div class="topic-display">
+                        <div class="topic-text" id="topicText">Sollten Hausaufgaben abgeschafft werden?</div>
+                    </div>
+                    <div class="participants">
+                        <div class="participant" onclick="speak(this, 'Dafür')"><div class="icon">✅</div><div class="role">Dafür</div></div>
+                        <div class="participant" onclick="speak(this, 'Moderator')"><div class="icon">🎤</div><div class="role">Moderator</div></div>
+                        <div class="participant" onclick="speak(this, 'Dagegen')"><div class="icon">❌</div><div class="role">Dagegen</div></div>
+                    </div>
+                    <div class="sim-buttons">
+                        <button class="sim-btn primary" onclick="newTopic()">🔄 Neues Thema</button>
+                        <button class="sim-btn secondary" onclick="markCompleted()">✓ Diskussion geführt</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">Geführte Diskussionen: <strong id="discussionCount">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Diskussionsregeln</h3>
+                <p>Diese Regeln befolgt das Kind:</p>
+                <div class="discussion-rules">
+                    <div class="rule-item" onclick="toggleRule(this)"><div class="rule-icon">✋</div><div class="rule-text">Andere ausreden lassen</div><div class="rule-check">✓</div></div>
+                    <div class="rule-item" onclick="toggleRule(this)"><div class="rule-icon">🎯</div><div class="rule-text">Beim Thema bleiben</div><div class="rule-check">✓</div></div>
+                    <div class="rule-item" onclick="toggleRule(this)"><div class="rule-icon">🤔</div><div class="rule-text">Argumente statt Angriffe</div><div class="rule-check">✓</div></div>
+                    <div class="rule-item" onclick="toggleRule(this)"><div class="rule-icon">💡</div><div class="rule-text">Begründungen geben</div><div class="rule-check">✓</div></div>
+                    <div class="rule-item" onclick="toggleRule(this)"><div class="rule-icon">🔄</div><div class="rule-text">Meinung ändern können</div><div class="rule-check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Selbsteinschätzung</h3>
+                <div class="rating-section">
+                    <div class="rating-title">Wie gut war die letzte Diskussion?</div>
+                    <div class="rating-scale">
+                        <span class="rating-star" onclick="setRating(1)">★</span>
+                        <span class="rating-star" onclick="setRating(2)">★</span>
+                        <span class="rating-star" onclick="setRating(3)">★</span>
+                        <span class="rating-star" onclick="setRating(4)">★</span>
+                        <span class="rating-star" onclick="setRating(5)">★</span>
+                    </div>
+                    <div class="rating-label" id="ratingLabel">Noch keine Bewertung</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie verhält sich das Kind in Diskussionen? Kann es sachlich bleiben? Wie reagiert es auf Gegenargumente?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const topics = [
+            "Sollten Hausaufgaben abgeschafft werden?",
+            "Sind Handys in der Schule gut oder schlecht?",
+            "Sollten alle Kinder ein Haustier haben dürfen?",
+            "Ist es besser, in der Stadt oder auf dem Land zu leben?",
+            "Sollte Schule später beginnen?"
+        ];
+        let currentTopic = 0;
+        let discussionCount = 0;
+        let currentRating = 0;
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleRule(el) { el.classList.toggle('followed'); saveData(); }
+        function speak(el, role) {
+            document.querySelectorAll('.participant').forEach(p => p.classList.remove('speaking'));
+            el.classList.add('speaking');
+            setTimeout(() => el.classList.remove('speaking'), 2000);
+        }
+        function newTopic() {
+            currentTopic = (currentTopic + 1) % topics.length;
+            document.getElementById('topicText').textContent = topics[currentTopic];
+        }
+        function markCompleted() {
+            discussionCount++;
+            document.getElementById('discussionCount').textContent = discussionCount;
+            saveData();
+        }
+        function setRating(stars) {
+            currentRating = stars;
+            document.querySelectorAll('.rating-star').forEach((s, i) => {
+                s.classList.toggle('active', i < stars);
+            });
+            const labels = ['', 'Noch üben', 'Geht so', 'Gut', 'Sehr gut', 'Ausgezeichnet'];
+            document.getElementById('ratingLabel').textContent = labels[stars];
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-card.achieved').length,
+                rules: document.querySelectorAll('.rule-item.followed').length,
+                discussionCount, currentRating,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k4_diskussion', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k4_diskussion');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const rules = document.querySelectorAll('.rule-item');
+                for (let i = 0; i < (data.rules || 0); i++) { if (rules[i]) rules[i].classList.add('followed'); }
+                discussionCount = data.discussionCount || 0;
+                document.getElementById('discussionCount').textContent = discussionCount;
+                if (data.currentRating) setRating(data.currentRating);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
