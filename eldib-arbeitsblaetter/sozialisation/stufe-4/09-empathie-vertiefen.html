@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empathie vertiefen - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f06292 0%, #c2185b 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center;
+        }
+        .domain-badge {
+            display: inline-block; background: linear-gradient(135deg, #f06292, #c2185b);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 { color: #f06292; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; line-height: 1.7;
+        }
+        .empathy-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .type-card {
+            background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .type-card:hover { transform: translateY(-3px); }
+        .type-card.understood { border-color: #f06292; background: linear-gradient(135deg, #fce4ec, #f8bbd9); }
+        .type-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+        .type-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .type-desc { font-size: 0.85rem; color: #666; }
+        .scenario {
+            background: #f8f9fa; border-radius: 15px; padding: 20px;
+            margin-bottom: 15px; border-left: 5px solid #f06292;
+        }
+        .scenario-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .scenario-emoji { font-size: 2rem; }
+        .scenario-title { font-weight: bold; color: #333; }
+        .scenario-text { color: #555; line-height: 1.6; margin-bottom: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .scenario-questions { display: flex; flex-direction: column; gap: 10px; }
+        .scenario-label { font-weight: 500; color: #555; font-size: 0.9rem; }
+        .scenario-input {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1rem; resize: vertical; min-height: 60px;
+        }
+        .scenario-input:focus { outline: none; border-color: #f06292; }
+        .perspective-section { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .perspective-title { font-weight: bold; color: #333; margin-bottom: 15px; }
+        .perspective-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .perspective-box { background: white; border-radius: 12px; padding: 15px; }
+        .perspective-box.person-a { border-top: 4px solid #2196f3; }
+        .perspective-box.person-b { border-top: 4px solid #e91e63; }
+        .perspective-header { font-weight: 500; color: #333; margin-bottom: 10px; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .skill-card {
+            background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .skill-card:hover { transform: scale(1.05); }
+        .skill-card.practiced { border-color: #4caf50; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .skill-emoji { font-size: 2rem; margin-bottom: 8px; }
+        .skill-text { font-weight: 500; color: #333; font-size: 0.85rem; }
+        .reflection-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #f06292; }
+        .notes-area {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #f06292; }
+        .save-notice {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #4caf50; color: white; padding: 15px 25px;
+            border-radius: 30px; display: none; z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        .eldib-reference { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; color: #666; }
+        .print-btn {
+            background: linear-gradient(135deg, #f06292, #c2185b);
+            color: white; border: none; padding: 12px 25px;
+            border-radius: 25px; cursor: pointer; font-size: 1rem; margin-top: 15px;
+        }
+        @media print { body { background: white; } .print-btn, .save-notice { display: none !important; } }
+        @media (max-width: 600px) { .perspective-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>💕 Empathie vertiefen</h1>
+            <p class="subtitle">Die Welt durch die Augen anderer sehen</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist tiefe Empathie?</h2>
+            <div class="intro-text">
+                <p><strong>Empathie</strong> bedeutet nicht nur zu erkennen, dass jemand traurig ist, sondern
+                wirklich zu verstehen, WARUM er traurig ist und WIE sich das anfühlt.</p>
+                <p style="margin-top: 10px;">Tiefe Empathie bedeutet, auch Menschen zu verstehen, die anders
+                sind als du - mit anderen Meinungen, Erfahrungen oder Lebensweisen.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Arten von Empathie</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf die Arten, die du verstehst und praktizierst:</p>
+            <div class="empathy-types">
+                <div class="type-card" data-type="cognitive">
+                    <div class="type-emoji">🧠</div>
+                    <div class="type-title">Kognitive Empathie</div>
+                    <div class="type-desc">Verstehen, was jemand denkt</div>
+                </div>
+                <div class="type-card" data-type="emotional">
+                    <div class="type-emoji">❤️</div>
+                    <div class="type-title">Emotionale Empathie</div>
+                    <div class="type-desc">Fühlen, was jemand fühlt</div>
+                </div>
+                <div class="type-card" data-type="compassionate">
+                    <div class="type-emoji">🤗</div>
+                    <div class="type-title">Mitfühlende Empathie</div>
+                    <div class="type-desc">Helfen wollen, weil man versteht</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Perspektivwechsel üben</h2>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">📱</div>
+                    <div class="scenario-title">Situation 1: Das Handy</div>
+                </div>
+                <div class="scenario-text">
+                    Dein Freund bekommt ein neues, teures Handy. Du hast kein Smartphone.
+                    Dein Freund zeigt es ständig allen.
+                </div>
+                <div class="scenario-questions">
+                    <label class="scenario-label">Wie fühlt sich dein Freund wahrscheinlich?</label>
+                    <textarea class="scenario-input" id="s1_friend" placeholder="Versuche seine Gefühle zu verstehen..."></textarea>
+                    <label class="scenario-label">Wie fühlst du dich dabei?</label>
+                    <textarea class="scenario-input" id="s1_self" placeholder="Deine eigenen Gefühle..."></textarea>
+                    <label class="scenario-label">Kann dein Freund verstehen, wie du dich fühlst?</label>
+                    <textarea class="scenario-input" id="s1_understanding" placeholder="Deine Gedanken dazu..."></textarea>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">👨‍👩‍👧</div>
+                    <div class="scenario-title">Situation 2: Familienstreit</div>
+                </div>
+                <div class="scenario-text">
+                    Die Eltern deines besten Freundes lassen sich scheiden. Er ist oft traurig
+                    und manchmal gereizt.
+                </div>
+                <div class="scenario-questions">
+                    <label class="scenario-label">Was geht wohl in deinem Freund vor?</label>
+                    <textarea class="scenario-input" id="s2_friend" placeholder="Seine möglichen Gedanken und Gefühle..."></textarea>
+                    <label class="scenario-label">Wie kannst du ihm helfen, ohne aufdringlich zu sein?</label>
+                    <textarea class="scenario-input" id="s2_help" placeholder="Deine Ideen..."></textarea>
+                </div>
+            </div>
+
+            <div class="perspective-section">
+                <div class="perspective-title">⚡ Zwei Seiten eines Konflikts</div>
+                <p style="color: #555; margin-bottom: 15px;">Situation: Zwei Schüler streiten, wer bei einem Projekt mehr gearbeitet hat.</p>
+                <div class="perspective-grid">
+                    <div class="perspective-box person-a">
+                        <div class="perspective-header">🔵 Person A denkt:</div>
+                        <textarea class="scenario-input" id="persp_a" placeholder="Was denkt und fühlt Person A?"></textarea>
+                    </div>
+                    <div class="perspective-box person-b">
+                        <div class="perspective-header">🔴 Person B denkt:</div>
+                        <textarea class="scenario-input" id="persp_b" placeholder="Was denkt und fühlt Person B?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🛠️</span> Empathie-Fähigkeiten</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Fähigkeiten, die du übst:</p>
+            <div class="skills-grid">
+                <div class="skill-card" data-skill="listen"><div class="skill-emoji">👂</div><div class="skill-text">Aktiv zuhören</div></div>
+                <div class="skill-card" data-skill="body"><div class="skill-emoji">🕺</div><div class="skill-text">Körpersprache lesen</div></div>
+                <div class="skill-card" data-skill="questions"><div class="skill-emoji">❓</div><div class="skill-text">Nachfragen</div></div>
+                <div class="skill-card" data-skill="validate"><div class="skill-emoji">✅</div><div class="skill-text">Gefühle bestätigen</div></div>
+                <div class="skill-card" data-skill="suspend"><div class="skill-emoji">⏸️</div><div class="skill-text">Urteile zurückhalten</div></div>
+                <div class="skill-card" data-skill="imagine"><div class="skill-emoji">💭</div><div class="skill-text">Sich hineinversetzen</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Empathie-Reflexion</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der ich richtig verstanden habe, wie sich jemand fühlt:</label>
+                <textarea class="reflection-input" id="understood" placeholder="Was ist passiert?"></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der ich die Gefühle von jemandem unterschätzt habe:</label>
+                <textarea class="reflection-input" id="missed" placeholder="Was habe ich gelernt?"></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Mit wem fällt es mir schwer, empathisch zu sein? Warum?</label>
+                <textarea class="reflection-input" id="difficult" placeholder="Deine ehrliche Reflexion..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu Empathie..."></textarea>
+            <div class="eldib-reference"><strong>ELDiB-Bezug:</strong> S-67, S-68 - Vertiefte Empathie, Perspektivübernahme</div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let types = [];
+        let skills = [];
+        document.addEventListener('DOMContentLoaded', function() { loadData(); setupEventListeners(); });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('understood');
+                    const type = this.dataset.type;
+                    if (this.classList.contains('understood')) { if (!types.includes(type)) types.push(type); }
+                    else { types = types.filter(t => t !== type); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.skill-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('practiced');
+                    const skill = this.dataset.skill;
+                    if (this.classList.contains('practiced')) { if (!skills.includes(skill)) skills.push(skill); }
+                    else { skills = skills.filter(s => s !== skill); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', saveData); });
+        }
+
+        function saveData() {
+            const data = {
+                types, skills,
+                scenarios: {
+                    s1_friend: document.getElementById('s1_friend').value,
+                    s1_self: document.getElementById('s1_self').value,
+                    s1_understanding: document.getElementById('s1_understanding').value,
+                    s2_friend: document.getElementById('s2_friend').value,
+                    s2_help: document.getElementById('s2_help').value,
+                    persp_a: document.getElementById('persp_a').value,
+                    persp_b: document.getElementById('persp_b').value
+                },
+                reflection: {
+                    understood: document.getElementById('understood').value,
+                    missed: document.getElementById('missed').value,
+                    difficult: document.getElementById('difficult').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_empathie_vertiefen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_empathie_vertiefen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.types) { types = data.types; types.forEach(t => { const el = document.querySelector(`.type-card[data-type="${t}"]`); if (el) el.classList.add('understood'); }); }
+                if (data.skills) { skills = data.skills; skills.forEach(s => { const el = document.querySelector(`.skill-card[data-skill="${s}"]`); if (el) el.classList.add('practiced'); }); }
+                if (data.scenarios) {
+                    document.getElementById('s1_friend').value = data.scenarios.s1_friend || '';
+                    document.getElementById('s1_self').value = data.scenarios.s1_self || '';
+                    document.getElementById('s1_understanding').value = data.scenarios.s1_understanding || '';
+                    document.getElementById('s2_friend').value = data.scenarios.s2_friend || '';
+                    document.getElementById('s2_help').value = data.scenarios.s2_help || '';
+                    document.getElementById('persp_a').value = data.scenarios.persp_a || '';
+                    document.getElementById('persp_b').value = data.scenarios.persp_b || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('understood').value = data.reflection.understood || '';
+                    document.getElementById('missed').value = data.reflection.missed || '';
+                    document.getElementById('difficult').value = data.reflection.difficult || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() { const notice = document.getElementById('saveNotice'); notice.classList.remove('show'); void notice.offsetWidth; notice.classList.add('show'); }
+    </script>
+</body>
+</html>

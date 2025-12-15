@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiefe Freundschaften - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e91e63 0%, #ad1457 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #e91e63, #ad1457);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .qualities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .quality-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        .quality-card:hover { transform: translateY(-3px); }
+        .quality-card.selected {
+            border-color: #e91e63;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+        }
+        .quality-emoji { font-size: 2rem; margin-bottom: 10px; }
+        .quality-text { font-weight: 500; color: #333; font-size: 0.9rem; }
+        .friend-profile {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .friend-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .friend-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e91e63, #ad1457);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        .friend-name-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .friend-name-input:focus { outline: none; border-color: #e91e63; }
+        .friend-details { display: grid; gap: 10px; }
+        .friend-detail-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 50px;
+        }
+        .friend-detail-input:focus { outline: none; border-color: #e91e63; }
+        .detail-label { font-weight: 500; color: #555; margin-bottom: 5px; display: block; }
+        .depth-meter {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .depth-title { font-weight: bold; color: #333; margin-bottom: 15px; text-align: center; }
+        .depth-levels { display: flex; flex-direction: column; gap: 10px; }
+        .depth-level {
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .depth-level:hover { transform: translateX(5px); }
+        .depth-level.selected { border-color: #e91e63; }
+        .depth-level.level-1 { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
+        .depth-level.level-2 { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .depth-level.level-3 { background: linear-gradient(135deg, #fff8e1, #ffecb3); }
+        .depth-level.level-4 { background: linear-gradient(135deg, #fce4ec, #f8bbd9); }
+        .depth-level.level-5 { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
+        .depth-name { font-weight: bold; color: #333; }
+        .depth-desc { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #e91e63;
+        }
+        .scenario-title { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .scenario-text { color: #555; line-height: 1.6; margin-bottom: 15px; }
+        .scenario-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .scenario-input:focus { outline: none; border-color: #e91e63; }
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #e91e63; }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #e91e63; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            display: none;
+            z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .print-btn {
+            background: linear-gradient(135deg, #e91e63, #ad1457);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+        @media (max-width: 600px) {
+            .qualities-grid { grid-template-columns: repeat(2, 1fr); }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>💕 Tiefe Freundschaften</h1>
+            <p class="subtitle">Was echte Freundschaft ausmacht</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was sind tiefe Freundschaften?</h2>
+            <div class="intro-text">
+                <p><strong>Tiefe Freundschaften</strong> gehen über "zusammen spielen" hinaus. Es geht um
+                echtes Verständnis, gemeinsame Werte und das Gefühl, wirklich gekannt und akzeptiert zu werden.</p>
+                <p style="margin-top: 10px;">In diesem Alter beginnen Freundschaften sich zu vertiefen.
+                Du suchst Freunde, die dich verstehen und mit denen du über wichtige Dinge reden kannst.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⭐</span> Eigenschaften guter Freunde</h2>
+            <p style="margin-bottom: 15px; color: #666;">Was ist dir bei Freunden wichtig? Wähle aus:</p>
+            <div class="qualities-grid">
+                <div class="quality-card" data-quality="honest"><div class="quality-emoji">💎</div><div class="quality-text">Ehrlichkeit</div></div>
+                <div class="quality-card" data-quality="loyal"><div class="quality-emoji">🛡️</div><div class="quality-text">Loyalität</div></div>
+                <div class="quality-card" data-quality="listener"><div class="quality-emoji">👂</div><div class="quality-text">Gutes Zuhören</div></div>
+                <div class="quality-card" data-quality="fun"><div class="quality-emoji">😄</div><div class="quality-text">Spaß haben</div></div>
+                <div class="quality-card" data-quality="support"><div class="quality-emoji">🤗</div><div class="quality-text">Unterstützung</div></div>
+                <div class="quality-card" data-quality="respect"><div class="quality-emoji">🙏</div><div class="quality-text">Respekt</div></div>
+                <div class="quality-card" data-quality="trust"><div class="quality-emoji">🤝</div><div class="quality-text">Vertrauen</div></div>
+                <div class="quality-card" data-quality="similar"><div class="quality-emoji">🪞</div><div class="quality-text">Ähnliche Interessen</div></div>
+                <div class="quality-card" data-quality="accept"><div class="quality-emoji">💜</div><div class="quality-text">Akzeptanz</div></div>
+                <div class="quality-card" data-quality="adventure"><div class="quality-emoji">🚀</div><div class="quality-text">Abenteuer</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Freundschafts-Tiefe</h2>
+            <div class="depth-meter">
+                <div class="depth-title">Auf welcher Ebene sind deine engsten Freundschaften?</div>
+                <div class="depth-levels">
+                    <div class="depth-level level-1" data-level="1">
+                        <div class="depth-name">Level 1: Bekannte</div>
+                        <div class="depth-desc">Man kennt sich, grüßt sich, macht aber nichts zusammen</div>
+                    </div>
+                    <div class="depth-level level-2" data-level="2">
+                        <div class="depth-name">Level 2: Aktivitäts-Freunde</div>
+                        <div class="depth-desc">Man macht Sachen zusammen (Sport, Spiele), aber redet nicht über Persönliches</div>
+                    </div>
+                    <div class="depth-level level-3" data-level="3">
+                        <div class="depth-name">Level 3: Gute Freunde</div>
+                        <div class="depth-desc">Man verbringt viel Zeit zusammen und teilt Gedanken und Gefühle</div>
+                    </div>
+                    <div class="depth-level level-4" data-level="4">
+                        <div class="depth-name">Level 4: Enge Freunde</div>
+                        <div class="depth-desc">Man kann über alles reden, vertraut sich Geheimnisse an</div>
+                    </div>
+                    <div class="depth-level level-5" data-level="5">
+                        <div class="depth-name">Level 5: Beste Freunde</div>
+                        <div class="depth-desc">Tiefes Verständnis, bedingungslose Unterstützung, wie Familie</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">👤</span> Mein bester Freund / Meine beste Freundin</h2>
+            <div class="friend-profile">
+                <div class="friend-header">
+                    <div class="friend-avatar">👤</div>
+                    <input type="text" class="friend-name-input" id="friend_name" placeholder="Name (oder Spitzname)">
+                </div>
+                <div class="friend-details">
+                    <div>
+                        <label class="detail-label">Was magst du am meisten an dieser Person?</label>
+                        <textarea class="friend-detail-input" id="friend_like" placeholder="..."></textarea>
+                    </div>
+                    <div>
+                        <label class="detail-label">Was habt ihr gemeinsam?</label>
+                        <textarea class="friend-detail-input" id="friend_common" placeholder="..."></textarea>
+                    </div>
+                    <div>
+                        <label class="detail-label">Eine besondere Erinnerung mit dieser Person:</label>
+                        <textarea class="friend-detail-input" id="friend_memory" placeholder="..."></textarea>
+                    </div>
+                    <div>
+                        <label class="detail-label">Warum kannst du dieser Person vertrauen?</label>
+                        <textarea class="friend-detail-input" id="friend_trust" placeholder="..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Freundschafts-Situationen</h2>
+            <div class="scenario">
+                <div class="scenario-title">💬 Tiefe Gespräche führen</div>
+                <div class="scenario-text">Über welche Themen redest du gerne mit deinen engsten Freunden?</div>
+                <textarea class="scenario-input" id="deep_topics" placeholder="z.B. Zukunftspläne, Ängste, Träume..."></textarea>
+            </div>
+            <div class="scenario">
+                <div class="scenario-title">🤝 Für den anderen da sein</div>
+                <div class="scenario-text">Beschreibe eine Situation, in der du für einen Freund da warst (oder er für dich):</div>
+                <textarea class="scenario-input" id="being_there" placeholder="Was ist passiert?"></textarea>
+            </div>
+            <div class="scenario">
+                <div class="scenario-title">⚡ Konflikte lösen</div>
+                <div class="scenario-text">Hattest du schon Streit mit einem guten Freund? Wie habt ihr es gelöst?</div>
+                <textarea class="scenario-input" id="conflict_solved" placeholder="Wie seid ihr damit umgegangen?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Reflexion</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">Was macht dich zu einem guten Freund?</label>
+                <textarea class="reflection-input" id="good_friend" placeholder="Deine Stärken als Freund..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was könntest du als Freund noch verbessern?</label>
+                <textarea class="reflection-input" id="improve_friend" placeholder="Woran möchtest du arbeiten?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu Freundschaft..."></textarea>
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-59, S-60 - Tiefe Freundschaften entwickeln, Intimität in Beziehungen
+            </div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let qualities = [];
+        let depthLevel = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.quality-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const q = this.dataset.quality;
+                    if (this.classList.contains('selected')) {
+                        if (!qualities.includes(q)) qualities.push(q);
+                    } else {
+                        qualities = qualities.filter(x => x !== q);
+                    }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.depth-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.depth-level').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    depthLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea, input').forEach(el => {
+                el.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                qualities,
+                depthLevel,
+                friend: {
+                    name: document.getElementById('friend_name').value,
+                    like: document.getElementById('friend_like').value,
+                    common: document.getElementById('friend_common').value,
+                    memory: document.getElementById('friend_memory').value,
+                    trust: document.getElementById('friend_trust').value
+                },
+                scenarios: {
+                    topics: document.getElementById('deep_topics').value,
+                    there: document.getElementById('being_there').value,
+                    conflict: document.getElementById('conflict_solved').value
+                },
+                reflection: {
+                    good: document.getElementById('good_friend').value,
+                    improve: document.getElementById('improve_friend').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_tiefe_freundschaften', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_tiefe_freundschaften');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.qualities) {
+                    qualities = data.qualities;
+                    qualities.forEach(q => {
+                        const el = document.querySelector(`.quality-card[data-quality="${q}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+                if (data.depthLevel) {
+                    depthLevel = data.depthLevel;
+                    const level = document.querySelector(`.depth-level[data-level="${depthLevel}"]`);
+                    if (level) level.classList.add('selected');
+                }
+                if (data.friend) {
+                    document.getElementById('friend_name').value = data.friend.name || '';
+                    document.getElementById('friend_like').value = data.friend.like || '';
+                    document.getElementById('friend_common').value = data.friend.common || '';
+                    document.getElementById('friend_memory').value = data.friend.memory || '';
+                    document.getElementById('friend_trust').value = data.friend.trust || '';
+                }
+                if (data.scenarios) {
+                    document.getElementById('deep_topics').value = data.scenarios.topics || '';
+                    document.getElementById('being_there').value = data.scenarios.there || '';
+                    document.getElementById('conflict_solved').value = data.scenarios.conflict || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('good_friend').value = data.reflection.good || '';
+                    document.getElementById('improve_friend').value = data.reflection.improve || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

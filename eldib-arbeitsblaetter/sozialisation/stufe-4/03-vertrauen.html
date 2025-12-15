@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertrauen aufbauen - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #5c6bc0 0%, #3949ab 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #5c6bc0, #3949ab);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #5c6bc0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Trust Tower */
+        .tower-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .tower {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tower-block {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tower-block.built {
+            opacity: 1;
+        }
+
+        .tower-block.empty {
+            opacity: 0.3;
+        }
+
+        .trust-meter {
+            width: 100%;
+            max-width: 300px;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .trust-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #5c6bc0, #3949ab);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Trust Behaviors */
+        .behaviors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .behavior-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid #e0e0e0;
+        }
+
+        .behavior-card:hover {
+            transform: translateX(5px);
+        }
+
+        .behavior-card.builds {
+            border-left-color: #4caf50;
+        }
+
+        .behavior-card.breaks {
+            border-left-color: #f44336;
+        }
+
+        .behavior-card.selected {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        .behavior-emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .behavior-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .behavior-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Trust Circle */
+        .circle-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .circle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .circle-level {
+            padding: 20px;
+            border-radius: 15px;
+            background: white;
+        }
+
+        .circle-level.inner {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .circle-level.middle {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+        }
+
+        .circle-level.outer {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        .circle-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .circle-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .circle-input:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+        /* Scenarios */
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .scenario-emoji {
+            font-size: 2rem;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .scenario-text {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .scenario-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .scenario-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .scenario-btn:hover {
+            border-color: #5c6bc0;
+        }
+
+        .scenario-btn.selected {
+            border-color: #5c6bc0;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        /* Reflection */
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .reflection-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+        /* Trust Scale */
+        .trust-scale-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .scale-label {
+            min-width: 120px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .scale-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #ffcdd2, #c8e6c9);
+        }
+
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #5c6bc0;
+            cursor: pointer;
+        }
+
+        .scale-value {
+            width: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: #5c6bc0;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #5c6bc0, #3949ab);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .circle-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .behaviors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🤝 Vertrauen aufbauen</h1>
+            <p class="subtitle">Was Vertrauen bedeutet und wie es entsteht</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Vertrauen?</h2>
+            <div class="intro-text">
+                <p><strong>Vertrauen</strong> ist das Gefühl, dass du dich auf jemanden verlassen kannst.
+                Wenn du jemandem vertraust, glaubst du, dass diese Person ehrlich ist, deine Geheimnisse
+                behält und dich nicht absichtlich verletzt.</p>
+                <p style="margin-top: 10px;">Vertrauen aufzubauen braucht Zeit - aber es kann schnell zerstört werden.
+                Deshalb ist es wichtig, sorgfältig mit dem Vertrauen anderer umzugehen!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🏗️</span> Der Vertrauens-Turm</h2>
+            <p style="margin-bottom: 15px; color: #666;">Vertrauen baut sich Stück für Stück auf. Klicke auf Verhaltensweisen, die du zeigst:</p>
+
+            <div class="tower-container">
+                <div class="tower">
+                    <div class="tower-block empty" data-block="1" style="width: 280px; background: #4caf50;">
+                        Geheimnisse behalten
+                    </div>
+                    <div class="tower-block empty" data-block="2" style="width: 250px; background: #66bb6a;">
+                        Versprechen halten
+                    </div>
+                    <div class="tower-block empty" data-block="3" style="width: 220px; background: #81c784;">
+                        Ehrlich sein
+                    </div>
+                    <div class="tower-block empty" data-block="4" style="width: 190px; background: #a5d6a7;">
+                        Zuverlässig sein
+                    </div>
+                    <div class="tower-block empty" data-block="5" style="width: 160px; background: #c8e6c9;">
+                        Respektvoll sein
+                    </div>
+                </div>
+                <div class="trust-meter">
+                    <div class="trust-fill" id="trustFill" style="width: 0%"></div>
+                </div>
+                <p style="margin-top: 10px; color: #666;">Vertrauenslevel: <span id="trustPercent">0</span>%</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">✅</span> Was baut Vertrauen auf?</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Verhaltensweisen, die du schon praktizierst:</p>
+
+            <div class="behaviors-grid">
+                <div class="behavior-card builds" data-behavior="honest">
+                    <div class="behavior-emoji">💎</div>
+                    <div class="behavior-title">Ehrlichkeit</div>
+                    <div class="behavior-desc">Die Wahrheit sagen, auch wenn es schwer ist</div>
+                </div>
+                <div class="behavior-card builds" data-behavior="reliable">
+                    <div class="behavior-emoji">⏰</div>
+                    <div class="behavior-title">Zuverlässigkeit</div>
+                    <div class="behavior-desc">Tun, was man versprochen hat</div>
+                </div>
+                <div class="behavior-card builds" data-behavior="secrets">
+                    <div class="behavior-emoji">🤫</div>
+                    <div class="behavior-title">Geheimnisse behalten</div>
+                    <div class="behavior-desc">Anvertrautes nicht weitererzählen</div>
+                </div>
+                <div class="behavior-card builds" data-behavior="support">
+                    <div class="behavior-emoji">🤗</div>
+                    <div class="behavior-title">Unterstützung</div>
+                    <div class="behavior-desc">Für den anderen da sein</div>
+                </div>
+                <div class="behavior-card builds" data-behavior="respect">
+                    <div class="behavior-emoji">🙏</div>
+                    <div class="behavior-title">Respekt</div>
+                    <div class="behavior-desc">Grenzen des anderen achten</div>
+                </div>
+                <div class="behavior-card builds" data-behavior="apologize">
+                    <div class="behavior-emoji">💕</div>
+                    <div class="behavior-title">Sich entschuldigen</div>
+                    <div class="behavior-desc">Fehler zugeben und es wieder gut machen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">❌</span> Was zerstört Vertrauen?</h2>
+
+            <div class="behaviors-grid">
+                <div class="behavior-card breaks" data-behavior="lie">
+                    <div class="behavior-emoji">🤥</div>
+                    <div class="behavior-title">Lügen</div>
+                    <div class="behavior-desc">Nicht die Wahrheit sagen</div>
+                </div>
+                <div class="behavior-card breaks" data-behavior="gossip">
+                    <div class="behavior-emoji">🗣️</div>
+                    <div class="behavior-title">Geheimnisse verraten</div>
+                    <div class="behavior-desc">Anvertrautes weiterzählen</div>
+                </div>
+                <div class="behavior-card breaks" data-behavior="break_promise">
+                    <div class="behavior-emoji">💔</div>
+                    <div class="behavior-title">Versprechen brechen</div>
+                    <div class="behavior-desc">Nicht halten, was man gesagt hat</div>
+                </div>
+                <div class="behavior-card breaks" data-behavior="betray">
+                    <div class="behavior-emoji">🔪</div>
+                    <div class="behavior-title">Hintergehen</div>
+                    <div class="behavior-desc">Hinter dem Rücken schlecht reden</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⭕</span> Meine Vertrauenskreise</h2>
+            <p style="margin-bottom: 15px; color: #666;">Wem vertraust du wie sehr? Schreibe Namen auf:</p>
+
+            <div class="circle-section">
+                <div class="circle-grid">
+                    <div class="circle-level inner">
+                        <div class="circle-title">🟢 Innerer Kreis</div>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                            Volles Vertrauen - kann alles anvertrauen
+                        </p>
+                        <textarea class="circle-input" id="circle_inner" placeholder="z.B. Mama, bester Freund..."></textarea>
+                    </div>
+                    <div class="circle-level middle">
+                        <div class="circle-title">🟡 Mittlerer Kreis</div>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                            Gutes Vertrauen - kann vieles teilen
+                        </p>
+                        <textarea class="circle-input" id="circle_middle" placeholder="z.B. Oma, gute Freunde..."></textarea>
+                    </div>
+                    <div class="circle-level outer">
+                        <div class="circle-title">🔵 Äußerer Kreis</div>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                            Grundvertrauen - bekannte Personen
+                        </p>
+                        <textarea class="circle-input" id="circle_outer" placeholder="z.B. Lehrer, Nachbarn..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Situationen einschätzen</h2>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">🤫</div>
+                    <div class="scenario-title">Situation 1: Das Geheimnis</div>
+                </div>
+                <div class="scenario-text">
+                    Deine beste Freundin erzählt dir ein Geheimnis. Am nächsten Tag fragen andere Kinder
+                    dich danach. Was machst du?
+                </div>
+                <div class="scenario-options" data-scenario="1">
+                    <button class="scenario-btn" data-response="tell">
+                        Ich erzähle es ihnen, weil es so spannend ist
+                    </button>
+                    <button class="scenario-btn" data-response="hint">
+                        Ich gebe Hinweise, aber sage nicht alles
+                    </button>
+                    <button class="scenario-btn" data-response="keep">
+                        Ich sage, dass ich nichts darüber erzählen darf
+                    </button>
+                    <button class="scenario-btn" data-response="lie">
+                        Ich sage, dass ich nichts weiß
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">📱</div>
+                    <div class="scenario-title">Situation 2: Das Handy</div>
+                </div>
+                <div class="scenario-text">
+                    Ein Freund lässt sein Handy bei dir liegen. Du könntest seine Nachrichten lesen.
+                    Was machst du?
+                </div>
+                <div class="scenario-options" data-scenario="2">
+                    <button class="scenario-btn" data-response="read">
+                        Kurz schauen, er merkt es ja nicht
+                    </button>
+                    <button class="scenario-btn" data-response="leave">
+                        Ich rühre es nicht an - das ist privat
+                    </button>
+                    <button class="scenario-btn" data-response="return">
+                        Ich bringe es ihm sofort zurück
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">😔</div>
+                    <div class="scenario-title">Situation 3: Vertrauen wieder aufbauen</div>
+                </div>
+                <div class="scenario-text">
+                    Du hast versehentlich ein Geheimnis deines Freundes ausgeplaudert. Er ist sehr verletzt.
+                    Wie kannst du das Vertrauen wieder aufbauen?
+                </div>
+                <div class="scenario-options" data-scenario="3">
+                    <button class="scenario-btn" data-response="ignore">
+                        Ich tue so, als wäre nichts passiert
+                    </button>
+                    <button class="scenario-btn" data-response="excuse">
+                        Ich sage, dass es nicht so schlimm ist
+                    </button>
+                    <button class="scenario-btn" data-response="apologize">
+                        Ich entschuldige mich ehrlich und erkläre, wie es passiert ist
+                    </button>
+                    <button class="scenario-btn" data-response="prove">
+                        Ich zeige durch mein Verhalten, dass ich vertrauenswürdig bin
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Selbsteinschätzung</h2>
+            <p style="margin-bottom: 15px; color: #666;">Wie vertrauenswürdig bist du? Schätze dich ein:</p>
+
+            <div class="trust-scale-container">
+                <span class="scale-label">Ich halte Versprechen</span>
+                <input type="range" class="scale-slider" id="scale_promises" min="1" max="5" value="3">
+                <span class="scale-value" id="val_promises">3</span>
+            </div>
+
+            <div class="trust-scale-container">
+                <span class="scale-label">Ich bin ehrlich</span>
+                <input type="range" class="scale-slider" id="scale_honest" min="1" max="5" value="3">
+                <span class="scale-value" id="val_honest">3</span>
+            </div>
+
+            <div class="trust-scale-container">
+                <span class="scale-label">Ich behalte Geheimnisse</span>
+                <input type="range" class="scale-slider" id="scale_secrets" min="1" max="5" value="3">
+                <span class="scale-value" id="val_secrets">3</span>
+            </div>
+
+            <div class="trust-scale-container">
+                <span class="scale-label">Ich bin zuverlässig</span>
+                <input type="range" class="scale-slider" id="scale_reliable" min="1" max="5" value="3">
+                <span class="scale-value" id="val_reliable">3</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Reflexion</h2>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Person, der ich sehr vertraue und warum:</label>
+                <textarea class="reflection-input" id="trusted_person" placeholder="Wem vertraust du? Warum?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der mein Vertrauen verletzt wurde:</label>
+                <textarea class="reflection-input" id="trust_broken" placeholder="Was ist passiert? Wie hast du dich gefühlt?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Was ich tun möchte, um vertrauenswürdiger zu sein:</label>
+                <textarea class="reflection-input" id="trust_goal" placeholder="Woran möchtest du arbeiten?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zum Thema Vertrauen..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-55, S-56 - Vertrauen aufbauen und erhalten, vertrauensvolle Beziehungen
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let towerBlocks = [];
+        let buildsBehaviors = [];
+        let scenarioResponses = {};
+        let scaleValues = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Tower blocks
+            document.querySelectorAll('.tower-block').forEach(block => {
+                block.addEventListener('click', function() {
+                    const blockNum = parseInt(this.dataset.block);
+                    this.classList.toggle('built');
+                    this.classList.toggle('empty');
+
+                    if (this.classList.contains('built')) {
+                        if (!towerBlocks.includes(blockNum)) {
+                            towerBlocks.push(blockNum);
+                        }
+                    } else {
+                        towerBlocks = towerBlocks.filter(b => b !== blockNum);
+                    }
+
+                    updateTrustMeter();
+                    saveData();
+                });
+            });
+
+            // Behavior cards (builds)
+            document.querySelectorAll('.behavior-card.builds').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const behavior = this.dataset.behavior;
+                    if (this.classList.contains('selected')) {
+                        if (!buildsBehaviors.includes(behavior)) {
+                            buildsBehaviors.push(behavior);
+                        }
+                    } else {
+                        buildsBehaviors = buildsBehaviors.filter(b => b !== behavior);
+                    }
+                    saveData();
+                });
+            });
+
+            // Scenario responses
+            document.querySelectorAll('.scenario-options').forEach(container => {
+                container.querySelectorAll('.scenario-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const scenario = container.dataset.scenario;
+                        container.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('selected'));
+                        this.classList.add('selected');
+                        scenarioResponses[scenario] = this.dataset.response;
+                        saveData();
+                    });
+                });
+            });
+
+            // Scale sliders
+            document.querySelectorAll('.scale-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const id = this.id.replace('scale_', '');
+                    document.getElementById('val_' + id).textContent = this.value;
+                    scaleValues[id] = parseInt(this.value);
+                    saveData();
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function updateTrustMeter() {
+            const percent = (towerBlocks.length / 5) * 100;
+            document.getElementById('trustFill').style.width = percent + '%';
+            document.getElementById('trustPercent').textContent = Math.round(percent);
+        }
+
+        function saveData() {
+            const data = {
+                towerBlocks,
+                buildsBehaviors,
+                scenarioResponses,
+                scaleValues,
+                circles: {
+                    inner: document.getElementById('circle_inner').value,
+                    middle: document.getElementById('circle_middle').value,
+                    outer: document.getElementById('circle_outer').value
+                },
+                reflections: {
+                    trusted_person: document.getElementById('trusted_person').value,
+                    trust_broken: document.getElementById('trust_broken').value,
+                    trust_goal: document.getElementById('trust_goal').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_vertrauen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_vertrauen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.towerBlocks) {
+                    towerBlocks = data.towerBlocks;
+                    towerBlocks.forEach(num => {
+                        const block = document.querySelector(`.tower-block[data-block="${num}"]`);
+                        if (block) {
+                            block.classList.add('built');
+                            block.classList.remove('empty');
+                        }
+                    });
+                    updateTrustMeter();
+                }
+
+                if (data.buildsBehaviors) {
+                    buildsBehaviors = data.buildsBehaviors;
+                    buildsBehaviors.forEach(b => {
+                        const el = document.querySelector(`.behavior-card.builds[data-behavior="${b}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.scenarioResponses) {
+                    scenarioResponses = data.scenarioResponses;
+                    Object.entries(scenarioResponses).forEach(([scenario, response]) => {
+                        const btn = document.querySelector(`.scenario-options[data-scenario="${scenario}"] .scenario-btn[data-response="${response}"]`);
+                        if (btn) btn.classList.add('selected');
+                    });
+                }
+
+                if (data.scaleValues) {
+                    scaleValues = data.scaleValues;
+                    Object.entries(scaleValues).forEach(([id, value]) => {
+                        const slider = document.getElementById('scale_' + id);
+                        const val = document.getElementById('val_' + id);
+                        if (slider) slider.value = value;
+                        if (val) val.textContent = value;
+                    });
+                }
+
+                if (data.circles) {
+                    document.getElementById('circle_inner').value = data.circles.inner || '';
+                    document.getElementById('circle_middle').value = data.circles.middle || '';
+                    document.getElementById('circle_outer').value = data.circles.outer || '';
+                }
+
+                if (data.reflections) {
+                    document.getElementById('trusted_person').value = data.reflections.trusted_person || '';
+                    document.getElementById('trust_broken').value = data.reflections.trust_broken || '';
+                    document.getElementById('trust_goal').value = data.reflections.trust_goal || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppendynamik verstehen - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff5722, #e64a19);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #ff5722;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .role-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        .role-card:hover { transform: translateY(-3px); }
+        .role-card.selected {
+            border-color: #ff5722;
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+        }
+        .role-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+        .role-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .role-desc { font-size: 0.8rem; color: #666; }
+        .group-visual {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        .group-circle {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .group-member {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+        .group-member:hover { transform: scale(1.1); }
+        .group-member.leader { background: linear-gradient(135deg, #ffd54f, #ffb300); }
+        .group-member.supporter { background: linear-gradient(135deg, #81c784, #4caf50); }
+        .group-member.creative { background: linear-gradient(135deg, #64b5f6, #2196f3); }
+        .group-member.mediator { background: linear-gradient(135deg, #ba68c8, #9c27b0); }
+        .group-member.observer { background: linear-gradient(135deg, #90a4ae, #607d8b); }
+        .group-member.active { box-shadow: 0 0 20px rgba(255,87,34,0.5); border: 3px solid #ff5722; }
+        .dynamics-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .dynamic-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dynamic-item:hover { transform: translateX(5px); }
+        .dynamic-item.experienced { background: linear-gradient(135deg, #fbe9e7, #ffccbc); border-left: 4px solid #ff5722; }
+        .dynamic-emoji { font-size: 1.5rem; }
+        .dynamic-text { flex: 1; }
+        .dynamic-title { font-weight: bold; color: #333; }
+        .dynamic-desc { font-size: 0.85rem; color: #666; }
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ff5722;
+        }
+        .scenario-title { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .scenario-text { color: #555; line-height: 1.6; margin-bottom: 15px; }
+        .scenario-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .scenario-input:focus { outline: none; border-color: #ff5722; }
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #ff5722; }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #ff5722; }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            display: none;
+            z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            20%, 80% { opacity: 1; }
+        }
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .print-btn {
+            background: linear-gradient(135deg, #ff5722, #e64a19);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+        @media (max-width: 600px) {
+            .roles-grid { grid-template-columns: repeat(2, 1fr); }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>👥 Gruppendynamik verstehen</h1>
+            <p class="subtitle">Wie Gruppen funktionieren und deine Rolle darin</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Gruppendynamik?</h2>
+            <div class="intro-text">
+                <p><strong>Gruppendynamik</strong> beschreibt, wie Menschen in Gruppen miteinander umgehen.
+                In jeder Gruppe gibt es verschiedene Rollen, Regeln und Verhaltensweisen.</p>
+                <p style="margin-top: 10px;">Wenn du verstehst, wie Gruppen funktionieren, kannst du
+                besser mit anderen zusammenarbeiten und positiv zur Gruppe beitragen!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Rollen in Gruppen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Welche Rolle(n) nimmst du meistens in Gruppen ein?</p>
+            <div class="roles-grid">
+                <div class="role-card" data-role="leader"><div class="role-emoji">👑</div><div class="role-title">Anführer</div><div class="role-desc">Gibt Richtung vor, organisiert</div></div>
+                <div class="role-card" data-role="supporter"><div class="role-emoji">🤝</div><div class="role-title">Unterstützer</div><div class="role-desc">Hilft anderen, arbeitet mit</div></div>
+                <div class="role-card" data-role="creative"><div class="role-emoji">💡</div><div class="role-title">Ideengeber</div><div class="role-desc">Hat kreative Vorschläge</div></div>
+                <div class="role-card" data-role="mediator"><div class="role-emoji">⚖️</div><div class="role-title">Vermittler</div><div class="role-desc">Löst Konflikte, ausgleichend</div></div>
+                <div class="role-card" data-role="entertainer"><div class="role-emoji">🎪</div><div class="role-title">Unterhalter</div><div class="role-desc">Sorgt für gute Stimmung</div></div>
+                <div class="role-card" data-role="observer"><div class="role-emoji">👁️</div><div class="role-title">Beobachter</div><div class="role-desc">Schaut erst mal zu</div></div>
+                <div class="role-card" data-role="expert"><div class="role-emoji">🎓</div><div class="role-title">Experte</div><div class="role-desc">Kennt sich gut aus</div></div>
+                <div class="role-card" data-role="organizer"><div class="role-emoji">📋</div><div class="role-title">Organisator</div><div class="role-desc">Plant und strukturiert</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🔄</span> Gruppen-Phänomene</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Dinge, die du in Gruppen erlebt hast:</p>
+            <div class="dynamics-section">
+                <div class="dynamic-item" data-dynamic="conformity">
+                    <div class="dynamic-emoji">🐑</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Anpassungsdruck</div><div class="dynamic-desc">Alle machen etwas, und du fühlst dich gedrängt mitzumachen</div></div>
+                </div>
+                <div class="dynamic-item" data-dynamic="cliques">
+                    <div class="dynamic-emoji">🔒</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Cliquen-Bildung</div><div class="dynamic-desc">Kleine Gruppen innerhalb der großen Gruppe, die zusammenhalten</div></div>
+                </div>
+                <div class="dynamic-item" data-dynamic="exclusion">
+                    <div class="dynamic-emoji">🚫</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Ausgrenzung</div><div class="dynamic-desc">Jemand wird nicht in die Gruppe aufgenommen</div></div>
+                </div>
+                <div class="dynamic-item" data-dynamic="hierarchy">
+                    <div class="dynamic-emoji">📊</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Hierarchie</div><div class="dynamic-desc">Manche haben mehr zu sagen als andere</div></div>
+                </div>
+                <div class="dynamic-item" data-dynamic="teamwork">
+                    <div class="dynamic-emoji">🤝</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Teamgeist</div><div class="dynamic-desc">Alle arbeiten zusammen für ein gemeinsames Ziel</div></div>
+                </div>
+                <div class="dynamic-item" data-dynamic="conflict">
+                    <div class="dynamic-emoji">⚡</div>
+                    <div class="dynamic-text"><div class="dynamic-title">Gruppenkonflikt</div><div class="dynamic-desc">Die Gruppe ist uneins oder streitet sich</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Situationen bewältigen</h2>
+            <div class="scenario">
+                <div class="scenario-title">Situation 1: Gruppenarbeit in der Schule</div>
+                <div class="scenario-text">In deiner Gruppe arbeiten nicht alle gleich mit. Einer macht fast alles, andere nichts.</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Was würdest du tun?</label>
+                <textarea class="scenario-input" id="scenario1" placeholder="Deine Idee..."></textarea>
+            </div>
+            <div class="scenario">
+                <div class="scenario-title">Situation 2: Der Neue</div>
+                <div class="scenario-text">Ein neues Kind kommt in deine Freundesgruppe. Manche sind skeptisch.</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Wie würdest du handeln?</label>
+                <textarea class="scenario-input" id="scenario2" placeholder="Deine Idee..."></textarea>
+            </div>
+            <div class="scenario">
+                <div class="scenario-title">Situation 3: Gruppenzwang</div>
+                <div class="scenario-text">Deine Freunde wollen etwas machen, das du nicht richtig findest.</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Wie reagierst du?</label>
+                <textarea class="scenario-input" id="scenario3" placeholder="Deine Idee..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Gruppen</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">In welchen Gruppen bist du? (Klasse, Sport, Musik...)</label>
+                <textarea class="reflection-input" id="my_groups" placeholder="Liste deine Gruppen auf..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">In welcher Gruppe fühlst du dich am wohlsten und warum?</label>
+                <textarea class="reflection-input" id="best_group" placeholder="Beschreibe..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was trägst du positiv zu deinen Gruppen bei?</label>
+                <textarea class="reflection-input" id="contribution" placeholder="Dein Beitrag..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu Gruppendynamik..."></textarea>
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-61, S-62 - Gruppendynamik verstehen, Rollen in Gruppen
+            </div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let roles = [];
+        let dynamics = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const role = this.dataset.role;
+                    if (this.classList.contains('selected')) {
+                        if (!roles.includes(role)) roles.push(role);
+                    } else {
+                        roles = roles.filter(r => r !== role);
+                    }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.dynamic-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('experienced');
+                    const dyn = this.dataset.dynamic;
+                    if (this.classList.contains('experienced')) {
+                        if (!dynamics.includes(dyn)) dynamics.push(dyn);
+                    } else {
+                        dynamics = dynamics.filter(d => d !== dyn);
+                    }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea').forEach(el => {
+                el.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                roles,
+                dynamics,
+                scenarios: {
+                    s1: document.getElementById('scenario1').value,
+                    s2: document.getElementById('scenario2').value,
+                    s3: document.getElementById('scenario3').value
+                },
+                reflection: {
+                    groups: document.getElementById('my_groups').value,
+                    best: document.getElementById('best_group').value,
+                    contribution: document.getElementById('contribution').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_gruppendynamik', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_gruppendynamik');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.roles) {
+                    roles = data.roles;
+                    roles.forEach(r => {
+                        const el = document.querySelector(`.role-card[data-role="${r}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+                if (data.dynamics) {
+                    dynamics = data.dynamics;
+                    dynamics.forEach(d => {
+                        const el = document.querySelector(`.dynamic-item[data-dynamic="${d}"]`);
+                        if (el) el.classList.add('experienced');
+                    });
+                }
+                if (data.scenarios) {
+                    document.getElementById('scenario1').value = data.scenarios.s1 || '';
+                    document.getElementById('scenario2').value = data.scenarios.s2 || '';
+                    document.getElementById('scenario3').value = data.scenarios.s3 || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('my_groups').value = data.reflection.groups || '';
+                    document.getElementById('best_group').value = data.reflection.best || '';
+                    document.getElementById('contribution').value = data.reflection.contribution || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

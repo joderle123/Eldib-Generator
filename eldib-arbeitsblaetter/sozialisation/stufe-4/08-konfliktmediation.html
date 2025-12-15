@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfliktmediation - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #673ab7 0%, #4527a0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center;
+        }
+        .domain-badge {
+            display: inline-block; background: linear-gradient(135deg, #673ab7, #4527a0);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 { color: #673ab7; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #ede7f6, #d1c4e9);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; line-height: 1.7;
+        }
+        .steps-container { display: flex; flex-direction: column; gap: 15px; }
+        .step-card {
+            display: flex; align-items: flex-start; gap: 15px;
+            padding: 20px; background: #f8f9fa; border-radius: 15px;
+            border-left: 5px solid #673ab7; cursor: pointer; transition: all 0.3s;
+        }
+        .step-card:hover { transform: translateX(5px); }
+        .step-card.completed { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left-color: #4caf50; }
+        .step-number {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #673ab7; color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 1.2rem; flex-shrink: 0;
+        }
+        .step-card.completed .step-number { background: #4caf50; }
+        .step-content { flex: 1; }
+        .step-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .step-desc { font-size: 0.9rem; color: #666; }
+        .scenario-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px; padding: 25px; margin-bottom: 20px;
+        }
+        .scenario-title { font-weight: bold; color: #333; margin-bottom: 15px; font-size: 1.1rem; }
+        .scenario-text { color: #555; line-height: 1.7; margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
+        .mediation-steps { display: flex; flex-direction: column; gap: 15px; }
+        .med-step { background: white; border-radius: 12px; padding: 15px; }
+        .med-step-header { font-weight: 500; color: #673ab7; margin-bottom: 10px; }
+        .med-input {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1rem; resize: vertical; min-height: 60px;
+        }
+        .med-input:focus { outline: none; border-color: #673ab7; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .skill-card {
+            background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .skill-card:hover { transform: translateY(-3px); }
+        .skill-card.mastered { border-color: #673ab7; background: linear-gradient(135deg, #ede7f6, #d1c4e9); }
+        .skill-emoji { font-size: 2rem; margin-bottom: 10px; }
+        .skill-text { font-weight: 500; color: #333; font-size: 0.9rem; }
+        .reflection-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #673ab7; }
+        .notes-area {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #673ab7; }
+        .save-notice {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #4caf50; color: white; padding: 15px 25px;
+            border-radius: 30px; display: none; z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        .eldib-reference { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; color: #666; }
+        .print-btn {
+            background: linear-gradient(135deg, #673ab7, #4527a0);
+            color: white; border: none; padding: 12px 25px;
+            border-radius: 25px; cursor: pointer; font-size: 1rem; margin-top: 15px;
+        }
+        @media print { body { background: white; } .print-btn, .save-notice { display: none !important; } }
+        @media (max-width: 600px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>⚖️ Konfliktmediation</h1>
+            <p class="subtitle">Anderen helfen, Streit zu lösen</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Mediation?</h2>
+            <div class="intro-text">
+                <p><strong>Mediation</strong> bedeutet, als neutrale Person anderen zu helfen, ihren Streit
+                zu lösen. Du nimmst keine Seite ein, sondern hilfst beiden Parteien, sich zu verstehen
+                und eine Lösung zu finden.</p>
+                <p style="margin-top: 10px;">Das ist eine wichtige Fähigkeit! Du kannst zum Friedensstifter
+                werden und dabei helfen, dass Konflikte nicht eskalieren.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🪜</span> Die 5 Schritte der Mediation</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Schritte, die du verstanden hast:</p>
+            <div class="steps-container">
+                <div class="step-card" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Einführung & Regeln</div>
+                        <div class="step-desc">Erkläre, dass du neutral bist. Regeln: Ausreden lassen, respektvoll bleiben.</div>
+                    </div>
+                </div>
+                <div class="step-card" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Standpunkte hören</div>
+                        <div class="step-desc">Jede Seite erzählt, was passiert ist und wie sie sich fühlt.</div>
+                    </div>
+                </div>
+                <div class="step-card" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Interessen klären</div>
+                        <div class="step-desc">Was braucht jede Person wirklich? Was ist ihr wichtig?</div>
+                    </div>
+                </div>
+                <div class="step-card" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Lösungen sammeln</div>
+                        <div class="step-desc">Gemeinsam Ideen entwickeln, wie der Konflikt gelöst werden kann.</div>
+                    </div>
+                </div>
+                <div class="step-card" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">Vereinbarung treffen</div>
+                        <div class="step-desc">Eine Lösung wählen, der beide zustimmen können.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Übungsszenario</h2>
+            <div class="scenario-section">
+                <div class="scenario-title">Situation: Der Streit um den Computer</div>
+                <div class="scenario-text">
+                    Anna und Ben streiten sich. Anna sagt: "Ben ist einfach an den Computer gegangen, obwohl ich
+                    zuerst da war!" Ben sagt: "Anna hatte schon eine Stunde gespielt und wollte nicht aufhören!"
+                    Beide sind wütend. Du sollst als Mediator helfen.
+                </div>
+                <div class="mediation-steps">
+                    <div class="med-step">
+                        <div class="med-step-header">1. Was würdest du als Einführung sagen?</div>
+                        <textarea class="med-input" id="med1" placeholder="Wie startest du die Mediation?"></textarea>
+                    </div>
+                    <div class="med-step">
+                        <div class="med-step-header">2. Was hat Anna gesagt? (Zusammenfassung)</div>
+                        <textarea class="med-input" id="med2" placeholder="Fasse Annas Perspektive zusammen..."></textarea>
+                    </div>
+                    <div class="med-step">
+                        <div class="med-step-header">3. Was hat Ben gesagt? (Zusammenfassung)</div>
+                        <textarea class="med-input" id="med3" placeholder="Fasse Bens Perspektive zusammen..."></textarea>
+                    </div>
+                    <div class="med-step">
+                        <div class="med-step-header">4. Was brauchen beide wirklich?</div>
+                        <textarea class="med-input" id="med4" placeholder="Was sind die tieferen Bedürfnisse?"></textarea>
+                    </div>
+                    <div class="med-step">
+                        <div class="med-step-header">5. Welche Lösungsvorschläge könntest du anbieten?</div>
+                        <textarea class="med-input" id="med5" placeholder="Deine Ideen für eine faire Lösung..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🛠️</span> Mediator-Fähigkeiten</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Fähigkeiten, die du schon hast:</p>
+            <div class="skills-grid">
+                <div class="skill-card" data-skill="listen"><div class="skill-emoji">👂</div><div class="skill-text">Aktiv zuhören</div></div>
+                <div class="skill-card" data-skill="neutral"><div class="skill-emoji">⚖️</div><div class="skill-text">Neutral bleiben</div></div>
+                <div class="skill-card" data-skill="calm"><div class="skill-emoji">🧘</div><div class="skill-text">Ruhig bleiben</div></div>
+                <div class="skill-card" data-skill="summarize"><div class="skill-emoji">📝</div><div class="skill-text">Zusammenfassen</div></div>
+                <div class="skill-card" data-skill="empathy"><div class="skill-emoji">💕</div><div class="skill-text">Empathie zeigen</div></div>
+                <div class="skill-card" data-skill="questions"><div class="skill-emoji">❓</div><div class="skill-text">Gute Fragen stellen</div></div>
+                <div class="skill-card" data-skill="patience"><div class="skill-emoji">⏰</div><div class="skill-text">Geduldig sein</div></div>
+                <div class="skill-card" data-skill="creative"><div class="skill-emoji">💡</div><div class="skill-text">Lösungen finden</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Erfahrungen</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">Hast du schon mal geholfen, einen Streit zu schlichten?</label>
+                <textarea class="reflection-input" id="experience" placeholder="Beschreibe die Situation..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was ist schwierig daran, neutral zu bleiben?</label>
+                <textarea class="reflection-input" id="challenge" placeholder="Deine Gedanken..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Wann sollte man einen Erwachsenen um Hilfe bitten?</label>
+                <textarea class="reflection-input" id="adult_help" placeholder="In welchen Situationen?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zur Konfliktmediation..."></textarea>
+            <div class="eldib-reference"><strong>ELDiB-Bezug:</strong> S-65, S-66 - Konflikte mediieren, Friedensstifter sein</div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let steps = [];
+        let skills = [];
+        document.addEventListener('DOMContentLoaded', function() { loadData(); setupEventListeners(); });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('completed');
+                    const step = parseInt(this.dataset.step);
+                    if (this.classList.contains('completed')) { if (!steps.includes(step)) steps.push(step); }
+                    else { steps = steps.filter(s => s !== step); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.skill-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('mastered');
+                    const skill = this.dataset.skill;
+                    if (this.classList.contains('mastered')) { if (!skills.includes(skill)) skills.push(skill); }
+                    else { skills = skills.filter(s => s !== skill); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', saveData); });
+        }
+
+        function saveData() {
+            const data = {
+                steps, skills,
+                mediation: {
+                    m1: document.getElementById('med1').value,
+                    m2: document.getElementById('med2').value,
+                    m3: document.getElementById('med3').value,
+                    m4: document.getElementById('med4').value,
+                    m5: document.getElementById('med5').value
+                },
+                reflection: {
+                    experience: document.getElementById('experience').value,
+                    challenge: document.getElementById('challenge').value,
+                    adult: document.getElementById('adult_help').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_konfliktmediation', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_konfliktmediation');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.steps) { steps = data.steps; steps.forEach(s => { const el = document.querySelector(`.step-card[data-step="${s}"]`); if (el) el.classList.add('completed'); }); }
+                if (data.skills) { skills = data.skills; skills.forEach(s => { const el = document.querySelector(`.skill-card[data-skill="${s}"]`); if (el) el.classList.add('mastered'); }); }
+                if (data.mediation) {
+                    document.getElementById('med1').value = data.mediation.m1 || '';
+                    document.getElementById('med2').value = data.mediation.m2 || '';
+                    document.getElementById('med3').value = data.mediation.m3 || '';
+                    document.getElementById('med4').value = data.mediation.m4 || '';
+                    document.getElementById('med5').value = data.mediation.m5 || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('experience').value = data.reflection.experience || '';
+                    document.getElementById('challenge').value = data.reflection.challenge || '';
+                    document.getElementById('adult_help').value = data.reflection.adult || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() { const notice = document.getElementById('saveNotice'); notice.classList.remove('show'); void notice.offsetWidth; notice.classList.add('show'); }
+    </script>
+</body>
+</html>

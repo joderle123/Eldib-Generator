@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Identität - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00897b 0%, #004d40 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00897b, #004d40);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #00897b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Identity Wheel */
+        .wheel-container {
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .identity-wheel {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897b, #004d40);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e0f2f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .wheel-segment:hover {
+            transform: scale(1.1);
+        }
+
+        .wheel-segment.selected {
+            border-color: #00897b;
+            background: #b2dfdb;
+        }
+
+        .wheel-segment .emoji {
+            font-size: 2rem;
+        }
+
+        /* Identity Cards */
+        .identity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .identity-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .identity-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .identity-card.selected {
+            border-color: #00897b;
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+        }
+
+        .identity-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .identity-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .identity-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Values Section */
+        .values-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .value-tag {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .value-tag:hover {
+            border-color: #00897b;
+        }
+
+        .value-tag.selected {
+            background: linear-gradient(135deg, #00897b, #004d40);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Strength Rating */
+        .strength-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .strength-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .strength-emoji {
+            font-size: 1.5rem;
+        }
+
+        .strength-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .strength-scale {
+            display: flex;
+            gap: 5px;
+        }
+
+        .strength-star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            opacity: 0.3;
+        }
+
+        .strength-star:hover {
+            transform: scale(1.2);
+        }
+
+        .strength-star.active {
+            opacity: 1;
+        }
+
+        /* Text Inputs */
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #00897b;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #00897b, #004d40);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 25px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00897b;
+            border: 4px solid white;
+        }
+
+        .timeline-age {
+            font-weight: bold;
+            color: #00897b;
+            margin-bottom: 10px;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #00897b;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #00897b, #004d40);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .identity-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .identity-wheel {
+                width: 250px;
+                height: 250px;
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🪞 Meine Identität</h1>
+            <p class="subtitle">Wer bin ich? Was macht mich aus?</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Identität?</h2>
+            <div class="intro-text">
+                <p>Deine <strong>Identität</strong> ist alles, was dich zu der Person macht, die du bist.
+                Das sind deine Eigenschaften, Überzeugungen, Interessen und Erfahrungen. Deine Identität
+                entwickelt sich ständig weiter - und das ist völlig normal!</p>
+                <p style="margin-top: 10px;">In dieser Zeit deines Lebens fragst du dich vielleicht oft:
+                <strong>Wer bin ich eigentlich?</strong> Lass uns das gemeinsam erkunden!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Die Teile meiner Identität</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf alles, was ein Teil von dir ist:</p>
+
+            <div class="identity-grid">
+                <div class="identity-card" data-aspect="family">
+                    <div class="identity-emoji">👨‍👩‍👧‍👦</div>
+                    <div class="identity-label">Familie</div>
+                    <div class="identity-desc">Meine Familie prägt mich</div>
+                </div>
+                <div class="identity-card" data-aspect="culture">
+                    <div class="identity-emoji">🌍</div>
+                    <div class="identity-label">Kultur</div>
+                    <div class="identity-desc">Traditionen und Herkunft</div>
+                </div>
+                <div class="identity-card" data-aspect="hobbies">
+                    <div class="identity-emoji">⚽</div>
+                    <div class="identity-label">Hobbys</div>
+                    <div class="identity-desc">Was ich gerne mache</div>
+                </div>
+                <div class="identity-card" data-aspect="friends">
+                    <div class="identity-emoji">👯</div>
+                    <div class="identity-label">Freunde</div>
+                    <div class="identity-desc">Meine sozialen Kreise</div>
+                </div>
+                <div class="identity-card" data-aspect="talents">
+                    <div class="identity-emoji">🌟</div>
+                    <div class="identity-label">Talente</div>
+                    <div class="identity-desc">Was ich gut kann</div>
+                </div>
+                <div class="identity-card" data-aspect="beliefs">
+                    <div class="identity-emoji">💭</div>
+                    <div class="identity-label">Überzeugungen</div>
+                    <div class="identity-desc">Woran ich glaube</div>
+                </div>
+                <div class="identity-card" data-aspect="dreams">
+                    <div class="identity-emoji">🎯</div>
+                    <div class="identity-label">Träume</div>
+                    <div class="identity-desc">Was ich erreichen will</div>
+                </div>
+                <div class="identity-card" data-aspect="appearance">
+                    <div class="identity-emoji">👤</div>
+                    <div class="identity-label">Aussehen</div>
+                    <div class="identity-desc">Wie ich aussehe</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⭐</span> Meine Werte</h2>
+            <p style="margin-bottom: 15px; color: #666;">Was ist dir wichtig im Leben? Wähle deine Top 5:</p>
+
+            <div class="values-container" id="valuesContainer">
+                <span class="value-tag" data-value="ehrlichkeit">Ehrlichkeit</span>
+                <span class="value-tag" data-value="freundschaft">Freundschaft</span>
+                <span class="value-tag" data-value="familie">Familie</span>
+                <span class="value-tag" data-value="gerechtigkeit">Gerechtigkeit</span>
+                <span class="value-tag" data-value="respekt">Respekt</span>
+                <span class="value-tag" data-value="hilfsbereitschaft">Hilfsbereitschaft</span>
+                <span class="value-tag" data-value="freiheit">Freiheit</span>
+                <span class="value-tag" data-value="kreativitaet">Kreativität</span>
+                <span class="value-tag" data-value="erfolg">Erfolg</span>
+                <span class="value-tag" data-value="natur">Natur</span>
+                <span class="value-tag" data-value="wissen">Wissen</span>
+                <span class="value-tag" data-value="spass">Spaß</span>
+                <span class="value-tag" data-value="mut">Mut</span>
+                <span class="value-tag" data-value="treue">Treue</span>
+                <span class="value-tag" data-value="selbststaendigkeit">Selbstständigkeit</span>
+            </div>
+            <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                Ausgewählt: <span id="valueCount">0</span>/5
+            </p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💪</span> Meine Stärken</h2>
+            <p style="margin-bottom: 15px; color: #666;">Bewerte, wie stark diese Eigenschaften bei dir sind:</p>
+
+            <div class="strength-item">
+                <div class="strength-header">
+                    <div class="strength-emoji">🧠</div>
+                    <div class="strength-label">Klugheit & Lernen</div>
+                </div>
+                <div class="strength-scale" data-strength="learning">
+                    <span class="strength-star" data-value="1">⭐</span>
+                    <span class="strength-star" data-value="2">⭐</span>
+                    <span class="strength-star" data-value="3">⭐</span>
+                    <span class="strength-star" data-value="4">⭐</span>
+                    <span class="strength-star" data-value="5">⭐</span>
+                </div>
+            </div>
+
+            <div class="strength-item">
+                <div class="strength-header">
+                    <div class="strength-emoji">🤝</div>
+                    <div class="strength-label">Freundlichkeit & Mitgefühl</div>
+                </div>
+                <div class="strength-scale" data-strength="kindness">
+                    <span class="strength-star" data-value="1">⭐</span>
+                    <span class="strength-star" data-value="2">⭐</span>
+                    <span class="strength-star" data-value="3">⭐</span>
+                    <span class="strength-star" data-value="4">⭐</span>
+                    <span class="strength-star" data-value="5">⭐</span>
+                </div>
+            </div>
+
+            <div class="strength-item">
+                <div class="strength-header">
+                    <div class="strength-emoji">🦁</div>
+                    <div class="strength-label">Mut & Durchhaltevermögen</div>
+                </div>
+                <div class="strength-scale" data-strength="courage">
+                    <span class="strength-star" data-value="1">⭐</span>
+                    <span class="strength-star" data-value="2">⭐</span>
+                    <span class="strength-star" data-value="3">⭐</span>
+                    <span class="strength-star" data-value="4">⭐</span>
+                    <span class="strength-star" data-value="5">⭐</span>
+                </div>
+            </div>
+
+            <div class="strength-item">
+                <div class="strength-header">
+                    <div class="strength-emoji">🎨</div>
+                    <div class="strength-label">Kreativität & Fantasie</div>
+                </div>
+                <div class="strength-scale" data-strength="creativity">
+                    <span class="strength-star" data-value="1">⭐</span>
+                    <span class="strength-star" data-value="2">⭐</span>
+                    <span class="strength-star" data-value="3">⭐</span>
+                    <span class="strength-star" data-value="4">⭐</span>
+                    <span class="strength-star" data-value="5">⭐</span>
+                </div>
+            </div>
+
+            <div class="strength-item">
+                <div class="strength-header">
+                    <div class="strength-emoji">👥</div>
+                    <div class="strength-label">Teamfähigkeit</div>
+                </div>
+                <div class="strength-scale" data-strength="teamwork">
+                    <span class="strength-star" data-value="1">⭐</span>
+                    <span class="strength-star" data-value="2">⭐</span>
+                    <span class="strength-star" data-value="3">⭐</span>
+                    <span class="strength-star" data-value="4">⭐</span>
+                    <span class="strength-star" data-value="5">⭐</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📜</span> Meine Geschichte</h2>
+            <p style="margin-bottom: 15px; color: #666;">Schreibe wichtige Momente in deinem Leben auf:</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-age">Als ich klein war...</div>
+                    <textarea class="text-input" id="timeline_young" placeholder="Was ist dir aus deiner frühen Kindheit in Erinnerung?"></textarea>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-age">Ein wichtiger Moment...</div>
+                    <textarea class="text-input" id="timeline_moment" placeholder="Ein Erlebnis, das dich geprägt hat?"></textarea>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-age">Heute bin ich...</div>
+                    <textarea class="text-input" id="timeline_today" placeholder="Wie würdest du dich heute beschreiben?"></textarea>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-age">In der Zukunft...</div>
+                    <textarea class="text-input" id="timeline_future" placeholder="Wie möchtest du in 10 Jahren sein?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💭</span> Selbstreflexion</h2>
+
+            <div class="input-section">
+                <label class="input-label">Drei Worte, die mich am besten beschreiben:</label>
+                <textarea class="text-input" id="three_words" placeholder="z.B. kreativ, hilfsbereit, neugierig..."></textarea>
+            </div>
+
+            <div class="input-section">
+                <label class="input-label">Was unterscheidet mich von anderen?</label>
+                <textarea class="text-input" id="unique" placeholder="Was macht dich besonders?"></textarea>
+            </div>
+
+            <div class="input-section">
+                <label class="input-label">Was möchte ich an mir verbessern?</label>
+                <textarea class="text-input" id="improve" placeholder="Woran möchtest du arbeiten?"></textarea>
+            </div>
+
+            <div class="input-section">
+                <label class="input-label">Worauf bin ich stolz?</label>
+                <textarea class="text-input" id="proud" placeholder="Was hast du erreicht oder gut gemacht?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu deiner Identität..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-53, S-54 - Identitätsentwicklung, Selbstkonzept
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let identityAspects = [];
+        let selectedValues = [];
+        let strengths = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Identity cards
+            document.querySelectorAll('.identity-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const aspect = this.dataset.aspect;
+                    if (this.classList.contains('selected')) {
+                        if (!identityAspects.includes(aspect)) {
+                            identityAspects.push(aspect);
+                        }
+                    } else {
+                        identityAspects = identityAspects.filter(a => a !== aspect);
+                    }
+                    saveData();
+                });
+            });
+
+            // Values
+            document.querySelectorAll('.value-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const value = this.dataset.value;
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                        selectedValues = selectedValues.filter(v => v !== value);
+                    } else if (selectedValues.length < 5) {
+                        this.classList.add('selected');
+                        selectedValues.push(value);
+                    }
+                    document.getElementById('valueCount').textContent = selectedValues.length;
+                    saveData();
+                });
+            });
+
+            // Strength stars
+            document.querySelectorAll('.strength-scale').forEach(scale => {
+                const stars = scale.querySelectorAll('.strength-star');
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const value = parseInt(this.dataset.value);
+                        const strength = scale.dataset.strength;
+                        strengths[strength] = value;
+
+                        stars.forEach((s, index) => {
+                            s.classList.toggle('active', index < value);
+                        });
+                        saveData();
+                    });
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                identityAspects,
+                selectedValues,
+                strengths,
+                timeline: {
+                    young: document.getElementById('timeline_young').value,
+                    moment: document.getElementById('timeline_moment').value,
+                    today: document.getElementById('timeline_today').value,
+                    future: document.getElementById('timeline_future').value
+                },
+                reflection: {
+                    three_words: document.getElementById('three_words').value,
+                    unique: document.getElementById('unique').value,
+                    improve: document.getElementById('improve').value,
+                    proud: document.getElementById('proud').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_identitaet', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_identitaet');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.identityAspects) {
+                    identityAspects = data.identityAspects;
+                    identityAspects.forEach(aspect => {
+                        const el = document.querySelector(`.identity-card[data-aspect="${aspect}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.selectedValues) {
+                    selectedValues = data.selectedValues;
+                    selectedValues.forEach(value => {
+                        const el = document.querySelector(`.value-tag[data-value="${value}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                    document.getElementById('valueCount').textContent = selectedValues.length;
+                }
+
+                if (data.strengths) {
+                    strengths = data.strengths;
+                    Object.entries(strengths).forEach(([strength, value]) => {
+                        const scale = document.querySelector(`.strength-scale[data-strength="${strength}"]`);
+                        if (scale) {
+                            scale.querySelectorAll('.strength-star').forEach((star, index) => {
+                                star.classList.toggle('active', index < value);
+                            });
+                        }
+                    });
+                }
+
+                if (data.timeline) {
+                    document.getElementById('timeline_young').value = data.timeline.young || '';
+                    document.getElementById('timeline_moment').value = data.timeline.moment || '';
+                    document.getElementById('timeline_today').value = data.timeline.today || '';
+                    document.getElementById('timeline_future').value = data.timeline.future || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('three_words').value = data.reflection.three_words || '';
+                    document.getElementById('unique').value = data.reflection.unique || '';
+                    document.getElementById('improve').value = data.reflection.improve || '';
+                    document.getElementById('proud').value = data.reflection.proud || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

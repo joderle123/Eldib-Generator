@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soziale Rollen - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #009688 0%, #00695c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #009688, #00695c);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #009688;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .roles-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .role-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #009688;
+        }
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .role-emoji { font-size: 2rem; }
+        .role-title { font-weight: bold; color: #333; }
+        .role-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .role-input:focus { outline: none; border-color: #009688; }
+        .role-label { font-size: 0.9rem; color: #666; margin-bottom: 8px; display: block; }
+        .expectations-grid { display: grid; gap: 15px; }
+        .expectation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .expectation-item:hover { transform: translateX(5px); }
+        .expectation-item.relates { background: linear-gradient(135deg, #e0f2f1, #b2dfdb); border-left: 4px solid #009688; }
+        .expectation-emoji { font-size: 1.5rem; }
+        .expectation-content { flex: 1; }
+        .expectation-title { font-weight: bold; color: #333; }
+        .expectation-desc { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .conflict-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .conflict-title { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .conflict-text { color: #555; line-height: 1.6; margin-bottom: 15px; }
+        .conflict-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .conflict-input:focus { outline: none; border-color: #009688; }
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #009688; }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #009688; }
+        .save-notice {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #4caf50; color: white;
+            padding: 15px 25px; border-radius: 30px;
+            display: none; z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .print-btn {
+            background: linear-gradient(135deg, #009688, #00695c);
+            color: white; border: none;
+            padding: 12px 25px; border-radius: 25px;
+            cursor: pointer; font-size: 1rem; margin-top: 15px;
+        }
+        @media print { body { background: white; } .print-btn, .save-notice { display: none !important; } }
+        @media (max-width: 600px) { .roles-container { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🎭 Soziale Rollen</h1>
+            <p class="subtitle">Die verschiedenen "Hüte", die wir tragen</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was sind soziale Rollen?</h2>
+            <div class="intro-text">
+                <p>Eine <strong>soziale Rolle</strong> ist wie ein "Hut", den wir in verschiedenen Situationen
+                tragen. Zuhause bist du Kind oder Geschwister, in der Schule Schüler, im Sportverein
+                Teammitglied. Jede Rolle hat ihre eigenen Erwartungen!</p>
+                <p style="margin-top: 10px;">Du bist immer dieselbe Person, aber je nach Situation verhältst
+                du dich etwas anders - und das ist ganz normal.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">👤</span> Meine verschiedenen Rollen</h2>
+            <p style="margin-bottom: 20px; color: #666;">Beschreibe, wie du dich in diesen Rollen verhältst:</p>
+            <div class="roles-container">
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">👨‍👩‍👧</span><span class="role-title">Kind / Sohn / Tochter</span></div>
+                    <label class="role-label">Wie bist du zuhause bei deinen Eltern?</label>
+                    <textarea class="role-input" id="role_child" placeholder="Wie verhältst du dich? Was wird erwartet?"></textarea>
+                </div>
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">👫</span><span class="role-title">Geschwister</span></div>
+                    <label class="role-label">Wie bist du als Bruder/Schwester? (falls zutreffend)</label>
+                    <textarea class="role-input" id="role_sibling" placeholder="Wie verhältst du dich gegenüber Geschwistern?"></textarea>
+                </div>
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">📚</span><span class="role-title">Schüler/in</span></div>
+                    <label class="role-label">Wie bist du in der Schule?</label>
+                    <textarea class="role-input" id="role_student" placeholder="Im Unterricht, mit Lehrern..."></textarea>
+                </div>
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">🧑‍🤝‍🧑</span><span class="role-title">Freund/in</span></div>
+                    <label class="role-label">Wie bist du als Freund/in?</label>
+                    <textarea class="role-input" id="role_friend" placeholder="Was macht dich zu einem guten Freund?"></textarea>
+                </div>
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">⚽</span><span class="role-title">Teammitglied</span></div>
+                    <label class="role-label">In Sport, Verein oder Hobby-Gruppe?</label>
+                    <textarea class="role-input" id="role_team" placeholder="Deine Rolle im Team..."></textarea>
+                </div>
+                <div class="role-section">
+                    <div class="role-header"><span class="role-emoji">✨</span><span class="role-title">Andere Rollen</span></div>
+                    <label class="role-label">Welche anderen Rollen hast du noch?</label>
+                    <textarea class="role-input" id="role_other" placeholder="z.B. Enkel, Nachbar, Helfer..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📋</span> Erwartungen an Rollen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Erwartungen, die du kennst oder spürst:</p>
+            <div class="expectations-grid">
+                <div class="expectation-item" data-exp="respect"><div class="expectation-emoji">🙏</div><div class="expectation-content"><div class="expectation-title">Respekt zeigen</div><div class="expectation-desc">Als Kind soll ich Erwachsene respektieren</div></div></div>
+                <div class="expectation-item" data-exp="grades"><div class="expectation-emoji">📊</div><div class="expectation-content"><div class="expectation-title">Gute Noten</div><div class="expectation-desc">Als Schüler soll ich mich anstrengen</div></div></div>
+                <div class="expectation-item" data-exp="loyal"><div class="expectation-emoji">🛡️</div><div class="expectation-content"><div class="expectation-title">Loyal sein</div><div class="expectation-desc">Als Freund soll ich treu und verlässlich sein</div></div></div>
+                <div class="expectation-item" data-exp="teamplay"><div class="expectation-emoji">🤝</div><div class="expectation-content"><div class="expectation-title">Teamplayer sein</div><div class="expectation-desc">Im Team soll ich mit anderen zusammenarbeiten</div></div></div>
+                <div class="expectation-item" data-exp="help"><div class="expectation-emoji">🏠</div><div class="expectation-content"><div class="expectation-title">Im Haushalt helfen</div><div class="expectation-desc">Als Familienmitglied soll ich mithelfen</div></div></div>
+                <div class="expectation-item" data-exp="behave"><div class="expectation-emoji">✨</div><div class="expectation-content"><div class="expectation-title">Sich gut benehmen</div><div class="expectation-desc">In der Öffentlichkeit soll ich mich angemessen verhalten</div></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⚡</span> Rollenkonflikte</h2>
+            <p style="margin-bottom: 15px; color: #666;">Manchmal widersprechen sich Rollen. Wie gehst du damit um?</p>
+            <div class="conflict-section">
+                <div class="conflict-title">Konflikt 1: Freunde vs. Familie</div>
+                <div class="conflict-text">Deine Freunde wollen etwas mit dir machen, aber deine Eltern erwarten, dass du bei einem Familientreffen dabei bist.</div>
+                <textarea class="conflict-input" id="conflict1" placeholder="Wie würdest du das lösen?"></textarea>
+            </div>
+            <div class="conflict-section">
+                <div class="conflict-title">Konflikt 2: Schüler vs. Freund</div>
+                <div class="conflict-text">Dein Freund bittet dich, ihm bei einer Prüfung zu helfen (abschreiben lassen). Als Schüler weißt du, dass das nicht erlaubt ist.</div>
+                <textarea class="conflict-input" id="conflict2" placeholder="Was würdest du tun?"></textarea>
+            </div>
+            <div class="conflict-section">
+                <div class="conflict-title">Konflikt 3: Unterschiedliche Erwartungen</div>
+                <div class="conflict-text">Deine Eltern erwarten, dass du viel lernst. Deine Freunde finden Lernen langweilig.</div>
+                <textarea class="conflict-input" id="conflict3" placeholder="Wie gehst du damit um?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Reflexion</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">In welcher Rolle fühlst du dich am wohlsten und warum?</label>
+                <textarea class="reflection-input" id="best_role" placeholder="Deine Lieblingsrolle..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Welche Rolle fällt dir manchmal schwer?</label>
+                <textarea class="reflection-input" id="hard_role" placeholder="Was ist dabei herausfordernd?"></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was bleibt bei dir gleich, egal welche Rolle du einnimmst?</label>
+                <textarea class="reflection-input" id="core_self" placeholder="Dein wahrer Kern..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu sozialen Rollen..."></textarea>
+            <div class="eldib-reference"><strong>ELDiB-Bezug:</strong> S-63, S-64 - Soziale Rollen verstehen, Rollenerwartungen</div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let expectations = [];
+        document.addEventListener('DOMContentLoaded', function() { loadData(); setupEventListeners(); });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.expectation-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('relates');
+                    const exp = this.dataset.exp;
+                    if (this.classList.contains('relates')) { if (!expectations.includes(exp)) expectations.push(exp); }
+                    else { expectations = expectations.filter(e => e !== exp); }
+                    saveData();
+                });
+            });
+            document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', saveData); });
+        }
+
+        function saveData() {
+            const data = {
+                expectations,
+                roles: {
+                    child: document.getElementById('role_child').value,
+                    sibling: document.getElementById('role_sibling').value,
+                    student: document.getElementById('role_student').value,
+                    friend: document.getElementById('role_friend').value,
+                    team: document.getElementById('role_team').value,
+                    other: document.getElementById('role_other').value
+                },
+                conflicts: {
+                    c1: document.getElementById('conflict1').value,
+                    c2: document.getElementById('conflict2').value,
+                    c3: document.getElementById('conflict3').value
+                },
+                reflection: {
+                    best: document.getElementById('best_role').value,
+                    hard: document.getElementById('hard_role').value,
+                    core: document.getElementById('core_self').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_soziale_rollen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_soziale_rollen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.expectations) { expectations = data.expectations; expectations.forEach(e => { const el = document.querySelector(`.expectation-item[data-exp="${e}"]`); if (el) el.classList.add('relates'); }); }
+                if (data.roles) {
+                    document.getElementById('role_child').value = data.roles.child || '';
+                    document.getElementById('role_sibling').value = data.roles.sibling || '';
+                    document.getElementById('role_student').value = data.roles.student || '';
+                    document.getElementById('role_friend').value = data.roles.friend || '';
+                    document.getElementById('role_team').value = data.roles.team || '';
+                    document.getElementById('role_other').value = data.roles.other || '';
+                }
+                if (data.conflicts) {
+                    document.getElementById('conflict1').value = data.conflicts.c1 || '';
+                    document.getElementById('conflict2').value = data.conflicts.c2 || '';
+                    document.getElementById('conflict3').value = data.conflicts.c3 || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('best_role').value = data.reflection.best || '';
+                    document.getElementById('hard_role').value = data.reflection.hard || '';
+                    document.getElementById('core_self').value = data.reflection.core || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() { const notice = document.getElementById('saveNotice'); notice.classList.remove('show'); void notice.offsetWidth; notice.classList.add('show'); }
+    </script>
+</body>
+</html>

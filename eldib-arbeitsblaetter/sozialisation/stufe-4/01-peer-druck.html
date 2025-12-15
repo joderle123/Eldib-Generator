@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer-Druck verstehen - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3949ab, #1a237e);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #3949ab;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Pressure Types */
+        .pressure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .pressure-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .pressure-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .pressure-card.recognized {
+            border-color: #3949ab;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        .pressure-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .pressure-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .pressure-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Scenario Section */
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3949ab;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .scenario-emoji {
+            font-size: 2rem;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .scenario-text {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .response-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .response-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .response-btn:hover {
+            border-color: #3949ab;
+            transform: translateX(5px);
+        }
+
+        .response-btn.selected {
+            border-color: #3949ab;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        .response-btn.assertive {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .response-btn.passive {
+            border-color: #ff9800;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+        }
+
+        .response-btn.risky {
+            border-color: #f44336;
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .response-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        /* Strength Meter */
+        .strength-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .strength-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .strength-meter {
+            height: 30px;
+            background: linear-gradient(to right, #ffcdd2, #fff9c4, #c8e6c9);
+            border-radius: 15px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .strength-marker {
+            position: absolute;
+            top: -5px;
+            width: 40px;
+            height: 40px;
+            background: #3949ab;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transform: translateX(-50%);
+            transition: left 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .strength-labels {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Say No Techniques */
+        .technique-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid #e0e0e0;
+        }
+
+        .technique-card:hover {
+            transform: translateX(5px);
+        }
+
+        .technique-card.practiced {
+            border-left-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .technique-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .technique-emoji {
+            font-size: 1.5rem;
+        }
+
+        .technique-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .technique-desc {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .technique-example {
+            font-style: italic;
+            color: #3949ab;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        /* Reflection */
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .reflection-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: #3949ab;
+        }
+
+        /* Support Network */
+        .network-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .network-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .network-card:hover {
+            transform: scale(1.05);
+        }
+
+        .network-card.selected {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .network-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .network-label {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #3949ab;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #3949ab, #1a237e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .pressure-grid, .network-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🎭 Peer-Druck verstehen</h1>
+            <p class="subtitle">Stark bleiben, wenn andere dich beeinflussen wollen</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Peer-Druck?</h2>
+            <div class="intro-text">
+                <p><strong>Peer-Druck</strong> (auch "Gruppenzwang" genannt) entsteht, wenn Gleichaltrige dich
+                dazu bringen wollen, etwas zu tun, das du eigentlich nicht möchtest. Das kann direkt sein
+                ("Komm schon, mach mit!") oder indirekt durch das Gefühl, dazugehören zu wollen.</p>
+                <p style="margin-top: 10px;">Es ist wichtig zu wissen: <strong>Du hast immer das Recht, Nein zu sagen!</strong></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🔍</span> Arten von Peer-Druck erkennen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf die Arten, die du schon erlebt hast:</p>
+
+            <div class="pressure-grid">
+                <div class="pressure-card" data-type="direct">
+                    <div class="pressure-emoji">🗣️</div>
+                    <div class="pressure-title">Direkter Druck</div>
+                    <div class="pressure-desc">"Mach das, sonst bist du nicht cool!"</div>
+                </div>
+                <div class="pressure-card" data-type="indirect">
+                    <div class="pressure-emoji">👀</div>
+                    <div class="pressure-title">Indirekter Druck</div>
+                    <div class="pressure-desc">Andere machen etwas und du fühlst dich gedrängt mitzumachen</div>
+                </div>
+                <div class="pressure-card" data-type="teasing">
+                    <div class="pressure-emoji">😏</div>
+                    <div class="pressure-title">Hänseln</div>
+                    <div class="pressure-desc">"Du traust dich ja eh nicht!"</div>
+                </div>
+                <div class="pressure-card" data-type="exclusion">
+                    <div class="pressure-emoji">🚪</div>
+                    <div class="pressure-title">Ausschluss drohen</div>
+                    <div class="pressure-desc">"Wenn du nicht mitmachst, gehörst du nicht mehr dazu."</div>
+                </div>
+                <div class="pressure-card" data-type="reasoning">
+                    <div class="pressure-emoji">🤔</div>
+                    <div class="pressure-title">Überreden</div>
+                    <div class="pressure-desc">"Alle machen das doch, das ist total normal!"</div>
+                </div>
+                <div class="pressure-card" data-type="positive">
+                    <div class="pressure-emoji">✨</div>
+                    <div class="pressure-title">Positiver Druck</div>
+                    <div class="pressure-desc">Freunde ermutigen dich zu guten Dingen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Situationen bewerten</h2>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">🎮</div>
+                    <div class="scenario-title">Situation 1: Das neue Spiel</div>
+                </div>
+                <div class="scenario-text">
+                    Deine Freunde spielen ein Spiel, das ab 16 Jahren freigegeben ist. Sie sagen:
+                    "Komm schon, spiel mit! Deine Eltern werden es nie erfahren. Alle spielen das!"
+                </div>
+                <div class="response-options" data-scenario="1">
+                    <button class="response-btn" data-response="agree" data-type="risky">
+                        <div class="response-label">Nachgeben</div>
+                        <span>"Na gut, aber nur einmal..."</span>
+                    </button>
+                    <button class="response-btn" data-response="assertive" data-type="assertive">
+                        <div class="response-label">Selbstbewusst ablehnen</div>
+                        <span>"Nein danke, das Spiel interessiert mich nicht. Lass uns was anderes machen."</span>
+                    </button>
+                    <button class="response-btn" data-response="excuse" data-type="passive">
+                        <div class="response-label">Ausrede nutzen</div>
+                        <span>"Meine Eltern haben das verboten, ich kann nicht..."</span>
+                    </button>
+                    <button class="response-btn" data-response="leave" data-type="assertive">
+                        <div class="response-label">Situation verlassen</div>
+                        <span>"Ich gehe nach Hause, das ist nichts für mich."</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">🚬</div>
+                    <div class="scenario-title">Situation 2: Auf dem Schulhof</div>
+                </div>
+                <div class="scenario-text">
+                    Eine Gruppe älterer Schüler bietet dir eine Zigarette an. "Probier mal, das ist nicht schlimm.
+                    Oder bist du etwa ein Baby?"
+                </div>
+                <div class="response-options" data-scenario="2">
+                    <button class="response-btn" data-response="agree" data-type="risky">
+                        <div class="response-label">Probieren</div>
+                        <span>"Okay, nur einmal..."</span>
+                    </button>
+                    <button class="response-btn" data-response="assertive" data-type="assertive">
+                        <div class="response-label">Klar ablehnen</div>
+                        <span>"Nein danke, das ist nichts für mich."</span>
+                    </button>
+                    <button class="response-btn" data-response="humor" data-type="assertive">
+                        <div class="response-label">Mit Humor kontern</div>
+                        <span>"Nee, ich steh nicht auf den Geschmack von Aschenbecher."</span>
+                    </button>
+                    <button class="response-btn" data-response="report" data-type="assertive">
+                        <div class="response-label">Weggehen und melden</div>
+                        <span>Die Situation verlassen und einem Erwachsenen erzählen.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">📱</div>
+                    <div class="scenario-title">Situation 3: Online-Druck</div>
+                </div>
+                <div class="scenario-text">
+                    In eurem Klassenchat wird ein peinliches Foto von jemandem geteilt. Alle lachen und du sollst
+                    auch etwas Lustiges schreiben.
+                </div>
+                <div class="response-options" data-scenario="3">
+                    <button class="response-btn" data-response="join" data-type="risky">
+                        <div class="response-label">Mitmachen</div>
+                        <span>Auch einen lustigen Kommentar schreiben.</span>
+                    </button>
+                    <button class="response-btn" data-response="ignore" data-type="passive">
+                        <div class="response-label">Ignorieren</div>
+                        <span>Nichts schreiben und hoffen, dass es vorübergeht.</span>
+                    </button>
+                    <button class="response-btn" data-response="defend" data-type="assertive">
+                        <div class="response-label">Verteidigen</div>
+                        <span>"Hey, das ist gemein. Löscht das bitte."</span>
+                    </button>
+                    <button class="response-btn" data-response="private" data-type="assertive">
+                        <div class="response-label">Person unterstützen</div>
+                        <span>Der betroffenen Person privat schreiben und Unterstützung anbieten.</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💪</span> Meine Widerstandskraft</h2>
+            <div class="strength-container">
+                <div class="strength-title">Wie stark fühlst du dich, Nein zu sagen?</div>
+                <div class="strength-meter">
+                    <div class="strength-marker" id="strengthMarker" style="left: 50%;">💪</div>
+                </div>
+                <div class="strength-labels">
+                    <span>Fällt mir schwer</span>
+                    <span>Geht so</span>
+                    <span>Bin sehr stark</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🛡️</span> Techniken zum Nein-Sagen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Techniken, die du schon geübt hast:</p>
+
+            <div class="technique-card" data-technique="broken-record">
+                <div class="technique-header">
+                    <div class="technique-emoji">🔄</div>
+                    <div class="technique-title">Kaputte Schallplatte</div>
+                </div>
+                <div class="technique-desc">Wiederhole ruhig immer wieder dasselbe "Nein".</div>
+                <div class="technique-example">"Nein danke. Nein danke. Nein danke."</div>
+            </div>
+
+            <div class="technique-card" data-technique="alternative">
+                <div class="technique-header">
+                    <div class="technique-emoji">🔀</div>
+                    <div class="technique-title">Alternative anbieten</div>
+                </div>
+                <div class="technique-desc">Schlage etwas anderes vor, das ihr machen könnt.</div>
+                <div class="technique-example">"Lass uns lieber... / Wie wäre es stattdessen mit...?"</div>
+            </div>
+
+            <div class="technique-card" data-technique="humor">
+                <div class="technique-header">
+                    <div class="technique-emoji">😄</div>
+                    <div class="technique-title">Mit Humor ablehnen</div>
+                </div>
+                <div class="technique-desc">Mach einen Witz, um die Situation zu entschärfen.</div>
+                <div class="technique-example">"Haha, nee, ich bin allergisch gegen schlechte Ideen!"</div>
+            </div>
+
+            <div class="technique-card" data-technique="friend">
+                <div class="technique-header">
+                    <div class="technique-emoji">👯</div>
+                    <div class="technique-title">Verbündeten suchen</div>
+                </div>
+                <div class="technique-desc">Halte dich an Freunde, die ähnlich denken wie du.</div>
+                <div class="technique-example">"Wir gehen jetzt, komm [Name]."</div>
+            </div>
+
+            <div class="technique-card" data-technique="leave">
+                <div class="technique-header">
+                    <div class="technique-emoji">🚶</div>
+                    <div class="technique-title">Situation verlassen</div>
+                </div>
+                <div class="technique-desc">Manchmal ist Weggehen die beste Option.</div>
+                <div class="technique-example">"Ich muss jetzt los." (und gehen)</div>
+            </div>
+
+            <div class="technique-card" data-technique="values">
+                <div class="technique-header">
+                    <div class="technique-emoji">⭐</div>
+                    <div class="technique-title">Auf Werte berufen</div>
+                </div>
+                <div class="technique-desc">Erkläre, warum dir das wichtig ist.</div>
+                <div class="technique-example">"Das passt nicht zu mir. Ich finde das nicht richtig."</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">👥</span> Mein Unterstützungsnetzwerk</h2>
+            <p style="margin-bottom: 15px; color: #666;">Wer kann dir helfen, wenn du Druck erlebst? Klicke auf alle Personen:</p>
+
+            <div class="network-grid">
+                <div class="network-card" data-person="parents">
+                    <div class="network-emoji">👨‍👩‍👧</div>
+                    <div class="network-label">Eltern</div>
+                </div>
+                <div class="network-card" data-person="siblings">
+                    <div class="network-emoji">👫</div>
+                    <div class="network-label">Geschwister</div>
+                </div>
+                <div class="network-card" data-person="teacher">
+                    <div class="network-emoji">👩‍🏫</div>
+                    <div class="network-label">Lehrer*in</div>
+                </div>
+                <div class="network-card" data-person="friend">
+                    <div class="network-emoji">🧑‍🤝‍🧑</div>
+                    <div class="network-label">Gute Freunde</div>
+                </div>
+                <div class="network-card" data-person="counselor">
+                    <div class="network-emoji">👨‍⚕️</div>
+                    <div class="network-label">Berater*in</div>
+                </div>
+                <div class="network-card" data-person="relative">
+                    <div class="network-emoji">👵</div>
+                    <div class="network-label">Verwandte</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Reflexion</h2>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der ich gut Nein gesagt habe:</label>
+                <textarea class="reflection-input" id="good_no" placeholder="Was ist passiert? Wie hast du dich gefühlt?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der mir Nein-Sagen schwer fiel:</label>
+                <textarea class="reflection-input" id="hard_no" placeholder="Was war schwierig? Was würdest du heute anders machen?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Mein persönlicher Nein-Sagen-Satz:</label>
+                <textarea class="reflection-input" id="my_phrase" placeholder="Schreibe einen Satz, den du gut auswendig lernen kannst..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zum Thema Peer-Druck..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-51, S-52 - Peer-Druck erkennen und widerstehen, Selbstbehauptung
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let pressureTypes = [];
+        let scenarioResponses = {};
+        let strengthLevel = 50;
+        let techniques = [];
+        let supportNetwork = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Pressure cards
+            document.querySelectorAll('.pressure-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('recognized');
+                    const type = this.dataset.type;
+                    if (this.classList.contains('recognized')) {
+                        if (!pressureTypes.includes(type)) {
+                            pressureTypes.push(type);
+                        }
+                    } else {
+                        pressureTypes = pressureTypes.filter(t => t !== type);
+                    }
+                    saveData();
+                });
+            });
+
+            // Scenario responses
+            document.querySelectorAll('.response-options').forEach(container => {
+                container.querySelectorAll('.response-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const scenario = container.dataset.scenario;
+                        const response = this.dataset.response;
+                        const type = this.dataset.type;
+
+                        container.querySelectorAll('.response-btn').forEach(b => {
+                            b.classList.remove('selected', 'assertive', 'passive', 'risky');
+                        });
+
+                        this.classList.add('selected', type);
+                        scenarioResponses[scenario] = { response, type };
+                        saveData();
+                    });
+                });
+            });
+
+            // Strength meter
+            const strengthMeter = document.querySelector('.strength-meter');
+            const marker = document.getElementById('strengthMarker');
+
+            strengthMeter.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                strengthLevel = Math.round((x / rect.width) * 100);
+                strengthLevel = Math.max(0, Math.min(100, strengthLevel));
+                marker.style.left = strengthLevel + '%';
+                saveData();
+            });
+
+            // Technique cards
+            document.querySelectorAll('.technique-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('practiced');
+                    const technique = this.dataset.technique;
+                    if (this.classList.contains('practiced')) {
+                        if (!techniques.includes(technique)) {
+                            techniques.push(technique);
+                        }
+                    } else {
+                        techniques = techniques.filter(t => t !== technique);
+                    }
+                    saveData();
+                });
+            });
+
+            // Support network
+            document.querySelectorAll('.network-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const person = this.dataset.person;
+                    if (this.classList.contains('selected')) {
+                        if (!supportNetwork.includes(person)) {
+                            supportNetwork.push(person);
+                        }
+                    } else {
+                        supportNetwork = supportNetwork.filter(p => p !== person);
+                    }
+                    saveData();
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                pressureTypes,
+                scenarioResponses,
+                strengthLevel,
+                techniques,
+                supportNetwork,
+                reflections: {
+                    good_no: document.getElementById('good_no').value,
+                    hard_no: document.getElementById('hard_no').value,
+                    my_phrase: document.getElementById('my_phrase').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_peer_druck', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_peer_druck');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.pressureTypes) {
+                    pressureTypes = data.pressureTypes;
+                    pressureTypes.forEach(type => {
+                        const el = document.querySelector(`.pressure-card[data-type="${type}"]`);
+                        if (el) el.classList.add('recognized');
+                    });
+                }
+
+                if (data.scenarioResponses) {
+                    scenarioResponses = data.scenarioResponses;
+                    Object.entries(scenarioResponses).forEach(([scenario, {response, type}]) => {
+                        const btn = document.querySelector(`.response-options[data-scenario="${scenario}"] .response-btn[data-response="${response}"]`);
+                        if (btn) btn.classList.add('selected', type);
+                    });
+                }
+
+                if (data.strengthLevel !== undefined) {
+                    strengthLevel = data.strengthLevel;
+                    document.getElementById('strengthMarker').style.left = strengthLevel + '%';
+                }
+
+                if (data.techniques) {
+                    techniques = data.techniques;
+                    techniques.forEach(t => {
+                        const el = document.querySelector(`.technique-card[data-technique="${t}"]`);
+                        if (el) el.classList.add('practiced');
+                    });
+                }
+
+                if (data.supportNetwork) {
+                    supportNetwork = data.supportNetwork;
+                    supportNetwork.forEach(p => {
+                        const el = document.querySelector(`.network-card[data-person="${p}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.reflections) {
+                    document.getElementById('good_no').value = data.reflections.good_no || '';
+                    document.getElementById('hard_no').value = data.reflections.hard_no || '';
+                    document.getElementById('my_phrase').value = data.reflections.my_phrase || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

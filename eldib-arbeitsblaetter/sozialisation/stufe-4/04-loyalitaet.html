@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyalität und Treue - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #7b1fa2, #4a148c);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #7b1fa2;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Loyalty Types */
+        .loyalty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .loyalty-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .loyalty-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .loyalty-card.selected {
+            border-color: #7b1fa2;
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+        }
+
+        .loyalty-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .loyalty-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .loyalty-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Dilemma Section */
+        .dilemma {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .dilemma-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .dilemma-emoji {
+            font-size: 2.5rem;
+        }
+
+        .dilemma-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .dilemma-text {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .dilemma-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .dilemma-btn {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .dilemma-btn:hover {
+            border-color: #7b1fa2;
+        }
+
+        .dilemma-btn.selected {
+            border-color: #7b1fa2;
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+        }
+
+        .dilemma-reason {
+            margin-top: 15px;
+        }
+
+        .dilemma-reason label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .reason-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .reason-input:focus {
+            outline: none;
+            border-color: #7b1fa2;
+        }
+
+        /* Loyalty Scale */
+        .scale-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .scale-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .scale-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .scale-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, #e0e0e0, #7b1fa2);
+        }
+
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #7b1fa2;
+            cursor: pointer;
+        }
+
+        .scale-value {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: #7b1fa2;
+        }
+
+        /* Boundaries */
+        .boundaries-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .boundary-column {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .boundary-column.healthy {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .boundary-column.unhealthy {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .boundary-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .boundary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .boundary-item:hover {
+            transform: translateX(5px);
+        }
+
+        .boundary-item.checked {
+            border: 2px solid #7b1fa2;
+        }
+
+        .boundary-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #7b1fa2;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .boundary-item.checked .boundary-checkbox {
+            background: #7b1fa2;
+            color: white;
+        }
+
+        /* Reflection */
+        .reflection-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .reflection-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: #7b1fa2;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #7b1fa2;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #7b1fa2, #4a148c);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .loyalty-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .boundaries-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🛡️ Loyalität und Treue</h1>
+            <p class="subtitle">Zu Freunden und Werten stehen</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was bedeutet Loyalität?</h2>
+            <div class="intro-text">
+                <p><strong>Loyalität</strong> bedeutet, zu jemandem oder etwas zu stehen - auch wenn es
+                schwierig wird. Es bedeutet, Freunde nicht im Stich zu lassen, Versprechen zu halten
+                und treu zu bleiben.</p>
+                <p style="margin-top: 10px;">Aber Achtung: Loyalität hat auch <strong>Grenzen</strong>.
+                Wenn jemand etwas Falsches tut, ist es nicht loyal mitzumachen - sondern mutig, es anzusprechen!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Verschiedene Arten von Loyalität</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf die Bereiche, in denen dir Loyalität wichtig ist:</p>
+
+            <div class="loyalty-grid">
+                <div class="loyalty-card" data-type="friends">
+                    <div class="loyalty-emoji">👯</div>
+                    <div class="loyalty-title">Freundschafts-Treue</div>
+                    <div class="loyalty-desc">Zu Freunden stehen</div>
+                </div>
+                <div class="loyalty-card" data-type="family">
+                    <div class="loyalty-emoji">👨‍👩‍👧‍👦</div>
+                    <div class="loyalty-title">Familien-Treue</div>
+                    <div class="loyalty-desc">Familie unterstützen</div>
+                </div>
+                <div class="loyalty-card" data-type="team">
+                    <div class="loyalty-emoji">⚽</div>
+                    <div class="loyalty-title">Team-Loyalität</div>
+                    <div class="loyalty-desc">Zum Team halten</div>
+                </div>
+                <div class="loyalty-card" data-type="values">
+                    <div class="loyalty-emoji">⭐</div>
+                    <div class="loyalty-title">Werte-Treue</div>
+                    <div class="loyalty-desc">Zu eigenen Werten stehen</div>
+                </div>
+                <div class="loyalty-card" data-type="promises">
+                    <div class="loyalty-emoji">🤝</div>
+                    <div class="loyalty-title">Versprechen-Treue</div>
+                    <div class="loyalty-desc">Wort halten</div>
+                </div>
+                <div class="loyalty-card" data-type="self">
+                    <div class="loyalty-emoji">💪</div>
+                    <div class="loyalty-title">Selbst-Loyalität</div>
+                    <div class="loyalty-desc">Zu sich selbst stehen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⚖️</span> Loyalitäts-Dilemmata</h2>
+            <p style="margin-bottom: 15px; color: #666;">Manchmal ist es schwer zu entscheiden, wem man treu sein soll:</p>
+
+            <div class="dilemma">
+                <div class="dilemma-header">
+                    <div class="dilemma-emoji">🤔</div>
+                    <div class="dilemma-title">Dilemma 1: Der abschreibende Freund</div>
+                </div>
+                <div class="dilemma-text">
+                    Dein bester Freund schreibt bei einer Klassenarbeit von dir ab. Die Lehrerin fragt dich,
+                    ob du etwas gesehen hast. Lügen würde deinen Freund schützen, aber es wäre unehrlich.
+                </div>
+                <div class="dilemma-options" data-dilemma="1">
+                    <button class="dilemma-btn" data-response="lie">
+                        Ich sage, ich habe nichts gesehen (Freund schützen)
+                    </button>
+                    <button class="dilemma-btn" data-response="truth">
+                        Ich sage die Wahrheit (Ehrlich sein)
+                    </button>
+                    <button class="dilemma-btn" data-response="vague">
+                        Ich sage etwas Vages ("Ich weiß nicht genau...")
+                    </button>
+                    <button class="dilemma-btn" data-response="talk">
+                        Ich bitte die Lehrerin um ein Einzelgespräch
+                    </button>
+                </div>
+                <div class="dilemma-reason">
+                    <label>Warum hast du so entschieden?</label>
+                    <textarea class="reason-input" id="reason1" placeholder="Erkläre deine Gedanken..."></textarea>
+                </div>
+            </div>
+
+            <div class="dilemma">
+                <div class="dilemma-header">
+                    <div class="dilemma-emoji">😰</div>
+                    <div class="dilemma-title">Dilemma 2: Das Mobbing</div>
+                </div>
+                <div class="dilemma-text">
+                    Deine Freundesgruppe macht sich regelmäßig über ein anderes Kind lustig. Du findest das
+                    nicht gut, aber du hast Angst, selbst ausgeschlossen zu werden, wenn du etwas sagst.
+                </div>
+                <div class="dilemma-options" data-dilemma="2">
+                    <button class="dilemma-btn" data-response="join">
+                        Ich mache mit, um dazuzugehören
+                    </button>
+                    <button class="dilemma-btn" data-response="silent">
+                        Ich mache nicht mit, sage aber auch nichts
+                    </button>
+                    <button class="dilemma-btn" data-response="speak">
+                        Ich sage meinen Freunden, dass ich das nicht gut finde
+                    </button>
+                    <button class="dilemma-btn" data-response="help">
+                        Ich versuche, dem Kind zu helfen
+                    </button>
+                </div>
+                <div class="dilemma-reason">
+                    <label>Warum hast du so entschieden?</label>
+                    <textarea class="reason-input" id="reason2" placeholder="Erkläre deine Gedanken..."></textarea>
+                </div>
+            </div>
+
+            <div class="dilemma">
+                <div class="dilemma-header">
+                    <div class="dilemma-emoji">🔐</div>
+                    <div class="dilemma-title">Dilemma 3: Das gefährliche Geheimnis</div>
+                </div>
+                <div class="dilemma-text">
+                    Ein Freund erzählt dir, dass er sich selbst verletzt. Er bittet dich, niemandem davon
+                    zu erzählen. Du machst dir große Sorgen um ihn.
+                </div>
+                <div class="dilemma-options" data-dilemma="3">
+                    <button class="dilemma-btn" data-response="secret">
+                        Ich behalte das Geheimnis für mich
+                    </button>
+                    <button class="dilemma-btn" data-response="adult">
+                        Ich erzähle einem Erwachsenen davon
+                    </button>
+                    <button class="dilemma-btn" data-response="convince">
+                        Ich versuche, ihn zu überzeugen, Hilfe zu suchen
+                    </button>
+                    <button class="dilemma-btn" data-response="together">
+                        Ich biete an, mit ihm zusammen Hilfe zu suchen
+                    </button>
+                </div>
+                <div class="dilemma-reason">
+                    <label>Warum hast du so entschieden?</label>
+                    <textarea class="reason-input" id="reason3" placeholder="Erkläre deine Gedanken..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🚧</span> Gesunde vs. ungesunde Loyalität</h2>
+
+            <div class="boundaries-container">
+                <div class="boundary-column healthy">
+                    <div class="boundary-title">✅ Gesunde Loyalität</div>
+                    <div class="boundary-item" data-boundary="support">
+                        <div class="boundary-checkbox"></div>
+                        <span>Freunde in schweren Zeiten unterstützen</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="defend">
+                        <div class="boundary-checkbox"></div>
+                        <span>Jemanden gegen unfaire Kritik verteidigen</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="honest">
+                        <div class="boundary-checkbox"></div>
+                        <span>Ehrlich sein, auch wenn es unangenehm ist</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="help_grow">
+                        <div class="boundary-checkbox"></div>
+                        <span>Helfen, besser zu werden</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="respect">
+                        <div class="boundary-checkbox"></div>
+                        <span>Unterschiede respektieren</span>
+                    </div>
+                </div>
+                <div class="boundary-column unhealthy">
+                    <div class="boundary-title">❌ Ungesunde Loyalität</div>
+                    <div class="boundary-item" data-boundary="cover_wrong">
+                        <div class="boundary-checkbox"></div>
+                        <span>Falsches Verhalten decken</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="follow_bad">
+                        <div class="boundary-checkbox"></div>
+                        <span>Schlechten Entscheidungen blind folgen</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="lie_for">
+                        <div class="boundary-checkbox"></div>
+                        <span>Für jemanden lügen</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="give_up_self">
+                        <div class="boundary-checkbox"></div>
+                        <span>Eigene Werte aufgeben</span>
+                    </div>
+                    <div class="boundary-item" data-boundary="harm_others">
+                        <div class="boundary-checkbox"></div>
+                        <span>Anderen schaden, um loyal zu sein</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Meine Loyalität einschätzen</h2>
+
+            <div class="scale-section">
+                <label class="scale-label">Ich stehe zu meinen Freunden, auch wenn es schwierig wird</label>
+                <div class="scale-container">
+                    <span>Selten</span>
+                    <input type="range" class="scale-slider" id="scale_friends" min="1" max="5" value="3">
+                    <span>Immer</span>
+                    <span class="scale-value" id="val_friends">3</span>
+                </div>
+            </div>
+
+            <div class="scale-section">
+                <label class="scale-label">Ich halte meine Versprechen</label>
+                <div class="scale-container">
+                    <span>Selten</span>
+                    <input type="range" class="scale-slider" id="scale_promises" min="1" max="5" value="3">
+                    <span>Immer</span>
+                    <span class="scale-value" id="val_promises">3</span>
+                </div>
+            </div>
+
+            <div class="scale-section">
+                <label class="scale-label">Ich bleibe meinen Werten treu, auch unter Druck</label>
+                <div class="scale-container">
+                    <span>Selten</span>
+                    <input type="range" class="scale-slider" id="scale_values" min="1" max="5" value="3">
+                    <span>Immer</span>
+                    <span class="scale-value" id="val_values">3</span>
+                </div>
+            </div>
+
+            <div class="scale-section">
+                <label class="scale-label">Ich sage ehrlich meine Meinung, auch wenn andere anderer Meinung sind</label>
+                <div class="scale-container">
+                    <span>Selten</span>
+                    <input type="range" class="scale-slider" id="scale_opinion" min="1" max="5" value="3">
+                    <span>Immer</span>
+                    <span class="scale-value" id="val_opinion">3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Reflexion</h2>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der ich loyal war und stolz darauf bin:</label>
+                <textarea class="reflection-input" id="loyal_proud" placeholder="Was ist passiert?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Eine Situation, in der Loyalität schwierig war:</label>
+                <textarea class="reflection-input" id="loyal_hard" placeholder="Was war das Dilemma?"></textarea>
+            </div>
+
+            <div class="reflection-section">
+                <label class="reflection-label">Wann würde ich Loyalität brechen?</label>
+                <textarea class="reflection-input" id="loyal_limits" placeholder="Wo sind deine Grenzen?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zum Thema Loyalität..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-57, S-58 - Loyalität verstehen, Grenzen gesunder Treue
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let loyaltyTypes = [];
+        let dilemmaResponses = {};
+        let boundaryChecks = [];
+        let scaleValues = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Loyalty cards
+            document.querySelectorAll('.loyalty-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const type = this.dataset.type;
+                    if (this.classList.contains('selected')) {
+                        if (!loyaltyTypes.includes(type)) loyaltyTypes.push(type);
+                    } else {
+                        loyaltyTypes = loyaltyTypes.filter(t => t !== type);
+                    }
+                    saveData();
+                });
+            });
+
+            // Dilemma responses
+            document.querySelectorAll('.dilemma-options').forEach(container => {
+                container.querySelectorAll('.dilemma-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const dilemma = container.dataset.dilemma;
+                        container.querySelectorAll('.dilemma-btn').forEach(b => b.classList.remove('selected'));
+                        this.classList.add('selected');
+                        dilemmaResponses[dilemma] = this.dataset.response;
+                        saveData();
+                    });
+                });
+            });
+
+            // Boundary items
+            document.querySelectorAll('.boundary-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    const boundary = this.dataset.boundary;
+                    this.querySelector('.boundary-checkbox').textContent = this.classList.contains('checked') ? '✓' : '';
+                    if (this.classList.contains('checked')) {
+                        if (!boundaryChecks.includes(boundary)) boundaryChecks.push(boundary);
+                    } else {
+                        boundaryChecks = boundaryChecks.filter(b => b !== boundary);
+                    }
+                    saveData();
+                });
+            });
+
+            // Scale sliders
+            document.querySelectorAll('.scale-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const id = this.id.replace('scale_', '');
+                    document.getElementById('val_' + id).textContent = this.value;
+                    scaleValues[id] = parseInt(this.value);
+                    saveData();
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                loyaltyTypes,
+                dilemmaResponses,
+                dilemmaReasons: {
+                    r1: document.getElementById('reason1').value,
+                    r2: document.getElementById('reason2').value,
+                    r3: document.getElementById('reason3').value
+                },
+                boundaryChecks,
+                scaleValues,
+                reflections: {
+                    proud: document.getElementById('loyal_proud').value,
+                    hard: document.getElementById('loyal_hard').value,
+                    limits: document.getElementById('loyal_limits').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_loyalitaet', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_loyalitaet');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.loyaltyTypes) {
+                    loyaltyTypes = data.loyaltyTypes;
+                    loyaltyTypes.forEach(type => {
+                        const el = document.querySelector(`.loyalty-card[data-type="${type}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.dilemmaResponses) {
+                    dilemmaResponses = data.dilemmaResponses;
+                    Object.entries(dilemmaResponses).forEach(([dilemma, response]) => {
+                        const btn = document.querySelector(`.dilemma-options[data-dilemma="${dilemma}"] .dilemma-btn[data-response="${response}"]`);
+                        if (btn) btn.classList.add('selected');
+                    });
+                }
+
+                if (data.dilemmaReasons) {
+                    document.getElementById('reason1').value = data.dilemmaReasons.r1 || '';
+                    document.getElementById('reason2').value = data.dilemmaReasons.r2 || '';
+                    document.getElementById('reason3').value = data.dilemmaReasons.r3 || '';
+                }
+
+                if (data.boundaryChecks) {
+                    boundaryChecks = data.boundaryChecks;
+                    boundaryChecks.forEach(b => {
+                        const el = document.querySelector(`.boundary-item[data-boundary="${b}"]`);
+                        if (el) {
+                            el.classList.add('checked');
+                            el.querySelector('.boundary-checkbox').textContent = '✓';
+                        }
+                    });
+                }
+
+                if (data.scaleValues) {
+                    scaleValues = data.scaleValues;
+                    Object.entries(scaleValues).forEach(([id, value]) => {
+                        const slider = document.getElementById('scale_' + id);
+                        const val = document.getElementById('val_' + id);
+                        if (slider) slider.value = value;
+                        if (val) val.textContent = value;
+                    });
+                }
+
+                if (data.reflections) {
+                    document.getElementById('loyal_proud').value = data.reflections.proud || '';
+                    document.getElementById('loyal_hard').value = data.reflections.hard || '';
+                    document.getElementById('loyal_limits').value = data.reflections.limits || '';
+                }
+
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

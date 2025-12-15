@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemeinschaftssinn - Sozialisation Stufe IV - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center;
+        }
+        .domain-badge {
+            display: inline-block; background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 { color: #4caf50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; line-height: 1.7;
+        }
+        .communities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .community-card {
+            background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .community-card:hover { transform: translateY(-3px); }
+        .community-card.selected { border-color: #4caf50; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .community-emoji { font-size: 2rem; margin-bottom: 10px; }
+        .community-text { font-weight: 500; color: #333; font-size: 0.9rem; }
+        .ways-section { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .way-item {
+            display: flex; align-items: flex-start; gap: 15px;
+            padding: 15px; background: white; border-radius: 12px;
+            margin-bottom: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .way-item:hover { transform: translateX(5px); }
+        .way-item.done { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; }
+        .way-emoji { font-size: 1.5rem; }
+        .way-content { flex: 1; }
+        .way-title { font-weight: bold; color: #333; }
+        .way-desc { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .project-section { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .project-title { font-weight: bold; color: #333; margin-bottom: 15px; font-size: 1.1rem; }
+        .project-input {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1rem; resize: vertical; min-height: 60px;
+        }
+        .project-input:focus { outline: none; border-color: #4caf50; }
+        .project-label { font-weight: 500; color: #555; margin-bottom: 8px; display: block; }
+        .impact-meter {
+            background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center;
+        }
+        .impact-title { font-weight: bold; color: #333; margin-bottom: 15px; }
+        .impact-scale { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .impact-level {
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .impact-level:hover { transform: scale(1.1); }
+        .impact-level.selected { border-color: #4caf50; box-shadow: 0 0 15px rgba(76,175,80,0.4); }
+        .impact-level.level-1 { background: #ffebee; }
+        .impact-level.level-2 { background: #fff3e0; }
+        .impact-level.level-3 { background: #fffde7; }
+        .impact-level.level-4 { background: #e8f5e9; }
+        .impact-level.level-5 { background: #c8e6c9; }
+        .impact-value { font-size: 0.7rem; color: #666; }
+        .reflection-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #4caf50; }
+        .pledge-section {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border-radius: 15px; padding: 25px; color: white; text-align: center;
+        }
+        .pledge-title { font-size: 1.3rem; margin-bottom: 20px; }
+        .pledge-items { text-align: left; }
+        .pledge-item {
+            display: flex; align-items: center; gap: 15px;
+            padding: 12px; background: rgba(255,255,255,0.2); border-radius: 10px;
+            margin-bottom: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .pledge-item:hover { background: rgba(255,255,255,0.3); }
+        .pledge-item.checked { background: rgba(255,255,255,0.4); }
+        .pledge-checkbox {
+            width: 24px; height: 24px; border: 2px solid white; border-radius: 6px;
+            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+        }
+        .pledge-item.checked .pledge-checkbox { background: white; color: #4caf50; font-weight: bold; }
+        .notes-area {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #4caf50; }
+        .save-notice {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #4caf50; color: white; padding: 15px 25px;
+            border-radius: 30px; display: none; z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        .eldib-reference { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; color: #666; }
+        .print-btn {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white; border: none; padding: 12px 25px;
+            border-radius: 25px; cursor: pointer; font-size: 1rem; margin-top: 15px;
+        }
+        @media print { body { background: white; } .print-btn, .save-notice { display: none !important; } }
+        @media (max-width: 600px) { .communities-grid { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe IV (9-12 Jahre)</div>
+            <h1>🌍 Gemeinschaftssinn</h1>
+            <p class="subtitle">Teil von etwas Größerem sein</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist Gemeinschaftssinn?</h2>
+            <div class="intro-text">
+                <p><strong>Gemeinschaftssinn</strong> bedeutet, sich für andere und für die Gemeinschaft
+                einzusetzen. Es ist das Gefühl, Teil von etwas Größerem zu sein und Verantwortung zu
+                übernehmen.</p>
+                <p style="margin-top: 10px;">Wenn jeder nur an sich denkt, funktioniert eine Gesellschaft
+                nicht. Aber wenn alle ihren Beitrag leisten, wird alles besser!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🏘️</span> Meine Gemeinschaften</h2>
+            <p style="margin-bottom: 15px; color: #666;">Zu welchen Gemeinschaften gehörst du?</p>
+            <div class="communities-grid">
+                <div class="community-card" data-comm="family"><div class="community-emoji">👨‍👩‍👧‍👦</div><div class="community-text">Familie</div></div>
+                <div class="community-card" data-comm="class"><div class="community-emoji">🏫</div><div class="community-text">Klasse</div></div>
+                <div class="community-card" data-comm="school"><div class="community-emoji">🎒</div><div class="community-text">Schule</div></div>
+                <div class="community-card" data-comm="sports"><div class="community-emoji">⚽</div><div class="community-text">Sportverein</div></div>
+                <div class="community-card" data-comm="music"><div class="community-emoji">🎵</div><div class="community-text">Musikgruppe</div></div>
+                <div class="community-card" data-comm="neighborhood"><div class="community-emoji">🏠</div><div class="community-text">Nachbarschaft</div></div>
+                <div class="community-card" data-comm="religious"><div class="community-emoji">🙏</div><div class="community-text">Religionsgemeinschaft</div></div>
+                <div class="community-card" data-comm="online"><div class="community-emoji">💻</div><div class="community-text">Online-Gruppe</div></div>
+                <div class="community-card" data-comm="hobby"><div class="community-emoji">🎨</div><div class="community-text">Hobby-Gruppe</div></div>
+                <div class="community-card" data-comm="scouts"><div class="community-emoji">🏕️</div><div class="community-text">Jugendgruppe</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🤝</span> Wie kann ich beitragen?</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Dinge, die du schon machst oder machen könntest:</p>
+            <div class="ways-section">
+                <div class="way-item" data-way="help_classmate"><div class="way-emoji">📚</div><div class="way-content"><div class="way-title">Mitschülern helfen</div><div class="way-desc">Bei Aufgaben helfen, wenn jemand nicht versteht</div></div></div>
+                <div class="way-item" data-way="volunteer"><div class="way-emoji">🙋</div><div class="way-content"><div class="way-title">Freiwillig mitmachen</div><div class="way-desc">Bei Projekten, Festen oder Aufräumaktionen helfen</div></div></div>
+                <div class="way-item" data-way="environment"><div class="way-emoji">🌱</div><div class="way-content"><div class="way-title">Umwelt schützen</div><div class="way-desc">Müll trennen, sparsam mit Ressourcen umgehen</div></div></div>
+                <div class="way-item" data-way="include"><div class="way-emoji">🤗</div><div class="way-content"><div class="way-title">Andere einbeziehen</div><div class="way-desc">Darauf achten, dass niemand ausgeschlossen wird</div></div></div>
+                <div class="way-item" data-way="rules"><div class="way-emoji">📋</div><div class="way-content"><div class="way-title">Regeln respektieren</div><div class="way-desc">Gemeinsame Regeln einhalten</div></div></div>
+                <div class="way-item" data-way="share"><div class="way-emoji">🎁</div><div class="way-content"><div class="way-title">Teilen</div><div class="way-desc">Sachen, Wissen oder Zeit mit anderen teilen</div></div></div>
+                <div class="way-item" data-way="speak_up"><div class="way-emoji">🗣️</div><div class="way-content"><div class="way-title">Stimme erheben</div><div class="way-desc">Für andere einstehen, wenn etwas nicht richtig ist</div></div></div>
+                <div class="way-item" data-way="appreciate"><div class="way-emoji">💕</div><div class="way-content"><div class="way-title">Wertschätzung zeigen</div><div class="way-desc">Danke sagen und andere anerkennen</div></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Mein Gemeinschaftsprojekt</h2>
+            <p style="margin-bottom: 15px; color: #666;">Plane eine Aktion für deine Gemeinschaft:</p>
+            <div class="project-section">
+                <div class="project-title">🎯 Projektidee</div>
+                <label class="project-label">Was möchtest du für andere tun?</label>
+                <textarea class="project-input" id="project_idea" placeholder="z.B. Spendensammlung, Müllsammelaktion, Nachhilfe..."></textarea>
+            </div>
+            <div class="project-section">
+                <label class="project-label">Für wen ist das Projekt?</label>
+                <textarea class="project-input" id="project_for" placeholder="Wer profitiert davon?"></textarea>
+            </div>
+            <div class="project-section">
+                <label class="project-label">Was brauchst du dafür?</label>
+                <textarea class="project-input" id="project_needs" placeholder="Hilfe von anderen, Materialien..."></textarea>
+            </div>
+            <div class="project-section">
+                <label class="project-label">Erste konkrete Schritte:</label>
+                <textarea class="project-input" id="project_steps" placeholder="Was kannst du als Erstes tun?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Mein Engagement-Level</h2>
+            <div class="impact-meter">
+                <div class="impact-title">Wie aktiv engagierst du dich in deiner Gemeinschaft?</div>
+                <div class="impact-scale">
+                    <div class="impact-level level-1" data-level="1"><span>😴</span><div class="impact-value">Wenig</div></div>
+                    <div class="impact-level level-2" data-level="2"><span>🙂</span><div class="impact-value">Manchmal</div></div>
+                    <div class="impact-level level-3" data-level="3"><span>😊</span><div class="impact-value">Öfter</div></div>
+                    <div class="impact-level level-4" data-level="4"><span>😄</span><div class="impact-value">Viel</div></div>
+                    <div class="impact-level level-5" data-level="5"><span>🌟</span><div class="impact-value">Sehr viel</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">✨</span> Mein Versprechen</h2>
+            <div class="pledge-section">
+                <div class="pledge-title">Ich verspreche, für meine Gemeinschaft...</div>
+                <div class="pledge-items">
+                    <div class="pledge-item" data-pledge="help"><div class="pledge-checkbox"></div><span>Anderen zu helfen, wenn sie Hilfe brauchen</span></div>
+                    <div class="pledge-item" data-pledge="respect"><div class="pledge-checkbox"></div><span>Alle mit Respekt zu behandeln</span></div>
+                    <div class="pledge-item" data-pledge="responsible"><div class="pledge-checkbox"></div><span>Verantwortung zu übernehmen</span></div>
+                    <div class="pledge-item" data-pledge="positive"><div class="pledge-checkbox"></div><span>Positive Energie zu verbreiten</span></div>
+                    <div class="pledge-item" data-pledge="fair"><div class="pledge-checkbox"></div><span>Fair und gerecht zu sein</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Reflexion</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">Warum ist Gemeinschaftssinn wichtig für dich?</label>
+                <textarea class="reflection-input" id="why_important" placeholder="Deine Gedanken..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was hast du schon mal für andere getan, das dich stolz gemacht hat?</label>
+                <textarea class="reflection-input" id="proud_moment" placeholder="Erzähle..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu Gemeinschaftssinn..."></textarea>
+            <div class="eldib-reference"><strong>ELDiB-Bezug:</strong> S-69, S-70 - Gemeinschaftssinn, soziale Verantwortung</div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let communities = [];
+        let ways = [];
+        let impactLevel = 0;
+        let pledges = [];
+
+        document.addEventListener('DOMContentLoaded', function() { loadData(); setupEventListeners(); });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.community-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const comm = this.dataset.comm;
+                    if (this.classList.contains('selected')) { if (!communities.includes(comm)) communities.push(comm); }
+                    else { communities = communities.filter(c => c !== comm); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.way-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('done');
+                    const way = this.dataset.way;
+                    if (this.classList.contains('done')) { if (!ways.includes(way)) ways.push(way); }
+                    else { ways = ways.filter(w => w !== way); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.impact-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.impact-level').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    impactLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.pledge-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    const pledge = this.dataset.pledge;
+                    this.querySelector('.pledge-checkbox').textContent = this.classList.contains('checked') ? '✓' : '';
+                    if (this.classList.contains('checked')) { if (!pledges.includes(pledge)) pledges.push(pledge); }
+                    else { pledges = pledges.filter(p => p !== pledge); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', saveData); });
+        }
+
+        function saveData() {
+            const data = {
+                communities, ways, impactLevel, pledges,
+                project: {
+                    idea: document.getElementById('project_idea').value,
+                    for_whom: document.getElementById('project_for').value,
+                    needs: document.getElementById('project_needs').value,
+                    steps: document.getElementById('project_steps').value
+                },
+                reflection: {
+                    important: document.getElementById('why_important').value,
+                    proud: document.getElementById('proud_moment').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s4_gemeinschaftssinn', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s4_gemeinschaftssinn');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.communities) { communities = data.communities; communities.forEach(c => { const el = document.querySelector(`.community-card[data-comm="${c}"]`); if (el) el.classList.add('selected'); }); }
+                if (data.ways) { ways = data.ways; ways.forEach(w => { const el = document.querySelector(`.way-item[data-way="${w}"]`); if (el) el.classList.add('done'); }); }
+                if (data.impactLevel) { impactLevel = data.impactLevel; const level = document.querySelector(`.impact-level[data-level="${impactLevel}"]`); if (level) level.classList.add('selected'); }
+                if (data.pledges) { pledges = data.pledges; pledges.forEach(p => { const el = document.querySelector(`.pledge-item[data-pledge="${p}"]`); if (el) { el.classList.add('checked'); el.querySelector('.pledge-checkbox').textContent = '✓'; } }); }
+                if (data.project) {
+                    document.getElementById('project_idea').value = data.project.idea || '';
+                    document.getElementById('project_for').value = data.project.for_whom || '';
+                    document.getElementById('project_needs').value = data.project.needs || '';
+                    document.getElementById('project_steps').value = data.project.steps || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('why_important').value = data.reflection.important || '';
+                    document.getElementById('proud_moment').value = data.reflection.proud || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() { const notice = document.getElementById('saveNotice'); notice.classList.remove('show'); void notice.offsetWidth; notice.classList.add('show'); }
+    </script>
+</body>
+</html>
