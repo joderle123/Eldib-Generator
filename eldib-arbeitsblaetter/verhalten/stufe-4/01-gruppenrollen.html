@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenrollen verstehen - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #d76d77; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .role-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .role-card:hover { transform: translateY(-3px); border-color: #d76d77; }
+        .role-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .role-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .role-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .role-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .strength-meter { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .strength-item { background: white; border-radius: 10px; padding: 15px; border: 2px solid #e0e0e0; }
+        .strength-label { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .strength-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+        .strength-fill { height: 100%; background: linear-gradient(90deg, #d76d77, #ffaf7b); transition: width 0.3s; cursor: pointer; }
+        .reflection-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .reflection-question { font-size: 1.1em; margin-bottom: 15px; }
+        .reflection-input { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 1em; margin-bottom: 10px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #d76d77; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .role-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Gruppenrollen verstehen</h1>
+            <p>Verschiedene Rollen in der Gruppe kennenlernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-22/V-23)</h3>
+                <p>Das Kind versteht verschiedene Rollen in einer Gruppe. Es kann erkennen, welche Rolle es selbst einnimmt und welche Stärken verschiedene Rollen haben.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Welche Rollen gibt es?</h3>
+                <p>Wähle die Rollen aus, die du schon einmal übernommen hast:</p>
+                <div class="role-grid">
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">👑</div>
+                        <div class="title">Die Führungsperson</div>
+                        <div class="desc">Gibt Richtung vor, organisiert die Gruppe</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">💡</div>
+                        <div class="title">Der Ideengeber</div>
+                        <div class="desc">Hat kreative Vorschläge und neue Ideen</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Der Vermittler</div>
+                        <div class="desc">Löst Konflikte, sorgt für Harmonie</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">📋</div>
+                        <div class="title">Der Organisator</div>
+                        <div class="desc">Plant und strukturiert die Arbeit</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">💪</div>
+                        <div class="title">Der Umsetzer</div>
+                        <div class="desc">Packt an und macht die Arbeit</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">🎯</div>
+                        <div class="title">Der Kritiker</div>
+                        <div class="desc">Prüft Ideen und gibt Feedback</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">❤️</div>
+                        <div class="title">Der Unterstützer</div>
+                        <div class="desc">Hilft anderen und motiviert</div>
+                    </div>
+                    <div class="role-card" onclick="toggleRole(this)">
+                        <div class="icon">🔍</div>
+                        <div class="title">Der Beobachter</div>
+                        <div class="desc">Achtet auf Details und Stimmung</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine Stärken in der Gruppe</h3>
+                <p>Klicke auf die Balken, um deine Stärken einzuschätzen:</p>
+                <div class="strength-meter">
+                    <div class="strength-item">
+                        <div class="strength-label"><span>Ideen einbringen</span><span id="val1">50%</span></div>
+                        <div class="strength-bar"><div class="strength-fill" style="width: 50%;" onclick="setStrength(this, event)" data-id="1"></div></div>
+                    </div>
+                    <div class="strength-item">
+                        <div class="strength-label"><span>Anderen zuhören</span><span id="val2">50%</span></div>
+                        <div class="strength-bar"><div class="strength-fill" style="width: 50%;" onclick="setStrength(this, event)" data-id="2"></div></div>
+                    </div>
+                    <div class="strength-item">
+                        <div class="strength-label"><span>Verantwortung übernehmen</span><span id="val3">50%</span></div>
+                        <div class="strength-bar"><div class="strength-fill" style="width: 50%;" onclick="setStrength(this, event)" data-id="3"></div></div>
+                    </div>
+                    <div class="strength-item">
+                        <div class="strength-label"><span>Kompromisse finden</span><span id="val4">50%</span></div>
+                        <div class="strength-bar"><div class="strength-fill" style="width: 50%;" onclick="setStrength(this, event)" data-id="4"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💭</span> Reflexion</h3>
+                <div class="reflection-box">
+                    <div class="reflection-question">In welcher Rolle fühlst du dich am wohlsten?</div>
+                    <input class="reflection-input" id="reflect1" placeholder="Meine Lieblingsrolle ist..." oninput="saveData()">
+                    <div class="reflection-question">Welche Rolle möchtest du noch besser können?</div>
+                    <input class="reflection-input" id="reflect2" placeholder="Ich möchte besser werden in..." oninput="saveData()">
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Gruppenrollen übernimmt das Kind? Wie flexibel wechselt es zwischen Rollen? Wo liegen Stärken und Entwicklungspotenziale?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let strengths = [50, 50, 50, 50];
+        function toggleRole(el) { el.classList.toggle('selected'); saveData(); }
+        function setStrength(el, event) {
+            const rect = el.parentElement.getBoundingClientRect();
+            const percent = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+            const id = parseInt(el.dataset.id);
+            strengths[id - 1] = percent;
+            el.style.width = percent + '%';
+            document.getElementById('val' + id).textContent = percent + '%';
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                roles: [...document.querySelectorAll('.role-card.selected')].map(r => r.querySelector('.title').textContent),
+                strengths: strengths,
+                reflect1: document.getElementById('reflect1').value,
+                reflect2: document.getElementById('reflect2').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_gruppenrollen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_gruppenrollen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.roles) {
+                    document.querySelectorAll('.role-card').forEach(card => {
+                        if (data.roles.includes(card.querySelector('.title').textContent)) {
+                            card.classList.add('selected');
+                        }
+                    });
+                }
+                if (data.strengths) {
+                    strengths = data.strengths;
+                    document.querySelectorAll('.strength-fill').forEach((fill, i) => {
+                        fill.style.width = strengths[i] + '%';
+                        document.getElementById('val' + (i + 1)).textContent = strengths[i] + '%';
+                    });
+                }
+                document.getElementById('reflect1').value = data.reflect1 || '';
+                document.getElementById('reflect2').value = data.reflect2 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

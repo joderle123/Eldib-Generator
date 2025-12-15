@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Begründungen akzeptieren - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4facfe; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .reason-cards { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .reason-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .reason-card:hover { border-color: #4facfe; }
+        .reason-card.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .reason-card .situation { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .reason-card .reason { color: #666; padding-left: 30px; font-style: italic; }
+        .matching-game { background: #f5f5f5; border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .match-pairs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .match-column h4 { text-align: center; margin-bottom: 15px; }
+        .match-item { padding: 15px; background: white; border: 3px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; margin-bottom: 10px; text-align: center; }
+        .match-item:hover { border-color: #4facfe; }
+        .match-item.selected { border-color: #2196F3; background: #e3f2fd; }
+        .match-item.matched { border-color: #4CAF50; background: #e8f5e9; }
+        .acceptance-scale { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .scale-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .scale-item .label { flex: 1; }
+        .scale-buttons { display: flex; gap: 5px; }
+        .scale-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #e0e0e0; background: white; cursor: pointer; transition: all 0.2s; }
+        .scale-btn:hover { transform: scale(1.1); }
+        .scale-btn.active { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Begründungen akzeptieren</h1>
+            <p>Verstehen, warum Regeln und Grenzen wichtig sind</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-18)</h3>
+                <p>Das Kind kann Begründungen für Regeln und Grenzen akzeptieren. Es versteht, warum bestimmte Verhaltensweisen erwartet werden.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Regeln und ihre Gründe</h3>
+                <p>Klicke auf die Karten, deren Begründung du verstehst:</p>
+                <div class="reason-cards">
+                    <div class="reason-card" onclick="toggleReason(this)">
+                        <div class="situation">🚶 "Im Flur gehen wir langsam."</div>
+                        <div class="reason">→ Damit niemand hinfällt und sich verletzt.</div>
+                    </div>
+                    <div class="reason-card" onclick="toggleReason(this)">
+                        <div class="situation">🙋 "Wir melden uns, bevor wir sprechen."</div>
+                        <div class="reason">→ Damit jeder gehört wird und es nicht zu laut ist.</div>
+                    </div>
+                    <div class="reason-card" onclick="toggleReason(this)">
+                        <div class="situation">🧹 "Wir räumen nach dem Spielen auf."</div>
+                        <div class="reason">→ Damit wir die Sachen wiederfinden und der Raum schön bleibt.</div>
+                    </div>
+                    <div class="reason-card" onclick="toggleReason(this)">
+                        <div class="situation">⏰ "Wir kommen pünktlich."</div>
+                        <div class="reason">→ Damit alle gemeinsam anfangen können.</div>
+                    </div>
+                    <div class="reason-card" onclick="toggleReason(this)">
+                        <div class="situation">🤝 "Wir sind freundlich zueinander."</div>
+                        <div class="reason">→ Damit sich alle wohlfühlen und gerne hier sind.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔗</span> Verbinde Regel und Grund</h3>
+                <p>Klicke auf eine Regel und dann auf den passenden Grund:</p>
+                <div class="matching-game">
+                    <div class="match-pairs">
+                        <div class="match-column">
+                            <h4>Regel</h4>
+                            <div class="match-item" onclick="selectMatch(this, 'rule', 1)">🍽️ Am Tisch sitzen bleiben</div>
+                            <div class="match-item" onclick="selectMatch(this, 'rule', 2)">✋ Nicht schlagen</div>
+                            <div class="match-item" onclick="selectMatch(this, 'rule', 3)">📱 Handy weglegen</div>
+                        </div>
+                        <div class="match-column">
+                            <h4>Grund</h4>
+                            <div class="match-item" onclick="selectMatch(this, 'reason', 2)">Gewalt tut weh</div>
+                            <div class="match-item" onclick="selectMatch(this, 'reason', 1)">Konzentriert essen</div>
+                            <div class="match-item" onclick="selectMatch(this, 'reason', 3)">Besser aufpassen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Wie gut kann ich Begründungen akzeptieren?</h3>
+                <div class="acceptance-scale">
+                    <div class="scale-item">
+                        <div class="label">Wenn mir etwas erklärt wird, höre ich zu</div>
+                        <div class="scale-buttons">
+                            <button class="scale-btn" onclick="setScale(this, 1)">😟</button>
+                            <button class="scale-btn" onclick="setScale(this, 2)">😐</button>
+                            <button class="scale-btn" onclick="setScale(this, 3)">🙂</button>
+                            <button class="scale-btn" onclick="setScale(this, 4)">😊</button>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="label">Ich verstehe, warum Regeln wichtig sind</div>
+                        <div class="scale-buttons">
+                            <button class="scale-btn" onclick="setScale(this, 1)">😟</button>
+                            <button class="scale-btn" onclick="setScale(this, 2)">😐</button>
+                            <button class="scale-btn" onclick="setScale(this, 3)">🙂</button>
+                            <button class="scale-btn" onclick="setScale(this, 4)">😊</button>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="label">Ich akzeptiere "Nein", wenn es erklärt wird</div>
+                        <div class="scale-buttons">
+                            <button class="scale-btn" onclick="setScale(this, 1)">😟</button>
+                            <button class="scale-btn" onclick="setScale(this, 2)">😐</button>
+                            <button class="scale-btn" onclick="setScale(this, 3)">🙂</button>
+                            <button class="scale-btn" onclick="setScale(this, 4)">😊</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert das Kind auf Begründungen? Akzeptiert es Grenzen besser, wenn sie erklärt werden?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let selectedRule = null, selectedReason = null;
+        function toggleReason(el) { el.classList.toggle('understood'); saveData(); }
+        function selectMatch(el, type, id) {
+            if (type === 'rule') { document.querySelectorAll('.match-column:first-child .match-item').forEach(i => i.classList.remove('selected')); el.classList.add('selected'); selectedRule = id; }
+            else { selectedReason = id; if (selectedRule === selectedReason) { el.classList.add('matched'); document.querySelector('.match-column:first-child .match-item.selected').classList.add('matched'); } selectedRule = null; }
+            saveData();
+        }
+        function setScale(btn, value) { btn.parentElement.querySelectorAll('.scale-btn').forEach((b, i) => b.classList.toggle('active', i < value)); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { reasons: document.querySelectorAll('.reason-card.understood').length, matched: document.querySelectorAll('.match-item.matched').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_begruendungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_begruendungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const reasons = document.querySelectorAll('.reason-card');
+                for (let i = 0; i < (data.reasons || 0); i++) { if (reasons[i]) reasons[i].classList.add('understood'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

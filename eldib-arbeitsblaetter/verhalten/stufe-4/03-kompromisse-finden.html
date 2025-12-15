@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompromisse finden - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .balance-visual { display: flex; flex-direction: column; align-items: center; padding: 30px; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; margin: 20px 0; }
+        .balance { display: flex; align-items: flex-end; gap: 20px; margin-bottom: 20px; }
+        .balance-side { text-align: center; }
+        .balance-weight { width: 100px; height: 80px; background: white; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 2em; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .balance-label { margin-top: 10px; font-weight: bold; }
+        .balance-middle { font-size: 3em; }
+        .slider-container { width: 100%; max-width: 400px; margin-top: 20px; }
+        .slider-container input { width: 100%; height: 20px; -webkit-appearance: none; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 10px; cursor: pointer; }
+        .slider-container input::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; background: white; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .slider-labels { display: flex; justify-content: space-between; margin-top: 10px; }
+        .compromise-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .step { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .step:hover { border-color: #667eea; }
+        .step.done { border-color: #4CAF50; background: #e8f5e9; }
+        .step-num { width: 40px; height: 40px; background: #667eea; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .done .step-num { background: #4CAF50; }
+        .practice-area { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .practice-situation { padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-bottom: 15px; }
+        .practice-inputs { display: grid; gap: 10px; }
+        .practice-input { padding: 12px; border: none; border-radius: 8px; font-size: 1em; }
+        .success-stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .success-card { background: white; border: 3px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .success-card:hover { border-color: #667eea; }
+        .success-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .success-card .icon { font-size: 2em; margin-bottom: 10px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .success-stories { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Kompromisse finden</h1>
+            <p>Die Kunst des Verhandelns</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-24/V-25)</h3>
+                <p>Das Kind kann Kompromisse aushandeln. Es versteht, dass manchmal beide Seiten etwas nachgeben müssen, um eine gute Lösung zu finden.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚖️</span> Die Balance finden</h3>
+                <p>Bewege den Regler, um einen fairen Kompromiss zu finden:</p>
+                <div class="balance-visual">
+                    <div class="balance">
+                        <div class="balance-side">
+                            <div class="balance-weight" id="weight1">👤</div>
+                            <div class="balance-label">Meine Wünsche</div>
+                        </div>
+                        <div class="balance-middle">⚖️</div>
+                        <div class="balance-side">
+                            <div class="balance-weight" id="weight2">👥</div>
+                            <div class="balance-label">Wünsche anderer</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="100" value="50" id="balanceSlider" oninput="updateBalance()">
+                        <div class="slider-labels">
+                            <span>Nur ich</span>
+                            <span>Ausgewogen</span>
+                            <span>Nur andere</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Schritte zum Kompromiss</h3>
+                <p>Klicke auf die Schritte, die du bei einer Einigung nutzt:</p>
+                <div class="compromise-steps">
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">1</div><div>🔍 Beide Seiten erklären ihre Wünsche</div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">2</div><div>👂 Aufmerksam zuhören und verstehen</div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">3</div><div>🤔 Gemeinsamkeiten finden</div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">4</div><div>💡 Verschiedene Lösungen überlegen</div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">5</div><div>🤝 Gemeinsam entscheiden</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Übe einen Kompromiss</h3>
+                <div class="practice-area">
+                    <div class="practice-situation">
+                        <strong>Situation:</strong> Du und dein Freund wollt spielen. Du willst Fußball spielen, aber dein Freund will Basketball spielen.
+                    </div>
+                    <div class="practice-inputs">
+                        <input class="practice-input" id="myWish" placeholder="Mein Wunsch: Ich möchte..." oninput="saveData()">
+                        <input class="practice-input" id="theirWish" placeholder="Wunsch des anderen: Er/Sie möchte..." oninput="saveData()">
+                        <input class="practice-input" id="compromise" placeholder="Unser Kompromiss: Wir könnten..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏆</span> Meine Kompromiss-Erfolge</h3>
+                <p>Markiere Situationen, in denen du erfolgreich einen Kompromiss gefunden hast:</p>
+                <div class="success-stories">
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">🎮</div><div>Beim Spielen</div></div>
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">📚</div><div>Bei der Arbeit</div></div>
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">🏠</div><div>Zuhause</div></div>
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">👫</div><div>Mit Freunden</div></div>
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">👨‍👩‍👧</div><div>In der Familie</div></div>
+                    <div class="success-card" onclick="toggleSuccess(this)"><div class="icon">🏫</div><div>In der Schule</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie geht das Kind mit unterschiedlichen Meinungen um? Kann es Kompromisse vorschlagen? Wie reagiert es, wenn es nachgeben muss?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let balanceValue = 50;
+        function updateBalance() {
+            balanceValue = document.getElementById('balanceSlider').value;
+            const w1 = document.getElementById('weight1');
+            const w2 = document.getElementById('weight2');
+            w1.style.transform = `scale(${1 + (100 - balanceValue) / 100})`;
+            w2.style.transform = `scale(${1 + balanceValue / 100})`;
+            saveData();
+        }
+        function toggleStep(el) { el.classList.toggle('done'); saveData(); }
+        function toggleSuccess(el) { el.classList.toggle('achieved'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                balance: balanceValue,
+                steps: document.querySelectorAll('.step.done').length,
+                myWish: document.getElementById('myWish').value,
+                theirWish: document.getElementById('theirWish').value,
+                compromise: document.getElementById('compromise').value,
+                successes: document.querySelectorAll('.success-card.achieved').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_kompromisse', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_kompromisse');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.balance) {
+                    document.getElementById('balanceSlider').value = data.balance;
+                    updateBalance();
+                }
+                const steps = document.querySelectorAll('.step');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('done'); }
+                document.getElementById('myWish').value = data.myWish || '';
+                document.getElementById('theirWish').value = data.theirWish || '';
+                document.getElementById('compromise').value = data.compromise || '';
+                const successes = document.querySelectorAll('.success-card');
+                for (let i = 0; i < (data.successes || 0); i++) { if (successes[i]) successes[i].classList.add('achieved'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

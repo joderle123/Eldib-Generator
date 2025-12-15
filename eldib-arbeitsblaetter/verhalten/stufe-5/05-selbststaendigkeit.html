@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selbstständigkeit - Verhalten Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #00b09b; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-category { background: white; border: 3px solid #e0e0e0; border-radius: 15px; padding: 20px; }
+        .skill-category h4 { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #333; }
+        .skill-items { display: flex; flex-direction: column; gap: 10px; }
+        .skill-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f5f5f5; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .skill-item:hover { background: #e8f5e9; }
+        .skill-item.mastered { background: #c8e6c9; }
+        .skill-checkbox { width: 24px; height: 24px; border: 3px solid #00b09b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .mastered .skill-checkbox { background: #00b09b; color: white; }
+        .independence-meter { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; color: white; }
+        .meter-circle { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(#4CAF50 0deg, #4CAF50 var(--progress, 0deg), rgba(255,255,255,0.2) var(--progress, 0deg)); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
+        .meter-inner { width: 160px; height: 160px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .meter-value { font-size: 2.5em; font-weight: bold; }
+        .meter-label { font-size: 0.9em; opacity: 0.8; }
+        .challenge-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .challenge-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .challenge-card:hover { border-color: #96c93d; transform: translateY(-3px); }
+        .challenge-card.completed { border-color: #4CAF50; background: #e8f5e9; }
+        .challenge-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .challenge-card .title { font-weight: bold; font-size: 0.85em; }
+        .weekly-tracker { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-header { font-weight: bold; margin-bottom: 15px; }
+        .tracker-days { display: flex; justify-content: space-between; }
+        .tracker-day { text-align: center; }
+        .day-circle { width: 45px; height: 45px; border-radius: 50%; background: white; border: 3px solid #e0e0e0; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; cursor: pointer; transition: all 0.3s; font-size: 1.2em; }
+        .day-circle:hover { border-color: #00b09b; }
+        .day-circle.done { background: #00b09b; border-color: #00b09b; color: white; }
+        .day-label { font-size: 0.8em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #00b09b; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .skills-grid, .challenge-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe V</div>
+            <h1>Selbstständigkeit</h1>
+            <p>Mein Leben selbst gestalten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-29 bis V-33)</h3>
+                <p>Der Jugendliche handelt zunehmend selbstständig. Er übernimmt Verantwortung für sein tägliches Leben und trifft eigene Entscheidungen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Meine Selbstständigkeits-Checkliste</h3>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h4>🏠 Haushalt</h4>
+                        <div class="skill-items">
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Zimmer aufräumen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Wäsche waschen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Kochen/Essen zubereiten</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Einkaufen</span></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>💰 Finanzen</h4>
+                        <div class="skill-items">
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Geld einteilen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Sparen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Überweisungen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Preise vergleichen</span></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>📋 Organisation</h4>
+                        <div class="skill-items">
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Termine einhalten</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Pünktlich aufstehen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Aufgaben planen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Dokumente ordnen</span></div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>🌍 Außenwelt</h4>
+                        <div class="skill-items">
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Öffentliche Verkehrsmittel</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Arzttermine machen</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Behördengänge</span></div>
+                            <div class="skill-item" onclick="toggleSkill(this)"><div class="skill-checkbox">✓</div><span>Nach dem Weg fragen</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Mein Selbstständigkeits-Level</h3>
+                <div class="independence-meter">
+                    <div class="meter-circle" id="meterCircle">
+                        <div class="meter-inner">
+                            <div class="meter-value" id="meterValue">0%</div>
+                            <div class="meter-label">Selbstständigkeit</div>
+                        </div>
+                    </div>
+                    <p>Markiere oben die Fähigkeiten, die du beherrschst!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Wochen-Challenge</h3>
+                <p>Wähle eine Herausforderung für diese Woche:</p>
+                <div class="challenge-cards">
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">🍳</div><div class="title">Selbst kochen</div></div>
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">🛒</div><div class="title">Allein einkaufen</div></div>
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">📞</div><div class="title">Telefonat führen</div></div>
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">🚌</div><div class="title">Neuer Weg</div></div>
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">📅</div><div class="title">Woche planen</div></div>
+                    <div class="challenge-card" onclick="toggleChallenge(this)"><div class="icon">💪</div><div class="title">Problem lösen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Selbstständigkeits-Tracker</h3>
+                <div class="weekly-tracker">
+                    <div class="tracker-header">Heute war ich selbstständig:</div>
+                    <div class="tracker-days">
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Mo</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Di</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Mi</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Do</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Fr</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">Sa</div></div>
+                        <div class="tracker-day"><div class="day-circle" onclick="toggleDay(this)">✓</div><div class="day-label">So</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie selbstständig handelt der Jugendliche? In welchen Bereichen braucht er noch Unterstützung? Welche Fortschritte sind erkennbar?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleSkill(el) { el.classList.toggle('mastered'); updateMeter(); saveData(); }
+        function toggleChallenge(el) { el.classList.toggle('completed'); saveData(); }
+        function toggleDay(el) { el.classList.toggle('done'); saveData(); }
+        function updateMeter() {
+            const total = document.querySelectorAll('.skill-item').length;
+            const mastered = document.querySelectorAll('.skill-item.mastered').length;
+            const percent = Math.round((mastered / total) * 100);
+            document.getElementById('meterValue').textContent = percent + '%';
+            document.getElementById('meterCircle').style.setProperty('--progress', (percent * 3.6) + 'deg');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: [...document.querySelectorAll('.skill-item.mastered')].map(s => s.querySelector('span').textContent),
+                challenges: document.querySelectorAll('.challenge-card.completed').length,
+                days: [...document.querySelectorAll('.day-circle.done')].length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v5_selbststaendigkeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v5_selbststaendigkeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.skills) {
+                    document.querySelectorAll('.skill-item').forEach(item => {
+                        if (data.skills.includes(item.querySelector('span').textContent)) {
+                            item.classList.add('mastered');
+                        }
+                    });
+                }
+                updateMeter();
+                const challenges = document.querySelectorAll('.challenge-card');
+                for (let i = 0; i < (data.challenges || 0); i++) { if (challenges[i]) challenges[i].classList.add('completed'); }
+                const days = document.querySelectorAll('.day-circle');
+                for (let i = 0; i < (data.days || 0); i++) { if (days[i]) days[i].classList.add('done'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verantwortung übernehmen - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .responsibility-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .resp-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .resp-card:hover { border-color: #f5576c; transform: translateY(-3px); }
+        .resp-card.taken { border-color: #4CAF50; background: #e8f5e9; }
+        .resp-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .resp-card .title { font-weight: bold; margin-bottom: 5px; }
+        .accountability { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .acc-scenario { padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-bottom: 15px; }
+        .acc-options { display: flex; flex-direction: column; gap: 10px; }
+        .acc-option { padding: 15px; background: rgba(255,255,255,0.9); color: #333; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .acc-option:hover { transform: translateX(10px); }
+        .acc-option.correct { background: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .acc-option.wrong { background: #ffebee; border-left: 5px solid #f44336; }
+        .weekly-tracker { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin: 20px 0; }
+        .day-box { background: white; border: 3px solid #e0e0e0; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .day-box:hover { border-color: #f5576c; }
+        .day-box.done { border-color: #4CAF50; background: #e8f5e9; }
+        .day-box .day { font-weight: bold; margin-bottom: 5px; }
+        .day-box .icon { font-size: 1.5em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .responsibility-cards, .weekly-tracker { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Verantwortung übernehmen</h1>
+            <p>Für mein Handeln einstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-15 bis V-21)</h3>
+                <p>Das Kind übernimmt Verantwortung für sein Handeln. Es steht zu seinen Fehlern und bemüht sich, sie wieder gutzumachen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Meine Verantwortungen</h3>
+                <p>Markiere die Aufgaben, für die du verantwortlich bist:</p>
+                <div class="responsibility-cards">
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">🎒</div><div class="title">Schultasche packen</div></div>
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">🛏️</div><div class="title">Bett machen</div></div>
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">📚</div><div class="title">Hausaufgaben</div></div>
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">🧹</div><div class="title">Zimmer aufräumen</div></div>
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">🐕</div><div class="title">Haustier versorgen</div></div>
+                    <div class="resp-card" onclick="toggleResp(this)"><div class="icon">🍽️</div><div class="title">Tisch decken/abräumen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Zu Fehlern stehen</h3>
+                <p>Was ist die richtige Reaktion?</p>
+                <div class="accountability">
+                    <div class="acc-scenario">Du hast aus Versehen die Vase umgeworfen und sie ist kaputt gegangen.</div>
+                    <div class="acc-options">
+                        <div class="acc-option" onclick="checkAcc(this, true)">💬 "Es tut mir leid, ich war es. Kann ich helfen, es aufzuräumen?"</div>
+                        <div class="acc-option" onclick="checkAcc(this, false)">🙈 So tun, als wäre nichts passiert</div>
+                        <div class="acc-option" onclick="checkAcc(this, false)">👉 Jemand anderen beschuldigen</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Verantwortungs-Woche</h3>
+                <p>Markiere jeden Tag, an dem du deine Verantwortungen erfüllt hast:</p>
+                <div class="weekly-tracker">
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Mo</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Di</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Mi</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Do</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Fr</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">Sa</div><div class="icon">⭐</div></div>
+                    <div class="day-box" onclick="toggleDay(this)"><div class="day">So</div><div class="icon">⭐</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie übernimmt das Kind Verantwortung? Steht es zu Fehlern? Welche Aufgaben erledigt es zuverlässig?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleResp(el) { el.classList.toggle('taken'); saveData(); }
+        function checkAcc(el, correct) {
+            el.classList.add(correct ? 'correct' : 'wrong');
+            document.querySelectorAll('.acc-option').forEach(o => o.style.pointerEvents = 'none');
+            saveData();
+        }
+        function toggleDay(el) { el.classList.toggle('done'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { responsibilities: document.querySelectorAll('.resp-card.taken').length, days: document.querySelectorAll('.day-box.done').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_verantwortung', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_verantwortung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const resps = document.querySelectorAll('.resp-card');
+                for (let i = 0; i < (data.responsibilities || 0); i++) { if (resps[i]) resps[i].classList.add('taken'); }
+                const days = document.querySelectorAll('.day-box');
+                for (let i = 0; i < (data.days || 0); i++) { if (days[i]) days[i].classList.add('done'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

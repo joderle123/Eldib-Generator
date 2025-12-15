@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenreflexion - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #3494e6 0%, #ec6ead 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #3494e6 0%, #ec6ead 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e3f2fd 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #3494e6; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .reflection-wheel { text-align: center; padding: 30px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 15px; margin: 20px 0; }
+        .wheel-container { position: relative; width: 250px; height: 250px; margin: 0 auto; }
+        .wheel-segment { position: absolute; width: 100px; height: 100px; background: white; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .wheel-segment:hover { transform: scale(1.1); }
+        .wheel-segment.selected { box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        .wheel-segment .icon { font-size: 2em; }
+        .wheel-segment .label { font-size: 0.7em; margin-top: 5px; }
+        .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: linear-gradient(135deg, #3494e6, #ec6ead); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white; }
+        .rating-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .rating-item { background: white; border-radius: 12px; padding: 15px; border: 3px solid #e0e0e0; }
+        .rating-item .question { font-weight: bold; margin-bottom: 10px; }
+        .rating-faces { display: flex; justify-content: space-around; }
+        .rating-face { font-size: 2em; cursor: pointer; opacity: 0.4; transition: all 0.2s; }
+        .rating-face:hover { opacity: 0.7; transform: scale(1.1); }
+        .rating-face.selected { opacity: 1; transform: scale(1.2); }
+        .team-feedback { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .feedback-section { margin-bottom: 20px; }
+        .feedback-section h4 { margin-bottom: 10px; }
+        .feedback-input { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 1em; }
+        .improvement-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .improve-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .improve-card:hover { border-color: #3494e6; }
+        .improve-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .improve-card .icon { font-size: 2em; margin-bottom: 5px; }
+        .weekly-reflection { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .week-row { display: flex; justify-content: space-around; margin-bottom: 15px; }
+        .day-reflection { text-align: center; cursor: pointer; }
+        .day-circle { width: 40px; height: 40px; background: white; border: 3px solid #e0e0e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; transition: all 0.3s; }
+        .day-circle:hover { border-color: #3494e6; }
+        .day-circle.positive { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .day-circle.neutral { background: #FFC107; border-color: #FFC107; }
+        .day-circle.negative { background: #f44336; border-color: #f44336; color: white; }
+        .day-label { font-size: 0.8em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #3494e6; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .rating-grid, .improvement-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Gruppenreflexion</h1>
+            <p>Über unsere Zusammenarbeit nachdenken</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-26 bis V-28)</h3>
+                <p>Das Kind reflektiert die Gruppenarbeit. Es erkennt, was gut gelaufen ist und wo die Gruppe sich verbessern kann.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Reflexionsrad</h3>
+                <p>Klicke auf die Bereiche, über die du nachdenken möchtest:</p>
+                <div class="reflection-wheel">
+                    <div class="wheel-container">
+                        <div class="wheel-segment" style="top: 0; left: 75px;" onclick="toggleSegment(this)"><div class="icon">🤝</div><div class="label">Zusammenarbeit</div></div>
+                        <div class="wheel-segment" style="top: 75px; left: 150px;" onclick="toggleSegment(this)"><div class="icon">💬</div><div class="label">Kommunikation</div></div>
+                        <div class="wheel-segment" style="top: 150px; left: 75px;" onclick="toggleSegment(this)"><div class="icon">🎯</div><div class="label">Zielerreichung</div></div>
+                        <div class="wheel-segment" style="top: 75px; left: 0;" onclick="toggleSegment(this)"><div class="icon">😊</div><div class="label">Stimmung</div></div>
+                        <div class="wheel-center">💭</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Wie war unsere Gruppenarbeit?</h3>
+                <div class="rating-grid">
+                    <div class="rating-item">
+                        <div class="question">Haben wir gut zusammengearbeitet?</div>
+                        <div class="rating-faces">
+                            <span class="rating-face" onclick="setRating(this, 0, 1)">😢</span>
+                            <span class="rating-face" onclick="setRating(this, 0, 2)">😐</span>
+                            <span class="rating-face" onclick="setRating(this, 0, 3)">🙂</span>
+                            <span class="rating-face" onclick="setRating(this, 0, 4)">😊</span>
+                        </div>
+                    </div>
+                    <div class="rating-item">
+                        <div class="question">Hat jeder seinen Teil beigetragen?</div>
+                        <div class="rating-faces">
+                            <span class="rating-face" onclick="setRating(this, 1, 1)">😢</span>
+                            <span class="rating-face" onclick="setRating(this, 1, 2)">😐</span>
+                            <span class="rating-face" onclick="setRating(this, 1, 3)">🙂</span>
+                            <span class="rating-face" onclick="setRating(this, 1, 4)">😊</span>
+                        </div>
+                    </div>
+                    <div class="rating-item">
+                        <div class="question">Haben wir unser Ziel erreicht?</div>
+                        <div class="rating-faces">
+                            <span class="rating-face" onclick="setRating(this, 2, 1)">😢</span>
+                            <span class="rating-face" onclick="setRating(this, 2, 2)">😐</span>
+                            <span class="rating-face" onclick="setRating(this, 2, 3)">🙂</span>
+                            <span class="rating-face" onclick="setRating(this, 2, 4)">😊</span>
+                        </div>
+                    </div>
+                    <div class="rating-item">
+                        <div class="question">Hatten wir Spaß zusammen?</div>
+                        <div class="rating-faces">
+                            <span class="rating-face" onclick="setRating(this, 3, 1)">😢</span>
+                            <span class="rating-face" onclick="setRating(this, 3, 2)">😐</span>
+                            <span class="rating-face" onclick="setRating(this, 3, 3)">🙂</span>
+                            <span class="rating-face" onclick="setRating(this, 3, 4)">😊</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💚</span> Feedback für die Gruppe</h3>
+                <div class="team-feedback">
+                    <div class="feedback-section">
+                        <h4>⭐ Das war richtig gut:</h4>
+                        <input class="feedback-input" type="text" id="goodFeedback" placeholder="Was hat super geklappt?" oninput="saveData()">
+                    </div>
+                    <div class="feedback-section">
+                        <h4>🔧 Das können wir verbessern:</h4>
+                        <input class="feedback-input" type="text" id="improveFeedback" placeholder="Was machen wir nächstes Mal besser?" oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Worauf wollen wir achten?</h3>
+                <p>Wähle 1-2 Bereiche für die nächste Gruppenarbeit:</p>
+                <div class="improvement-cards">
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">👂</div><div>Besser zuhören</div></div>
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">🤝</div><div>Mehr helfen</div></div>
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">⏰</div><div>Pünktlicher sein</div></div>
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">🗣️</div><div>Klarer sprechen</div></div>
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">😌</div><div>Ruhiger bleiben</div></div>
+                    <div class="improve-card" onclick="toggleImprove(this)"><div class="icon">🎯</div><div>Fokussierter sein</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Meine Woche im Team</h3>
+                <p>Klicke mehrmals auf einen Tag, um deine Zufriedenheit zu zeigen:</p>
+                <div class="weekly-reflection">
+                    <div class="week-row">
+                        <div class="day-reflection" onclick="cycleDayState(this)"><div class="day-circle">😊</div><div class="day-label">Mo</div></div>
+                        <div class="day-reflection" onclick="cycleDayState(this)"><div class="day-circle">😊</div><div class="day-label">Di</div></div>
+                        <div class="day-reflection" onclick="cycleDayState(this)"><div class="day-circle">😊</div><div class="day-label">Mi</div></div>
+                        <div class="day-reflection" onclick="cycleDayState(this)"><div class="day-circle">😊</div><div class="day-label">Do</div></div>
+                        <div class="day-reflection" onclick="cycleDayState(this)"><div class="day-circle">😊</div><div class="day-label">Fr</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reflektiert das Kind die Gruppenarbeit? Kann es konstruktives Feedback geben? Nimmt es sich Verbesserungen vor? Wie realistisch ist die Selbsteinschätzung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let ratings = [0, 0, 0, 0];
+        let dayStates = [0, 0, 0, 0, 0]; // 0=neutral, 1=positive, 2=negative
+        function toggleSegment(el) { el.classList.toggle('selected'); saveData(); }
+        function setRating(el, questionIndex, value) {
+            const container = el.parentElement;
+            container.querySelectorAll('.rating-face').forEach(f => f.classList.remove('selected'));
+            el.classList.add('selected');
+            ratings[questionIndex] = value;
+            saveData();
+        }
+        function toggleImprove(el) { el.classList.toggle('selected'); saveData(); }
+        function cycleDayState(el) {
+            const circle = el.querySelector('.day-circle');
+            const index = [...el.parentElement.children].indexOf(el);
+            dayStates[index] = (dayStates[index] + 1) % 3;
+            circle.classList.remove('positive', 'neutral', 'negative');
+            if (dayStates[index] === 1) { circle.classList.add('positive'); circle.textContent = '😊'; }
+            else if (dayStates[index] === 2) { circle.classList.add('negative'); circle.textContent = '😢'; }
+            else { circle.textContent = '😐'; circle.classList.add('neutral'); }
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                segments: document.querySelectorAll('.wheel-segment.selected').length,
+                ratings: ratings,
+                goodFeedback: document.getElementById('goodFeedback').value,
+                improveFeedback: document.getElementById('improveFeedback').value,
+                improvements: [...document.querySelectorAll('.improve-card.selected')].map(c => c.textContent.trim()),
+                dayStates: dayStates,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_reflexion', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_reflexion');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const segments = document.querySelectorAll('.wheel-segment');
+                for (let i = 0; i < (data.segments || 0); i++) { if (segments[i]) segments[i].classList.add('selected'); }
+                if (data.ratings) {
+                    ratings = data.ratings;
+                    document.querySelectorAll('.rating-item').forEach((item, i) => {
+                        if (ratings[i]) {
+                            const faces = item.querySelectorAll('.rating-face');
+                            if (faces[ratings[i] - 1]) faces[ratings[i] - 1].classList.add('selected');
+                        }
+                    });
+                }
+                document.getElementById('goodFeedback').value = data.goodFeedback || '';
+                document.getElementById('improveFeedback').value = data.improveFeedback || '';
+                if (data.improvements) {
+                    document.querySelectorAll('.improve-card').forEach(card => {
+                        if (data.improvements.includes(card.textContent.trim())) card.classList.add('selected');
+                    });
+                }
+                if (data.dayStates) {
+                    dayStates = data.dayStates;
+                    document.querySelectorAll('.day-reflection').forEach((day, i) => {
+                        const circle = day.querySelector('.day-circle');
+                        if (dayStates[i] === 1) { circle.classList.add('positive'); circle.textContent = '😊'; }
+                        else if (dayStates[i] === 2) { circle.classList.add('negative'); circle.textContent = '😢'; }
+                        else { circle.classList.add('neutral'); circle.textContent = '😐'; }
+                    });
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

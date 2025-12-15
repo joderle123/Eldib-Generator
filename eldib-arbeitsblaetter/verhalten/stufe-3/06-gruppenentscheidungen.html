@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenentscheidungen - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #a18cd1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .voting-simulation { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .vote-question { font-size: 1.3em; margin-bottom: 20px; }
+        .vote-options { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .vote-option { padding: 20px 30px; background: rgba(255,255,255,0.2); border-radius: 15px; cursor: pointer; transition: all 0.3s; min-width: 120px; }
+        .vote-option:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
+        .vote-option.selected { background: #4CAF50; }
+        .vote-option .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .vote-count { margin-top: 5px; font-size: 0.9em; }
+        .decision-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .step-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .step-item:hover { border-color: #a18cd1; }
+        .step-item.done { border-color: #4CAF50; background: #e8f5e9; }
+        .step-number { width: 40px; height: 40px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .done .step-number { background: #4CAF50; color: white; }
+        .step-item .icon { font-size: 1.5em; }
+        .compromise-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .compromise-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .compromise-card:hover { border-color: #a18cd1; }
+        .compromise-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .compromise-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #a18cd1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .compromise-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Gruppenentscheidungen</h1>
+            <p>Gemeinsam entscheiden lernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-20)</h3>
+                <p>Das Kind kann an Gruppenentscheidungen teilnehmen. Es akzeptiert demokratische Entscheidungen, auch wenn sie anders ausfallen als gewünscht.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗳️</span> Abstimmungs-Simulation</h3>
+                <p>Stimme ab! Was sollen wir in der Pause spielen?</p>
+                <div class="voting-simulation">
+                    <div class="vote-question">Was möchtest du spielen?</div>
+                    <div class="vote-options">
+                        <div class="vote-option" onclick="vote(this, 'ball')">
+                            <div class="icon">⚽</div>
+                            <div>Fußball</div>
+                            <div class="vote-count" id="count-ball">3 Stimmen</div>
+                        </div>
+                        <div class="vote-option" onclick="vote(this, 'versteck')">
+                            <div class="icon">🙈</div>
+                            <div>Verstecken</div>
+                            <div class="vote-count" id="count-versteck">2 Stimmen</div>
+                        </div>
+                        <div class="vote-option" onclick="vote(this, 'fangen')">
+                            <div class="icon">🏃</div>
+                            <div>Fangen</div>
+                            <div class="vote-count" id="count-fangen">4 Stimmen</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 0.9em;">Die Gruppe entscheidet gemeinsam!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Schritte einer guten Gruppenentscheidung</h3>
+                <p>Markiere die Schritte, die du verstanden hast:</p>
+                <div class="decision-steps">
+                    <div class="step-item" onclick="toggleStep(this)"><div class="step-number">1</div><div class="icon">💬</div><div>Alle dürfen ihre Meinung sagen</div></div>
+                    <div class="step-item" onclick="toggleStep(this)"><div class="step-number">2</div><div class="icon">👂</div><div>Wir hören allen zu</div></div>
+                    <div class="step-item" onclick="toggleStep(this)"><div class="step-number">3</div><div class="icon">🗳️</div><div>Wir stimmen fair ab</div></div>
+                    <div class="step-item" onclick="toggleStep(this)"><div class="step-number">4</div><div class="icon">✅</div><div>Wir akzeptieren das Ergebnis</div></div>
+                    <div class="step-item" onclick="toggleStep(this)"><div class="step-number">5</div><div class="icon">🤝</div><div>Wir machen gemeinsam mit</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🤝</span> Kompromisse finden</h3>
+                <p>Markiere die Kompromiss-Fähigkeiten, die du schon hast:</p>
+                <div class="compromise-cards">
+                    <div class="compromise-card" onclick="toggleCompromise(this)"><div class="icon">👂</div><div><strong>Zuhören</strong></div><div>Andere Meinungen anhören</div></div>
+                    <div class="compromise-card" onclick="toggleCompromise(this)"><div class="icon">💡</div><div><strong>Vorschläge machen</strong></div><div>Eigene Ideen einbringen</div></div>
+                    <div class="compromise-card" onclick="toggleCompromise(this)"><div class="icon">↔️</div><div><strong>Nachgeben können</strong></div><div>Nicht immer gewinnen müssen</div></div>
+                    <div class="compromise-card" onclick="toggleCompromise(this)"><div class="icon">🎯</div><div><strong>Gemeinsame Lösung</strong></div><div>Etwas finden, das für alle okay ist</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie verhält sich das Kind bei Gruppenentscheidungen? Kann es verlieren? Macht es bei Entscheidungen mit, die es nicht wollte?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let votes = { ball: 3, versteck: 2, fangen: 4 };
+        function vote(el, option) {
+            document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            votes[option]++;
+            document.getElementById('count-' + option).textContent = votes[option] + ' Stimmen';
+            saveData();
+        }
+        function toggleStep(el) { el.classList.toggle('done'); saveData(); }
+        function toggleCompromise(el) { el.classList.toggle('mastered'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { votes, steps: document.querySelectorAll('.step-item.done').length, compromises: document.querySelectorAll('.compromise-card.mastered').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_gruppenentscheidungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_gruppenentscheidungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.step-item');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('done'); }
+                const compromises = document.querySelectorAll('.compromise-card');
+                for (let i = 0; i < (data.compromises || 0); i++) { if (compromises[i]) compromises[i].classList.add('mastered'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

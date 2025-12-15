@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problemlösung - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .problem-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .step { display: flex; align-items: flex-start; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .step:hover { border-color: #667eea; }
+        .step.completed { border-color: #4CAF50; background: #e8f5e9; }
+        .step-num { width: 40px; height: 40px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .completed .step-num { background: #4CAF50; }
+        .step-content { flex: 1; }
+        .step-title { font-weight: bold; margin-bottom: 5px; }
+        .step-desc { font-size: 0.9em; color: #666; }
+        .practice-scenario { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-title { font-size: 1.2em; margin-bottom: 15px; }
+        .scenario-input { padding: 15px; border: none; border-radius: 10px; width: 100%; font-size: 1em; margin-bottom: 10px; }
+        .scenario-hint { font-size: 0.9em; opacity: 0.8; }
+        .problem-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .problem-type { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .problem-type:hover { border-color: #667eea; }
+        .problem-type.can-solve { border-color: #4CAF50; background: #e8f5e9; }
+        .problem-type .icon { font-size: 2.5em; margin-bottom: 10px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .problem-types { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Problemlösung</h1>
+            <p>Probleme Schritt für Schritt lösen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-18/V-19)</h3>
+                <p>Das Kind kann Probleme systematisch angehen. Es lernt Schritte zur Problemlösung und wendet sie an.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🧩</span> Die 5 Schritte zur Problemlösung</h3>
+                <p>Klicke auf jeden Schritt, den du verstanden hast:</p>
+                <div class="problem-steps">
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">1</div><div class="step-content"><div class="step-title">🔍 Problem erkennen</div><div class="step-desc">Was genau ist das Problem?</div></div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">2</div><div class="step-content"><div class="step-title">💡 Ideen sammeln</div><div class="step-desc">Welche Lösungen gibt es?</div></div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">3</div><div class="step-content"><div class="step-title">⚖️ Nachdenken</div><div class="step-desc">Was sind die Vor- und Nachteile?</div></div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">4</div><div class="step-content"><div class="step-title">✅ Entscheiden</div><div class="step-desc">Die beste Lösung wählen</div></div></div>
+                    <div class="step" onclick="toggleStep(this)"><div class="step-num">5</div><div class="step-content"><div class="step-title">🎯 Ausprobieren</div><div class="step-desc">Die Lösung umsetzen und prüfen</div></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Übe die Schritte</h3>
+                <div class="practice-scenario">
+                    <div class="scenario-title">Problem: Du hast deinen Stift verloren.</div>
+                    <input class="scenario-input" id="step1" placeholder="Schritt 1: Was ist das Problem?" oninput="saveData()">
+                    <input class="scenario-input" id="step2" placeholder="Schritt 2: Welche Lösungen gibt es?" oninput="saveData()">
+                    <input class="scenario-input" id="step3" placeholder="Schritt 3: Was ist die beste Lösung?" oninput="saveData()">
+                    <div class="scenario-hint">💡 Tipp: Nachfragen, suchen, ausleihen, neuen kaufen...</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Diese Probleme kann ich schon lösen</h3>
+                <p>Markiere, welche Probleme du selbst lösen kannst:</p>
+                <div class="problem-types">
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">🤝</div><div><strong>Streit mit Freunden</strong></div></div>
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">📚</div><div><strong>Schwierige Aufgabe</strong></div></div>
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">🔍</div><div><strong>Etwas verloren</strong></div></div>
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">⏰</div><div><strong>Keine Zeit</strong></div></div>
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">😤</div><div><strong>Ungerechtigkeit</strong></div></div>
+                    <div class="problem-type" onclick="toggleProblem(this)"><div class="icon">🆘</div><div><strong>Brauche Hilfe</strong></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie geht das Kind Probleme an? Kann es die Schritte anwenden? Wo braucht es Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleStep(el) { el.classList.toggle('completed'); saveData(); }
+        function toggleProblem(el) { el.classList.toggle('can-solve'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                steps: document.querySelectorAll('.step.completed').length,
+                problems: document.querySelectorAll('.problem-type.can-solve').length,
+                practice: { step1: document.getElementById('step1').value, step2: document.getElementById('step2').value, step3: document.getElementById('step3').value },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v3_problemloesung', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_problemloesung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.step');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('completed'); }
+                const probs = document.querySelectorAll('.problem-type');
+                for (let i = 0; i < (data.problems || 0); i++) { if (probs[i]) probs[i].classList.add('can-solve'); }
+                if (data.practice) {
+                    document.getElementById('step1').value = data.practice.step1 || '';
+                    document.getElementById('step2').value = data.practice.step2 || '';
+                    document.getElementById('step3').value = data.practice.step3 || '';
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

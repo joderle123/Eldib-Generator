@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Führung übernehmen - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3cd 0%, #ffc107 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5af19; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .leader-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .leader-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .leader-card:hover { border-color: #f5af19; transform: translateY(-3px); }
+        .leader-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .leader-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .leader-card .title { font-weight: bold; margin-bottom: 5px; }
+        .leader-card .desc { font-size: 0.85em; color: #666; }
+        .leadership-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-item { background: white; border-radius: 12px; padding: 15px; border: 3px solid #e0e0e0; }
+        .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .skill-name { font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .skill-level { display: flex; gap: 5px; }
+        .star { font-size: 1.5em; cursor: pointer; opacity: 0.3; transition: opacity 0.2s; }
+        .star.active { opacity: 1; }
+        .scenario-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-title { font-size: 1.1em; margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 10px; }
+        .scenario-option { padding: 15px; background: rgba(255,255,255,0.9); color: #333; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .scenario-option:hover { transform: translateX(10px); }
+        .scenario-option.leader { background: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .scenario-option.notleader { background: #ffebee; border-left: 5px solid #f44336; }
+        .reflection-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .reflection-card { background: #f5f5f5; border-radius: 12px; padding: 15px; }
+        .reflection-card label { display: block; font-weight: bold; margin-bottom: 10px; }
+        .reflection-card input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .reflection-card input:focus { outline: none; border-color: #f5af19; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5af19; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .leader-types, .reflection-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Führung übernehmen</h1>
+            <p>Die Gruppe leiten können</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-27/V-28)</h3>
+                <p>Das Kind kann Führungsaufgaben übernehmen. Es leitet die Gruppe respektvoll, hört auf andere und trifft faire Entscheidungen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👑</span> Verschiedene Führungsstile</h3>
+                <p>Welcher Führungsstil passt zu dir? Markiere deinen bevorzugten Stil:</p>
+                <div class="leader-types">
+                    <div class="leader-card" onclick="toggleLeader(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Der Motivator</div>
+                        <div class="desc">Feuert das Team an und macht Mut</div>
+                    </div>
+                    <div class="leader-card" onclick="toggleLeader(this)">
+                        <div class="icon">📋</div>
+                        <div class="title">Der Organisator</div>
+                        <div class="desc">Plant und strukturiert alles</div>
+                    </div>
+                    <div class="leader-card" onclick="toggleLeader(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Der Teamplayer</div>
+                        <div class="desc">Bezieht alle mit ein</div>
+                    </div>
+                    <div class="leader-card" onclick="toggleLeader(this)">
+                        <div class="icon">💡</div>
+                        <div class="title">Der Visionär</div>
+                        <div class="desc">Hat große Ideen und Ziele</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Meine Führungsfähigkeiten</h3>
+                <p>Bewerte dich selbst - klicke auf die Sterne:</p>
+                <div class="leadership-skills">
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <div class="skill-name">🗣️ Klar kommunizieren</div>
+                            <div class="skill-level" data-skill="0">
+                                <span class="star" onclick="setSkill(this, 1)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 2)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 3)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 4)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 5)">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <div class="skill-name">👂 Anderen zuhören</div>
+                            <div class="skill-level" data-skill="1">
+                                <span class="star" onclick="setSkill(this, 1)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 2)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 3)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 4)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 5)">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <div class="skill-name">⚖️ Fair entscheiden</div>
+                            <div class="skill-level" data-skill="2">
+                                <span class="star" onclick="setSkill(this, 1)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 2)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 3)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 4)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 5)">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <div class="skill-name">💪 Verantwortung tragen</div>
+                            <div class="skill-level" data-skill="3">
+                                <span class="star" onclick="setSkill(this, 1)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 2)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 3)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 4)">⭐</span>
+                                <span class="star" onclick="setSkill(this, 5)">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Was macht eine gute Führungsperson?</h3>
+                <div class="scenario-box">
+                    <div class="scenario-title">Die Gruppe ist uneinig, was gespielt werden soll. Du bist heute der Gruppenleiter. Was tust du?</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" onclick="checkLeader(this, 'notleader')">😤 Ich bestimme einfach, was gespielt wird</div>
+                        <div class="scenario-option" onclick="checkLeader(this, 'leader')">🗳️ Ich lasse abstimmen und akzeptiere das Ergebnis</div>
+                        <div class="scenario-option" onclick="checkLeader(this, 'leader')">💬 Ich frage nach Kompromissen, die alle zufriedenstellen</div>
+                        <div class="scenario-option" onclick="checkLeader(this, 'notleader')">🙈 Ich sage nichts und warte ab</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Meine Führungserfahrungen</h3>
+                <div class="reflection-grid">
+                    <div class="reflection-card">
+                        <label>Eine Situation, in der ich geführt habe:</label>
+                        <input type="text" id="leadSituation" placeholder="Wann war das?" oninput="saveData()">
+                    </div>
+                    <div class="reflection-card">
+                        <label>Was ist mir gut gelungen:</label>
+                        <input type="text" id="leadSuccess" placeholder="Das hat geklappt..." oninput="saveData()">
+                    </div>
+                    <div class="reflection-card">
+                        <label>Was war schwierig:</label>
+                        <input type="text" id="leadChallenge" placeholder="Das war herausfordernd..." oninput="saveData()">
+                    </div>
+                    <div class="reflection-card">
+                        <label>Was ich nächstes Mal besser machen will:</label>
+                        <input type="text" id="leadImprove" placeholder="Ich werde versuchen..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Übernimmt das Kind Führungsrollen? Wie geht es mit der Verantwortung um? Respektiert es die Meinungen anderer? Wie trifft es Entscheidungen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let skillLevels = [0, 0, 0, 0];
+        function toggleLeader(el) { el.classList.toggle('selected'); saveData(); }
+        function setSkill(star, level) {
+            const container = star.closest('.skill-level');
+            const skillIndex = parseInt(container.dataset.skill);
+            skillLevels[skillIndex] = level;
+            container.querySelectorAll('.star').forEach((s, i) => {
+                s.classList.toggle('active', i < level);
+            });
+            saveData();
+        }
+        function checkLeader(el, type) {
+            el.classList.add(type);
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                leaderTypes: [...document.querySelectorAll('.leader-card.selected')].map(c => c.querySelector('.title').textContent),
+                skills: skillLevels,
+                leadSituation: document.getElementById('leadSituation').value,
+                leadSuccess: document.getElementById('leadSuccess').value,
+                leadChallenge: document.getElementById('leadChallenge').value,
+                leadImprove: document.getElementById('leadImprove').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_fuehrung', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_fuehrung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.leaderTypes) {
+                    document.querySelectorAll('.leader-card').forEach(card => {
+                        if (data.leaderTypes.includes(card.querySelector('.title').textContent)) {
+                            card.classList.add('selected');
+                        }
+                    });
+                }
+                if (data.skills) {
+                    skillLevels = data.skills;
+                    document.querySelectorAll('.skill-level').forEach((container, skillIndex) => {
+                        container.querySelectorAll('.star').forEach((star, i) => {
+                            star.classList.toggle('active', i < skillLevels[skillIndex]);
+                        });
+                    });
+                }
+                document.getElementById('leadSituation').value = data.leadSituation || '';
+                document.getElementById('leadSuccess').value = data.leadSuccess || '';
+                document.getElementById('leadChallenge').value = data.leadChallenge || '';
+                document.getElementById('leadImprove').value = data.leadImprove || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

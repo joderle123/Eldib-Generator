@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konflikte lösen - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .conflict-scale { display: flex; flex-direction: column; align-items: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .scale-visual { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .scale-level { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; cursor: pointer; transition: all 0.3s; opacity: 0.5; }
+        .scale-level:hover { opacity: 0.8; }
+        .scale-level.active { opacity: 1; transform: scale(1.2); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        .scale-level.green { background: #4CAF50; }
+        .scale-level.yellow { background: #FFC107; }
+        .scale-level.orange { background: #FF9800; }
+        .scale-level.red { background: #f44336; }
+        .scale-label { color: white; text-align: center; font-size: 1.1em; }
+        .strategy-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .strategy-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .strategy-card:hover { border-color: #f5576c; transform: translateY(-3px); }
+        .strategy-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .strategy-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .strategy-card .title { font-weight: bold; margin-bottom: 5px; }
+        .strategy-card .desc { font-size: 0.85em; color: #666; }
+        .scenario-box { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-title { font-size: 1.2em; margin-bottom: 15px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 10px; }
+        .scenario-option { padding: 15px; background: rgba(255,255,255,0.9); color: #333; border-radius: 10px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .scenario-option:hover { transform: translateX(10px); }
+        .scenario-option.best { background: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .scenario-option.ok { background: #fff3e0; border-left: 5px solid #FF9800; }
+        .scenario-option.bad { background: #ffebee; border-left: 5px solid #f44336; }
+        .reflection-area { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .reflection-item { background: white; padding: 15px; border-radius: 10px; border: 2px solid #e0e0e0; }
+        .reflection-item label { display: block; margin-bottom: 10px; font-weight: bold; }
+        .reflection-item input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .reflection-item input:focus { outline: none; border-color: #f5576c; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .strategy-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Konflikte lösen</h1>
+            <p>Streit friedlich beilegen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-23 bis V-26)</h3>
+                <p>Das Kind kann Konflikte konstruktiv lösen. Es erkennt Konfliktsituationen und wendet passende Strategien an, um sie friedlich zu lösen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌡️</span> Mein Konflikt-Barometer</h3>
+                <p>Wie stark ist der Konflikt? Klicke auf die passende Stufe:</p>
+                <div class="conflict-scale">
+                    <div class="scale-visual">
+                        <div class="scale-level green" onclick="setLevel(this, 1)">😊</div>
+                        <div class="scale-level yellow" onclick="setLevel(this, 2)">😐</div>
+                        <div class="scale-level orange" onclick="setLevel(this, 3)">😟</div>
+                        <div class="scale-level red" onclick="setLevel(this, 4)">😤</div>
+                    </div>
+                    <div class="scale-label" id="scaleLabel">Wähle eine Stufe</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛠️</span> Meine Konflikt-Strategien</h3>
+                <p>Welche Strategien nutzt du? Markiere alle, die dir helfen:</p>
+                <div class="strategy-cards">
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Ich-Botschaften</div>
+                        <div class="desc">"Ich fühle mich..., wenn..."</div>
+                    </div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">👂</div>
+                        <div class="title">Aktiv zuhören</div>
+                        <div class="desc">Die andere Seite verstehen</div>
+                    </div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">⏸️</div>
+                        <div class="title">Pause machen</div>
+                        <div class="desc">Erst beruhigen, dann reden</div>
+                    </div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Kompromiss suchen</div>
+                        <div class="desc">Eine Lösung für beide finden</div>
+                    </div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">🆘</div>
+                        <div class="title">Hilfe holen</div>
+                        <div class="desc">Einen Erwachsenen einbeziehen</div>
+                    </div>
+                    <div class="strategy-card" onclick="toggleStrategy(this)">
+                        <div class="icon">🙏</div>
+                        <div class="title">Entschuldigen</div>
+                        <div class="desc">Fehler zugeben und verzeihen</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Wie würdest du reagieren?</h3>
+                <div class="scenario-box">
+                    <div class="scenario-title">Jemand nimmt dir dein Stift weg und sagt, es sei seiner.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" onclick="checkOption(this, 'bad')">😤 Ich schreie laut und nehme ihn mir zurück</div>
+                        <div class="scenario-option" onclick="checkOption(this, 'best')">💬 Ich sage ruhig: "Das ist mein Stift. Können wir das klären?"</div>
+                        <div class="scenario-option" onclick="checkOption(this, 'ok')">🙋 Ich hole die Lehrkraft zur Hilfe</div>
+                        <div class="scenario-option" onclick="checkOption(this, 'bad')">😢 Ich sage nichts und gebe auf</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Meine Konflikt-Reflexion</h3>
+                <div class="reflection-area">
+                    <div class="reflection-item">
+                        <label>Ein Konflikt, den ich gut gelöst habe:</label>
+                        <input type="text" id="goodConflict" placeholder="Beschreibe die Situation..." oninput="saveData()">
+                    </div>
+                    <div class="reflection-item">
+                        <label>Was hat mir dabei geholfen?</label>
+                        <input type="text" id="whatHelped" placeholder="Meine Strategie war..." oninput="saveData()">
+                    </div>
+                    <div class="reflection-item">
+                        <label>Was möchte ich beim nächsten Mal besser machen?</label>
+                        <input type="text" id="nextTime" placeholder="Ich werde versuchen..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert das Kind in Konfliktsituationen? Welche Strategien wendet es an? Kann es sich beruhigen? Braucht es Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let conflictLevel = 0;
+        const levelLabels = ['Wähle eine Stufe', 'Kleines Problem - leicht zu lösen', 'Mittleres Problem - braucht Gespräch', 'Größeres Problem - braucht Hilfe', 'Großer Konflikt - unbedingt Hilfe holen'];
+        function setLevel(el, level) {
+            document.querySelectorAll('.scale-level').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+            conflictLevel = level;
+            document.getElementById('scaleLabel').textContent = levelLabels[level];
+            saveData();
+        }
+        function toggleStrategy(el) { el.classList.toggle('selected'); saveData(); }
+        function checkOption(el, type) {
+            el.classList.add(type);
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                level: conflictLevel,
+                strategies: document.querySelectorAll('.strategy-card.selected').length,
+                goodConflict: document.getElementById('goodConflict').value,
+                whatHelped: document.getElementById('whatHelped').value,
+                nextTime: document.getElementById('nextTime').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_konfliktloesung', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_konfliktloesung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.level) {
+                    const levels = document.querySelectorAll('.scale-level');
+                    if (levels[data.level - 1]) {
+                        levels[data.level - 1].classList.add('active');
+                        conflictLevel = data.level;
+                        document.getElementById('scaleLabel').textContent = levelLabels[data.level];
+                    }
+                }
+                const strategies = document.querySelectorAll('.strategy-card');
+                for (let i = 0; i < (data.strategies || 0); i++) { if (strategies[i]) strategies[i].classList.add('selected'); }
+                document.getElementById('goodConflict').value = data.goodConflict || '';
+                document.getElementById('whatHelped').value = data.whatHelped || '';
+                document.getElementById('nextTime').value = data.nextTime || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

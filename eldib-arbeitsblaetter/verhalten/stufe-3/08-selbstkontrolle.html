@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selbstkontrolle - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .thermometer { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
+        .thermo-container { width: 60px; height: 300px; background: #e0e0e0; border-radius: 30px; position: relative; overflow: hidden; }
+        .thermo-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #4CAF50, #FFC107, #f44336); border-radius: 0 0 30px 30px; transition: height 0.5s; }
+        .thermo-labels { display: flex; flex-direction: column; justify-content: space-between; height: 300px; margin-left: 20px; padding: 10px 0; }
+        .thermo-label { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 5px; }
+        .thermo-label:hover { background: #f0f0f0; }
+        .thermo-label.selected { background: #e8f5e9; }
+        .control-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .control-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .control-card:hover { border-color: #11998e; }
+        .control-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .control-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .daily-log { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .log-entry { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; margin-bottom: 10px; }
+        .log-entry .time { font-weight: bold; color: #666; }
+        .log-entry .rating { display: flex; gap: 5px; margin-left: auto; }
+        .rating-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #e0e0e0; background: white; cursor: pointer; font-size: 1em; }
+        .rating-btn.active { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .control-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Selbstkontrolle</h1>
+            <p>Meine Gefühle und mein Verhalten steuern</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-16 bis V-21)</h3>
+                <p>Das Kind kann sein Verhalten und seine Gefühle kontrollieren. Es reagiert angemessen, auch in schwierigen Situationen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌡️</span> Mein Gefühls-Thermometer</h3>
+                <p>Wie ist deine Selbstkontrolle gerade? Klicke auf die passende Stufe:</p>
+                <div class="thermometer" style="flex-direction: row;">
+                    <div class="thermo-container"><div class="thermo-fill" id="thermoFill" style="height: 50%;"></div></div>
+                    <div class="thermo-labels">
+                        <div class="thermo-label" onclick="setThermo(100)">🔴 Außer Kontrolle</div>
+                        <div class="thermo-label" onclick="setThermo(80)">🟠 Sehr aufgeregt</div>
+                        <div class="thermo-label" onclick="setThermo(60)">🟡 Etwas aufgeregt</div>
+                        <div class="thermo-label" onclick="setThermo(40)">🟢 Unter Kontrolle</div>
+                        <div class="thermo-label" onclick="setThermo(20)">💚 Ruhig und entspannt</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Selbstkontrolle-Fähigkeiten</h3>
+                <p>Markiere, was du schon kannst:</p>
+                <div class="control-cards">
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">🛑</div><div><strong>Stoppen</strong></div><div>Innehalten bevor ich handle</div></div>
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">🤔</div><div><strong>Nachdenken</strong></div><div>Überlegen was ich tue</div></div>
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">😌</div><div><strong>Beruhigen</strong></div><div>Mich selbst runterbringen</div></div>
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">💬</div><div><strong>Ausdrücken</strong></div><div>Mit Worten statt Taten</div></div>
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">🎯</div><div><strong>Fokussieren</strong></div><div>Bei der Sache bleiben</div></div>
+                    <div class="control-card" onclick="toggleControl(this)"><div class="icon">⏰</div><div><strong>Warten</strong></div><div>Geduldig sein</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Mein Tages-Log</h3>
+                <p>Bewerte deine Selbstkontrolle zu verschiedenen Zeiten:</p>
+                <div class="daily-log">
+                    <div class="log-entry"><div class="time">🌅 Morgen</div><div class="rating"><button class="rating-btn" onclick="setLogRating(this)">😟</button><button class="rating-btn" onclick="setLogRating(this)">😐</button><button class="rating-btn" onclick="setLogRating(this)">🙂</button><button class="rating-btn" onclick="setLogRating(this)">😊</button></div></div>
+                    <div class="log-entry"><div class="time">☀️ Mittag</div><div class="rating"><button class="rating-btn" onclick="setLogRating(this)">😟</button><button class="rating-btn" onclick="setLogRating(this)">😐</button><button class="rating-btn" onclick="setLogRating(this)">🙂</button><button class="rating-btn" onclick="setLogRating(this)">😊</button></div></div>
+                    <div class="log-entry"><div class="time">🌆 Nachmittag</div><div class="rating"><button class="rating-btn" onclick="setLogRating(this)">😟</button><button class="rating-btn" onclick="setLogRating(this)">😐</button><button class="rating-btn" onclick="setLogRating(this)">🙂</button><button class="rating-btn" onclick="setLogRating(this)">😊</button></div></div>
+                    <div class="log-entry"><div class="time">🌙 Abend</div><div class="rating"><button class="rating-btn" onclick="setLogRating(this)">😟</button><button class="rating-btn" onclick="setLogRating(this)">😐</button><button class="rating-btn" onclick="setLogRating(this)">🙂</button><button class="rating-btn" onclick="setLogRating(this)">😊</button></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie ist die Selbstkontrolle des Kindes? Welche Situationen sind herausfordernd? Welche Fortschritte gibt es?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let thermoLevel = 50;
+        function setThermo(level) {
+            thermoLevel = level;
+            document.getElementById('thermoFill').style.height = level + '%';
+            document.querySelectorAll('.thermo-label').forEach(l => l.classList.remove('selected'));
+            event.target.classList.add('selected');
+            saveData();
+        }
+        function toggleControl(el) { el.classList.toggle('mastered'); saveData(); }
+        function setLogRating(btn) {
+            btn.parentElement.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { thermo: thermoLevel, controls: document.querySelectorAll('.control-card.mastered').length, log: document.querySelectorAll('.rating-btn.active').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_selbstkontrolle', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_selbstkontrolle');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.thermo) setThermo(data.thermo);
+                const controls = document.querySelectorAll('.control-card');
+                for (let i = 0; i < (data.controls || 0); i++) { if (controls[i]) controls[i].classList.add('mastered'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

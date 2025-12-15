@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aufgaben beenden - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .task-builder { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .task-input { display: flex; gap: 10px; margin-bottom: 20px; }
+        .task-input input { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 1em; }
+        .task-input button { padding: 15px 25px; background: white; color: #667eea; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .task-list { display: flex; flex-direction: column; gap: 10px; }
+        .task-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .task-item.done { background: rgba(76,175,80,0.5); text-decoration: line-through; }
+        .task-checkbox { width: 25px; height: 25px; border: 3px solid white; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+        .done .task-checkbox { background: white; color: #4CAF50; }
+        .progress-ring { display: flex; justify-content: center; margin: 20px 0; }
+        .ring-container { position: relative; width: 200px; height: 200px; }
+        .ring-bg { fill: none; stroke: #e0e0e0; stroke-width: 15; }
+        .ring-progress { fill: none; stroke: #4CAF50; stroke-width: 15; stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.5s; }
+        .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .ring-percent { font-size: 3em; font-weight: bold; color: #333; }
+        .ring-label { color: #666; }
+        .completion-habits { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .habit-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .habit-card:hover { border-color: #11998e; transform: translateY(-3px); }
+        .habit-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .habit-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .habit-card .title { font-weight: bold; }
+        .weekly-tracker { display: flex; justify-content: space-between; margin: 20px 0; background: #f5f5f5; padding: 20px; border-radius: 15px; }
+        .day-column { text-align: center; }
+        .day-name { font-weight: bold; margin-bottom: 10px; }
+        .day-check { width: 40px; height: 40px; border-radius: 50%; background: #e0e0e0; margin: 0 auto; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; transition: all 0.3s; }
+        .day-check.completed { background: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .completion-habits { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Aufgaben beenden</h1>
+            <p>Dranbleiben und fertig werden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-17)</h3>
+                <p>Das Kind kann Aufgaben vollständig beenden. Es bleibt bei einer Tätigkeit, auch wenn sie schwierig wird, und führt sie zu Ende.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Meine Aufgabenliste</h3>
+                <p>Füge Aufgaben hinzu und hake sie ab, wenn du fertig bist:</p>
+                <div class="task-builder">
+                    <div class="task-input">
+                        <input type="text" id="newTask" placeholder="Neue Aufgabe eingeben...">
+                        <button onclick="addTask()">Hinzufügen</button>
+                    </div>
+                    <div class="task-list" id="taskList">
+                        <div class="task-item" onclick="toggleTask(this)"><div class="task-checkbox">✓</div><span>Beispiel: Hausaufgaben machen</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Mein Fortschritt</h3>
+                <div class="progress-ring">
+                    <div class="ring-container">
+                        <svg width="200" height="200">
+                            <circle class="ring-bg" cx="100" cy="100" r="85"/>
+                            <circle class="ring-progress" id="progressRing" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="534"/>
+                        </svg>
+                        <div class="ring-text">
+                            <div class="ring-percent" id="percentText">0%</div>
+                            <div class="ring-label">erledigt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💪</span> Gute Gewohnheiten zum Fertigwerden</h3>
+                <p>Markiere die Gewohnheiten, die du übst:</p>
+                <div class="completion-habits">
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">🎯</div><div class="title">Ziel im Blick behalten</div></div>
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">⏰</div><div class="title">Zeit einteilen</div></div>
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">🧩</div><div class="title">In kleine Schritte teilen</div></div>
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">🚫</div><div class="title">Ablenkungen vermeiden</div></div>
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">💬</div><div class="title">Um Hilfe fragen</div></div>
+                    <div class="habit-card" onclick="toggleHabit(this)"><div class="icon">🎉</div><div class="title">Mich selbst belohnen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Wochentracker: Aufgaben beendet</h3>
+                <div class="weekly-tracker">
+                    <div class="day-column"><div class="day-name">Mo</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">Di</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">Mi</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">Do</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">Fr</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">Sa</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                    <div class="day-column"><div class="day-name">So</div><div class="day-check" onclick="toggleDay(this)">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut kann das Kind Aufgaben beenden? Welche Hilfen braucht es? Was motiviert es?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function addTask() {
+            const input = document.getElementById('newTask');
+            if (input.value.trim()) {
+                const list = document.getElementById('taskList');
+                const item = document.createElement('div');
+                item.className = 'task-item';
+                item.onclick = function() { toggleTask(this); };
+                item.innerHTML = `<div class="task-checkbox">✓</div><span>${input.value}</span>`;
+                list.appendChild(item);
+                input.value = '';
+                updateProgress();
+                saveData();
+            }
+        }
+        function toggleTask(el) { el.classList.toggle('done'); updateProgress(); saveData(); }
+        function updateProgress() {
+            const total = document.querySelectorAll('.task-item').length;
+            const done = document.querySelectorAll('.task-item.done').length;
+            const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+            const offset = 534 - (534 * percent / 100);
+            document.getElementById('progressRing').style.strokeDashoffset = offset;
+            document.getElementById('percentText').textContent = percent + '%';
+        }
+        function toggleHabit(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleDay(el) { el.classList.toggle('completed'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const tasks = Array.from(document.querySelectorAll('.task-item')).map(t => ({ text: t.querySelector('span').textContent, done: t.classList.contains('done') }));
+            const data = { tasks, habits: document.querySelectorAll('.habit-card.practiced').length, days: document.querySelectorAll('.day-check.completed').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_beenden', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_beenden');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.tasks && data.tasks.length > 0) {
+                    const list = document.getElementById('taskList');
+                    list.innerHTML = '';
+                    data.tasks.forEach(t => {
+                        const item = document.createElement('div');
+                        item.className = 'task-item' + (t.done ? ' done' : '');
+                        item.onclick = function() { toggleTask(this); };
+                        item.innerHTML = `<div class="task-checkbox">✓</div><span>${t.text}</span>`;
+                        list.appendChild(item);
+                    });
+                }
+                const habits = document.querySelectorAll('.habit-card');
+                for (let i = 0; i < (data.habits || 0); i++) { if (habits[i]) habits[i].classList.add('practiced'); }
+                const days = document.querySelectorAll('.day-check');
+                for (let i = 0; i < (data.days || 0); i++) { if (days[i]) days[i].classList.add('completed'); }
+                document.getElementById('notes').value = data.notes || '';
+                updateProgress();
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sich zurückhalten - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff6b6b; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .restraint-game { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; margin: 20px 0; }
+        .countdown { font-size: 5em; margin: 20px 0; }
+        .game-instruction { font-size: 1.2em; margin-bottom: 20px; }
+        .btn { background: white; color: #667eea; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1em; margin: 5px; }
+        .btn:hover { transform: scale(1.05); }
+        .btn.danger { background: #f44336; color: white; }
+        .situations-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .situation-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .situation-card:hover { border-color: #ff6b6b; }
+        .situation-card.can-wait { border-color: #4CAF50; background: #e8f5e9; }
+        .situation-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .situation-card .title { font-weight: bold; }
+        .strategies { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .strategy { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .strategy:hover { border-color: #ff6b6b; }
+        .strategy.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .strategy .icon { font-size: 1.5em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff6b6b; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .situations-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Sich zurückhalten</h1>
+            <p>Impulse kontrollieren und warten können</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-21)</h3>
+                <p>Das Kind kann sich zurückhalten und abwarten. Es kontrolliert Impulse und wartet, bis der richtige Moment gekommen ist.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛑</span> Stopp-Spiel</h3>
+                <p>Drücke NICHT auf den roten Knopf, bis die Zeit abgelaufen ist!</p>
+                <div class="restraint-game">
+                    <div class="game-instruction" id="gameInstruction">Warte und drücke NICHT!</div>
+                    <div class="countdown" id="countdown">5</div>
+                    <button class="btn danger" onclick="pressedEarly()">🔴 NICHT DRÜCKEN!</button>
+                    <br><br>
+                    <button class="btn" onclick="startGame()">Neues Spiel</button>
+                    <p style="margin-top: 15px;">Erfolge: <strong id="successes">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⏰</span> Wann muss ich mich zurückhalten?</h3>
+                <p>Markiere die Situationen, in denen du dich zurückhalten kannst:</p>
+                <div class="situations-grid">
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">🙋</div><div class="title">Warten bis ich dran bin</div></div>
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">🗣️</div><div class="title">Nicht reinreden</div></div>
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">🍬</div><div class="title">Süßes aufheben</div></div>
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">🎁</div><div class="title">Geschenke nicht auspacken</div></div>
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">📱</div><div class="title">Nicht aufs Handy schauen</div></div>
+                    <div class="situation-card" onclick="toggleSituation(this)"><div class="icon">🏃</div><div class="title">Nicht losrennen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Meine Strategien zum Zurückhalten</h3>
+                <p>Wähle, was dir hilft:</p>
+                <div class="strategies">
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">🌬️</div>Tief durchatmen</div>
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">✊</div>Hände zusammendrücken</div>
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">🔢</div>Im Kopf zählen</div>
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">👀</div>Woanders hinschauen</div>
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">💭</div>An etwas anderes denken</div>
+                    <div class="strategy" onclick="toggleStrategy(this)"><div class="icon">🗣️</div>Mir selbst "Warte" sagen</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut kann sich das Kind zurückhalten? Welche Situationen sind schwierig? Welche Strategien helfen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let successes = 0, gameActive = false, gameTimer = null;
+        function startGame() {
+            if (gameActive) return;
+            gameActive = true;
+            let count = 5;
+            document.getElementById('countdown').textContent = count;
+            document.getElementById('gameInstruction').textContent = 'Warte und drücke NICHT!';
+            gameTimer = setInterval(() => {
+                count--;
+                document.getElementById('countdown').textContent = count;
+                if (count <= 0) {
+                    clearInterval(gameTimer);
+                    gameActive = false;
+                    successes++;
+                    document.getElementById('successes').textContent = successes;
+                    document.getElementById('gameInstruction').textContent = '🎉 Super! Du hast gewartet!';
+                    saveData();
+                }
+            }, 1000);
+        }
+        function pressedEarly() {
+            if (gameActive) {
+                clearInterval(gameTimer);
+                gameActive = false;
+                document.getElementById('gameInstruction').textContent = '😮 Zu früh! Versuche es nochmal.';
+                document.getElementById('countdown').textContent = '❌';
+            }
+        }
+        function toggleSituation(el) { el.classList.toggle('can-wait'); saveData(); }
+        function toggleStrategy(el) { el.classList.toggle('selected'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { successes, situations: document.querySelectorAll('.situation-card.can-wait').length, strategies: document.querySelectorAll('.strategy.selected').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_zurueckhalten', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_zurueckhalten');
+            if (saved) {
+                const data = JSON.parse(saved);
+                successes = data.successes || 0;
+                document.getElementById('successes').textContent = successes;
+                const sits = document.querySelectorAll('.situation-card');
+                for (let i = 0; i < (data.situations || 0); i++) { if (sits[i]) sits[i].classList.add('can-wait'); }
+                const strats = document.querySelectorAll('.strategy');
+                for (let i = 0; i < (data.strategies || 0); i++) { if (strats[i]) strats[i].classList.add('selected'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

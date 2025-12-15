@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teamarbeit meistern - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .team-visual { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; flex-wrap: wrap; }
+        .team-member { width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; cursor: pointer; transition: all 0.3s; border: 4px solid transparent; }
+        .team-member:hover { transform: scale(1.1); }
+        .team-member.active { border-color: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+        .team-goal { text-align: center; color: white; margin-top: 15px; font-size: 1.2em; }
+        .checklist { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .check-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .check-item:hover { border-color: #11998e; }
+        .check-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .check-box { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; transition: all 0.3s; }
+        .checked .check-box { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .scenario-game { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-text { font-size: 1.1em; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 10px; }
+        .scenario-option { padding: 15px; background: rgba(255,255,255,0.9); color: #333; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .scenario-option:hover { transform: translateX(10px); }
+        .scenario-option.correct { background: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .scenario-option.wrong { background: #ffebee; border-left: 5px solid #f44336; }
+        .progress-tracker { display: flex; justify-content: space-around; padding: 20px; background: #f5f5f5; border-radius: 15px; margin: 20px 0; }
+        .progress-item { text-align: center; }
+        .progress-circle { width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 1.5em; margin: 0 auto 10px; cursor: pointer; transition: all 0.3s; }
+        .progress-circle.complete { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Teamarbeit meistern</h1>
+            <p>Gemeinsam zum Erfolg</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-22 bis V-25)</h3>
+                <p>Das Kind kann effektiv im Team arbeiten. Es trägt zum gemeinsamen Ziel bei und unterstützt andere Teammitglieder.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👥</span> Unser Team</h3>
+                <p>Klicke auf die Teammitglieder, die aktiv mitmachen:</p>
+                <div class="team-visual">
+                    <div class="team-member" onclick="toggleMember(this)">👦</div>
+                    <div class="team-member" onclick="toggleMember(this)">👧</div>
+                    <div class="team-member" onclick="toggleMember(this)">🧒</div>
+                    <div class="team-member" onclick="toggleMember(this)">👦</div>
+                    <div class="team-member" onclick="toggleMember(this)">👧</div>
+                    <div class="team-goal">🎯 Gemeinsames Ziel erreichen!</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Teamwork-Regeln</h3>
+                <p>Welche Regeln befolgst du im Team? Markiere alle, die zutreffen:</p>
+                <div class="checklist">
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich höre anderen zu, bevor ich rede</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich teile meine Ideen mit der Gruppe</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich akzeptiere auch andere Meinungen</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich helfe, wenn jemand Schwierigkeiten hat</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich mache meinen Teil der Arbeit</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Ich bleibe fair, auch wenn es schwer wird</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Team-Situation</h3>
+                <div class="scenario-game">
+                    <div class="scenario-text">Dein Team arbeitet an einem Projekt. Ein Teammitglied macht nicht mit und stört. Was tust du?</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" onclick="checkScenario(this, false)">😤 Ich beschwere mich laut vor allen</div>
+                        <div class="scenario-option" onclick="checkScenario(this, true)">💬 Ich frage freundlich, ob alles okay ist</div>
+                        <div class="scenario-option" onclick="checkScenario(this, false)">🙈 Ich ignoriere es einfach</div>
+                        <div class="scenario-option" onclick="checkScenario(this, true)">🤝 Ich bitte einen Erwachsenen um Hilfe</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Mein Team-Fortschritt</h3>
+                <p>Markiere die Bereiche, in denen du dich verbessert hast:</p>
+                <div class="progress-tracker">
+                    <div class="progress-item">
+                        <div class="progress-circle" onclick="toggleProgress(this)">🗣️</div>
+                        <div>Kommunikation</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" onclick="toggleProgress(this)">🤝</div>
+                        <div>Zusammenarbeit</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" onclick="toggleProgress(this)">💪</div>
+                        <div>Einsatz</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" onclick="toggleProgress(this)">🎯</div>
+                        <div>Zielorientierung</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie arbeitet das Kind im Team? Übernimmt es Verantwortung? Wie geht es mit Konflikten um? Welche Fortschritte sind erkennbar?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleMember(el) { el.classList.toggle('active'); saveData(); }
+        function toggleCheck(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleProgress(el) { el.classList.toggle('complete'); saveData(); }
+        function checkScenario(el, correct) {
+            el.classList.add(correct ? 'correct' : 'wrong');
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                members: document.querySelectorAll('.team-member.active').length,
+                checks: document.querySelectorAll('.check-item.checked').length,
+                progress: document.querySelectorAll('.progress-circle.complete').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_teamarbeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_teamarbeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const members = document.querySelectorAll('.team-member');
+                for (let i = 0; i < (data.members || 0); i++) { if (members[i]) members[i].classList.add('active'); }
+                const checks = document.querySelectorAll('.check-item');
+                for (let i = 0; i < (data.checks || 0); i++) { if (checks[i]) checks[i].classList.add('checked'); }
+                const progress = document.querySelectorAll('.progress-circle');
+                for (let i = 0; i < (data.progress || 0); i++) { if (progress[i]) progress[i].classList.add('complete'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

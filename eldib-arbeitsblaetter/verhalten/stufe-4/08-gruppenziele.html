@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenziele erreichen - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #5ee7df; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .goal-mountain { text-align: center; padding: 30px; background: linear-gradient(to bottom, #87CEEB 0%, #98D8C8 60%, #7B8B6F 100%); border-radius: 15px; margin: 20px 0; position: relative; }
+        .mountain-path { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .path-point { display: flex; align-items: center; gap: 15px; }
+        .point-marker { width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; cursor: pointer; transition: all 0.3s; border: 4px solid #ccc; }
+        .point-marker:hover { transform: scale(1.1); }
+        .point-marker.reached { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .point-label { background: rgba(255,255,255,0.9); padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        .goal-setting { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .goal-form { display: flex; flex-direction: column; gap: 15px; }
+        .goal-row { display: flex; gap: 10px; align-items: center; }
+        .goal-row label { min-width: 120px; }
+        .goal-row input, .goal-row select { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1em; }
+        .team-contribution { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .contrib-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .contrib-card:hover { border-color: #5ee7df; }
+        .contrib-card.contributed { border-color: #4CAF50; background: #e8f5e9; }
+        .contrib-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .contrib-card .title { font-weight: bold; text-align: center; }
+        .progress-visual { margin: 20px 0; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .progress-bar { height: 40px; background: #e0e0e0; border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #5ee7df, #b490ca); transition: width 0.5s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .milestone-flags { display: flex; justify-content: space-between; margin-top: 5px; font-size: 1.2em; }
+        .celebration { text-align: center; padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; margin: 20px 0; color: white; display: none; }
+        .celebration.show { display: block; animation: celebrate 0.5s ease; }
+        @keyframes celebrate { 0% { transform: scale(0.5); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #5ee7df; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .team-contribution { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Gruppenziele erreichen</h1>
+            <p>Gemeinsam zum Erfolg</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-25 bis V-28)</h3>
+                <p>Das Kind arbeitet aktiv an Gruppenzielen mit. Es versteht, dass der gemeinsame Erfolg von der Mitarbeit aller abhängt.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏔️</span> Der Weg zum Ziel</h3>
+                <p>Klicke auf die Etappen, die ihr erreicht habt:</p>
+                <div class="goal-mountain">
+                    <div class="mountain-path">
+                        <div class="path-point">
+                            <div class="point-marker" onclick="togglePoint(this)">🏆</div>
+                            <div class="point-label">Ziel erreicht!</div>
+                        </div>
+                        <div class="path-point">
+                            <div class="point-marker" onclick="togglePoint(this)">⭐</div>
+                            <div class="point-label">Fast geschafft</div>
+                        </div>
+                        <div class="path-point">
+                            <div class="point-marker" onclick="togglePoint(this)">🚀</div>
+                            <div class="point-label">Gute Fortschritte</div>
+                        </div>
+                        <div class="path-point">
+                            <div class="point-marker" onclick="togglePoint(this)">🌱</div>
+                            <div class="point-label">Start</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Unser Gruppenziel planen</h3>
+                <div class="goal-setting">
+                    <div class="goal-form">
+                        <div class="goal-row">
+                            <label>Unser Ziel:</label>
+                            <input type="text" id="goalName" placeholder="Was wollen wir erreichen?" oninput="saveData()">
+                        </div>
+                        <div class="goal-row">
+                            <label>Bis wann:</label>
+                            <input type="text" id="goalDate" placeholder="z.B. Ende der Woche" oninput="saveData()">
+                        </div>
+                        <div class="goal-row">
+                            <label>Meine Aufgabe:</label>
+                            <input type="text" id="myTask" placeholder="Was ist mein Beitrag?" oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💪</span> Mein Beitrag zum Team</h3>
+                <p>Was hast du schon zur Gruppe beigetragen?</p>
+                <div class="team-contribution">
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">💡</div><div class="title">Ideen eingebracht</div></div>
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">🤝</div><div class="title">Anderen geholfen</div></div>
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">📋</div><div class="title">Aufgabe erledigt</div></div>
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">🎨</div><div class="title">Kreativ beigetragen</div></div>
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">⏰</div><div class="title">Pünktlich gewesen</div></div>
+                    <div class="contrib-card" onclick="toggleContrib(this)"><div class="icon">😊</div><div class="title">Motiviert</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Unser Fortschritt</h3>
+                <p>Klicke auf den Balken, um den Fortschritt zu aktualisieren:</p>
+                <div class="progress-visual">
+                    <div class="progress-label"><span>0%</span><span id="progressValue">50%</span><span>100%</span></div>
+                    <div class="progress-bar" onclick="setProgress(event)">
+                        <div class="progress-fill" id="progressFill" style="width: 50%;">50%</div>
+                    </div>
+                    <div class="milestone-flags">
+                        <span>🚩</span>
+                        <span>🚩</span>
+                        <span>🚩</span>
+                        <span>🏁</span>
+                    </div>
+                </div>
+                <div class="celebration" id="celebration">
+                    <h2>🎉 Herzlichen Glückwunsch! 🎉</h2>
+                    <p>Ihr habt euer Ziel erreicht!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie trägt das Kind zu Gruppenzielen bei? Wie geht es mit Rückschlägen um? Feiert es gemeinsame Erfolge?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let progress = 50;
+        function togglePoint(el) { el.classList.toggle('reached'); saveData(); }
+        function toggleContrib(el) { el.classList.toggle('contributed'); saveData(); }
+        function setProgress(event) {
+            const bar = event.currentTarget;
+            const rect = bar.getBoundingClientRect();
+            progress = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+            document.getElementById('progressValue').textContent = progress + '%';
+            if (progress >= 100) {
+                document.getElementById('celebration').classList.add('show');
+            } else {
+                document.getElementById('celebration').classList.remove('show');
+            }
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                points: document.querySelectorAll('.point-marker.reached').length,
+                goalName: document.getElementById('goalName').value,
+                goalDate: document.getElementById('goalDate').value,
+                myTask: document.getElementById('myTask').value,
+                contributions: document.querySelectorAll('.contrib-card.contributed').length,
+                progress: progress,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_gruppenziele', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_gruppenziele');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const points = document.querySelectorAll('.point-marker');
+                for (let i = points.length - 1; i >= points.length - (data.points || 0); i--) { if (points[i]) points[i].classList.add('reached'); }
+                document.getElementById('goalName').value = data.goalName || '';
+                document.getElementById('goalDate').value = data.goalDate || '';
+                document.getElementById('myTask').value = data.myTask || '';
+                const contribs = document.querySelectorAll('.contrib-card');
+                for (let i = 0; i < (data.contributions || 0); i++) { if (contribs[i]) contribs[i].classList.add('contributed'); }
+                if (data.progress !== undefined) {
+                    progress = data.progress;
+                    document.getElementById('progressFill').style.width = progress + '%';
+                    document.getElementById('progressFill').textContent = progress + '%';
+                    document.getElementById('progressValue').textContent = progress + '%';
+                    if (progress >= 100) document.getElementById('celebration').classList.add('show');
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

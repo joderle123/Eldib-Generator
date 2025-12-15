@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Gruppen teilnehmen - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .group-visual { display: flex; justify-content: center; align-items: center; padding: 30px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; margin: 20px 0; flex-wrap: wrap; gap: 20px; }
+        .group-member { text-align: center; cursor: pointer; transition: all 0.3s; }
+        .group-member:hover { transform: scale(1.1); }
+        .group-member.active { animation: bounce 0.5s; }
+        .member-icon { font-size: 3em; background: white; border-radius: 50%; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; }
+        .member-label { color: white; font-size: 0.85em; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .skill-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { transform: translateY(-3px); border-color: #667eea; }
+        .skill-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; margin-bottom: 5px; }
+        .skill-card .desc { font-size: 0.85em; color: #666; }
+        .scenario-game { background: #f5f5f5; border-radius: 15px; padding: 25px; margin: 20px 0; text-align: center; }
+        .scenario-text { font-size: 1.2em; padding: 20px; background: white; border-radius: 10px; margin-bottom: 20px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 10px; }
+        .scenario-option { padding: 15px; background: white; border: 3px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; text-align: left; }
+        .scenario-option:hover { border-color: #667eea; }
+        .scenario-option.correct { border-color: #4CAF50; background: #e8f5e9; }
+        .scenario-option.wrong { border-color: #f44336; background: #ffebee; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .rating-scale { display: flex; justify-content: space-between; margin: 20px 0; padding: 20px; background: white; border-radius: 15px; }
+        .rating-item { text-align: center; cursor: pointer; padding: 15px; border-radius: 10px; transition: all 0.3s; flex: 1; }
+        .rating-item:hover { background: #f0f0f0; }
+        .rating-item.selected { background: #e8f5e9; }
+        .rating-item .icon { font-size: 2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .skill-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>In Gruppen teilnehmen</h1>
+            <p>Erfolgreich in einer Gruppe mitmachen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-15)</h3>
+                <p>Das Kind erwirbt Fähigkeiten zur erfolgreichen Teilnahme in Gruppen. Es kann sich in Gruppenaktivitäten einbringen und mit anderen zusammenarbeiten.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👥</span> Meine Gruppe</h3>
+                <p>Klicke auf die Gruppenmitglieder, mit denen du heute zusammengearbeitet hast:</p>
+                <div class="group-visual">
+                    <div class="group-member" onclick="toggleMember(this)"><div class="member-icon">👦</div><div class="member-label">Mitschüler 1</div></div>
+                    <div class="group-member" onclick="toggleMember(this)"><div class="member-icon">👧</div><div class="member-label">Mitschüler 2</div></div>
+                    <div class="group-member" onclick="toggleMember(this)"><div class="member-icon">🧑</div><div class="member-label">Mitschüler 3</div></div>
+                    <div class="group-member" onclick="toggleMember(this)"><div class="member-icon">👩</div><div class="member-label">Mitschüler 4</div></div>
+                    <div class="group-member" onclick="toggleMember(this)"><div class="member-icon">👨‍🏫</div><div class="member-label">Lehrer/in</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Gruppen-Fähigkeiten</h3>
+                <p>Markiere die Fähigkeiten, die du schon hast:</p>
+                <div class="skill-cards">
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">👂</div><div class="title">Zuhören</div><div class="desc">Ich höre anderen in der Gruppe zu</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🙋</div><div class="title">Melden</div><div class="desc">Ich melde mich, wenn ich etwas sagen will</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">⏰</div><div class="title">Warten</div><div class="desc">Ich warte, bis ich dran bin</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🤝</div><div class="title">Teilen</div><div class="desc">Ich teile Material mit anderen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">💬</div><div class="title">Mitdiskutieren</div><div class="desc">Ich bringe Ideen in die Gruppe ein</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🎯</div><div class="title">Mitmachen</div><div class="desc">Ich beteilige mich an Aktivitäten</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Was würdest du tun?</h3>
+                <div class="scenario-game">
+                    <div class="scenario-text" id="scenarioText">Die Gruppe soll gemeinsam ein Plakat gestalten. Was machst du?</div>
+                    <div class="scenario-options" id="scenarioOptions">
+                        <div class="scenario-option" onclick="checkScenario(this, true)">💡 Ich bringe eine Idee ein und frage die anderen</div>
+                        <div class="scenario-option" onclick="checkScenario(this, false)">🚶 Ich mache etwas alleine ohne die anderen</div>
+                        <div class="scenario-option" onclick="checkScenario(this, false)">😶 Ich sage nichts und warte nur</div>
+                    </div>
+                    <button class="btn" onclick="nextScenario()" style="margin-top: 20px;">Nächste Situation</button>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Wie gut war meine Gruppenteilnahme heute?</h3>
+                <div class="rating-scale">
+                    <div class="rating-item" onclick="setRating(1)"><div class="icon">😟</div><div>Schwer</div></div>
+                    <div class="rating-item" onclick="setRating(2)"><div class="icon">😐</div><div>Ok</div></div>
+                    <div class="rating-item" onclick="setRating(3)"><div class="icon">🙂</div><div>Gut</div></div>
+                    <div class="rating-item" onclick="setRating(4)"><div class="icon">😊</div><div>Sehr gut</div></div>
+                    <div class="rating-item" onclick="setRating(5)"><div class="icon">🌟</div><div>Super!</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie beteiligt sich das Kind in Gruppen? Welche Rollen übernimmt es? Wo braucht es Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: "Die Gruppe soll gemeinsam ein Plakat gestalten. Was machst du?", correct: 0, options: ["💡 Ich bringe eine Idee ein und frage die anderen", "🚶 Ich mache etwas alleine ohne die anderen", "😶 Ich sage nichts und warte nur"] },
+            { text: "Ein anderes Kind hat eine andere Meinung als du. Was machst du?", correct: 0, options: ["👂 Ich höre zu und versuche zu verstehen", "😠 Ich sage, dass ich recht habe", "🚶 Ich gehe weg"] },
+            { text: "Die Gruppe braucht jemanden zum Aufräumen. Was machst du?", correct: 0, options: ["🙋 Ich biete an zu helfen", "👀 Ich warte, dass andere es machen", "🏃 Ich gehe schnell weg"] }
+        ];
+        let currentScenario = 0, rating = 0;
+        function toggleMember(el) { el.classList.toggle('active'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('mastered'); saveData(); }
+        function checkScenario(el, isCorrect) {
+            el.classList.add(isCorrect ? 'correct' : 'wrong');
+            document.querySelectorAll('.scenario-option').forEach(o => o.style.pointerEvents = 'none');
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            const opts = document.getElementById('scenarioOptions');
+            opts.innerHTML = s.options.map((o, i) => `<div class="scenario-option" onclick="checkScenario(this, ${i === s.correct})">${o}</div>`).join('');
+        }
+        function setRating(r) {
+            rating = r;
+            document.querySelectorAll('.rating-item').forEach((item, i) => item.classList.toggle('selected', i < r));
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { members: document.querySelectorAll('.group-member.active').length, skills: document.querySelectorAll('.skill-card.mastered').length, rating, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_gruppen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_gruppen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const members = document.querySelectorAll('.group-member');
+                for (let i = 0; i < (data.members || 0); i++) { if (members[i]) members[i].classList.add('active'); }
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('mastered'); }
+                if (data.rating) setRating(data.rating);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

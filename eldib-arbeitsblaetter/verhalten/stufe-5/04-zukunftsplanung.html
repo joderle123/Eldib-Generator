@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zukunftsplanung - Verhalten Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3cd 0%, #ffe5b4 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5af19; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .vision-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .vision-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; min-height: 120px; cursor: pointer; transition: all 0.3s; }
+        .vision-card:hover { border-color: #f5af19; transform: translateY(-3px); }
+        .vision-card.active { border-color: #4CAF50; background: #e8f5e9; }
+        .vision-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .vision-card .title { font-weight: bold; text-align: center; font-size: 0.9em; }
+        .timeline { position: relative; padding: 20px 0; margin: 20px 0; }
+        .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, #f12711, #f5af19); transform: translateX(-50%); }
+        .timeline-item { display: flex; align-items: center; margin-bottom: 30px; }
+        .timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+        .timeline-content { width: 45%; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; }
+        .timeline-content input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; margin-top: 10px; }
+        .timeline-marker { width: 50px; height: 50px; background: linear-gradient(135deg, #f12711, #f5af19); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 10px; z-index: 1; }
+        .goals-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .goal-category { margin-bottom: 20px; }
+        .goal-category h4 { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .goal-input { display: flex; gap: 10px; }
+        .goal-input input { flex: 1; padding: 12px; border: none; border-radius: 8px; }
+        .goal-input button { padding: 12px 20px; background: white; color: #667eea; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .goals-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .goal-item { padding: 10px 15px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .strengths-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .strength-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .strength-card:hover { border-color: #f5af19; }
+        .strength-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .strength-card .icon { font-size: 1.5em; margin-right: 10px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5af19; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .vision-board, .strengths-grid { grid-template-columns: 1fr; } .timeline::before { left: 20px; } .timeline-item { flex-direction: column !important; } .timeline-content { width: 100%; margin-left: 50px; } .timeline-marker { position: absolute; left: 0; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe V</div>
+            <h1>Zukunftsplanung</h1>
+            <p>Meine Ziele und Träume</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-32/V-33)</h3>
+                <p>Der Jugendliche entwickelt eine Vorstellung von seiner Zukunft. Er setzt sich realistische Ziele und plant Schritte zu deren Erreichung.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Meine Vision</h3>
+                <p>Was ist dir für deine Zukunft wichtig? Markiere deine Prioritäten:</p>
+                <div class="vision-board">
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">💼</div><div class="title">Beruf & Karriere</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">👨‍👩‍👧</div><div class="title">Familie</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">🏠</div><div class="title">Eigene Wohnung</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">🎓</div><div class="title">Bildung</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">✈️</div><div class="title">Reisen</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">🤝</div><div class="title">Freundschaften</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">💪</div><div class="title">Gesundheit</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">🎨</div><div class="title">Hobbys</div></div>
+                    <div class="vision-card" onclick="toggleVision(this)"><div class="icon">💰</div><div class="title">Finanzielle Sicherheit</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Meine Zeitlinie</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <strong>In 1 Jahr</strong>
+                            <input type="text" id="year1" placeholder="Was möchte ich erreicht haben?" oninput="saveData()">
+                        </div>
+                        <div class="timeline-marker">1</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <strong>In 3 Jahren</strong>
+                            <input type="text" id="year3" placeholder="Wo sehe ich mich?" oninput="saveData()">
+                        </div>
+                        <div class="timeline-marker">3</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <strong>In 5 Jahren</strong>
+                            <input type="text" id="year5" placeholder="Mein größtes Ziel..." oninput="saveData()">
+                        </div>
+                        <div class="timeline-marker">5</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <strong>In 10 Jahren</strong>
+                            <input type="text" id="year10" placeholder="Mein Traum..." oninput="saveData()">
+                        </div>
+                        <div class="timeline-marker">10</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌟</span> Meine Stärken für die Zukunft</h3>
+                <p>Diese Stärken helfen mir, meine Ziele zu erreichen:</p>
+                <div class="strengths-grid">
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">🧠</span>Klug und lernfähig</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">💪</span>Ausdauernd</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">🎨</span>Kreativ</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">🤝</span>Teamfähig</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">📋</span>Organisiert</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">💬</span>Kommunikativ</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">🎯</span>Zielstrebig</div>
+                    <div class="strength-card" onclick="toggleStrength(this)"><span class="icon">❤️</span>Einfühlsam</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie realistisch plant der Jugendliche? Hat er konkrete Vorstellungen? Kann er Schritte zur Zielerreichung benennen? Wo braucht er Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleVision(el) { el.classList.toggle('active'); saveData(); }
+        function toggleStrength(el) { el.classList.toggle('selected'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                visions: document.querySelectorAll('.vision-card.active').length,
+                year1: document.getElementById('year1').value,
+                year3: document.getElementById('year3').value,
+                year5: document.getElementById('year5').value,
+                year10: document.getElementById('year10').value,
+                strengths: document.querySelectorAll('.strength-card.selected').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v5_zukunft', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v5_zukunft');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const visions = document.querySelectorAll('.vision-card');
+                for (let i = 0; i < (data.visions || 0); i++) { if (visions[i]) visions[i].classList.add('active'); }
+                document.getElementById('year1').value = data.year1 || '';
+                document.getElementById('year3').value = data.year3 || '';
+                document.getElementById('year5').value = data.year5 || '';
+                document.getElementById('year10').value = data.year10 || '';
+                const strengths = document.querySelectorAll('.strength-card');
+                for (let i = 0; i < (data.strengths || 0); i++) { if (strengths[i]) strengths[i].classList.add('selected'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verantwortung für die Gruppe - Verhalten Stufe IV</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4facfe; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .group-visual { display: flex; flex-direction: column; align-items: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .group-circle { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+        .group-member { width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1.5em; cursor: pointer; transition: all 0.3s; border: 4px solid transparent; }
+        .group-member:hover { transform: scale(1.1); }
+        .group-member.helping { border-color: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+        .group-member .role { font-size: 0.5em; margin-top: 2px; }
+        .group-message { color: white; text-align: center; font-size: 1.1em; }
+        .responsibility-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .resp-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .resp-item:hover { border-color: #4facfe; }
+        .resp-item.taken { border-color: #4CAF50; background: #e8f5e9; }
+        .resp-icon { font-size: 1.8em; }
+        .resp-content { flex: 1; }
+        .resp-title { font-weight: bold; }
+        .resp-desc { font-size: 0.85em; color: #666; }
+        .resp-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .taken .resp-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .weekly-goals { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .goal-input { display: flex; gap: 10px; margin-bottom: 15px; }
+        .goal-input input { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1em; }
+        .goal-input button { padding: 12px 20px; background: white; color: #f5576c; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .goal-list { display: flex; flex-direction: column; gap: 10px; }
+        .goal-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; }
+        .goal-item.done { background: rgba(76, 175, 80, 0.3); text-decoration: line-through; }
+        .goal-text { flex: 1; }
+        .goal-check { width: 25px; height: 25px; border: 2px solid white; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .done .goal-check { background: white; color: #4CAF50; }
+        .contribution-meter { margin: 20px 0; }
+        .meter-label { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .meter-bar { height: 30px; background: #e0e0e0; border-radius: 15px; overflow: hidden; cursor: pointer; }
+        .meter-fill { height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); transition: width 0.3s; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-weight: bold; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe IV</div>
+            <h1>Verantwortung für die Gruppe</h1>
+            <p>Zum Gruppenerfolg beitragen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-25/V-26)</h3>
+                <p>Das Kind übernimmt Verantwortung für den Erfolg der Gruppe. Es erkennt, dass sein Beitrag wichtig ist und handelt entsprechend.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👥</span> Unsere Gruppe braucht jeden!</h3>
+                <p>Klicke auf die Gruppenmitglieder, denen du hilfst:</p>
+                <div class="group-visual">
+                    <div class="group-circle">
+                        <div class="group-member" onclick="toggleHelp(this)">👦<div class="role">Max</div></div>
+                        <div class="group-member" onclick="toggleHelp(this)">👧<div class="role">Lisa</div></div>
+                        <div class="group-member" onclick="toggleHelp(this)">🧒<div class="role">Tom</div></div>
+                        <div class="group-member" onclick="toggleHelp(this)">👧<div class="role">Sara</div></div>
+                        <div class="group-member" onclick="toggleHelp(this)">👦<div class="role">Leo</div></div>
+                    </div>
+                    <div class="group-message" id="helpMessage">Wem hilfst du heute?</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Meine Verantwortungen in der Gruppe</h3>
+                <p>Welche Aufgaben übernimmst du für die Gruppe?</p>
+                <div class="responsibility-list">
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">📋</div>
+                        <div class="resp-content"><div class="resp-title">Aufgaben organisieren</div><div class="resp-desc">Ich helfe, die Arbeit zu planen</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">🤝</div>
+                        <div class="resp-content"><div class="resp-title">Anderen helfen</div><div class="resp-desc">Ich unterstütze, wenn jemand Hilfe braucht</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">💬</div>
+                        <div class="resp-content"><div class="resp-title">Kommunizieren</div><div class="resp-desc">Ich sorge dafür, dass alle informiert sind</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">🧹</div>
+                        <div class="resp-content"><div class="resp-title">Aufräumen</div><div class="resp-desc">Ich räume nach der Arbeit auf</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">⏰</div>
+                        <div class="resp-content"><div class="resp-title">Pünktlich sein</div><div class="resp-desc">Ich bin rechtzeitig da</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                    <div class="resp-item" onclick="toggleResp(this)">
+                        <div class="resp-icon">🎯</div>
+                        <div class="resp-content"><div class="resp-title">Fokussiert bleiben</div><div class="resp-desc">Ich konzentriere mich auf die Aufgabe</div></div>
+                        <div class="resp-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Meine Wochen-Ziele für die Gruppe</h3>
+                <div class="weekly-goals">
+                    <div class="goal-input">
+                        <input type="text" id="newGoal" placeholder="Neues Ziel eingeben...">
+                        <button onclick="addGoal()">Hinzufügen</button>
+                    </div>
+                    <div class="goal-list" id="goalList">
+                        <!-- Goals will be added here -->
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Mein Beitrag zur Gruppe</h3>
+                <p>Wie viel hast du diese Woche beigetragen? Klicke auf den Balken:</p>
+                <div class="contribution-meter">
+                    <div class="meter-label"><span>Wenig</span><span>Viel</span></div>
+                    <div class="meter-bar" onclick="setContribution(event)">
+                        <div class="meter-fill" id="meterFill" style="width: 50%;">50%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie übernimmt das Kind Verantwortung in der Gruppe? Hilft es anderen? Erfüllt es seine Aufgaben zuverlässig?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let goals = [];
+        let contribution = 50;
+        function toggleHelp(el) {
+            el.classList.toggle('helping');
+            const helping = document.querySelectorAll('.group-member.helping').length;
+            document.getElementById('helpMessage').textContent = helping > 0 ? `Du hilfst ${helping} Person(en)!` : 'Wem hilfst du heute?';
+            saveData();
+        }
+        function toggleResp(el) { el.classList.toggle('taken'); saveData(); }
+        function addGoal() {
+            const input = document.getElementById('newGoal');
+            if (input.value.trim()) {
+                goals.push({ text: input.value, done: false });
+                input.value = '';
+                renderGoals();
+                saveData();
+            }
+        }
+        function toggleGoal(index) {
+            goals[index].done = !goals[index].done;
+            renderGoals();
+            saveData();
+        }
+        function renderGoals() {
+            const list = document.getElementById('goalList');
+            list.innerHTML = goals.map((g, i) => `
+                <div class="goal-item ${g.done ? 'done' : ''}" onclick="toggleGoal(${i})">
+                    <div class="goal-text">${g.text}</div>
+                    <div class="goal-check">${g.done ? '✓' : ''}</div>
+                </div>
+            `).join('');
+        }
+        function setContribution(event) {
+            const bar = event.currentTarget;
+            const rect = bar.getBoundingClientRect();
+            contribution = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+            document.getElementById('meterFill').style.width = contribution + '%';
+            document.getElementById('meterFill').textContent = contribution + '%';
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                helping: document.querySelectorAll('.group-member.helping').length,
+                responsibilities: document.querySelectorAll('.resp-item.taken').length,
+                goals: goals,
+                contribution: contribution,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v4_verantwortung_gruppe', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v4_verantwortung_gruppe');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const members = document.querySelectorAll('.group-member');
+                for (let i = 0; i < (data.helping || 0); i++) { if (members[i]) members[i].classList.add('helping'); }
+                const resps = document.querySelectorAll('.resp-item');
+                for (let i = 0; i < (data.responsibilities || 0); i++) { if (resps[i]) resps[i].classList.add('taken'); }
+                if (data.goals) { goals = data.goals; renderGoals(); }
+                if (data.contribution) {
+                    contribution = data.contribution;
+                    document.getElementById('meterFill').style.width = contribution + '%';
+                    document.getElementById('meterFill').textContent = contribution + '%';
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

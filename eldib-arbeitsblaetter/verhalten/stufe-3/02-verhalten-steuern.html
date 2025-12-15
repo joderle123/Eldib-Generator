@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eigenes Verhalten steuern - Verhalten Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .info-box h3 { color: #5a5a5a; margin-bottom: 10px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .traffic-light { display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 30px; background: #333; border-radius: 20px; margin: 20px auto; width: 150px; }
+        .light { width: 80px; height: 80px; border-radius: 50%; cursor: pointer; transition: all 0.3s; opacity: 0.3; }
+        .light.red { background: #f44336; }
+        .light.yellow { background: #FFC107; }
+        .light.green { background: #4CAF50; }
+        .light.active { opacity: 1; box-shadow: 0 0 30px currentColor; }
+        .traffic-labels { display: flex; justify-content: space-around; margin-top: 20px; }
+        .traffic-label { text-align: center; padding: 10px; }
+        .stop-think-go { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .stg-card { background: white; border-radius: 15px; padding: 20px; text-align: center; border: 4px solid; cursor: pointer; transition: all 0.3s; }
+        .stg-card.stop { border-color: #f44336; }
+        .stg-card.think { border-color: #FFC107; }
+        .stg-card.go { border-color: #4CAF50; }
+        .stg-card.done { opacity: 0.6; }
+        .stg-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .impulse-tracker { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .impulse-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; }
+        .impulse-item .icon { font-size: 2em; }
+        .impulse-item .info { flex: 1; }
+        .impulse-buttons { display: flex; gap: 10px; }
+        .impulse-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2em; transition: all 0.2s; }
+        .impulse-btn:hover { transform: scale(1.1); }
+        .impulse-btn.success { background: #e8f5e9; }
+        .impulse-btn.struggle { background: #ffebee; }
+        .impulse-btn.active { transform: scale(1.2); border: 3px solid #333; }
+        .calm-strategies { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; justify-content: center; }
+        .calm-chip { padding: 12px 20px; background: white; border: 3px solid #e0e0e0; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+        .calm-chip:hover { border-color: #f5576c; }
+        .calm-chip.selected { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .stop-think-go { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe III</div>
+            <h1>Eigenes Verhalten steuern</h1>
+            <p>Stop - Denk - Handle</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-16)</h3>
+                <p>Das Kind lernt, sein eigenes Verhalten zu steuern. Es kann innehalten, nachdenken und dann angemessen handeln.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🚦</span> Die Verhaltens-Ampel</h3>
+                <p>Klicke auf die Farbe, die zeigt, wie du dich gerade fühlst:</p>
+                <div style="display: flex; justify-content: center; gap: 40px; align-items: center; flex-wrap: wrap;">
+                    <div class="traffic-light">
+                        <div class="light red" onclick="setLight('red')"></div>
+                        <div class="light yellow" onclick="setLight('yellow')"></div>
+                        <div class="light green" onclick="setLight('green')"></div>
+                    </div>
+                    <div class="traffic-labels" style="flex-direction: column; gap: 15px;">
+                        <div class="traffic-label"><strong style="color: #f44336;">🔴 STOP</strong> - Ich muss anhalten</div>
+                        <div class="traffic-label"><strong style="color: #FFC107;">🟡 DENKEN</strong> - Was kann ich tun?</div>
+                        <div class="traffic-label"><strong style="color: #4CAF50;">🟢 HANDELN</strong> - Ich bin bereit</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🧠</span> Stop - Denk - Handle</h3>
+                <p>Übe die drei Schritte - klicke sie der Reihe nach an:</p>
+                <div class="stop-think-go">
+                    <div class="stg-card stop" onclick="clickSTG(this, 1)"><div class="icon">🛑</div><div><strong>1. STOP</strong></div><div>Halte an!</div></div>
+                    <div class="stg-card think" onclick="clickSTG(this, 2)"><div class="icon">🤔</div><div><strong>2. DENK</strong></div><div>Was sind meine Möglichkeiten?</div></div>
+                    <div class="stg-card go" onclick="clickSTG(this, 3)"><div class="icon">✅</div><div><strong>3. HANDLE</strong></div><div>Wähle die beste Option!</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine Impulskontrolle heute</h3>
+                <p>Wie gut konntest du dich heute kontrollieren?</p>
+                <div class="impulse-tracker">
+                    <div class="impulse-item"><div class="icon">🗣️</div><div class="info">Nicht reinrufen</div><div class="impulse-buttons"><button class="impulse-btn success" onclick="setImpulse(this, 'success')">✓</button><button class="impulse-btn struggle" onclick="setImpulse(this, 'struggle')">✗</button></div></div>
+                    <div class="impulse-item"><div class="icon">⏰</div><div class="info">Warten können</div><div class="impulse-buttons"><button class="impulse-btn success" onclick="setImpulse(this, 'success')">✓</button><button class="impulse-btn struggle" onclick="setImpulse(this, 'struggle')">✗</button></div></div>
+                    <div class="impulse-item"><div class="icon">😤</div><div class="info">Ruhig bleiben bei Frustration</div><div class="impulse-buttons"><button class="impulse-btn success" onclick="setImpulse(this, 'success')">✓</button><button class="impulse-btn struggle" onclick="setImpulse(this, 'struggle')">✗</button></div></div>
+                    <div class="impulse-item"><div class="icon">🚶</div><div class="info">Nicht weglaufen</div><div class="impulse-buttons"><button class="impulse-btn success" onclick="setImpulse(this, 'success')">✓</button><button class="impulse-btn struggle" onclick="setImpulse(this, 'struggle')">✗</button></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Was hilft mir, ruhig zu bleiben?</h3>
+                <p>Wähle deine Strategien:</p>
+                <div class="calm-strategies">
+                    <div class="calm-chip" onclick="toggleCalm(this)">🌬️ Tief atmen</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">🔢 Bis 10 zählen</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">🚶 Kurz weggehen</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">💭 An etwas Schönes denken</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">✊ Hände drücken</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">🗣️ Um Hilfe bitten</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">📝 Aufschreiben</div>
+                    <div class="calm-chip" onclick="toggleCalm(this)">🎵 Summen</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut kann das Kind Impulse kontrollieren? Welche Situationen sind schwierig? Welche Strategien helfen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let currentLight = '', stgStep = 0;
+        function setLight(color) {
+            document.querySelectorAll('.light').forEach(l => l.classList.remove('active'));
+            document.querySelector('.light.' + color).classList.add('active');
+            currentLight = color;
+            saveData();
+        }
+        function clickSTG(el, step) {
+            if (step === stgStep + 1) { el.classList.add('done'); stgStep = step; if (stgStep === 3) setTimeout(() => { document.querySelectorAll('.stg-card').forEach(c => c.classList.remove('done')); stgStep = 0; }, 1500); saveData(); }
+        }
+        function setImpulse(btn, type) {
+            btn.parentElement.querySelectorAll('.impulse-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            saveData();
+        }
+        function toggleCalm(el) { el.classList.toggle('selected'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = { light: currentLight, impulses: document.querySelectorAll('.impulse-btn.active').length, strategies: document.querySelectorAll('.calm-chip.selected').length, notes: document.getElementById('notes').value };
+            localStorage.setItem('eldib_v3_steuerung', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_steuerung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.light) setLight(data.light);
+                const chips = document.querySelectorAll('.calm-chip');
+                for (let i = 0; i < (data.strategies || 0); i++) { if (chips[i]) chips[i].classList.add('selected'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
