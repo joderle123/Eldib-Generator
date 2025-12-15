@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nähe und Distanz - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ffcc80; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .behavior-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .behavior-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .behavior-card:hover { border-color: #ffcc80; transform: scale(1.02); }
+        .behavior-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .behavior-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .behavior-card .title { font-weight: bold; margin-bottom: 5px; }
+        .behavior-card .desc { font-size: 0.85em; color: #666; }
+        .proximity-visual { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .proximity-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .proximity-diagram { position: relative; width: 100%; max-width: 300px; margin: 0 auto; }
+        .proximity-circle { border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; position: absolute; }
+        .proximity-circle.outer { width: 280px; height: 280px; background: #e3f2fd; border: 3px solid #90caf9; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+        .proximity-circle.middle { width: 180px; height: 180px; background: #bbdefb; border: 3px solid #64b5f6; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; }
+        .proximity-circle.inner { width: 80px; height: 80px; background: #90caf9; border: 3px solid #2196F3; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
+        .proximity-circle.selected { border-color: #4CAF50; border-width: 5px; }
+        .proximity-circle span { font-size: 0.8em; text-align: center; padding: 5px; }
+        .proximity-container { height: 300px; position: relative; }
+        .proximity-legend { display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9em; }
+        .legend-color { width: 20px; height: 20px; border-radius: 50%; }
+        .seeking-section { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .seeking-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .seeking-items { display: flex; flex-direction: column; gap: 10px; }
+        .seeking-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .seeking-item:hover { background: #f1f8e9; }
+        .seeking-item.checked { background: #e8f5e9; }
+        .seeking-icon { font-size: 1.3em; }
+        .seeking-text { flex: 1; }
+        .seeking-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .seeking-item.checked .seeking-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .avoidance-section { background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .avoidance-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .frequency-tracker { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-row { display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid #ffe082; }
+        .tracker-row:last-child { border-bottom: none; }
+        .tracker-label { flex: 1; font-weight: bold; }
+        .tracker-options { display: flex; gap: 8px; }
+        .tracker-option { padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .tracker-option:hover { border-color: #ff9800; }
+        .tracker-option.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ffcc80; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .behavior-grid { grid-template-columns: 1fr; } .tracker-row { flex-direction: column; align-items: flex-start; } .tracker-options { width: 100%; justify-content: space-between; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>↔️ Nähe und Distanz</h1>
+            <p>Körperliche Nähe regulieren lernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-9)</h3>
+                <p>Das Kind lernt, Nähe zu suchen und zu regulieren. Es zeigt durch sein Verhalten, wann es Nähe braucht und wann es Abstand möchte. Es entwickelt ein erstes Gespür für angemessene Distanz.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👀</span> Beobachtetes Nähe-/Distanzverhalten</h3>
+                <p>Diese Verhaltensweisen zeigt das Kind:</p>
+                <div class="behavior-grid">
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">🤱</div>
+                        <div class="title">Sucht Körperkontakt</div>
+                        <div class="desc">Kuschelt sich an, will getragen werden</div>
+                    </div>
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">🚶</div>
+                        <div class="title">Entfernt sich</div>
+                        <div class="desc">Krabbelt/läuft weg zum Erkunden</div>
+                    </div>
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">🔙</div>
+                        <div class="title">Kehrt zurück</div>
+                        <div class="desc">Kommt zur Bezugsperson zurück</div>
+                    </div>
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">✋</div>
+                        <div class="title">Wehrt ab</div>
+                        <div class="desc">Zeigt, dass es Abstand möchte</div>
+                    </div>
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">👁️</div>
+                        <div class="title">Blickkontakt halten</div>
+                        <div class="desc">Hält Kontakt aus der Distanz</div>
+                    </div>
+                    <div class="behavior-card" onclick="toggleBehavior(this)">
+                        <div class="icon">🤚</div>
+                        <div class="title">Arme ausstrecken</div>
+                        <div class="desc">Signalisiert, hochgenommen werden zu wollen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Bevorzugte Distanzzone</h3>
+                <div class="proximity-visual">
+                    <div class="proximity-title">Wo hält sich das Kind bevorzugt auf?</div>
+                    <div class="proximity-container">
+                        <div class="proximity-circle outer" onclick="selectZone('fern')"><span>Fern<br>(erkundet)</span></div>
+                        <div class="proximity-circle middle" onclick="selectZone('nah')"><span>Nah<br>(in Sichtweite)</span></div>
+                        <div class="proximity-circle inner" onclick="selectZone('koerper')"><span>Körper-<br>kontakt</span></div>
+                    </div>
+                    <div class="proximity-legend">
+                        <div class="legend-item"><div class="legend-color" style="background:#90caf9"></div>Körperkontakt</div>
+                        <div class="legend-item"><div class="legend-color" style="background:#bbdefb"></div>Nahe Distanz</div>
+                        <div class="legend-item"><div class="legend-color" style="background:#e3f2fd"></div>Ferne Distanz</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💚</span> Nähe suchendes Verhalten</h3>
+                <div class="seeking-section">
+                    <div class="seeking-title">Das Kind zeigt Nähe suchendes Verhalten:</div>
+                    <div class="seeking-items">
+                        <div class="seeking-item" onclick="toggleSeeking(this)">
+                            <span class="seeking-icon">😢</span>
+                            <span class="seeking-text">Bei Müdigkeit oder Unwohlsein</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleSeeking(this)">
+                            <span class="seeking-icon">😨</span>
+                            <span class="seeking-text">Bei Angst oder Unsicherheit</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleSeeking(this)">
+                            <span class="seeking-icon">👋</span>
+                            <span class="seeking-text">Nach längerer Trennung</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleSeeking(this)">
+                            <span class="seeking-icon">👤</span>
+                            <span class="seeking-text">Bei fremden Personen</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleSeeking(this)">
+                            <span class="seeking-icon">🏠</span>
+                            <span class="seeking-text">In neuer Umgebung</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔴</span> Distanz schaffendes Verhalten</h3>
+                <div class="avoidance-section">
+                    <div class="avoidance-title">Das Kind zeigt, dass es Abstand möchte:</div>
+                    <div class="seeking-items">
+                        <div class="seeking-item" onclick="toggleAvoidance(this)">
+                            <span class="seeking-icon">🙅</span>
+                            <span class="seeking-text">Dreht sich weg</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleAvoidance(this)">
+                            <span class="seeking-icon">✋</span>
+                            <span class="seeking-text">Schiebt Hände weg</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleAvoidance(this)">
+                            <span class="seeking-icon">🏃</span>
+                            <span class="seeking-text">Krabbelt/läuft weg</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                        <div class="seeking-item" onclick="toggleAvoidance(this)">
+                            <span class="seeking-icon">😤</span>
+                            <span class="seeking-text">Zeigt Unmut bei zu viel Nähe</span>
+                            <span class="seeking-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Häufigkeit des Verhaltens</h3>
+                <div class="frequency-tracker">
+                    <div class="tracker-row">
+                        <span class="tracker-label">Sucht aktiv Nähe:</span>
+                        <div class="tracker-options" data-type="naehe">
+                            <div class="tracker-option" onclick="setFrequency('naehe', 'selten')">Selten</div>
+                            <div class="tracker-option" onclick="setFrequency('naehe', 'manchmal')">Manchmal</div>
+                            <div class="tracker-option" onclick="setFrequency('naehe', 'oft')">Oft</div>
+                        </div>
+                    </div>
+                    <div class="tracker-row">
+                        <span class="tracker-label">Zeigt Distanzbedürfnis:</span>
+                        <div class="tracker-options" data-type="distanz">
+                            <div class="tracker-option" onclick="setFrequency('distanz', 'selten')">Selten</div>
+                            <div class="tracker-option" onclick="setFrequency('distanz', 'manchmal')">Manchmal</div>
+                            <div class="tracker-option" onclick="setFrequency('distanz', 'oft')">Oft</div>
+                        </div>
+                    </div>
+                    <div class="tracker-row">
+                        <span class="tracker-label">Reguliert selbstständig:</span>
+                        <div class="tracker-options" data-type="reguliert">
+                            <div class="tracker-option" onclick="setFrequency('reguliert', 'selten')">Selten</div>
+                            <div class="tracker-option" onclick="setFrequency('reguliert', 'manchmal')">Manchmal</div>
+                            <div class="tracker-option" onclick="setFrequency('reguliert', 'oft')">Oft</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie gesundes Nähe-/Distanzverhalten:</div>
+                    <div class="tip-item"><span class="tip-icon">👂</span>Signale des Kindes wahrnehmen und respektieren</div>
+                    <div class="tip-item"><span class="tip-icon">🤗</span>Nähe anbieten, aber nicht aufdrängen</div>
+                    <div class="tip-item"><span class="tip-icon">🚶</span>Exploration zulassen, sichere Basis bieten</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Wechsel zwischen Nähe und Distanz ermöglichen</div>
+                    <div class="tip-item"><span class="tip-icon">✋</span>Abwehrverhalten akzeptieren</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wann sucht das Kind Nähe? Wann braucht es Abstand? Wie zeigt es seine Bedürfnisse? Kann es zwischen Nähe und Distanz wechseln?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let preferredZone = '';
+        let frequencies = {};
+
+        function toggleBehavior(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleSeeking(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleAvoidance(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectZone(zone) {
+            preferredZone = zone;
+            document.querySelectorAll('.proximity-circle').forEach(c => c.classList.remove('selected'));
+            document.querySelector(`.proximity-circle.${zone === 'koerper' ? 'inner' : zone === 'nah' ? 'middle' : 'outer'}`).classList.add('selected');
+            saveData();
+        }
+
+        function setFrequency(type, value) {
+            frequencies[type] = value;
+            const container = document.querySelector(`[data-type="${type}"]`);
+            container.querySelectorAll('.tracker-option').forEach(o => o.classList.remove('selected'));
+            container.querySelectorAll('.tracker-option').forEach(o => {
+                if (o.textContent.toLowerCase() === value) o.classList.add('selected');
+            });
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                behaviors: [...document.querySelectorAll('.behavior-card.observed')].map(el => el.querySelector('.title').textContent),
+                seekingBehaviors: [...document.querySelectorAll('.seeking-section .seeking-item.checked')].map(el => el.querySelector('.seeking-text').textContent),
+                avoidanceBehaviors: [...document.querySelectorAll('.avoidance-section .seeking-item.checked')].map(el => el.querySelector('.seeking-text').textContent),
+                preferredZone,
+                frequencies,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_naehe_distanz', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_naehe_distanz');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.behavior-card').forEach(el => {
+                    if (data.behaviors && data.behaviors.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.seeking-section .seeking-item').forEach(el => {
+                    if (data.seekingBehaviors && data.seekingBehaviors.includes(el.querySelector('.seeking-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                document.querySelectorAll('.avoidance-section .seeking-item').forEach(el => {
+                    if (data.avoidanceBehaviors && data.avoidanceBehaviors.includes(el.querySelector('.seeking-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.preferredZone) selectZone(data.preferredZone);
+                if (data.frequencies) {
+                    frequencies = data.frequencies;
+                    Object.keys(frequencies).forEach(type => {
+                        setFrequency(type, frequencies[type]);
+                    });
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

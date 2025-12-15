@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warten lernen - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #b39ddb 0%, #9575cd 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #b39ddb 0%, #9575cd 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #9575cd; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .wait-situations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .situation-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .situation-card:hover { border-color: #9575cd; }
+        .situation-card.good { border-color: #4CAF50; background: #e8f5e9; }
+        .situation-card.difficult { border-color: #ff9800; background: #fff3e0; }
+        .situation-card .icon { font-size: 2em; text-align: center; margin-bottom: 8px; }
+        .situation-card .title { font-weight: bold; font-size: 0.9em; text-align: center; margin-bottom: 5px; }
+        .situation-card .rating { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
+        .rating-btn { padding: 5px 10px; border: 2px solid #e0e0e0; border-radius: 5px; cursor: pointer; font-size: 0.75em; background: white; }
+        .rating-btn.good { border-color: #4CAF50; background: #e8f5e9; }
+        .rating-btn.difficult { border-color: #ff9800; background: #fff3e0; }
+        .duration-section { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .duration-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .duration-scale { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .duration-btn { padding: 15px 20px; border: 3px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: white; transition: all 0.3s; text-align: center; }
+        .duration-btn:hover { border-color: #2196F3; }
+        .duration-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .duration-btn .time { font-weight: bold; font-size: 1.1em; }
+        .duration-btn .label { font-size: 0.8em; color: #666; }
+        .strategy-section { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .strategy-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .strategy-list { display: flex; flex-direction: column; gap: 10px; }
+        .strategy-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .strategy-item:hover { background: #f1f8e9; }
+        .strategy-item.checked { background: #e8f5e9; }
+        .strategy-icon { font-size: 1.3em; }
+        .strategy-text { flex: 1; }
+        .strategy-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .strategy-item.checked .strategy-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .frustration-tracker { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .frustration-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .frustration-scale { display: flex; justify-content: space-between; align-items: center; }
+        .frustration-label { font-size: 0.85em; }
+        .frustration-dots { display: flex; gap: 10px; }
+        .frustration-dot { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #e0e0e0; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; transition: all 0.3s; }
+        .frustration-dot:hover { border-color: #ff5722; }
+        .frustration-dot.active { background: #ff5722; border-color: #ff5722; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #9575cd; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .wait-situations { grid-template-columns: 1fr; } .duration-scale { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>⏰ Warten lernen</h1>
+            <p>Geduld und Frustrationstoleranz</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-32/S-33)</h3>
+                <p>Das Kind lernt, auf etwas zu warten und Bedürfnisse aufzuschieben. Es entwickelt Strategien, um die Wartezeit zu überbrücken, und kann mit leichten Frustrationen umgehen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Wartesituationen</h3>
+                <p>Wie gut kann das Kind in diesen Situationen warten?</p>
+                <div class="wait-situations">
+                    <div class="situation-card" data-sit="reihe">
+                        <div class="icon">🚶‍♂️</div>
+                        <div class="title">In der Reihe stehen</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('reihe', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('reihe', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                    <div class="situation-card" data-sit="essen">
+                        <div class="icon">🍽️</div>
+                        <div class="title">Auf Essen warten</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('essen', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('essen', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                    <div class="situation-card" data-sit="spielzeug">
+                        <div class="icon">🧸</div>
+                        <div class="title">Auf Spielzeug warten</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('spielzeug', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('spielzeug', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                    <div class="situation-card" data-sit="anziehen">
+                        <div class="icon">👟</div>
+                        <div class="title">Beim Anziehen helfen</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('anziehen', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('anziehen', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                    <div class="situation-card" data-sit="morgen">
+                        <div class="icon">🌙</div>
+                        <div class="title">Auf "Morgen" warten</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('morgen', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('morgen', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                    <div class="situation-card" data-sit="dran">
+                        <div class="icon">🎮</div>
+                        <div class="title">Bis es dran ist</div>
+                        <div class="rating">
+                            <button class="rating-btn" onclick="rateSituation('dran', 'good', this)">Gut ✓</button>
+                            <button class="rating-btn" onclick="rateSituation('dran', 'difficult', this)">Schwierig !</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⏱️</span> Maximale Wartezeit</h3>
+                <div class="duration-section">
+                    <div class="duration-title">Wie lange kann das Kind typischerweise warten?</div>
+                    <div class="duration-scale">
+                        <div class="duration-btn" onclick="selectDuration(this, '30s')">
+                            <div class="time">< 30 Sek.</div>
+                            <div class="label">Sehr kurz</div>
+                        </div>
+                        <div class="duration-btn" onclick="selectDuration(this, '1min')">
+                            <div class="time">1-2 Min.</div>
+                            <div class="label">Kurz</div>
+                        </div>
+                        <div class="duration-btn" onclick="selectDuration(this, '5min')">
+                            <div class="time">3-5 Min.</div>
+                            <div class="label">Mittel</div>
+                        </div>
+                        <div class="duration-btn" onclick="selectDuration(this, '10min')">
+                            <div class="time">5-10 Min.</div>
+                            <div class="label">Gut</div>
+                        </div>
+                        <div class="duration-btn" onclick="selectDuration(this, '10min+')">
+                            <div class="time">10+ Min.</div>
+                            <div class="label">Sehr gut</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧘</span> Warte-Strategien</h3>
+                <div class="strategy-section">
+                    <div class="strategy-title">Diese Strategien kann das Kind nutzen:</div>
+                    <div class="strategy-list">
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🎵</span>
+                            <span class="strategy-text">Sich mit etwas anderem beschäftigen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🔢</span>
+                            <span class="strategy-text">Zählen oder Timer verstehen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🗣️</span>
+                            <span class="strategy-text">Sich selbst beruhigend zusprechen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">👀</span>
+                            <span class="strategy-text">Anderen beim Warten zuschauen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🧘</span>
+                            <span class="strategy-text">Tief durchatmen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">💭</span>
+                            <span class="strategy-text">An etwas Schönes denken</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">😤</span> Frustration beim Warten</h3>
+                <div class="frustration-tracker">
+                    <div class="frustration-title">Wie stark zeigt das Kind Frustration beim Warten?</div>
+                    <div class="frustration-scale">
+                        <span class="frustration-label">Stark</span>
+                        <div class="frustration-dots">
+                            <div class="frustration-dot" onclick="setFrustration(1)">😡</div>
+                            <div class="frustration-dot" onclick="setFrustration(2)">😤</div>
+                            <div class="frustration-dot" onclick="setFrustration(3)">😐</div>
+                            <div class="frustration-dot" onclick="setFrustration(4)">🙂</div>
+                            <div class="frustration-dot" onclick="setFrustration(5)">😊</div>
+                        </div>
+                        <span class="frustration-label">Kaum</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Wartefähigkeit:</div>
+                    <div class="tip-item"><span class="tip-icon">⏰</span>Timer oder Sanduhr nutzen (visuell)</div>
+                    <div class="tip-item"><span class="tip-icon">📈</span>Wartezeiten langsam steigern</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Geduldiges Warten loben</div>
+                    <div class="tip-item"><span class="tip-icon">🎯</span>Beschäftigungen für die Wartezeit anbieten</div>
+                    <div class="tip-item"><span class="tip-icon">🗓️</span>Wartezeit ankündigen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wann fällt das Warten besonders schwer? Welche Strategien helfen? Wie zeigt es Frustration?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let situations = {};
+        let duration = '';
+        let frustration = 0;
+
+        function rateSituation(sit, rating, el) {
+            situations[sit] = rating;
+            const card = el.closest('.situation-card');
+            card.classList.remove('good', 'difficult');
+            card.classList.add(rating);
+            card.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('good', 'difficult'));
+            el.classList.add(rating);
+            saveData();
+        }
+
+        function selectDuration(el, d) {
+            duration = d;
+            document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function toggleStrategy(el) { el.classList.toggle('checked'); saveData(); }
+
+        function setFrustration(level) {
+            frustration = level;
+            document.querySelectorAll('.frustration-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === level - 1);
+            });
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                situations,
+                duration,
+                strategies: [...document.querySelectorAll('.strategy-item.checked')].map(el => el.querySelector('.strategy-text').textContent),
+                frustration,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_warten', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_warten');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.situations) {
+                    situations = data.situations;
+                    Object.keys(situations).forEach(sit => {
+                        const card = document.querySelector(`[data-sit="${sit}"]`);
+                        if (card) {
+                            card.classList.add(situations[sit]);
+                            card.querySelectorAll('.rating-btn').forEach(b => {
+                                if ((situations[sit] === 'good' && b.textContent.includes('Gut')) ||
+                                    (situations[sit] === 'difficult' && b.textContent.includes('Schwierig'))) {
+                                    b.classList.add(situations[sit]);
+                                }
+                            });
+                        }
+                    });
+                }
+                if (data.duration) {
+                    duration = data.duration;
+                    document.querySelectorAll('.duration-btn').forEach(b => {
+                        if (b.onclick.toString().includes(`'${data.duration}'`)) b.classList.add('selected');
+                    });
+                }
+                document.querySelectorAll('.strategy-item').forEach(el => {
+                    if (data.strategies && data.strategies.includes(el.querySelector('.strategy-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.frustration) setFrustration(data.frustration);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

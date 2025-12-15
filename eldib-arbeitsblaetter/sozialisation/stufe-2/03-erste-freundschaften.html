@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erste Freundschaften - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ec407a; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .friend-tracker { background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .friend-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .friend-list { display: flex; flex-direction: column; gap: 15px; }
+        .friend-input { display: flex; gap: 10px; margin-bottom: 15px; }
+        .friend-input input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .friend-input button { padding: 12px 20px; background: #2196F3; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .friend-card { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; }
+        .friend-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f48fb1, #ec407a); display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white; }
+        .friend-info { flex: 1; }
+        .friend-name { font-weight: bold; }
+        .friend-activities { font-size: 0.85em; color: #666; }
+        .friend-remove { background: #ffcdd2; color: #c62828; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+        .friendship-signs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .sign-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .sign-card:hover { border-color: #ec407a; transform: scale(1.02); }
+        .sign-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .sign-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .sign-card .title { font-weight: bold; margin-bottom: 5px; }
+        .sign-card .desc { font-size: 0.85em; color: #666; }
+        .play-activities { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .activities-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .activities-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .activity-tag { padding: 10px 18px; border: 3px solid #e0e0e0; border-radius: 25px; cursor: pointer; transition: all 0.3s; background: white; }
+        .activity-tag:hover { border-color: #fbc02d; }
+        .activity-tag.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .quality-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.beginning { background: #ffcdd2; color: #c62828; }
+        .scale-btn.developing { background: #fff9c4; color: #f57f17; }
+        .scale-btn.stable { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ec407a; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .friendship-signs { grid-template-columns: 1fr; } .friend-input { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>💕 Erste Freundschaften</h1>
+            <p>Spielkameraden und Freunde finden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-20/S-21)</h3>
+                <p>Das Kind entwickelt Vorlieben für bestimmte Spielpartner. Es zeigt erste Freundschaftszeichen wie gemeinsames Spielen, Freude beim Wiedersehen und Vermissen bei Abwesenheit.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👫</span> Freunde des Kindes</h3>
+                <div class="friend-tracker">
+                    <div class="friend-title">Wer sind die Spielkameraden/Freunde?</div>
+                    <div class="friend-input">
+                        <input type="text" id="friendName" placeholder="Name des Freundes eingeben...">
+                        <button onclick="addFriend()">+ Hinzufügen</button>
+                    </div>
+                    <div class="friend-list" id="friendList">
+                        <!-- Freunde werden hier dynamisch eingefügt -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">❤️</span> Freundschaftszeichen</h3>
+                <p>Diese Zeichen von Freundschaft zeigt das Kind:</p>
+                <div class="friendship-signs">
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Freude beim Wiedersehen</div>
+                        <div class="desc">Freut sich, wenn Freund kommt</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🔎</div>
+                        <div class="title">Sucht bestimmte Kinder</div>
+                        <div class="desc">Fragt nach bestimmten Spielpartnern</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">😢</div>
+                        <div class="title">Vermisst Freunde</div>
+                        <div class="desc">Ist traurig bei Abwesenheit</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Bevorzugtes Spielen</div>
+                        <div class="desc">Spielt am liebsten mit bestimmten Kindern</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🎁</div>
+                        <div class="title">Teilt gerne</div>
+                        <div class="desc">Teilt besonders mit Freunden</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Redet über Freunde</div>
+                        <div class="desc">Erzählt zu Hause von Freunden</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Gemeinsame Aktivitäten</h3>
+                <div class="play-activities">
+                    <div class="activities-title">Was macht das Kind gerne mit Freunden?</div>
+                    <div class="activities-list">
+                        <div class="activity-tag" onclick="toggleActivity(this)">🏃 Toben</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🧱 Bauen</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🎨 Malen</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🎎 Rollenspiel</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">⚽ Ballspiele</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">📚 Bücher anschauen</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🎵 Musik/Tanzen</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🏖️ Sandkasten</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🧩 Puzzles</div>
+                        <div class="activity-tag" onclick="toggleActivity(this)">🚗 Fahrzeuge</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Qualität der Freundschaften</h3>
+                <div class="quality-scale">
+                    <div class="scale-title">Wie entwickelt sind die Freundschaften?</div>
+                    <div class="scale-options">
+                        <button class="scale-btn beginning" onclick="setQuality('beginning')">🌱 Beginnend</button>
+                        <button class="scale-btn developing" onclick="setQuality('developing')">🌿 Wachsend</button>
+                        <button class="scale-btn stable" onclick="setQuality('stable')">🌳 Stabil</button>
+                    </div>
+                    <div class="scale-display" id="qualityDisplay">Noch nicht eingeschätzt</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Freundschaften:</div>
+                    <div class="tip-item"><span class="tip-icon">📅</span>Regelmäßige Spielverabredungen ermöglichen</div>
+                    <div class="tip-item"><span class="tip-icon">🏠</span>Freunde auch zu Hause einladen</div>
+                    <div class="tip-item"><span class="tip-icon">👥</span>Kleine Gruppen bevorzugen (2-3 Kinder)</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Über Freunde sprechen und nachfragen</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Bei Konflikten unterstützen, nicht lösen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Mit wem spielt das Kind am liebsten? Wie verhält es sich mit Freunden im Vergleich zu anderen Kindern? Welche Freundschaftsrituale hat es entwickelt?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let friends = [];
+        let quality = '';
+
+        function addFriend() {
+            const input = document.getElementById('friendName');
+            const name = input.value.trim();
+            if (name) {
+                friends.push({ name, id: Date.now() });
+                input.value = '';
+                renderFriends();
+                saveData();
+            }
+        }
+
+        function removeFriend(id) {
+            friends = friends.filter(f => f.id !== id);
+            renderFriends();
+            saveData();
+        }
+
+        function renderFriends() {
+            const list = document.getElementById('friendList');
+            if (friends.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#666;">Noch keine Freunde eingetragen</p>';
+                return;
+            }
+            list.innerHTML = friends.map(f => `
+                <div class="friend-card">
+                    <div class="friend-avatar">${f.name.charAt(0).toUpperCase()}</div>
+                    <div class="friend-info">
+                        <div class="friend-name">${f.name}</div>
+                        <div class="friend-activities">Spielkamerad</div>
+                    </div>
+                    <button class="friend-remove" onclick="removeFriend(${f.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleSign(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleActivity(el) { el.classList.toggle('selected'); saveData(); }
+
+        function setQuality(level) {
+            quality = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${level}`).classList.add('selected');
+            const labels = {
+                beginning: '🌱 Beginnend - Erste Spielvorlieben',
+                developing: '🌿 Wachsend - Regelmäßige Spielpartner',
+                stable: '🌳 Stabil - Echte Freundschaften'
+            };
+            document.getElementById('qualityDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                friends,
+                signs: [...document.querySelectorAll('.sign-card.observed')].map(el => el.querySelector('.title').textContent),
+                activities: [...document.querySelectorAll('.activity-tag.selected')].map(el => el.textContent),
+                quality,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_freundschaften', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_freundschaften');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.friends) {
+                    friends = data.friends;
+                    renderFriends();
+                } else {
+                    renderFriends();
+                }
+                document.querySelectorAll('.sign-card').forEach(el => {
+                    if (data.signs && data.signs.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.activity-tag').forEach(el => {
+                    if (data.activities && data.activities.includes(el.textContent)) {
+                        el.classList.add('selected');
+                    }
+                });
+                if (data.quality) setQuality(data.quality);
+                document.getElementById('notes').value = data.notes || '';
+            } else {
+                renderFriends();
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

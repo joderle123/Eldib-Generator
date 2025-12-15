@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaktion auf andere Menschen - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #81d4fa; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .reaction-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .reaction-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .reaction-card:hover { border-color: #81d4fa; transform: scale(1.02); }
+        .reaction-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .reaction-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .reaction-card .title { font-weight: bold; margin-bottom: 5px; }
+        .reaction-card .desc { font-size: 0.85em; color: #666; }
+        .person-types { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .person-section { margin-bottom: 20px; }
+        .person-section:last-child { margin-bottom: 0; }
+        .person-header { display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 10px; }
+        .person-icon { font-size: 1.5em; }
+        .reaction-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .reaction-option { padding: 10px 15px; border: 3px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; background: white; }
+        .reaction-option:hover { border-color: #ff9800; }
+        .reaction-option.selected { border-color: #ff9800; background: #fff3e0; }
+        .awareness-tracker { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .awareness-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .awareness-items { display: flex; flex-direction: column; gap: 10px; }
+        .awareness-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .awareness-item:hover { background: #f5f5f5; }
+        .awareness-item.checked { background: #e8f5e9; }
+        .awareness-icon { font-size: 1.3em; }
+        .awareness-text { flex: 1; }
+        .awareness-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .awareness-item.checked .awareness-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .frequency-scale { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.level1 { background: #ffcdd2; color: #c62828; }
+        .scale-btn.level2 { background: #fff9c4; color: #f57f17; }
+        .scale-btn.level3 { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #81d4fa; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .reaction-grid { grid-template-columns: 1fr; } .reaction-options { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>👥 Reaktion auf andere Menschen</h1>
+            <p>Die soziale Welt entdecken</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-6)</h3>
+                <p>Das Kind nimmt andere Menschen wahr und reagiert auf sie. Es unterscheidet zwischen vertrauten und fremden Personen und zeigt unterschiedliche Reaktionen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👀</span> Beobachtete Reaktionen</h3>
+                <p>Diese Reaktionen zeigt das Kind auf andere Menschen:</p>
+                <div class="reaction-grid">
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">👁️</div>
+                        <div class="title">Aufmerksames Schauen</div>
+                        <div class="desc">Betrachtet andere Menschen interessiert</div>
+                    </div>
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Anlächeln</div>
+                        <div class="desc">Lächelt andere an</div>
+                    </div>
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Lautäußerungen</div>
+                        <div class="desc">Brabbelt oder gurrt bei Ansprache</div>
+                    </div>
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">🙈</div>
+                        <div class="title">Schüchternheit</div>
+                        <div class="desc">Versteckt sich oder schaut weg</div>
+                    </div>
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">🤚</div>
+                        <div class="title">Streckt Arme aus</div>
+                        <div class="desc">Möchte hochgenommen werden</div>
+                    </div>
+                    <div class="reaction-card" onclick="toggleReaction(this)">
+                        <div class="icon">😢</div>
+                        <div class="title">Fremdeln</div>
+                        <div class="desc">Weint bei fremden Personen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👨‍👩‍👧</span> Reaktionen auf verschiedene Personen</h3>
+                <div class="person-types">
+                    <div class="person-section">
+                        <div class="person-header">
+                            <span class="person-icon">👩</span>
+                            <span>Bei Bezugspersonen:</span>
+                        </div>
+                        <div class="reaction-options" data-person="bezug">
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bezug', 'freude')">😊 Freude</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bezug', 'neutral')">😐 Neutral</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bezug', 'aktiv')">🤗 Aktives Suchen</div>
+                        </div>
+                    </div>
+                    <div class="person-section">
+                        <div class="person-header">
+                            <span class="person-icon">👤</span>
+                            <span>Bei bekannten Personen:</span>
+                        </div>
+                        <div class="reaction-options" data-person="bekannt">
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bekannt', 'freude')">😊 Freude</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bekannt', 'neutral')">😐 Neutral</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'bekannt', 'vorsicht')">🤨 Vorsichtig</div>
+                        </div>
+                    </div>
+                    <div class="person-section">
+                        <div class="person-header">
+                            <span class="person-icon">👻</span>
+                            <span>Bei fremden Personen:</span>
+                        </div>
+                        <div class="reaction-options" data-person="fremd">
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'fremd', 'interesse')">🧐 Interesse</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'fremd', 'vorsicht')">😟 Vorsicht</div>
+                            <div class="reaction-option" onclick="selectPersonReaction(this, 'fremd', 'fremdeln')">😢 Fremdeln</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Soziale Wahrnehmung</h3>
+                <div class="awareness-tracker">
+                    <div class="awareness-title">Das Kind zeigt folgende soziale Wahrnehmung:</div>
+                    <div class="awareness-items">
+                        <div class="awareness-item" onclick="toggleAwareness(this)">
+                            <span class="awareness-icon">👂</span>
+                            <span class="awareness-text">Dreht sich zu Stimmen</span>
+                            <span class="awareness-check">✓</span>
+                        </div>
+                        <div class="awareness-item" onclick="toggleAwareness(this)">
+                            <span class="awareness-icon">👀</span>
+                            <span class="awareness-text">Folgt Menschen mit dem Blick</span>
+                            <span class="awareness-check">✓</span>
+                        </div>
+                        <div class="awareness-item" onclick="toggleAwareness(this)">
+                            <span class="awareness-icon">🔍</span>
+                            <span class="awareness-text">Unterscheidet bekannt/fremd</span>
+                            <span class="awareness-check">✓</span>
+                        </div>
+                        <div class="awareness-item" onclick="toggleAwareness(this)">
+                            <span class="awareness-icon">😊</span>
+                            <span class="awareness-text">Reagiert auf Mimik anderer</span>
+                            <span class="awareness-check">✓</span>
+                        </div>
+                        <div class="awareness-item" onclick="toggleAwareness(this)">
+                            <span class="awareness-icon">👋</span>
+                            <span class="awareness-text">Bemerkt Kommen und Gehen</span>
+                            <span class="awareness-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Soziale Reaktionsfreudigkeit</h3>
+                <div class="frequency-scale">
+                    <div class="scale-title">Wie reaktionsfreudig ist das Kind auf andere Menschen?</div>
+                    <div class="scale-buttons">
+                        <button class="scale-btn level1" onclick="setReactivity('gering')">😔 Gering</button>
+                        <button class="scale-btn level2" onclick="setReactivity('mittel')">🙂 Mittel</button>
+                        <button class="scale-btn level3" onclick="setReactivity('hoch')">😊 Hoch</button>
+                    </div>
+                    <div class="scale-display" id="reactivityDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie soziale Reaktionen:</div>
+                    <div class="tip-item"><span class="tip-icon">👥</span>Regelmäßig verschiedene Menschen kennenlernen</div>
+                    <div class="tip-item"><span class="tip-icon">🛡️</span>Bei Fremdeln Sicherheit geben</div>
+                    <div class="tip-item"><span class="tip-icon">⏳</span>Zeit für Annäherung lassen</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Positive Mimik zeigen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Freundlich über andere sprechen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert das Kind auf verschiedene Menschen? Wann zeigt es Fremdeln? Wie verhält es sich in Gruppen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let personReactions = { bezug: '', bekannt: '', fremd: '' };
+        let reactivity = '';
+
+        function toggleReaction(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleAwareness(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectPersonReaction(el, person, reaction) {
+            personReactions[person] = reaction;
+            el.parentElement.querySelectorAll('.reaction-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setReactivity(level) {
+            reactivity = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            const labels = { gering: '😔 Gering', mittel: '🙂 Mittel', hoch: '😊 Hoch' };
+            document.querySelector(`.scale-btn.level${['gering','mittel','hoch'].indexOf(level)+1}`).classList.add('selected');
+            document.getElementById('reactivityDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                reactions: [...document.querySelectorAll('.reaction-card.observed')].map(el => el.querySelector('.title').textContent),
+                personReactions,
+                awareness: [...document.querySelectorAll('.awareness-item.checked')].map(el => el.querySelector('.awareness-text').textContent),
+                reactivity,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_reaktion', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_reaktion');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.reaction-card').forEach(el => {
+                    if (data.reactions && data.reactions.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                if (data.personReactions) {
+                    personReactions = data.personReactions;
+                    Object.keys(personReactions).forEach(person => {
+                        if (personReactions[person]) {
+                            const section = document.querySelector(`[data-person="${person}"]`);
+                            if (section) {
+                                section.querySelectorAll('.reaction-option').forEach(opt => {
+                                    if (opt.onclick.toString().includes(personReactions[person])) {
+                                        opt.classList.add('selected');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                document.querySelectorAll('.awareness-item').forEach(el => {
+                    if (data.awareness && data.awareness.includes(el.querySelector('.awareness-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.reactivity) setReactivity(data.reactivity);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grundvertrauen entwickeln - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #9fa8da; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .trust-indicators { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .trust-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .trust-card:hover { border-color: #9fa8da; transform: scale(1.02); }
+        .trust-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .trust-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .trust-card .title { font-weight: bold; margin-bottom: 5px; }
+        .trust-card .desc { font-size: 0.85em; color: #666; }
+        .needs-tracker { background: linear-gradient(135deg, #ffecb3 0%, #ffe082 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .needs-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .needs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .need-item { background: white; border-radius: 12px; padding: 15px; }
+        .need-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .need-icon { font-size: 1.5em; }
+        .need-label { font-weight: bold; }
+        .need-response { display: flex; gap: 8px; }
+        .response-btn { flex: 1; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; background: white; }
+        .response-btn:hover { border-color: #ff9800; }
+        .response-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .comfort-section { background: linear-gradient(135deg, #f8bbd9 0%, #f48fb1 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .comfort-title { font-weight: bold; margin-bottom: 15px; text-align: center; color: #333; }
+        .comfort-items { display: flex; flex-direction: column; gap: 10px; }
+        .comfort-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .comfort-item:hover { background: #fce4ec; }
+        .comfort-item.checked { background: #e8f5e9; }
+        .comfort-icon { font-size: 1.3em; }
+        .comfort-text { flex: 1; }
+        .comfort-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .comfort-item.checked .comfort-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .trust-scale { background: linear-gradient(135deg, #b2dfdb 0%, #80cbc4 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-visual { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .scale-point { text-align: center; cursor: pointer; transition: all 0.3s; }
+        .scale-point .circle { width: 50px; height: 50px; border-radius: 50%; background: white; border: 4px solid #e0e0e0; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; transition: all 0.3s; }
+        .scale-point:hover .circle { border-color: #26a69a; }
+        .scale-point.selected .circle { border-color: #4CAF50; background: #e8f5e9; transform: scale(1.1); }
+        .scale-point .label { font-size: 0.8em; }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; padding: 10px; background: white; border-radius: 10px; }
+        .erikson-box { background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .erikson-title { font-weight: bold; margin-bottom: 10px; }
+        .erikson-text { font-size: 0.95em; line-height: 1.6; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #9fa8da; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .trust-indicators, .needs-grid { grid-template-columns: 1fr; } .scale-visual { flex-wrap: wrap; justify-content: center; gap: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>🛡️ Grundvertrauen entwickeln</h1>
+            <p>Die Welt als sicheren Ort erleben</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-7/S-8)</h3>
+                <p>Das Kind entwickelt ein Grundvertrauen in seine Bezugspersonen und die Welt. Es erlebt, dass seine Bedürfnisse zuverlässig erfüllt werden und fühlt sich sicher und geborgen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">❤️</span> Zeichen von Grundvertrauen</h3>
+                <p>Diese Verhaltensweisen deuten auf Grundvertrauen hin:</p>
+                <div class="trust-indicators">
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">😌</div>
+                        <div class="title">Entspannung</div>
+                        <div class="desc">Wirkt ruhig und zufrieden</div>
+                    </div>
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">🔍</div>
+                        <div class="title">Exploration</div>
+                        <div class="desc">Erkundet aktiv die Umgebung</div>
+                    </div>
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">🔙</div>
+                        <div class="title">Rückversicherung</div>
+                        <div class="desc">Kehrt zur Bezugsperson zurück</div>
+                    </div>
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Tröstbarkeit</div>
+                        <div class="desc">Lässt sich schnell beruhigen</div>
+                    </div>
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">😴</div>
+                        <div class="title">Schlafqualität</div>
+                        <div class="desc">Schläft gut und ruhig</div>
+                    </div>
+                    <div class="trust-card" onclick="toggleTrust(this)">
+                        <div class="icon">🍼</div>
+                        <div class="title">Essverhalten</div>
+                        <div class="desc">Isst entspannt und ausreichend</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Bedürfnisse und Reaktionen</h3>
+                <div class="needs-tracker">
+                    <div class="needs-title">Wie reagiert das Kind, wenn Bedürfnisse erfüllt werden?</div>
+                    <div class="needs-grid">
+                        <div class="need-item">
+                            <div class="need-header">
+                                <span class="need-icon">🍼</span>
+                                <span class="need-label">Hunger</span>
+                            </div>
+                            <div class="need-response" data-need="hunger">
+                                <div class="response-btn" onclick="setNeedResponse('hunger', 'wartet')">Wartet</div>
+                                <div class="response-btn" onclick="setNeedResponse('hunger', 'beruhigt')">Beruhigt sich</div>
+                            </div>
+                        </div>
+                        <div class="need-item">
+                            <div class="need-header">
+                                <span class="need-icon">🤗</span>
+                                <span class="need-label">Nähe</span>
+                            </div>
+                            <div class="need-response" data-need="naehe">
+                                <div class="response-btn" onclick="setNeedResponse('naehe', 'sucht')">Sucht aktiv</div>
+                                <div class="response-btn" onclick="setNeedResponse('naehe', 'entspannt')">Entspannt sich</div>
+                            </div>
+                        </div>
+                        <div class="need-item">
+                            <div class="need-header">
+                                <span class="need-icon">😴</span>
+                                <span class="need-label">Müdigkeit</span>
+                            </div>
+                            <div class="need-response" data-need="muede">
+                                <div class="response-btn" onclick="setNeedResponse('muede', 'signalisiert')">Signalisiert</div>
+                                <div class="response-btn" onclick="setNeedResponse('muede', 'schlaeft')">Schläft ein</div>
+                            </div>
+                        </div>
+                        <div class="need-item">
+                            <div class="need-header">
+                                <span class="need-icon">😢</span>
+                                <span class="need-label">Unwohlsein</span>
+                            </div>
+                            <div class="need-response" data-need="unwohl">
+                                <div class="response-btn" onclick="setNeedResponse('unwohl', 'zeigt')">Zeigt es</div>
+                                <div class="response-btn" onclick="setNeedResponse('unwohl', 'troestbar')">Tröstbar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧸</span> Tröstungsverhalten</h3>
+                <div class="comfort-section">
+                    <div class="comfort-title">Das Kind lässt sich trösten durch:</div>
+                    <div class="comfort-items">
+                        <div class="comfort-item" onclick="toggleComfort(this)">
+                            <span class="comfort-icon">🤱</span>
+                            <span class="comfort-text">Körperliche Nähe und Halten</span>
+                            <span class="comfort-check">✓</span>
+                        </div>
+                        <div class="comfort-item" onclick="toggleComfort(this)">
+                            <span class="comfort-icon">🗣️</span>
+                            <span class="comfort-text">Sanftes Sprechen und Singen</span>
+                            <span class="comfort-check">✓</span>
+                        </div>
+                        <div class="comfort-item" onclick="toggleComfort(this)">
+                            <span class="comfort-icon">👆</span>
+                            <span class="comfort-text">Streicheln und sanfte Berührung</span>
+                            <span class="comfort-check">✓</span>
+                        </div>
+                        <div class="comfort-item" onclick="toggleComfort(this)">
+                            <span class="comfort-icon">🍼</span>
+                            <span class="comfort-text">Füttern oder Schnuller</span>
+                            <span class="comfort-check">✓</span>
+                        </div>
+                        <div class="comfort-item" onclick="toggleComfort(this)">
+                            <span class="comfort-icon">🎵</span>
+                            <span class="comfort-text">Rhythmische Bewegungen (Wiegen)</span>
+                            <span class="comfort-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Einschätzung des Grundvertrauens</h3>
+                <div class="trust-scale">
+                    <div class="scale-title">Wie stark ist das Grundvertrauen entwickelt?</div>
+                    <div class="scale-visual">
+                        <div class="scale-point" onclick="setTrustLevel(1)">
+                            <div class="circle">😟</div>
+                            <div class="label">Unsicher</div>
+                        </div>
+                        <div class="scale-point" onclick="setTrustLevel(2)">
+                            <div class="circle">😐</div>
+                            <div class="label">Beginnend</div>
+                        </div>
+                        <div class="scale-point" onclick="setTrustLevel(3)">
+                            <div class="circle">🙂</div>
+                            <div class="label">Entwickelnd</div>
+                        </div>
+                        <div class="scale-point" onclick="setTrustLevel(4)">
+                            <div class="circle">😊</div>
+                            <div class="label">Stabil</div>
+                        </div>
+                        <div class="scale-point" onclick="setTrustLevel(5)">
+                            <div class="circle">🌟</div>
+                            <div class="label">Gefestigt</div>
+                        </div>
+                    </div>
+                    <div class="scale-display" id="trustDisplay">Noch nicht eingeschätzt</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📚</span> Hintergrund: Eriksons Entwicklungstheorie</h3>
+                <div class="erikson-box">
+                    <div class="erikson-title">Urvertrauen vs. Urmisstrauen (0-1 Jahr)</div>
+                    <div class="erikson-text">
+                        Nach Erik Erikson ist das erste Lebensjahr entscheidend für die Entwicklung von Grundvertrauen.
+                        Wenn Bezugspersonen zuverlässig und feinfühlig auf die Bedürfnisse des Kindes reagieren,
+                        entwickelt es ein Gefühl von Sicherheit und Vertrauen in die Welt.
+                        Dieses Grundvertrauen bildet die Basis für alle weiteren Entwicklungsschritte.
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Grundvertrauen:</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Bedürfnisse prompt und zuverlässig erfüllen</div>
+                    <div class="tip-item"><span class="tip-icon">📅</span>Regelmäßige Routinen schaffen</div>
+                    <div class="tip-item"><span class="tip-icon">❤️</span>Feinfühlig auf Signale reagieren</div>
+                    <div class="tip-item"><span class="tip-icon">🤗</span>Viel Körperkontakt und Nähe bieten</div>
+                    <div class="tip-item"><span class="tip-icon">😊</span>Positiv und beruhigend kommunizieren</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie zeigt das Kind Vertrauen? Wie schnell lässt es sich trösten? Wie reagiert es auf neue Situationen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let needResponses = {};
+        let trustLevel = 0;
+
+        function toggleTrust(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleComfort(el) { el.classList.toggle('checked'); saveData(); }
+
+        function setNeedResponse(need, response) {
+            needResponses[need] = response;
+            const container = document.querySelector(`[data-need="${need}"]`);
+            container.querySelectorAll('.response-btn').forEach(b => b.classList.remove('selected'));
+            container.querySelectorAll('.response-btn').forEach(b => {
+                if (b.textContent.toLowerCase().includes(response.substring(0,4))) {
+                    b.classList.add('selected');
+                }
+            });
+            saveData();
+        }
+
+        function setTrustLevel(level) {
+            trustLevel = level;
+            document.querySelectorAll('.scale-point').forEach((p, i) => {
+                p.classList.toggle('selected', i < level);
+            });
+            const labels = ['', 'Unsicher', 'Beginnend', 'Entwickelnd', 'Stabil', 'Gefestigt'];
+            document.getElementById('trustDisplay').textContent = `Stufe ${level}: ${labels[level]}`;
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                trustIndicators: [...document.querySelectorAll('.trust-card.observed')].map(el => el.querySelector('.title').textContent),
+                needResponses,
+                comfortMethods: [...document.querySelectorAll('.comfort-item.checked')].map(el => el.querySelector('.comfort-text').textContent),
+                trustLevel,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_grundvertrauen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_grundvertrauen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.trust-card').forEach(el => {
+                    if (data.trustIndicators && data.trustIndicators.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                if (data.needResponses) {
+                    needResponses = data.needResponses;
+                    Object.keys(needResponses).forEach(need => {
+                        setNeedResponse(need, needResponses[need]);
+                    });
+                }
+                document.querySelectorAll('.comfort-item').forEach(el => {
+                    if (data.comfortMethods && data.comfortMethods.includes(el.querySelector('.comfort-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.trustLevel) setTrustLevel(data.trustLevel);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

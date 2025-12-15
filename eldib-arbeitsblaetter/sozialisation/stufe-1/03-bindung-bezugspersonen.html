@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bindung zu Bezugspersonen - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #a8e6cf; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .person-tracker { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .person-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .person-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .person-card:hover { border-color: #a8e6cf; }
+        .person-card.primary { border-color: #4CAF50; background: #e8f5e9; }
+        .person-card.secondary { border-color: #2196F3; background: #e3f2fd; }
+        .person-icon { font-size: 2em; text-align: center; margin-bottom: 8px; }
+        .person-label { text-align: center; font-weight: bold; font-size: 0.9em; }
+        .person-status { text-align: center; font-size: 0.8em; color: #666; margin-top: 5px; }
+        .binding-signs { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .sign-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .sign-item:hover { border-color: #a8e6cf; }
+        .sign-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .sign-icon { font-size: 1.5em; }
+        .sign-text { flex: 1; }
+        .sign-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .sign-item.checked .sign-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .separation-tracker { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .separation-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .reaction-options { display: flex; flex-direction: column; gap: 10px; }
+        .reaction-btn { padding: 12px 20px; border: 3px solid #e0e0e0; border-radius: 10px; background: white; cursor: pointer; transition: all 0.3s; text-align: left; display: flex; align-items: center; gap: 10px; }
+        .reaction-btn:hover { border-color: #ff8a65; }
+        .reaction-btn.selected { border-color: #ff5722; background: #fbe9e7; }
+        .reaction-icon { font-size: 1.3em; }
+        .quality-scale { background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-options { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .scale-btn { flex: 1; min-width: 80px; padding: 15px 10px; border: none; border-radius: 10px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; text-align: center; }
+        .scale-btn.level1 { background: #ffcdd2; }
+        .scale-btn.level2 { background: #fff9c4; }
+        .scale-btn.level3 { background: #c8e6c9; }
+        .scale-btn.level4 { background: #b2dfdb; }
+        .scale-btn.selected { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #a8e6cf; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .person-grid { grid-template-columns: 1fr; } .scale-options { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>🤗 Bindung zu Bezugspersonen</h1>
+            <p>Sichere Beziehungen als Basis</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-4/S-5)</h3>
+                <p>Das Kind entwickelt eine sichere Bindung zu seinen Bezugspersonen. Es zeigt Bindungsverhalten wie Nähe suchen, protestiert bei Trennung und lässt sich von der Bezugsperson trösten.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👨‍👩‍👧</span> Bezugspersonen des Kindes</h3>
+                <p>Klicken Sie auf Personen, zu denen das Kind Bindung zeigt:</p>
+                <div class="person-tracker">
+                    <div class="person-grid">
+                        <div class="person-card" onclick="togglePerson(this, 'primary')">
+                            <div class="person-icon">👩</div>
+                            <div class="person-label">Mutter</div>
+                            <div class="person-status">Klicken zum Markieren</div>
+                        </div>
+                        <div class="person-card" onclick="togglePerson(this, 'primary')">
+                            <div class="person-icon">👨</div>
+                            <div class="person-label">Vater</div>
+                            <div class="person-status">Klicken zum Markieren</div>
+                        </div>
+                        <div class="person-card" onclick="togglePerson(this, 'secondary')">
+                            <div class="person-icon">👵</div>
+                            <div class="person-label">Großeltern</div>
+                            <div class="person-status">Klicken zum Markieren</div>
+                        </div>
+                        <div class="person-card" onclick="togglePerson(this, 'secondary')">
+                            <div class="person-icon">👩‍🏫</div>
+                            <div class="person-label">Erzieherin</div>
+                            <div class="person-status">Klicken zum Markieren</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">❤️</span> Bindungszeichen</h3>
+                <p>Diese Verhaltensweisen zeigt das Kind:</p>
+                <div class="binding-signs">
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">🤱</span>
+                        <span class="sign-text">Sucht aktiv Nähe und Körperkontakt</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">😊</span>
+                        <span class="sign-text">Freut sich bei Rückkehr der Bezugsperson</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">😢</span>
+                        <span class="sign-text">Zeigt Trennungsprotest</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">🧸</span>
+                        <span class="sign-text">Lässt sich von Bezugsperson trösten</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">👀</span>
+                        <span class="sign-text">Sucht Blickkontakt bei Unsicherheit</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                    <div class="sign-item" onclick="toggleSign(this)">
+                        <span class="sign-icon">🏃</span>
+                        <span class="sign-text">Nutzt Bezugsperson als sichere Basis</span>
+                        <span class="sign-check">✓</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👋</span> Reaktion bei Trennung</h3>
+                <div class="separation-tracker">
+                    <div class="separation-title">Wie reagiert das Kind, wenn die Bezugsperson geht?</div>
+                    <div class="reaction-options">
+                        <div class="reaction-btn" onclick="selectReaction(this, 'none')">
+                            <span class="reaction-icon">😐</span>
+                            <span>Kaum Reaktion</span>
+                        </div>
+                        <div class="reaction-btn" onclick="selectReaction(this, 'mild')">
+                            <span class="reaction-icon">😟</span>
+                            <span>Kurz unruhig, beruhigt sich schnell</span>
+                        </div>
+                        <div class="reaction-btn" onclick="selectReaction(this, 'moderate')">
+                            <span class="reaction-icon">😢</span>
+                            <span>Weint, lässt sich aber trösten</span>
+                        </div>
+                        <div class="reaction-btn" onclick="selectReaction(this, 'strong')">
+                            <span class="reaction-icon">😭</span>
+                            <span>Starker Protest, schwer zu trösten</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Bindungsqualität einschätzen</h3>
+                <div class="quality-scale">
+                    <div class="scale-title">Wie sicher erscheint die Bindung?</div>
+                    <div class="scale-options">
+                        <button class="scale-btn level1" onclick="setQuality('unsicher')">Unsicher</button>
+                        <button class="scale-btn level2" onclick="setQuality('entwickelnd')">Entwickelnd</button>
+                        <button class="scale-btn level3" onclick="setQuality('stabil')">Stabil</button>
+                        <button class="scale-btn level4" onclick="setQuality('sicher')">Sicher</button>
+                    </div>
+                    <div class="scale-display" id="qualityDisplay">Noch nicht eingeschätzt</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie sichere Bindung:</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Zuverlässig und vorhersehbar reagieren</div>
+                    <div class="tip-item"><span class="tip-icon">❤️</span>Feinfühlig auf Bedürfnisse eingehen</div>
+                    <div class="tip-item"><span class="tip-icon">🤗</span>Viel Körperkontakt und Nähe anbieten</div>
+                    <div class="tip-item"><span class="tip-icon">👋</span>Abschiede bewusst und kurz gestalten</div>
+                    <div class="tip-item"><span class="tip-icon">😊</span>Wiedersehen freudig begrüßen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie zeigt das Kind Bindungsverhalten? Zu wem ist die Bindung am stärksten? Wie reagiert es auf Trennung und Wiedersehen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let separationReaction = '';
+        let bindingQuality = '';
+
+        function togglePerson(el, type) {
+            if (el.classList.contains('primary') || el.classList.contains('secondary')) {
+                el.classList.remove('primary', 'secondary');
+                el.querySelector('.person-status').textContent = 'Klicken zum Markieren';
+            } else {
+                el.classList.add(type);
+                el.querySelector('.person-status').textContent = type === 'primary' ? '★ Hauptbezugsperson' : '○ Weitere Bezugsperson';
+            }
+            saveData();
+        }
+
+        function toggleSign(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectReaction(el, reaction) {
+            separationReaction = reaction;
+            document.querySelectorAll('.reaction-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setQuality(level) {
+            bindingQuality = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            const labels = { unsicher: 'Unsicher', entwickelnd: 'Entwickelnd', stabil: 'Stabil', sicher: 'Sicher' };
+            document.querySelector(`.scale-btn.level${['unsicher','entwickelnd','stabil','sicher'].indexOf(level)+1}`).classList.add('selected');
+            document.getElementById('qualityDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                persons: [...document.querySelectorAll('.person-card.primary, .person-card.secondary')].map(el => ({
+                    label: el.querySelector('.person-label').textContent,
+                    type: el.classList.contains('primary') ? 'primary' : 'secondary'
+                })),
+                signs: [...document.querySelectorAll('.sign-item.checked')].map(el => el.querySelector('.sign-text').textContent),
+                separationReaction,
+                bindingQuality,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_bindung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_bindung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.persons) {
+                    document.querySelectorAll('.person-card').forEach(el => {
+                        const label = el.querySelector('.person-label').textContent;
+                        const found = data.persons.find(p => p.label === label);
+                        if (found) {
+                            el.classList.add(found.type);
+                            el.querySelector('.person-status').textContent = found.type === 'primary' ? '★ Hauptbezugsperson' : '○ Weitere Bezugsperson';
+                        }
+                    });
+                }
+                document.querySelectorAll('.sign-item').forEach(el => {
+                    if (data.signs && data.signs.includes(el.querySelector('.sign-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.separationReaction) {
+                    separationReaction = data.separationReaction;
+                    document.querySelectorAll('.reaction-btn').forEach(b => {
+                        if (b.onclick.toString().includes(data.separationReaction)) b.classList.add('selected');
+                    });
+                }
+                if (data.bindingQuality) setQuality(data.bindingQuality);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

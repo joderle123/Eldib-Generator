@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenregeln verstehen - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #81c784; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .rules-section { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .rules-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .rules-list { display: flex; flex-direction: column; gap: 12px; }
+        .rule-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; cursor: pointer; transition: all 0.3s; border: 3px solid #e0e0e0; }
+        .rule-item:hover { border-color: #2196F3; }
+        .rule-item.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .rule-icon { font-size: 1.8em; }
+        .rule-content { flex: 1; }
+        .rule-name { font-weight: bold; }
+        .rule-desc { font-size: 0.85em; color: #666; }
+        .rule-status { display: flex; gap: 5px; }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .status-dot.active { background: #4CAF50; }
+        .compliance-tracker { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .compliance-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .compliance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .compliance-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .compliance-card:hover { border-color: #fbc02d; }
+        .compliance-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .compliance-card .icon { font-size: 2em; margin-bottom: 8px; }
+        .compliance-card .title { font-weight: bold; font-size: 0.9em; }
+        .situation-section { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .situation-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .situation-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ce93d8; }
+        .situation-item:last-child { margin-bottom: 0; border-bottom: none; }
+        .situation-label { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .situation-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .situation-btn { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .situation-btn:hover { border-color: #9c27b0; }
+        .situation-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .reminder-tracker { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .reminder-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .reminder-scale { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+        .reminder-label { font-size: 0.9em; }
+        .reminder-dots { display: flex; gap: 10px; }
+        .reminder-dot { width: 35px; height: 35px; border-radius: 50%; background: white; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .reminder-dot:hover { border-color: #ff5722; }
+        .reminder-dot.active { background: #ff5722; border-color: #ff5722; color: white; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #81c784; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .compliance-grid { grid-template-columns: 1fr; } .situation-options { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>📋 Gruppenregeln verstehen</h1>
+            <p>Regeln kennen und befolgen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-22/S-23)</h3>
+                <p>Das Kind versteht einfache Gruppenregeln und kann sie befolgen. Es erkennt, warum Regeln wichtig sind und akzeptiert Grenzen im Zusammenleben mit anderen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📜</span> Wichtige Gruppenregeln</h3>
+                <div class="rules-section">
+                    <div class="rules-title">Diese Regeln versteht und befolgt das Kind (1-5 Punkte):</div>
+                    <div class="rules-list">
+                        <div class="rule-item">
+                            <span class="rule-icon">🤫</span>
+                            <div class="rule-content">
+                                <div class="rule-name">Zuhören wenn andere sprechen</div>
+                                <div class="rule-desc">Nicht dazwischenreden, abwarten</div>
+                            </div>
+                            <div class="rule-status" data-rule="zuhoeren">
+                                <div class="status-dot" onclick="setRuleLevel('zuhoeren', 1)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('zuhoeren', 2)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('zuhoeren', 3)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('zuhoeren', 4)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('zuhoeren', 5)"></div>
+                            </div>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">🤝</span>
+                            <div class="rule-content">
+                                <div class="rule-name">Nicht hauen, treten, beißen</div>
+                                <div class="rule-desc">Hände und Füße bei sich behalten</div>
+                            </div>
+                            <div class="rule-status" data-rule="haende">
+                                <div class="status-dot" onclick="setRuleLevel('haende', 1)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('haende', 2)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('haende', 3)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('haende', 4)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('haende', 5)"></div>
+                            </div>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">🧹</span>
+                            <div class="rule-content">
+                                <div class="rule-name">Aufräumen nach dem Spielen</div>
+                                <div class="rule-desc">Spielsachen an ihren Platz zurück</div>
+                            </div>
+                            <div class="rule-status" data-rule="aufraeumen">
+                                <div class="status-dot" onclick="setRuleLevel('aufraeumen', 1)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('aufraeumen', 2)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('aufraeumen', 3)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('aufraeumen', 4)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('aufraeumen', 5)"></div>
+                            </div>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">⏰</span>
+                            <div class="rule-content">
+                                <div class="rule-name">Warten bis man dran ist</div>
+                                <div class="rule-desc">Geduldig in der Reihe bleiben</div>
+                            </div>
+                            <div class="rule-status" data-rule="warten">
+                                <div class="status-dot" onclick="setRuleLevel('warten', 1)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('warten', 2)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('warten', 3)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('warten', 4)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('warten', 5)"></div>
+                            </div>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">🚶</span>
+                            <div class="rule-content">
+                                <div class="rule-name">Im Raum gehen, nicht rennen</div>
+                                <div class="rule-desc">Langsam und vorsichtig bewegen</div>
+                            </div>
+                            <div class="rule-status" data-rule="gehen">
+                                <div class="status-dot" onclick="setRuleLevel('gehen', 1)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('gehen', 2)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('gehen', 3)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('gehen', 4)"></div>
+                                <div class="status-dot" onclick="setRuleLevel('gehen', 5)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Regelbefolgung</h3>
+                <div class="compliance-grid">
+                    <div class="compliance-card" onclick="toggleCompliance(this)">
+                        <div class="icon">👂</div>
+                        <div class="title">Kennt die Regeln</div>
+                    </div>
+                    <div class="compliance-card" onclick="toggleCompliance(this)">
+                        <div class="icon">💭</div>
+                        <div class="title">Versteht den Sinn</div>
+                    </div>
+                    <div class="compliance-card" onclick="toggleCompliance(this)">
+                        <div class="icon">✋</div>
+                        <div class="title">Akzeptiert Grenzen</div>
+                    </div>
+                    <div class="compliance-card" onclick="toggleCompliance(this)">
+                        <div class="icon">🔄</div>
+                        <div class="title">Befolgt meist selbstständig</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Verhalten in Regelsituationen</h3>
+                <div class="situation-section">
+                    <div class="situation-title">Wie reagiert das Kind typischerweise?</div>
+                    <div class="situation-item">
+                        <div class="situation-label">🛑 Wenn eine Regel erklärt wird:</div>
+                        <div class="situation-options" data-sit="erklaerung">
+                            <div class="situation-btn" onclick="selectSituation('erklaerung', this)">Hört zu</div>
+                            <div class="situation-btn" onclick="selectSituation('erklaerung', this)">Teils abgelenkt</div>
+                            <div class="situation-btn" onclick="selectSituation('erklaerung', this)">Hört nicht zu</div>
+                        </div>
+                    </div>
+                    <div class="situation-item">
+                        <div class="situation-label">⚠️ Wenn es ermahnt wird:</div>
+                        <div class="situation-options" data-sit="ermahnung">
+                            <div class="situation-btn" onclick="selectSituation('ermahnung', this)">Akzeptiert</div>
+                            <div class="situation-btn" onclick="selectSituation('ermahnung', this)">Protestiert kurz</div>
+                            <div class="situation-btn" onclick="selectSituation('ermahnung', this)">Starker Widerstand</div>
+                        </div>
+                    </div>
+                    <div class="situation-item">
+                        <div class="situation-label">🔄 Bei Routinen (Aufräumen etc.):</div>
+                        <div class="situation-options" data-sit="routine">
+                            <div class="situation-btn" onclick="selectSituation('routine', this)">Macht mit</div>
+                            <div class="situation-btn" onclick="selectSituation('routine', this)">Braucht Aufforderung</div>
+                            <div class="situation-btn" onclick="selectSituation('routine', this)">Verweigert oft</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔔</span> Benötigte Erinnerungen</h3>
+                <div class="reminder-tracker">
+                    <div class="reminder-title">Wie oft muss das Kind an Regeln erinnert werden?</div>
+                    <div class="reminder-scale">
+                        <span class="reminder-label">Sehr oft</span>
+                        <div class="reminder-dots">
+                            <div class="reminder-dot" onclick="setReminder(1)">1</div>
+                            <div class="reminder-dot" onclick="setReminder(2)">2</div>
+                            <div class="reminder-dot" onclick="setReminder(3)">3</div>
+                            <div class="reminder-dot" onclick="setReminder(4)">4</div>
+                            <div class="reminder-dot" onclick="setReminder(5)">5</div>
+                        </div>
+                        <span class="reminder-label">Selten</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Regelverständnis:</div>
+                    <div class="tip-item"><span class="tip-icon">🖼️</span>Regeln visualisieren (Bilder, Symbole)</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Regeln regelmäßig wiederholen</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Regelbefolgung positiv verstärken</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Sinn der Regeln erklären</div>
+                    <div class="tip-item"><span class="tip-icon">⚖️</span>Konsequent und fair sein</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Regeln befolgt das Kind gut? Wo gibt es Schwierigkeiten? Was hilft bei der Regeleinhaltung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let ruleLevels = {};
+        let situations = {};
+        let reminderLevel = 0;
+
+        function setRuleLevel(rule, level) {
+            ruleLevels[rule] = level;
+            const container = document.querySelector(`[data-rule="${rule}"]`);
+            container.querySelectorAll('.status-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i < level);
+            });
+            saveData();
+        }
+
+        function toggleCompliance(el) { el.classList.toggle('achieved'); saveData(); }
+
+        function selectSituation(sit, el) {
+            situations[sit] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.situation-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setReminder(level) {
+            reminderLevel = level;
+            document.querySelectorAll('.reminder-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i < level);
+            });
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                ruleLevels,
+                compliance: [...document.querySelectorAll('.compliance-card.achieved')].map(el => el.querySelector('.title').textContent),
+                situations,
+                reminderLevel,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_gruppenregeln', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_gruppenregeln');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.ruleLevels) {
+                    ruleLevels = data.ruleLevels;
+                    Object.keys(ruleLevels).forEach(rule => {
+                        setRuleLevel(rule, ruleLevels[rule]);
+                    });
+                }
+                document.querySelectorAll('.compliance-card').forEach(el => {
+                    if (data.compliance && data.compliance.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                if (data.situations) {
+                    situations = data.situations;
+                    Object.keys(situations).forEach(sit => {
+                        const container = document.querySelector(`[data-sit="${sit}"]`);
+                        if (container) {
+                            container.querySelectorAll('.situation-btn').forEach(btn => {
+                                if (btn.textContent === situations[sit]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                if (data.reminderLevel) setReminder(data.reminderLevel);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

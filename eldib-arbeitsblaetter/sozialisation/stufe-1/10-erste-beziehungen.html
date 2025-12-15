@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erste Beziehungen - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ef9a9a; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .relationship-map { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .map-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .map-visual { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .relationship-circle { text-align: center; }
+        .circle-ring { width: 100px; height: 100px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; border: 4px solid #e0e0e0; background: white; }
+        .circle-ring:hover { border-color: #4CAF50; }
+        .circle-ring.active { border-color: #4CAF50; background: #e8f5e9; }
+        .circle-ring .person-icon { font-size: 2em; }
+        .circle-ring .person-label { font-size: 0.75em; margin-top: 3px; }
+        .relationship-strength { margin-top: 8px; }
+        .strength-dots { display: flex; gap: 4px; justify-content: center; }
+        .strength-dot { width: 12px; height: 12px; border-radius: 50%; background: #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .strength-dot.filled { background: #e91e63; }
+        .quality-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .quality-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .quality-card:hover { border-color: #ef9a9a; transform: scale(1.02); }
+        .quality-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .quality-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .quality-card .title { font-weight: bold; margin-bottom: 5px; }
+        .quality-card .desc { font-size: 0.85em; color: #666; }
+        .interaction-patterns { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .pattern-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .pattern-list { display: flex; flex-direction: column; gap: 10px; }
+        .pattern-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .pattern-item:hover { background: #e3f2fd; }
+        .pattern-item.checked { background: #e8f5e9; }
+        .pattern-icon { font-size: 1.3em; }
+        .pattern-text { flex: 1; }
+        .pattern-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .pattern-item.checked .pattern-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .peer-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .peer-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .peer-behaviors { display: flex; flex-direction: column; gap: 10px; }
+        .peer-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .peer-item:hover { background: #fffde7; }
+        .peer-item.checked { background: #e8f5e9; }
+        .peer-icon { font-size: 1.3em; }
+        .peer-text { flex: 1; }
+        .peer-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .peer-item.checked .peer-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .summary-scale { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.beginning { background: #ffcdd2; color: #c62828; }
+        .scale-btn.developing { background: #fff9c4; color: #f57f17; }
+        .scale-btn.established { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ef9a9a; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .quality-grid { grid-template-columns: 1fr; } .map-visual { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>💕 Erste Beziehungen</h1>
+            <p>Soziale Verbindungen aufbauen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-15)</h3>
+                <p>Das Kind baut erste bedeutsame Beziehungen zu verschiedenen Menschen auf. Es zeigt unterschiedliches Verhalten gegenüber verschiedenen Personen und entwickelt ein Netzwerk sozialer Beziehungen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👨‍👩‍👧</span> Beziehungslandkarte</h3>
+                <div class="relationship-map">
+                    <div class="map-title">Zu wem hat das Kind Beziehungen? (Klicken Sie auf die Personen und bewerten Sie die Bindungsstärke)</div>
+                    <div class="map-visual">
+                        <div class="relationship-circle" data-person="mutter">
+                            <div class="circle-ring" onclick="togglePerson('mutter')">
+                                <span class="person-icon">👩</span>
+                                <span class="person-label">Mutter</span>
+                            </div>
+                            <div class="relationship-strength">
+                                <div class="strength-dots">
+                                    <div class="strength-dot" onclick="setStrength('mutter', 1)"></div>
+                                    <div class="strength-dot" onclick="setStrength('mutter', 2)"></div>
+                                    <div class="strength-dot" onclick="setStrength('mutter', 3)"></div>
+                                    <div class="strength-dot" onclick="setStrength('mutter', 4)"></div>
+                                    <div class="strength-dot" onclick="setStrength('mutter', 5)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relationship-circle" data-person="vater">
+                            <div class="circle-ring" onclick="togglePerson('vater')">
+                                <span class="person-icon">👨</span>
+                                <span class="person-label">Vater</span>
+                            </div>
+                            <div class="relationship-strength">
+                                <div class="strength-dots">
+                                    <div class="strength-dot" onclick="setStrength('vater', 1)"></div>
+                                    <div class="strength-dot" onclick="setStrength('vater', 2)"></div>
+                                    <div class="strength-dot" onclick="setStrength('vater', 3)"></div>
+                                    <div class="strength-dot" onclick="setStrength('vater', 4)"></div>
+                                    <div class="strength-dot" onclick="setStrength('vater', 5)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relationship-circle" data-person="geschwister">
+                            <div class="circle-ring" onclick="togglePerson('geschwister')">
+                                <span class="person-icon">👧</span>
+                                <span class="person-label">Geschwister</span>
+                            </div>
+                            <div class="relationship-strength">
+                                <div class="strength-dots">
+                                    <div class="strength-dot" onclick="setStrength('geschwister', 1)"></div>
+                                    <div class="strength-dot" onclick="setStrength('geschwister', 2)"></div>
+                                    <div class="strength-dot" onclick="setStrength('geschwister', 3)"></div>
+                                    <div class="strength-dot" onclick="setStrength('geschwister', 4)"></div>
+                                    <div class="strength-dot" onclick="setStrength('geschwister', 5)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relationship-circle" data-person="grosseltern">
+                            <div class="circle-ring" onclick="togglePerson('grosseltern')">
+                                <span class="person-icon">👵</span>
+                                <span class="person-label">Großeltern</span>
+                            </div>
+                            <div class="relationship-strength">
+                                <div class="strength-dots">
+                                    <div class="strength-dot" onclick="setStrength('grosseltern', 1)"></div>
+                                    <div class="strength-dot" onclick="setStrength('grosseltern', 2)"></div>
+                                    <div class="strength-dot" onclick="setStrength('grosseltern', 3)"></div>
+                                    <div class="strength-dot" onclick="setStrength('grosseltern', 4)"></div>
+                                    <div class="strength-dot" onclick="setStrength('grosseltern', 5)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relationship-circle" data-person="erzieherin">
+                            <div class="circle-ring" onclick="togglePerson('erzieherin')">
+                                <span class="person-icon">👩‍🏫</span>
+                                <span class="person-label">Erzieherin</span>
+                            </div>
+                            <div class="relationship-strength">
+                                <div class="strength-dots">
+                                    <div class="strength-dot" onclick="setStrength('erzieherin', 1)"></div>
+                                    <div class="strength-dot" onclick="setStrength('erzieherin', 2)"></div>
+                                    <div class="strength-dot" onclick="setStrength('erzieherin', 3)"></div>
+                                    <div class="strength-dot" onclick="setStrength('erzieherin', 4)"></div>
+                                    <div class="strength-dot" onclick="setStrength('erzieherin', 5)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">❤️</span> Beziehungsqualitäten</h3>
+                <p>Diese Qualitäten zeigt das Kind in Beziehungen:</p>
+                <div class="quality-grid">
+                    <div class="quality-card" onclick="toggleQuality(this)">
+                        <div class="icon">🤗</div>
+                        <div class="title">Nähe suchen</div>
+                        <div class="desc">Geht aktiv auf Bezugspersonen zu</div>
+                    </div>
+                    <div class="quality-card" onclick="toggleQuality(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Freude zeigen</div>
+                        <div class="desc">Freut sich bei Wiedersehen</div>
+                    </div>
+                    <div class="quality-card" onclick="toggleQuality(this)">
+                        <div class="icon">🔍</div>
+                        <div class="title">Unterscheiden</div>
+                        <div class="desc">Reagiert verschieden auf Personen</div>
+                    </div>
+                    <div class="quality-card" onclick="toggleQuality(this)">
+                        <div class="icon">🛡️</div>
+                        <div class="title">Trost suchen</div>
+                        <div class="desc">Wendet sich bei Kummer an Bezugsperson</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Interaktionsmuster</h3>
+                <div class="interaction-patterns">
+                    <div class="pattern-title">Das Kind zeigt folgende Interaktionsmuster:</div>
+                    <div class="pattern-list">
+                        <div class="pattern-item" onclick="togglePattern(this)">
+                            <span class="pattern-icon">👁️</span>
+                            <span class="pattern-text">Sucht Blickkontakt bei bekannten Personen</span>
+                            <span class="pattern-check">✓</span>
+                        </div>
+                        <div class="pattern-item" onclick="togglePattern(this)">
+                            <span class="pattern-icon">🤝</span>
+                            <span class="pattern-text">Reagiert auf Kontaktangebote positiv</span>
+                            <span class="pattern-check">✓</span>
+                        </div>
+                        <div class="pattern-item" onclick="togglePattern(this)">
+                            <span class="pattern-icon">📣</span>
+                            <span class="pattern-text">Initiiert selbst Kontakt</span>
+                            <span class="pattern-check">✓</span>
+                        </div>
+                        <div class="pattern-item" onclick="togglePattern(this)">
+                            <span class="pattern-icon">🎭</span>
+                            <span class="pattern-text">Spiegelt Emotionen der Bezugsperson</span>
+                            <span class="pattern-check">✓</span>
+                        </div>
+                        <div class="pattern-item" onclick="togglePattern(this)">
+                            <span class="pattern-icon">🔙</span>
+                            <span class="pattern-text">Nutzt Bezugsperson als sichere Basis</span>
+                            <span class="pattern-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👶</span> Interesse an Gleichaltrigen</h3>
+                <div class="peer-section">
+                    <div class="peer-title">Das Kind zeigt folgendes Verhalten gegenüber anderen Kindern:</div>
+                    <div class="peer-behaviors">
+                        <div class="peer-item" onclick="togglePeer(this)">
+                            <span class="peer-icon">👀</span>
+                            <span class="peer-text">Beobachtet andere Kinder interessiert</span>
+                            <span class="peer-check">✓</span>
+                        </div>
+                        <div class="peer-item" onclick="togglePeer(this)">
+                            <span class="peer-icon">😊</span>
+                            <span class="peer-text">Lächelt andere Kinder an</span>
+                            <span class="peer-check">✓</span>
+                        </div>
+                        <div class="peer-item" onclick="togglePeer(this)">
+                            <span class="peer-icon">🤚</span>
+                            <span class="peer-text">Streckt Hand nach anderen Kindern aus</span>
+                            <span class="peer-check">✓</span>
+                        </div>
+                        <div class="peer-item" onclick="togglePeer(this)">
+                            <span class="peer-icon">🧸</span>
+                            <span class="peer-text">Spielt neben anderen (Parallelspiel)</span>
+                            <span class="peer-check">✓</span>
+                        </div>
+                        <div class="peer-item" onclick="togglePeer(this)">
+                            <span class="peer-icon">🔄</span>
+                            <span class="peer-text">Einfache Nachahmung anderer Kinder</span>
+                            <span class="peer-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Gesamteinschätzung</h3>
+                <div class="summary-scale">
+                    <div class="scale-title">Wie entwickelt sind die ersten Beziehungen insgesamt?</div>
+                    <div class="scale-options">
+                        <button class="scale-btn beginning" onclick="setSummary('beginning')">🌱 Beginnend</button>
+                        <button class="scale-btn developing" onclick="setSummary('developing')">🌿 Entwickelnd</button>
+                        <button class="scale-btn established" onclick="setSummary('established')">🌳 Etabliert</button>
+                    </div>
+                    <div class="scale-display" id="summaryDisplay">Noch nicht eingeschätzt</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie erste Beziehungen:</div>
+                    <div class="tip-item"><span class="tip-icon">👨‍👩‍👧</span>Stabile, verlässliche Bezugspersonen ermöglichen</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Regelmäßigen Kontakt zu wichtigen Personen pflegen</div>
+                    <div class="tip-item"><span class="tip-icon">👶</span>Kontakt zu anderen Kindern ermöglichen</div>
+                    <div class="tip-item"><span class="tip-icon">⏳</span>Zeit für Beziehungsaufbau geben</div>
+                    <div class="tip-item"><span class="tip-icon">🛡️</span>Sichere Basis für Erkundung bieten</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Zu wem hat das Kind die engste Beziehung? Wie unterscheidet sich sein Verhalten bei verschiedenen Personen? Wie reagiert es auf andere Kinder?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let relationships = {};
+        let summary = '';
+
+        function togglePerson(person) {
+            const circle = document.querySelector(`[data-person="${person}"] .circle-ring`);
+            circle.classList.toggle('active');
+            if (!circle.classList.contains('active')) {
+                relationships[person] = 0;
+                updateStrengthDots(person, 0);
+            }
+            saveData();
+        }
+
+        function setStrength(person, level) {
+            relationships[person] = level;
+            const circle = document.querySelector(`[data-person="${person}"] .circle-ring`);
+            if (!circle.classList.contains('active')) {
+                circle.classList.add('active');
+            }
+            updateStrengthDots(person, level);
+            saveData();
+        }
+
+        function updateStrengthDots(person, level) {
+            const dots = document.querySelectorAll(`[data-person="${person}"] .strength-dot`);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('filled', i < level);
+            });
+        }
+
+        function toggleQuality(el) { el.classList.toggle('observed'); saveData(); }
+        function togglePattern(el) { el.classList.toggle('checked'); saveData(); }
+        function togglePeer(el) { el.classList.toggle('checked'); saveData(); }
+
+        function setSummary(level) {
+            summary = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${level}`).classList.add('selected');
+            const labels = {
+                beginning: '🌱 Beginnend - Erste Beziehungen entstehen',
+                developing: '🌿 Entwickelnd - Beziehungen werden stärker',
+                established: '🌳 Etabliert - Stabile Beziehungen vorhanden'
+            };
+            document.getElementById('summaryDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                relationships,
+                qualities: [...document.querySelectorAll('.quality-card.observed')].map(el => el.querySelector('.title').textContent),
+                patterns: [...document.querySelectorAll('.pattern-item.checked')].map(el => el.querySelector('.pattern-text').textContent),
+                peerBehaviors: [...document.querySelectorAll('.peer-item.checked')].map(el => el.querySelector('.peer-text').textContent),
+                summary,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_beziehungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_beziehungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.relationships) {
+                    relationships = data.relationships;
+                    Object.keys(relationships).forEach(person => {
+                        if (relationships[person] > 0) {
+                            document.querySelector(`[data-person="${person}"] .circle-ring`).classList.add('active');
+                            updateStrengthDots(person, relationships[person]);
+                        }
+                    });
+                }
+                document.querySelectorAll('.quality-card').forEach(el => {
+                    if (data.qualities && data.qualities.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.pattern-item').forEach(el => {
+                    if (data.patterns && data.patterns.includes(el.querySelector('.pattern-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                document.querySelectorAll('.peer-item').forEach(el => {
+                    if (data.peerBehaviors && data.peerBehaviors.includes(el.querySelector('.peer-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.summary) setSummary(data.summary);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

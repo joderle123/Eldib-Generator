@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selbstbewusstsein - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffb74d 0%, #ffa726 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffb74d 0%, #ffa726 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ffa726; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .self-signs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .sign-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .sign-card:hover { border-color: #ffa726; transform: scale(1.02); }
+        .sign-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .sign-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .sign-card .title { font-weight: bold; margin-bottom: 5px; }
+        .sign-card .desc { font-size: 0.85em; color: #666; }
+        .identity-section { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .identity-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .identity-list { display: flex; flex-direction: column; gap: 10px; }
+        .identity-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .identity-item:hover { background: #e3f2fd; }
+        .identity-item.checked { background: #e8f5e9; }
+        .identity-icon { font-size: 1.3em; }
+        .identity-text { flex: 1; }
+        .identity-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .identity-item.checked .identity-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .assertion-section { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .assertion-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .assertion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .assertion-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .assertion-card:hover { border-color: #9c27b0; }
+        .assertion-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .assertion-card .a-icon { font-size: 2em; margin-bottom: 8px; }
+        .assertion-card .a-title { font-weight: bold; font-size: 0.9em; }
+        .confidence-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-visual { display: flex; justify-content: center; align-items: center; gap: 5px; margin: 20px 0; }
+        .scale-star { font-size: 2.5em; cursor: pointer; transition: all 0.2s; opacity: 0.3; }
+        .scale-star.active { opacity: 1; transform: scale(1.1); }
+        .scale-display { text-align: center; margin-top: 10px; font-size: 1.1em; }
+        .situation-tracker { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .situation-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .situation-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #fff59d; }
+        .situation-item:last-child { border-bottom: none; margin-bottom: 0; }
+        .situation-label { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .situation-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .situation-btn { padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .situation-btn:hover { border-color: #fbc02d; }
+        .situation-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ffa726; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .self-signs, .assertion-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>💪 Selbstbewusstsein</h1>
+            <p>Sich selbst kennen und vertreten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-30/S-31)</h3>
+                <p>Das Kind entwickelt ein positives Selbstbild. Es kennt seine Stärken und Vorlieben, kann "Ich" sagen und traut sich, eigene Wünsche auszudrücken.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🌟</span> Zeichen von Selbstbewusstsein</h3>
+                <p>Diese Verhaltensweisen zeigt das Kind:</p>
+                <div class="self-signs">
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Sagt "Ich"</div>
+                        <div class="desc">Verwendet das Wort "Ich" korrekt</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">💭</div>
+                        <div class="title">Äußert Wünsche</div>
+                        <div class="desc">Sagt, was es möchte</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🛑</div>
+                        <div class="title">Sagt Nein</div>
+                        <div class="desc">Kann ablehnen, wenn es nicht will</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🎨</div>
+                        <div class="title">Zeigt Vorlieben</div>
+                        <div class="desc">Weiß, was es mag und nicht mag</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">💪</div>
+                        <div class="title">Stolz auf sich</div>
+                        <div class="desc">Freut sich über eigene Leistungen</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🙋</div>
+                        <div class="title">Traut sich</div>
+                        <div class="desc">Probiert Neues aus</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Selbsterkenntnis</h3>
+                <div class="identity-section">
+                    <div class="identity-title">Das Kind weiß über sich selbst:</div>
+                    <div class="identity-list">
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">📛</span>
+                            <span class="identity-text">Seinen eigenen Namen</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">🎂</span>
+                            <span class="identity-text">Sein Alter</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">👦👧</span>
+                            <span class="identity-text">Ob es Junge oder Mädchen ist</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">👨‍👩‍👧</span>
+                            <span class="identity-text">Namen der Familienmitglieder</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">🎨</span>
+                            <span class="identity-text">Lieblingsfarbe/-spielzeug</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                        <div class="identity-item" onclick="toggleIdentity(this)">
+                            <span class="identity-icon">💪</span>
+                            <span class="identity-text">Was es gut kann</span>
+                            <span class="identity-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🦁</span> Selbstbehauptung</h3>
+                <div class="assertion-section">
+                    <div class="assertion-title">Das Kind kann sich behaupten:</div>
+                    <div class="assertion-grid">
+                        <div class="assertion-card" onclick="toggleAssertion(this)">
+                            <div class="a-icon">🛑</div>
+                            <div class="a-title">"Stopp" sagen</div>
+                        </div>
+                        <div class="assertion-card" onclick="toggleAssertion(this)">
+                            <div class="a-icon">🗣️</div>
+                            <div class="a-title">Meinung äußern</div>
+                        </div>
+                        <div class="assertion-card" onclick="toggleAssertion(this)">
+                            <div class="a-icon">🆘</div>
+                            <div class="a-title">Um Hilfe bitten</div>
+                        </div>
+                        <div class="assertion-card" onclick="toggleAssertion(this)">
+                            <div class="a-icon">🎯</div>
+                            <div class="a-title">Eigene Ideen einbringen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Selbstvertrauen-Skala</h3>
+                <div class="confidence-scale">
+                    <div class="scale-title">Wie ausgeprägt ist das Selbstvertrauen?</div>
+                    <div class="scale-visual">
+                        <span class="scale-star" onclick="setConfidence(1)">⭐</span>
+                        <span class="scale-star" onclick="setConfidence(2)">⭐</span>
+                        <span class="scale-star" onclick="setConfidence(3)">⭐</span>
+                        <span class="scale-star" onclick="setConfidence(4)">⭐</span>
+                        <span class="scale-star" onclick="setConfidence(5)">⭐</span>
+                    </div>
+                    <div class="scale-display" id="confidenceDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Verhalten in Situationen</h3>
+                <div class="situation-tracker">
+                    <div class="situation-title">Wie verhält sich das Kind?</div>
+                    <div class="situation-item">
+                        <div class="situation-label">🆕 Bei neuen Aktivitäten:</div>
+                        <div class="situation-options" data-sit="neu">
+                            <div class="situation-btn" onclick="selectSituation('neu', this)">Traut sich sofort</div>
+                            <div class="situation-btn" onclick="selectSituation('neu', this)">Braucht Ermutigung</div>
+                            <div class="situation-btn" onclick="selectSituation('neu', this)">Sehr zurückhaltend</div>
+                        </div>
+                    </div>
+                    <div class="situation-item">
+                        <div class="situation-label">👥 In der Gruppe:</div>
+                        <div class="situation-options" data-sit="gruppe">
+                            <div class="situation-btn" onclick="selectSituation('gruppe', this)">Selbstbewusst</div>
+                            <div class="situation-btn" onclick="selectSituation('gruppe', this)">Mal so, mal so</div>
+                            <div class="situation-btn" onclick="selectSituation('gruppe', this)">Eher schüchtern</div>
+                        </div>
+                    </div>
+                    <div class="situation-item">
+                        <div class="situation-label">❌ Bei Misserfolg:</div>
+                        <div class="situation-options" data-sit="misserfolg">
+                            <div class="situation-btn" onclick="selectSituation('misserfolg', this)">Versucht es nochmal</div>
+                            <div class="situation-btn" onclick="selectSituation('misserfolg', this)">Braucht Zuspruch</div>
+                            <div class="situation-btn" onclick="selectSituation('misserfolg', this)">Gibt schnell auf</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Selbstbewusstsein:</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Erfolge anerkennen und loben</div>
+                    <div class="tip-item"><span class="tip-icon">🎯</span>Angemessene Herausforderungen bieten</div>
+                    <div class="tip-item"><span class="tip-icon">👂</span>Meinungen und Wünsche ernst nehmen</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Entscheidungen ermöglichen</div>
+                    <div class="tip-item"><span class="tip-icon">💪</span>Stärken benennen und fördern</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wo zeigt das Kind Selbstbewusstsein? Wo braucht es Unterstützung? Was stärkt sein Selbstvertrauen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let confidence = 0;
+        let situations = {};
+
+        function toggleSign(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleIdentity(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleAssertion(el) { el.classList.toggle('achieved'); saveData(); }
+
+        function setConfidence(level) {
+            confidence = level;
+            document.querySelectorAll('.scale-star').forEach((star, i) => {
+                star.classList.toggle('active', i < level);
+            });
+            const labels = ['', 'Sehr gering', 'Gering', 'Mittel', 'Gut', 'Sehr gut'];
+            document.getElementById('confidenceDisplay').textContent = `${level}/5 - ${labels[level]}`;
+            saveData();
+        }
+
+        function selectSituation(sit, el) {
+            situations[sit] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.situation-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                signs: [...document.querySelectorAll('.sign-card.observed')].map(el => el.querySelector('.title').textContent),
+                identity: [...document.querySelectorAll('.identity-item.checked')].map(el => el.querySelector('.identity-text').textContent),
+                assertions: [...document.querySelectorAll('.assertion-card.achieved')].map(el => el.querySelector('.a-title').textContent),
+                confidence,
+                situations,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_selbstbewusstsein', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_selbstbewusstsein');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.sign-card').forEach(el => {
+                    if (data.signs && data.signs.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.identity-item').forEach(el => {
+                    if (data.identity && data.identity.includes(el.querySelector('.identity-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                document.querySelectorAll('.assertion-card').forEach(el => {
+                    if (data.assertions && data.assertions.includes(el.querySelector('.a-title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                if (data.confidence) setConfidence(data.confidence);
+                if (data.situations) {
+                    situations = data.situations;
+                    Object.keys(situations).forEach(sit => {
+                        const container = document.querySelector(`[data-sit="${sit}"]`);
+                        if (container) {
+                            container.querySelectorAll('.situation-btn').forEach(btn => {
+                                if (btn.textContent === situations[sit]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

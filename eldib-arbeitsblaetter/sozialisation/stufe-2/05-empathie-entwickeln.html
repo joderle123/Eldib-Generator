@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empathie entwickeln - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ce93d8 0%, #ba68c8 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ce93d8 0%, #ba68c8 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ba68c8; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .empathy-signs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .sign-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .sign-card:hover { border-color: #ba68c8; transform: scale(1.02); }
+        .sign-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .sign-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .sign-card .title { font-weight: bold; margin-bottom: 5px; }
+        .sign-card .desc { font-size: 0.85em; color: #666; }
+        .emotion-recognition { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .emotion-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .emotion-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .emotion-item { text-align: center; padding: 15px 10px; background: white; border-radius: 12px; cursor: pointer; border: 3px solid #e0e0e0; transition: all 0.3s; }
+        .emotion-item:hover { border-color: #2196F3; }
+        .emotion-item.recognized { border-color: #4CAF50; background: #e8f5e9; }
+        .emotion-item .emotion-face { font-size: 2em; }
+        .emotion-item .emotion-name { font-size: 0.8em; margin-top: 5px; }
+        .scenario-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scenario-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .scenario-item { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
+        .scenario-desc { margin-bottom: 10px; font-style: italic; }
+        .scenario-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .scenario-btn { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .scenario-btn:hover { border-color: #fbc02d; }
+        .scenario-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .response-tracker { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .response-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .response-list { display: flex; flex-direction: column; gap: 10px; }
+        .response-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .response-item:hover { background: #fff3e0; }
+        .response-item.checked { background: #e8f5e9; }
+        .response-icon { font-size: 1.3em; }
+        .response-text { flex: 1; }
+        .response-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .response-item.checked .response-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .level-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 0.95em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.level1 { background: #ffcdd2; color: #c62828; }
+        .scale-btn.level2 { background: #ffe0b2; color: #ef6c00; }
+        .scale-btn.level3 { background: #fff9c4; color: #f57f17; }
+        .scale-btn.level4 { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ba68c8; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .empathy-signs { grid-template-columns: 1fr; } .emotion-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>💜 Empathie entwickeln</h1>
+            <p>Gefühle anderer verstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-24/S-25)</h3>
+                <p>Das Kind beginnt, die Gefühle anderer wahrzunehmen und darauf zu reagieren. Es zeigt erste Formen von Mitgefühl und Tröstverhalten.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">❤️</span> Zeichen von Empathie</h3>
+                <p>Diese empathischen Verhaltensweisen zeigt das Kind:</p>
+                <div class="empathy-signs">
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">👀</div>
+                        <div class="title">Bemerkt Gefühle</div>
+                        <div class="desc">Nimmt wahr, wenn andere traurig/fröhlich sind</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">😢</div>
+                        <div class="title">Mitfühlen</div>
+                        <div class="desc">Wird selbst traurig, wenn andere weinen</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🤗</div>
+                        <div class="title">Trösten wollen</div>
+                        <div class="desc">Versucht andere zu trösten</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">🧸</div>
+                        <div class="title">Hilfe anbieten</div>
+                        <div class="desc">Bringt Kuscheltier oder Spielzeug</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">❓</div>
+                        <div class="title">Nachfragen</div>
+                        <div class="desc">Fragt "Was ist los?" oder "Warum weinst du?"</div>
+                    </div>
+                    <div class="sign-card" onclick="toggleSign(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Freude teilen</div>
+                        <div class="desc">Freut sich mit, wenn andere glücklich sind</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Emotionen bei anderen erkennen</h3>
+                <div class="emotion-recognition">
+                    <div class="emotion-title">Welche Emotionen erkennt das Kind bei anderen?</div>
+                    <div class="emotion-grid">
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😊</div>
+                            <div class="emotion-name">Freude</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😢</div>
+                            <div class="emotion-name">Trauer</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😠</div>
+                            <div class="emotion-name">Ärger</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😨</div>
+                            <div class="emotion-name">Angst</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😲</div>
+                            <div class="emotion-name">Überraschung</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">🤢</div>
+                            <div class="emotion-name">Ekel</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😳</div>
+                            <div class="emotion-name">Scham</div>
+                        </div>
+                        <div class="emotion-item" onclick="toggleEmotion(this)">
+                            <div class="emotion-face">😤</div>
+                            <div class="emotion-name">Frustration</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎬</span> Reaktionen in Situationen</h3>
+                <div class="scenario-section">
+                    <div class="scenario-title">Wie reagiert das Kind in diesen Situationen?</div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 "Ein anderes Kind weint, weil es hingefallen ist:"</div>
+                        <div class="scenario-options" data-scenario="weinen">
+                            <div class="scenario-btn" onclick="selectScenario('weinen', this)">Ignoriert</div>
+                            <div class="scenario-btn" onclick="selectScenario('weinen', this)">Schaut hin</div>
+                            <div class="scenario-btn" onclick="selectScenario('weinen', this)">Geht hin</div>
+                            <div class="scenario-btn" onclick="selectScenario('weinen', this)">Tröstet</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 "Ein Kind freut sich über ein Geschenk:"</div>
+                        <div class="scenario-options" data-scenario="freude">
+                            <div class="scenario-btn" onclick="selectScenario('freude', this)">Ignoriert</div>
+                            <div class="scenario-btn" onclick="selectScenario('freude', this)">Schaut zu</div>
+                            <div class="scenario-btn" onclick="selectScenario('freude', this)">Lächelt mit</div>
+                            <div class="scenario-btn" onclick="selectScenario('freude', this)">Freut sich aktiv mit</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 "Ein Kind hat Angst vor etwas:"</div>
+                        <div class="scenario-options" data-scenario="angst">
+                            <div class="scenario-btn" onclick="selectScenario('angst', this)">Ignoriert</div>
+                            <div class="scenario-btn" onclick="selectScenario('angst', this)">Beobachtet</div>
+                            <div class="scenario-btn" onclick="selectScenario('angst', this)">Zeigt Sorge</div>
+                            <div class="scenario-btn" onclick="selectScenario('angst', this)">Versucht zu helfen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🤝</span> Tröst- und Hilfeverhalten</h3>
+                <div class="response-tracker">
+                    <div class="response-title">Diese Verhaltensweisen zeigt das Kind:</div>
+                    <div class="response-list">
+                        <div class="response-item" onclick="toggleResponse(this)">
+                            <span class="response-icon">👋</span>
+                            <span class="response-text">Streichelt oder berührt sanft</span>
+                            <span class="response-check">✓</span>
+                        </div>
+                        <div class="response-item" onclick="toggleResponse(this)">
+                            <span class="response-icon">🗣️</span>
+                            <span class="response-text">Sagt tröstende Worte</span>
+                            <span class="response-check">✓</span>
+                        </div>
+                        <div class="response-item" onclick="toggleResponse(this)">
+                            <span class="response-icon">👩</span>
+                            <span class="response-text">Holt einen Erwachsenen</span>
+                            <span class="response-check">✓</span>
+                        </div>
+                        <div class="response-item" onclick="toggleResponse(this)">
+                            <span class="response-icon">🧸</span>
+                            <span class="response-text">Gibt eigenes Spielzeug ab</span>
+                            <span class="response-check">✓</span>
+                        </div>
+                        <div class="response-item" onclick="toggleResponse(this)">
+                            <span class="response-icon">🤗</span>
+                            <span class="response-text">Umarmt oder nimmt in den Arm</span>
+                            <span class="response-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Empathie-Entwicklungsstand</h3>
+                <div class="level-scale">
+                    <div class="scale-title">Wie entwickelt ist die Empathiefähigkeit?</div>
+                    <div class="scale-options">
+                        <button class="scale-btn level1" onclick="setLevel('level1')">Beginnend</button>
+                        <button class="scale-btn level2" onclick="setLevel('level2')">Entwickelnd</button>
+                        <button class="scale-btn level3" onclick="setLevel('level3')">Fortgeschritten</button>
+                        <button class="scale-btn level4" onclick="setLevel('level4')">Gut ausgeprägt</button>
+                    </div>
+                    <div class="scale-display" id="levelDisplay">Noch nicht eingeschätzt</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Empathie:</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Bücher über Gefühle vorlesen und besprechen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Gefühle benennen und erklären</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Rollenspiele mit Gefühlsthemen</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Empathisches Verhalten loben</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Selbst als Vorbild empathisch sein</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: In welchen Situationen zeigt das Kind Empathie? Wie tröstet es? Welche Gefühle erkennt es gut?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let scenarios = {};
+        let level = '';
+
+        function toggleSign(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleEmotion(el) { el.classList.toggle('recognized'); saveData(); }
+        function toggleResponse(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectScenario(scenario, el) {
+            scenarios[scenario] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setLevel(lvl) {
+            level = lvl;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${lvl}`).classList.add('selected');
+            const labels = {
+                level1: 'Beginnend - Erste Anzeichen von Empathie',
+                level2: 'Entwickelnd - Nimmt Gefühle wahr',
+                level3: 'Fortgeschritten - Reagiert auf Gefühle',
+                level4: 'Gut ausgeprägt - Zeigt aktives Mitgefühl'
+            };
+            document.getElementById('levelDisplay').textContent = labels[lvl];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                signs: [...document.querySelectorAll('.sign-card.observed')].map(el => el.querySelector('.title').textContent),
+                emotions: [...document.querySelectorAll('.emotion-item.recognized')].map(el => el.querySelector('.emotion-name').textContent),
+                scenarios,
+                responses: [...document.querySelectorAll('.response-item.checked')].map(el => el.querySelector('.response-text').textContent),
+                level,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_empathie', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_empathie');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.sign-card').forEach(el => {
+                    if (data.signs && data.signs.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.emotion-item').forEach(el => {
+                    if (data.emotions && data.emotions.includes(el.querySelector('.emotion-name').textContent)) {
+                        el.classList.add('recognized');
+                    }
+                });
+                if (data.scenarios) {
+                    scenarios = data.scenarios;
+                    Object.keys(scenarios).forEach(scenario => {
+                        const container = document.querySelector(`[data-scenario="${scenario}"]`);
+                        if (container) {
+                            container.querySelectorAll('.scenario-btn').forEach(btn => {
+                                if (btn.textContent === scenarios[scenario]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                document.querySelectorAll('.response-item').forEach(el => {
+                    if (data.responses && data.responses.includes(el.querySelector('.response-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.level) setLevel(data.level);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

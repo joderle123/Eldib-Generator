@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aufmerksamkeit teilen - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #c5e1a5 0%, #aed581 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #c5e1a5 0%, #aed581 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #aed581; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .attention-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .attention-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .attention-card:hover { border-color: #aed581; transform: scale(1.02); }
+        .attention-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .attention-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .attention-card .title { font-weight: bold; margin-bottom: 5px; }
+        .attention-card .desc { font-size: 0.85em; color: #666; }
+        .joint-attention { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .joint-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .joint-diagram { display: flex; justify-content: center; align-items: center; gap: 30px; margin: 20px 0; flex-wrap: wrap; }
+        .joint-element { text-align: center; }
+        .joint-element .icon { font-size: 3em; margin-bottom: 5px; }
+        .joint-element .label { font-size: 0.85em; }
+        .joint-arrow { font-size: 2em; color: #2196F3; }
+        .joint-types { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .type-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .type-list { display: flex; flex-direction: column; gap: 10px; }
+        .type-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; cursor: pointer; transition: all 0.3s; border: 3px solid #e0e0e0; }
+        .type-item:hover { border-color: #fbc02d; }
+        .type-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .type-icon { font-size: 1.5em; }
+        .type-content { flex: 1; }
+        .type-name { font-weight: bold; margin-bottom: 3px; }
+        .type-desc { font-size: 0.85em; color: #666; }
+        .type-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .type-item.checked .type-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .pointing-section { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .pointing-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .pointing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .pointing-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .pointing-card:hover { border-color: #9c27b0; }
+        .pointing-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .pointing-card .p-icon { font-size: 2em; margin-bottom: 8px; }
+        .pointing-card .p-title { font-weight: bold; font-size: 0.9em; }
+        .frequency-scale { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.rare { background: #ffcdd2; color: #c62828; }
+        .scale-btn.sometimes { background: #fff9c4; color: #f57f17; }
+        .scale-btn.often { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .development-info { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .dev-title { font-weight: bold; margin-bottom: 10px; }
+        .dev-text { font-size: 0.95em; line-height: 1.6; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #aed581; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .attention-grid, .pointing-grid { grid-template-columns: 1fr; } .joint-diagram { flex-direction: column; } .joint-arrow { transform: rotate(90deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>👀 Aufmerksamkeit teilen</h1>
+            <p>Gemeinsame Aufmerksamkeit entwickeln</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-13/S-14)</h3>
+                <p>Das Kind entwickelt die Fähigkeit zur geteilten Aufmerksamkeit (Joint Attention). Es kann seine Aufmerksamkeit mit anderen teilen, indem es Blicke folgt, zeigt und die Aufmerksamkeit anderer lenkt.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Beobachtete Aufmerksamkeitsfähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind:</p>
+                <div class="attention-grid">
+                    <div class="attention-card" onclick="toggleAttention(this)">
+                        <div class="icon">👁️</div>
+                        <div class="title">Blick folgen</div>
+                        <div class="desc">Schaut dorthin, wo Erwachsener hinschaut</div>
+                    </div>
+                    <div class="attention-card" onclick="toggleAttention(this)">
+                        <div class="icon">👆</div>
+                        <div class="title">Zeigegeste folgen</div>
+                        <div class="desc">Schaut in Zeigerichtung</div>
+                    </div>
+                    <div class="attention-card" onclick="toggleAttention(this)">
+                        <div class="icon">☝️</div>
+                        <div class="title">Selbst zeigen</div>
+                        <div class="desc">Zeigt auf interessante Dinge</div>
+                    </div>
+                    <div class="attention-card" onclick="toggleAttention(this)">
+                        <div class="icon">🔄</div>
+                        <div class="title">Blickwechsel</div>
+                        <div class="desc">Wechselt Blick zwischen Objekt und Person</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔗</span> Geteilte Aufmerksamkeit (Joint Attention)</h3>
+                <div class="joint-attention">
+                    <div class="joint-title">Die Dreiecksbeziehung der geteilten Aufmerksamkeit:</div>
+                    <div class="joint-diagram">
+                        <div class="joint-element">
+                            <div class="icon">👶</div>
+                            <div class="label">Kind</div>
+                        </div>
+                        <div class="joint-arrow">↔️</div>
+                        <div class="joint-element">
+                            <div class="icon">🧸</div>
+                            <div class="label">Objekt</div>
+                        </div>
+                        <div class="joint-arrow">↔️</div>
+                        <div class="joint-element">
+                            <div class="icon">👩</div>
+                            <div class="label">Erwachsener</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-size: 0.9em; color: #666;">Kind, Bezugsperson und Objekt bilden zusammen den Fokus der Aufmerksamkeit</p>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Formen der geteilten Aufmerksamkeit</h3>
+                <div class="joint-types">
+                    <div class="type-title">Das Kind zeigt folgende Formen:</div>
+                    <div class="type-list">
+                        <div class="type-item" onclick="toggleType(this)">
+                            <span class="type-icon">👀</span>
+                            <div class="type-content">
+                                <div class="type-name">Reagierende Joint Attention</div>
+                                <div class="type-desc">Folgt dem Blick oder der Zeigegeste des Erwachsenen</div>
+                            </div>
+                            <span class="type-check">✓</span>
+                        </div>
+                        <div class="type-item" onclick="toggleType(this)">
+                            <span class="type-icon">☝️</span>
+                            <div class="type-content">
+                                <div class="type-name">Initiierende Joint Attention</div>
+                                <div class="type-desc">Lenkt aktiv die Aufmerksamkeit des Erwachsenen auf etwas</div>
+                            </div>
+                            <span class="type-check">✓</span>
+                        </div>
+                        <div class="type-item" onclick="toggleType(this)">
+                            <span class="type-icon">🔄</span>
+                            <div class="type-content">
+                                <div class="type-name">Referenzieller Blickwechsel</div>
+                                <div class="type-desc">Wechselt Blick zwischen Objekt und Person hin und her</div>
+                            </div>
+                            <span class="type-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">👆</span> Arten des Zeigens</h3>
+                <div class="pointing-section">
+                    <div class="pointing-title">Das Kind verwendet diese Zeigegesten:</div>
+                    <div class="pointing-grid">
+                        <div class="pointing-card" onclick="togglePointing(this)">
+                            <div class="p-icon">🫴</div>
+                            <div class="p-title">Proto-imperatives Zeigen</div>
+                            <p style="font-size:0.8em;color:#666;margin-top:5px;">Will etwas haben</p>
+                        </div>
+                        <div class="pointing-card" onclick="togglePointing(this)">
+                            <div class="p-icon">☝️</div>
+                            <div class="p-title">Proto-deklaratives Zeigen</div>
+                            <p style="font-size:0.8em;color:#666;margin-top:5px;">Will etwas teilen/zeigen</p>
+                        </div>
+                        <div class="pointing-card" onclick="togglePointing(this)">
+                            <div class="p-icon">👋</div>
+                            <div class="p-title">Zeigen mit Handöffnung</div>
+                            <p style="font-size:0.8em;color:#666;margin-top:5px;">Ganze Hand zeigt</p>
+                        </div>
+                        <div class="pointing-card" onclick="togglePointing(this)">
+                            <div class="p-icon">👆</div>
+                            <div class="p-title">Zeigen mit Zeigefinger</div>
+                            <p style="font-size:0.8em;color:#666;margin-top:5px;">Präzises Zeigen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Häufigkeit der geteilten Aufmerksamkeit</h3>
+                <div class="frequency-scale">
+                    <div class="scale-title">Wie oft zeigt das Kind geteilte Aufmerksamkeit?</div>
+                    <div class="scale-buttons">
+                        <button class="scale-btn rare" onclick="setFrequency('rare')">😔 Selten</button>
+                        <button class="scale-btn sometimes" onclick="setFrequency('sometimes')">🙂 Manchmal</button>
+                        <button class="scale-btn often" onclick="setFrequency('often')">😊 Oft</button>
+                    </div>
+                    <div class="scale-display" id="frequencyDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📚</span> Entwicklungshintergrund</h3>
+                <div class="development-info">
+                    <div class="dev-title">Warum ist geteilte Aufmerksamkeit wichtig?</div>
+                    <div class="dev-text">
+                        Joint Attention ist ein wichtiger Meilenstein in der sozial-kommunikativen Entwicklung.
+                        Sie entsteht typischerweise zwischen 9-12 Monaten und ist Grundlage für:
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Spracherwerb (Wörter lernen durch gemeinsamen Fokus)</li>
+                            <li>Soziales Lernen (von anderen lernen)</li>
+                            <li>Theory of Mind (Verstehen, dass andere eigene Gedanken haben)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie geteilte Aufmerksamkeit:</div>
+                    <div class="tip-item"><span class="tip-icon">👀</span>Blick des Kindes aufnehmen und folgen</div>
+                    <div class="tip-item"><span class="tip-icon">👆</span>Deutlich auf interessante Dinge zeigen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Benennen, worauf das Kind schaut</div>
+                    <div class="tip-item"><span class="tip-icon">😲</span>Begeistert reagieren, wenn Kind etwas zeigt</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Gemeinsam Bilderbücher anschauen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie teilt das Kind seine Aufmerksamkeit? Initiiert es oder reagiert es vor allem? Worauf zeigt es besonders gerne?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let frequency = '';
+
+        function toggleAttention(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleType(el) { el.classList.toggle('checked'); saveData(); }
+        function togglePointing(el) { el.classList.toggle('selected'); saveData(); }
+
+        function setFrequency(level) {
+            frequency = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${level}`).classList.add('selected');
+            const labels = { rare: '😔 Selten - zeigt kaum geteilte Aufmerksamkeit', sometimes: '🙂 Manchmal - zeigt es in bestimmten Situationen', often: '😊 Oft - teilt regelmäßig Aufmerksamkeit' };
+            document.getElementById('frequencyDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                attentionSkills: [...document.querySelectorAll('.attention-card.observed')].map(el => el.querySelector('.title').textContent),
+                jointTypes: [...document.querySelectorAll('.type-item.checked')].map(el => el.querySelector('.type-name').textContent),
+                pointingTypes: [...document.querySelectorAll('.pointing-card.selected')].map(el => el.querySelector('.p-title').textContent),
+                frequency,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s1_aufmerksamkeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_aufmerksamkeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.attention-card').forEach(el => {
+                    if (data.attentionSkills && data.attentionSkills.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.type-item').forEach(el => {
+                    if (data.jointTypes && data.jointTypes.includes(el.querySelector('.type-name').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                document.querySelectorAll('.pointing-card').forEach(el => {
+                    if (data.pointingTypes && data.pointingTypes.includes(el.querySelector('.p-title').textContent)) {
+                        el.classList.add('selected');
+                    }
+                });
+                if (data.frequency) setFrequency(data.frequency);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

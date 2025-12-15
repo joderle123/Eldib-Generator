@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfliktverhalten - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ef9a9a 0%, #e57373 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ef9a9a 0%, #e57373 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #e57373; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .conflict-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .conflict-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .conflict-card:hover { border-color: #e57373; }
+        .conflict-card.frequent { border-color: #ff5722; background: #fbe9e7; }
+        .conflict-card .icon { font-size: 2em; margin-bottom: 8px; }
+        .conflict-card .title { font-weight: bold; font-size: 0.9em; }
+        .reaction-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .reaction-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .reaction-grid { display: flex; flex-direction: column; gap: 12px; }
+        .reaction-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; cursor: pointer; transition: all 0.3s; border: 3px solid #e0e0e0; }
+        .reaction-item:hover { border-color: #fbc02d; }
+        .reaction-item.observed { border-color: #ff5722; background: #fff3e0; }
+        .reaction-icon { font-size: 1.5em; }
+        .reaction-content { flex: 1; }
+        .reaction-name { font-weight: bold; }
+        .reaction-type { font-size: 0.8em; padding: 3px 8px; border-radius: 10px; display: inline-block; margin-top: 3px; }
+        .reaction-type.negative { background: #ffcdd2; color: #c62828; }
+        .reaction-type.developing { background: #fff9c4; color: #f57f17; }
+        .reaction-type.positive { background: #c8e6c9; color: #2e7d32; }
+        .strategy-section { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .strategy-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .strategy-list { display: flex; flex-direction: column; gap: 10px; }
+        .strategy-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .strategy-item:hover { background: #f1f8e9; }
+        .strategy-item.mastered { background: #e8f5e9; }
+        .strategy-icon { font-size: 1.3em; }
+        .strategy-text { flex: 1; }
+        .strategy-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .strategy-item.mastered .strategy-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .support-tracker { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .support-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .support-scale { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .support-label { font-size: 0.85em; }
+        .support-options { display: flex; gap: 10px; }
+        .support-btn { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #e0e0e0; background: white; cursor: pointer; font-size: 1.5em; transition: all 0.3s; }
+        .support-btn:hover { border-color: #2196F3; }
+        .support-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #e57373; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .conflict-types { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>⚡ Konfliktverhalten</h1>
+            <p>Mit Streit umgehen lernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-26/S-27)</h3>
+                <p>Das Kind lernt erste Strategien für den Umgang mit Konflikten. Es kann bei einfachen Streitigkeiten Hilfe holen und beginnt, Kompromisse zu akzeptieren.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💥</span> Typische Konfliktanlässe</h3>
+                <p>Bei diesen Themen entstehen häufig Konflikte (klicken für häufige Anlässe):</p>
+                <div class="conflict-types">
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">🧸</div>
+                        <div class="title">Spielzeug wegnehmen</div>
+                    </div>
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">⏰</div>
+                        <div class="title">Nicht warten können</div>
+                    </div>
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">👑</div>
+                        <div class="title">Bestimmen wollen</div>
+                    </div>
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">🪑</div>
+                        <div class="title">Platz-Streitigkeiten</div>
+                    </div>
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Mitspielen wollen</div>
+                    </div>
+                    <div class="conflict-card" onclick="toggleConflict(this)">
+                        <div class="icon">🎯</div>
+                        <div class="title">Regeln im Spiel</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">😤</span> Reaktionen bei Konflikten</h3>
+                <div class="reaction-section">
+                    <div class="reaction-title">Welche Reaktionen zeigt das Kind?</div>
+                    <div class="reaction-grid">
+                        <div class="reaction-item" onclick="toggleReaction(this)">
+                            <span class="reaction-icon">👊</span>
+                            <div class="reaction-content">
+                                <div class="reaction-name">Körperlich reagieren</div>
+                                <span class="reaction-type negative">Unreif</span>
+                            </div>
+                        </div>
+                        <div class="reaction-item" onclick="toggleReaction(this)">
+                            <span class="reaction-icon">😭</span>
+                            <div class="reaction-content">
+                                <div class="reaction-name">Weinen/Schreien</div>
+                                <span class="reaction-type developing">Entwickelnd</span>
+                            </div>
+                        </div>
+                        <div class="reaction-item" onclick="toggleReaction(this)">
+                            <span class="reaction-icon">🚶</span>
+                            <div class="reaction-content">
+                                <div class="reaction-name">Weggehn/Rückzug</div>
+                                <span class="reaction-type developing">Entwickelnd</span>
+                            </div>
+                        </div>
+                        <div class="reaction-item" onclick="toggleReaction(this)">
+                            <span class="reaction-icon">👩</span>
+                            <div class="reaction-content">
+                                <div class="reaction-name">Erwachsenen holen</div>
+                                <span class="reaction-type positive">Angemessen</span>
+                            </div>
+                        </div>
+                        <div class="reaction-item" onclick="toggleReaction(this)">
+                            <span class="reaction-icon">🗣️</span>
+                            <div class="reaction-content">
+                                <div class="reaction-name">Mit Worten lösen</div>
+                                <span class="reaction-type positive">Angemessen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Konstruktive Strategien</h3>
+                <div class="strategy-section">
+                    <div class="strategy-title">Diese Strategien kann das Kind bereits:</div>
+                    <div class="strategy-list">
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🛑</span>
+                            <span class="strategy-text">"Stopp" oder "Nein" sagen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">👩</span>
+                            <span class="strategy-text">Um Hilfe bitten</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🔄</span>
+                            <span class="strategy-text">Abwechseln akzeptieren</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🤝</span>
+                            <span class="strategy-text">Kompromiss eingehen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🗣️</span>
+                            <span class="strategy-text">Gefühle mit Worten ausdrücken</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                        <div class="strategy-item" onclick="toggleStrategy(this)">
+                            <span class="strategy-icon">🚶</span>
+                            <span class="strategy-text">Sich zurückziehen zum Beruhigen</span>
+                            <span class="strategy-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🆘</span> Benötigte Unterstützung</h3>
+                <div class="support-tracker">
+                    <div class="support-title">Wie viel Unterstützung braucht das Kind bei Konflikten?</div>
+                    <div class="support-scale">
+                        <span class="support-label">Viel Hilfe</span>
+                        <div class="support-options">
+                            <button class="support-btn" onclick="setSupport(1)">😰</button>
+                            <button class="support-btn" onclick="setSupport(2)">😟</button>
+                            <button class="support-btn" onclick="setSupport(3)">😐</button>
+                            <button class="support-btn" onclick="setSupport(4)">🙂</button>
+                            <button class="support-btn" onclick="setSupport(5)">😊</button>
+                        </div>
+                        <span class="support-label">Selbstständig</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie konstruktives Konfliktverhalten:</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Worte für Gefühle und Wünsche geben</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Lösungsstrategien im Rollenspiel üben</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Bücher über Streit und Versöhnung lesen</div>
+                    <div class="tip-item"><span class="tip-icon">🧘</span>Beruhigungsstrategien vermitteln</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Konstruktives Verhalten loben</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Bei welchen Konflikten reagiert das Kind wie? Welche Strategien helfen? Was eskaliert den Konflikt?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let supportLevel = 0;
+
+        function toggleConflict(el) { el.classList.toggle('frequent'); saveData(); }
+        function toggleReaction(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleStrategy(el) { el.classList.toggle('mastered'); saveData(); }
+
+        function setSupport(level) {
+            supportLevel = level;
+            document.querySelectorAll('.support-btn').forEach((btn, i) => {
+                btn.classList.toggle('selected', i < level);
+            });
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                conflicts: [...document.querySelectorAll('.conflict-card.frequent')].map(el => el.querySelector('.title').textContent),
+                reactions: [...document.querySelectorAll('.reaction-item.observed')].map(el => el.querySelector('.reaction-name').textContent),
+                strategies: [...document.querySelectorAll('.strategy-item.mastered')].map(el => el.querySelector('.strategy-text').textContent),
+                supportLevel,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_konflikt', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_konflikt');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.conflict-card').forEach(el => {
+                    if (data.conflicts && data.conflicts.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('frequent');
+                    }
+                });
+                document.querySelectorAll('.reaction-item').forEach(el => {
+                    if (data.reactions && data.reactions.includes(el.querySelector('.reaction-name').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.strategy-item').forEach(el => {
+                    if (data.strategies && data.strategies.includes(el.querySelector('.strategy-text').textContent)) {
+                        el.classList.add('mastered');
+                    }
+                });
+                if (data.supportLevel) setSupport(data.supportLevel);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

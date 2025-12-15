@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soziale Rituale - Sozialisation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #80deea 0%, #4dd0e1 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #80deea 0%, #4dd0e1 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4dd0e1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .ritual-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .ritual-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .ritual-card:hover { border-color: #4dd0e1; transform: scale(1.02); }
+        .ritual-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .ritual-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .ritual-card .title { font-weight: bold; margin-bottom: 5px; }
+        .ritual-card .desc { font-size: 0.85em; color: #666; }
+        .politeness-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .politeness-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .politeness-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .politeness-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .politeness-item:hover { background: #fffde7; }
+        .politeness-item.checked { background: #e8f5e9; }
+        .politeness-icon { font-size: 1.5em; }
+        .politeness-text { flex: 1; font-size: 0.9em; }
+        .politeness-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7em; }
+        .politeness-item.checked .politeness-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .context-section { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .context-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .context-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ce93d8; }
+        .context-item:last-child { margin-bottom: 0; border-bottom: none; }
+        .context-label { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .context-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .context-btn { padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .context-btn:hover { border-color: #9c27b0; }
+        .context-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .independence-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.reminder { background: #ffcdd2; color: #c62828; }
+        .scale-btn.sometimes { background: #fff9c4; color: #f57f17; }
+        .scale-btn.independent { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4dd0e1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .ritual-grid, .politeness-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe II</div>
+            <h1>👋 Soziale Rituale</h1>
+            <p>Begrüßen, Bedanken, Verabschieden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-34/S-35)</h3>
+                <p>Das Kind beherrscht grundlegende soziale Rituale wie Begrüßen und Verabschieden. Es verwendet Höflichkeitsformen wie "Bitte" und "Danke" und versteht ihre soziale Bedeutung.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Soziale Rituale</h3>
+                <p>Diese sozialen Rituale beherrscht das Kind:</p>
+                <div class="ritual-grid">
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">👋</div>
+                        <div class="title">Begrüßen</div>
+                        <div class="desc">Sagt "Hallo" oder winkt</div>
+                    </div>
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">🚶</div>
+                        <div class="title">Verabschieden</div>
+                        <div class="desc">Sagt "Tschüss" beim Gehen</div>
+                    </div>
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">🙏</div>
+                        <div class="title">Bedanken</div>
+                        <div class="desc">Sagt "Danke" wenn es etwas bekommt</div>
+                    </div>
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">🙋</div>
+                        <div class="title">Bitten</div>
+                        <div class="desc">Sagt "Bitte" wenn es etwas möchte</div>
+                    </div>
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">😔</div>
+                        <div class="title">Entschuldigen</div>
+                        <div class="desc">Sagt "Entschuldigung" oder "Tut mir leid"</div>
+                    </div>
+                    <div class="ritual-card" onclick="toggleRitual(this)">
+                        <div class="icon">🤗</div>
+                        <div class="title">Gute Wünsche</div>
+                        <div class="desc">"Guten Appetit", "Gute Nacht" etc.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✨</span> Höflichkeitsformen</h3>
+                <div class="politeness-section">
+                    <div class="politeness-title">Diese Höflichkeitsformen verwendet das Kind:</div>
+                    <div class="politeness-grid">
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">🙏</span>
+                            <span class="politeness-text">"Bitte" beim Bitten</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">💝</span>
+                            <span class="politeness-text">"Danke" beim Bekommen</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">🤝</span>
+                            <span class="politeness-text">"Bitte schön" beim Geben</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">😊</span>
+                            <span class="politeness-text">"Gern geschehen" als Antwort</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">🚪</span>
+                            <span class="politeness-text">"Darf ich...?" vor dem Tun</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                        <div class="politeness-item" onclick="togglePoliteness(this)">
+                            <span class="politeness-icon">🗣️</span>
+                            <span class="politeness-text">Freundlicher Tonfall</span>
+                            <span class="politeness-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> In verschiedenen Kontexten</h3>
+                <div class="context-section">
+                    <div class="context-title">Wie gut nutzt das Kind Rituale in diesen Situationen?</div>
+                    <div class="context-item">
+                        <div class="context-label">🏠 Zu Hause:</div>
+                        <div class="context-options" data-context="zuhause">
+                            <div class="context-btn" onclick="selectContext('zuhause', this)">Selten</div>
+                            <div class="context-btn" onclick="selectContext('zuhause', this)">Manchmal</div>
+                            <div class="context-btn" onclick="selectContext('zuhause', this)">Meistens</div>
+                        </div>
+                    </div>
+                    <div class="context-item">
+                        <div class="context-label">🏫 In der Kita:</div>
+                        <div class="context-options" data-context="kita">
+                            <div class="context-btn" onclick="selectContext('kita', this)">Selten</div>
+                            <div class="context-btn" onclick="selectContext('kita', this)">Manchmal</div>
+                            <div class="context-btn" onclick="selectContext('kita', this)">Meistens</div>
+                        </div>
+                    </div>
+                    <div class="context-item">
+                        <div class="context-label">👥 Bei Fremden:</div>
+                        <div class="context-options" data-context="fremde">
+                            <div class="context-btn" onclick="selectContext('fremde', this)">Selten</div>
+                            <div class="context-btn" onclick="selectContext('fremde', this)">Manchmal</div>
+                            <div class="context-btn" onclick="selectContext('fremde', this)">Meistens</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Selbstständigkeit bei Ritualen</h3>
+                <div class="independence-scale">
+                    <div class="scale-title">Wie selbstständig nutzt das Kind soziale Rituale?</div>
+                    <div class="scale-options">
+                        <button class="scale-btn reminder" onclick="setIndependence('reminder')">🔔 Braucht Erinnerung</button>
+                        <button class="scale-btn sometimes" onclick="setIndependence('sometimes')">🔄 Mal so, mal so</button>
+                        <button class="scale-btn independent" onclick="setIndependence('independent')">✨ Meist selbstständig</button>
+                    </div>
+                    <div class="scale-display" id="independenceDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie soziale Rituale:</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Selbst als Vorbild handeln</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Konsequent einfordern und erinnern</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Höfliches Verhalten loben</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Im Rollenspiel üben</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Bücher über Höflichkeit vorlesen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Rituale klappen gut? Wo braucht es Erinnerung? In welchen Situationen vergisst es Höflichkeitsformen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let contexts = {};
+        let independence = '';
+
+        function toggleRitual(el) { el.classList.toggle('mastered'); saveData(); }
+        function togglePoliteness(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectContext(context, el) {
+            contexts[context] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.context-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setIndependence(level) {
+            independence = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${level}`).classList.add('selected');
+            const labels = {
+                reminder: '🔔 Braucht meist Erinnerung',
+                sometimes: '🔄 Verwendet sie manchmal selbstständig',
+                independent: '✨ Nutzt sie meist von selbst'
+            };
+            document.getElementById('independenceDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                rituals: [...document.querySelectorAll('.ritual-card.mastered')].map(el => el.querySelector('.title').textContent),
+                politeness: [...document.querySelectorAll('.politeness-item.checked')].map(el => el.querySelector('.politeness-text').textContent),
+                contexts,
+                independence,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s2_rituale', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s2_rituale');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.ritual-card').forEach(el => {
+                    if (data.rituals && data.rituals.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('mastered');
+                    }
+                });
+                document.querySelectorAll('.politeness-item').forEach(el => {
+                    if (data.politeness && data.politeness.includes(el.querySelector('.politeness-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.contexts) {
+                    contexts = data.contexts;
+                    Object.keys(contexts).forEach(context => {
+                        const container = document.querySelector(`[data-context="${context}"]`);
+                        if (container) {
+                            container.querySelectorAll('.context-btn').forEach(btn => {
+                                if (btn.textContent === contexts[context]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                if (data.independence) setIndependence(data.independence);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

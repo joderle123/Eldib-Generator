@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gefühle zeigen - Sozialisation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f8bbd9 0%, #f48fb1 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f8bbd9 0%, #f48fb1 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f48fb1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .emotion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .emotion-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .emotion-card:hover { border-color: #f48fb1; transform: scale(1.02); }
+        .emotion-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .emotion-card .icon { font-size: 2.5em; margin-bottom: 8px; }
+        .emotion-card .title { font-weight: bold; font-size: 0.95em; }
+        .expression-section { background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .expression-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .expression-list { display: flex; flex-direction: column; gap: 10px; }
+        .expression-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .expression-item:hover { background: #e1f5fe; }
+        .expression-item.checked { background: #e8f5e9; }
+        .expression-icon { font-size: 1.3em; }
+        .expression-text { flex: 1; }
+        .expression-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .expression-item.checked .expression-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .trigger-tracker { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .trigger-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .trigger-emotion { margin-bottom: 20px; }
+        .trigger-emotion-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; }
+        .trigger-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .trigger-option { padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .trigger-option:hover { border-color: #fbc02d; }
+        .trigger-option.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .intensity-scale { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .intensity-row { display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid #a5d6a7; }
+        .intensity-row:last-child { border-bottom: none; }
+        .intensity-label { width: 100px; font-weight: bold; font-size: 0.9em; }
+        .intensity-slider { flex: 1; display: flex; gap: 5px; }
+        .intensity-dot { width: 30px; height: 30px; border-radius: 50%; background: white; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.7em; }
+        .intensity-dot:hover { border-color: #4CAF50; }
+        .intensity-dot.active { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .regulation-section { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .regulation-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .regulation-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .regulation-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .regulation-btn.needs { background: #ffcdd2; color: #c62828; }
+        .regulation-btn.developing { background: #fff9c4; color: #f57f17; }
+        .regulation-btn.good { background: #c8e6c9; color: #2e7d32; }
+        .regulation-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .regulation-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f48fb1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .emotion-grid { grid-template-columns: repeat(2, 1fr); } .intensity-row { flex-direction: column; align-items: flex-start; } .intensity-slider { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe I</div>
+            <h1>😊 Gefühle zeigen</h1>
+            <p>Emotionen ausdrücken und wahrnehmen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-11/S-12)</h3>
+                <p>Das Kind zeigt seine Gefühle durch Mimik, Gestik und Laute. Es drückt Grundemotionen wie Freude, Ärger, Angst und Trauer aus und beginnt, auf die Gefühle anderer zu reagieren.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Gezeigte Grundemotionen</h3>
+                <p>Diese Emotionen zeigt das Kind deutlich:</p>
+                <div class="emotion-grid">
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Freude</div>
+                    </div>
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">😢</div>
+                        <div class="title">Trauer</div>
+                    </div>
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">😠</div>
+                        <div class="title">Ärger</div>
+                    </div>
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">😨</div>
+                        <div class="title">Angst</div>
+                    </div>
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">😲</div>
+                        <div class="title">Überraschung</div>
+                    </div>
+                    <div class="emotion-card" onclick="toggleEmotion(this)">
+                        <div class="icon">🤢</div>
+                        <div class="title">Ekel</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📣</span> Ausdrucksformen</h3>
+                <div class="expression-section">
+                    <div class="expression-title">So drückt das Kind Gefühle aus:</div>
+                    <div class="expression-list">
+                        <div class="expression-item" onclick="toggleExpression(this)">
+                            <span class="expression-icon">😀</span>
+                            <span class="expression-text">Mimik (Gesichtsausdruck)</span>
+                            <span class="expression-check">✓</span>
+                        </div>
+                        <div class="expression-item" onclick="toggleExpression(this)">
+                            <span class="expression-icon">🗣️</span>
+                            <span class="expression-text">Laute (Lachen, Weinen, Schreien)</span>
+                            <span class="expression-check">✓</span>
+                        </div>
+                        <div class="expression-item" onclick="toggleExpression(this)">
+                            <span class="expression-icon">💪</span>
+                            <span class="expression-text">Körperspannung</span>
+                            <span class="expression-check">✓</span>
+                        </div>
+                        <div class="expression-item" onclick="toggleExpression(this)">
+                            <span class="expression-icon">🏃</span>
+                            <span class="expression-text">Bewegungen (Zappeln, Erstarren)</span>
+                            <span class="expression-check">✓</span>
+                        </div>
+                        <div class="expression-item" onclick="toggleExpression(this)">
+                            <span class="expression-icon">🤲</span>
+                            <span class="expression-text">Gesten (Arme ausstrecken, wegdrehen)</span>
+                            <span class="expression-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Auslöser für Emotionen</h3>
+                <div class="trigger-tracker">
+                    <div class="trigger-title">Was löst typischerweise Gefühle aus?</div>
+
+                    <div class="trigger-emotion">
+                        <div class="trigger-emotion-header">😊 Freude bei:</div>
+                        <div class="trigger-options" data-emotion="freude">
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Bezugsperson</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Spielen</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Essen</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Musik</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Körperkontakt</div>
+                        </div>
+                    </div>
+
+                    <div class="trigger-emotion">
+                        <div class="trigger-emotion-header">😢 Trauer/Weinen bei:</div>
+                        <div class="trigger-options" data-emotion="trauer">
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Trennung</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Hunger</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Müdigkeit</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Schmerz</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Frustration</div>
+                        </div>
+                    </div>
+
+                    <div class="trigger-emotion">
+                        <div class="trigger-emotion-header">😨 Angst bei:</div>
+                        <div class="trigger-options" data-emotion="angst">
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Fremden</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Lauten Geräuschen</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Neuer Umgebung</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Dunkelheit</div>
+                            <div class="trigger-option" onclick="toggleTrigger(this)">Trennung</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Emotionsintensität</h3>
+                <div class="intensity-scale">
+                    <div class="scale-title">Wie intensiv zeigt das Kind die Emotionen?</div>
+                    <div class="intensity-row">
+                        <span class="intensity-label">😊 Freude</span>
+                        <div class="intensity-slider" data-emotion="freude">
+                            <div class="intensity-dot" onclick="setIntensity('freude', 1)">1</div>
+                            <div class="intensity-dot" onclick="setIntensity('freude', 2)">2</div>
+                            <div class="intensity-dot" onclick="setIntensity('freude', 3)">3</div>
+                            <div class="intensity-dot" onclick="setIntensity('freude', 4)">4</div>
+                            <div class="intensity-dot" onclick="setIntensity('freude', 5)">5</div>
+                        </div>
+                    </div>
+                    <div class="intensity-row">
+                        <span class="intensity-label">😢 Trauer</span>
+                        <div class="intensity-slider" data-emotion="trauer">
+                            <div class="intensity-dot" onclick="setIntensity('trauer', 1)">1</div>
+                            <div class="intensity-dot" onclick="setIntensity('trauer', 2)">2</div>
+                            <div class="intensity-dot" onclick="setIntensity('trauer', 3)">3</div>
+                            <div class="intensity-dot" onclick="setIntensity('trauer', 4)">4</div>
+                            <div class="intensity-dot" onclick="setIntensity('trauer', 5)">5</div>
+                        </div>
+                    </div>
+                    <div class="intensity-row">
+                        <span class="intensity-label">😠 Ärger</span>
+                        <div class="intensity-slider" data-emotion="aerger">
+                            <div class="intensity-dot" onclick="setIntensity('aerger', 1)">1</div>
+                            <div class="intensity-dot" onclick="setIntensity('aerger', 2)">2</div>
+                            <div class="intensity-dot" onclick="setIntensity('aerger', 3)">3</div>
+                            <div class="intensity-dot" onclick="setIntensity('aerger', 4)">4</div>
+                            <div class="intensity-dot" onclick="setIntensity('aerger', 5)">5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧘</span> Emotionsregulation</h3>
+                <div class="regulation-section">
+                    <div class="regulation-title">Wie gut kann sich das Kind beruhigen?</div>
+                    <div class="regulation-options">
+                        <button class="regulation-btn needs" onclick="setRegulation('needs')">😔 Braucht viel Hilfe</button>
+                        <button class="regulation-btn developing" onclick="setRegulation('developing')">🙂 Entwickelnd</button>
+                        <button class="regulation-btn good" onclick="setRegulation('good')">😊 Beruhigt sich gut</button>
+                    </div>
+                    <div class="regulation-display" id="regulationDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie den Gefühlsausdruck:</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Gefühle des Kindes spiegeln und benennen</div>
+                    <div class="tip-item"><span class="tip-icon">✅</span>Alle Gefühle als berechtigt anerkennen</div>
+                    <div class="tip-item"><span class="tip-icon">🤗</span>Bei starken Gefühlen Nähe anbieten</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Eigene Gefühle zeigen und benennen</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Bilderbücher mit Gefühlen anschauen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Gefühle zeigt das Kind am deutlichsten? Wie drückt es sie aus? Was hilft bei der Beruhigung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let intensities = {};
+        let regulation = '';
+
+        function toggleEmotion(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleExpression(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleTrigger(el) { el.classList.toggle('selected'); saveData(); }
+
+        function setIntensity(emotion, level) {
+            intensities[emotion] = level;
+            const slider = document.querySelector(`[data-emotion="${emotion}"].intensity-slider`);
+            slider.querySelectorAll('.intensity-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i < level);
+            });
+            saveData();
+        }
+
+        function setRegulation(level) {
+            regulation = level;
+            document.querySelectorAll('.regulation-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.regulation-btn.${level}`).classList.add('selected');
+            const labels = { needs: '😔 Braucht viel Unterstützung bei der Regulation', developing: '🙂 Kann sich mit etwas Hilfe beruhigen', good: '😊 Beruhigt sich meist selbstständig' };
+            document.getElementById('regulationDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                emotions: [...document.querySelectorAll('.emotion-card.observed')].map(el => el.querySelector('.title').textContent),
+                expressions: [...document.querySelectorAll('.expression-item.checked')].map(el => el.querySelector('.expression-text').textContent),
+                triggers: {},
+                intensities,
+                regulation,
+                notes: document.getElementById('notes').value
+            };
+            document.querySelectorAll('.trigger-options').forEach(container => {
+                const emotion = container.dataset.emotion;
+                data.triggers[emotion] = [...container.querySelectorAll('.trigger-option.selected')].map(el => el.textContent);
+            });
+            localStorage.setItem('eldib_s1_gefuehle', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s1_gefuehle');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.emotion-card').forEach(el => {
+                    if (data.emotions && data.emotions.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('observed');
+                    }
+                });
+                document.querySelectorAll('.expression-item').forEach(el => {
+                    if (data.expressions && data.expressions.includes(el.querySelector('.expression-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.triggers) {
+                    Object.keys(data.triggers).forEach(emotion => {
+                        const container = document.querySelector(`[data-emotion="${emotion}"].trigger-options`);
+                        if (container) {
+                            container.querySelectorAll('.trigger-option').forEach(opt => {
+                                if (data.triggers[emotion].includes(opt.textContent)) {
+                                    opt.classList.add('selected');
+                                }
+                            });
+                        }
+                    });
+                }
+                if (data.intensities) {
+                    intensities = data.intensities;
+                    Object.keys(intensities).forEach(emotion => {
+                        setIntensity(emotion, intensities[emotion]);
+                    });
+                }
+                if (data.regulation) setRegulation(data.regulation);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
