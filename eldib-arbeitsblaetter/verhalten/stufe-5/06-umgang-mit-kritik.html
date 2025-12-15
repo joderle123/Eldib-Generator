@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umgang mit Kritik - Verhalten Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #3498db; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .criticism-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
+        .criticism-type { padding: 25px; border-radius: 15px; }
+        .criticism-type.constructive { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+        .criticism-type.destructive { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .criticism-type h4 { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .criticism-type ul { padding-left: 20px; }
+        .criticism-type li { margin: 8px 0; }
+        .response-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .response-step { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .response-step:hover { border-color: #3498db; }
+        .response-step.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .step-num { width: 45px; height: 45px; background: linear-gradient(135deg, #2c3e50, #3498db); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .practiced .step-num { background: #4CAF50; }
+        .scenario-practice { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-text { padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-bottom: 20px; }
+        .response-options { display: flex; flex-direction: column; gap: 12px; }
+        .response-option { padding: 15px; background: rgba(255,255,255,0.9); color: #333; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .response-option:hover { transform: translateX(10px); }
+        .response-option.mature { background: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .response-option.immature { background: #ffebee; border-left: 5px solid #f44336; }
+        .reflection-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .reflection-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; }
+        .reflection-card label { display: block; font-weight: bold; margin-bottom: 10px; }
+        .reflection-card textarea { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; min-height: 80px; resize: vertical; }
+        .reflection-card textarea:focus { outline: none; border-color: #3498db; }
+        .growth-mindset { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .mindset-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .mindset-item:hover { border-color: #3498db; }
+        .mindset-item.adopted { border-color: #4CAF50; background: #e8f5e9; }
+        .mindset-icon { font-size: 1.5em; }
+        .mindset-check { margin-left: auto; width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .adopted .mindset-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #3498db; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .criticism-types, .reflection-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe V</div>
+            <h1>Umgang mit Kritik</h1>
+            <p>Feedback als Chance sehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-30/V-31)</h3>
+                <p>Der Jugendliche kann konstruktiv mit Kritik umgehen. Er unterscheidet zwischen hilfreicher und destruktiver Kritik und nutzt Feedback zur persönlichen Entwicklung.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔍</span> Kritik verstehen</h3>
+                <div class="criticism-types">
+                    <div class="criticism-type constructive">
+                        <h4>✅ Konstruktive Kritik</h4>
+                        <ul>
+                            <li>Gibt konkrete Verbesserungsvorschläge</li>
+                            <li>Ist respektvoll formuliert</li>
+                            <li>Bezieht sich auf Verhalten, nicht Person</li>
+                            <li>Will helfen, nicht verletzen</li>
+                        </ul>
+                    </div>
+                    <div class="criticism-type destructive">
+                        <h4>❌ Destruktive Kritik</h4>
+                        <ul>
+                            <li>Greift die Person an</li>
+                            <li>Ist verletzend oder beleidigend</li>
+                            <li>Bietet keine Lösungen</li>
+                            <li>Will nur kritisieren</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> So reagiere ich auf Kritik</h3>
+                <p>Klicke auf die Schritte, die du bereits anwendest:</p>
+                <div class="response-steps">
+                    <div class="response-step" onclick="toggleStep(this)">
+                        <div class="step-num">1</div>
+                        <div><strong>Durchatmen</strong> - Erst ruhig bleiben, nicht sofort reagieren</div>
+                    </div>
+                    <div class="response-step" onclick="toggleStep(this)">
+                        <div class="step-num">2</div>
+                        <div><strong>Zuhören</strong> - Die Kritik vollständig anhören</div>
+                    </div>
+                    <div class="response-step" onclick="toggleStep(this)">
+                        <div class="step-num">3</div>
+                        <div><strong>Nachfragen</strong> - Um Beispiele oder Erklärungen bitten</div>
+                    </div>
+                    <div class="response-step" onclick="toggleStep(this)">
+                        <div class="step-num">4</div>
+                        <div><strong>Reflektieren</strong> - Ist die Kritik berechtigt?</div>
+                    </div>
+                    <div class="response-step" onclick="toggleStep(this)">
+                        <div class="step-num">5</div>
+                        <div><strong>Reagieren</strong> - Danken oder sachlich Stellung nehmen</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Übungsszenario</h3>
+                <div class="scenario-practice">
+                    <div class="scenario-text">
+                        <strong>Situation:</strong> Ein Lehrer sagt zu dir: "Deine Arbeit war dieses Mal nicht so gut. Du hast wichtige Punkte vergessen und einige Fehler gemacht."
+                    </div>
+                    <div class="response-options">
+                        <div class="response-option" onclick="checkResponse(this, 'immature')">😤 "Das stimmt nicht! Die Aufgabe war unfair!"</div>
+                        <div class="response-option" onclick="checkResponse(this, 'mature')">🤔 "Danke für die Rückmeldung. Können Sie mir zeigen, was ich verbessern kann?"</div>
+                        <div class="response-option" onclick="checkResponse(this, 'immature')">😢 Nichts sagen und sich schlecht fühlen</div>
+                        <div class="response-option" onclick="checkResponse(this, 'mature')">📝 "Ich verstehe. Ich werde mir die Punkte nochmal anschauen."</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌱</span> Growth Mindset - Kritik als Chance</h3>
+                <p>Welche Einstellungen hast du übernommen?</p>
+                <div class="growth-mindset">
+                    <div class="mindset-item" onclick="toggleMindset(this)"><span class="mindset-icon">🎯</span><span>Fehler sind Lernchancen</span><div class="mindset-check">✓</div></div>
+                    <div class="mindset-item" onclick="toggleMindset(this)"><span class="mindset-icon">💪</span><span>Ich kann mich verbessern</span><div class="mindset-check">✓</div></div>
+                    <div class="mindset-item" onclick="toggleMindset(this)"><span class="mindset-icon">👂</span><span>Feedback hilft mir zu wachsen</span><div class="mindset-check">✓</div></div>
+                    <div class="mindset-item" onclick="toggleMindset(this)"><span class="mindset-icon">🔄</span><span>Kritik ist nicht gegen mich persönlich</span><div class="mindset-check">✓</div></div>
+                    <div class="mindset-item" onclick="toggleMindset(this)"><span class="mindset-icon">⭐</span><span>Ich bin wertvoll, auch mit Fehlern</span><div class="mindset-check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Meine Reflexion</h3>
+                <div class="reflection-cards">
+                    <div class="reflection-card">
+                        <label>Eine Kritik, die mir geholfen hat:</label>
+                        <textarea id="helpfulCriticism" placeholder="Was hat mir jemand gesagt, das mich weitergebracht hat?" oninput="saveData()"></textarea>
+                    </div>
+                    <div class="reflection-card">
+                        <label>So möchte ich auf Kritik reagieren:</label>
+                        <textarea id="futureReaction" placeholder="Was nehme ich mir vor?" oninput="saveData()"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert der Jugendliche auf Kritik? Kann er konstruktives Feedback annehmen? Wie geht er mit ungerechtfertigter Kritik um?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleStep(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleMindset(el) { el.classList.toggle('adopted'); saveData(); }
+        function checkResponse(el, type) { el.classList.add(type); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                steps: document.querySelectorAll('.response-step.practiced').length,
+                mindsets: document.querySelectorAll('.mindset-item.adopted').length,
+                helpfulCriticism: document.getElementById('helpfulCriticism').value,
+                futureReaction: document.getElementById('futureReaction').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v5_kritik', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v5_kritik');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.response-step');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('practiced'); }
+                const mindsets = document.querySelectorAll('.mindset-item');
+                for (let i = 0; i < (data.mindsets || 0); i++) { if (mindsets[i]) mindsets[i].classList.add('adopted'); }
+                document.getElementById('helpfulCriticism').value = data.helpfulCriticism || '';
+                document.getElementById('futureReaction').value = data.futureReaction || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

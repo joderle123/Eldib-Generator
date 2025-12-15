@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lebenskompetenzen - Verhalten Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #134e5e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .life-areas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
+        .life-area { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; }
+        .life-area h4 { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #134e5e; }
+        .skill-checklist { display: flex; flex-direction: column; gap: 8px; }
+        .skill-check { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f5f5f5; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .skill-check:hover { background: #e8f5e9; }
+        .skill-check.mastered { background: #c8e6c9; }
+        .check-box { width: 24px; height: 24px; border: 3px solid #134e5e; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .mastered .check-box { background: #134e5e; color: white; }
+        .readiness-meter { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; color: white; }
+        .meter-visual { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(#4CAF50 0deg, #4CAF50 var(--readiness, 0deg), rgba(255,255,255,0.2) var(--readiness, 0deg)); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
+        .meter-center { width: 150px; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .meter-percent { font-size: 2.5em; font-weight: bold; }
+        .meter-text { font-size: 0.9em; opacity: 0.8; }
+        .real-life-scenarios { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .scenario-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .scenario-card:hover { border-color: #71b280; }
+        .scenario-card.ready { border-color: #4CAF50; background: #e8f5e9; }
+        .scenario-card .title { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .scenario-card .desc { font-size: 0.9em; color: #666; }
+        .scenario-card .status { margin-top: 10px; padding: 8px 15px; background: #f5f5f5; border-radius: 20px; display: inline-block; font-size: 0.85em; }
+        .ready .status { background: #c8e6c9; color: #2e7d32; }
+        .action-plan { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .plan-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-bottom: 10px; }
+        .plan-item input { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 1em; }
+        .plan-num { width: 35px; height: 35px; background: white; color: #f5576c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #134e5e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .life-areas { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe V</div>
+            <h1>Lebenskompetenzen</h1>
+            <p>Bereit für das Leben</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-29 bis V-33)</h3>
+                <p>Der Jugendliche entwickelt umfassende Lebenskompetenzen. Er ist vorbereitet auf die Anforderungen des Erwachsenenlebens und kann selbstständig handeln.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Meine Lebenskompetenzen</h3>
+                <div class="life-areas">
+                    <div class="life-area">
+                        <h4>🏠 Alltag & Haushalt</h4>
+                        <div class="skill-checklist">
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Kochen & Ernährung</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Wäsche & Kleidung</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Putzen & Ordnung</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Einkaufen planen</span></div>
+                        </div>
+                    </div>
+                    <div class="life-area">
+                        <h4>💰 Finanzen</h4>
+                        <div class="skill-checklist">
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Budget erstellen</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Sparen können</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Rechnungen verstehen</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Bankkonto führen</span></div>
+                        </div>
+                    </div>
+                    <div class="life-area">
+                        <h4>💼 Arbeitswelt</h4>
+                        <div class="skill-checklist">
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Bewerbung schreiben</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Vorstellungsgespräch</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Pünktlichkeit</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Mit Kollegen umgehen</span></div>
+                        </div>
+                    </div>
+                    <div class="life-area">
+                        <h4>🏛️ Gesellschaft</h4>
+                        <div class="skill-checklist">
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Behördengänge</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Formulare ausfüllen</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Rechte & Pflichten kennen</span></div>
+                            <div class="skill-check" onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Arztbesuche organisieren</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine Lebens-Bereitschaft</h3>
+                <div class="readiness-meter">
+                    <div class="meter-visual" id="readinessMeter">
+                        <div class="meter-center">
+                            <div class="meter-percent" id="readinessPercent">0%</div>
+                            <div class="meter-text">Bereitschaft</div>
+                        </div>
+                    </div>
+                    <p>Markiere oben die Kompetenzen, die du beherrschst!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Bin ich bereit für...?</h3>
+                <div class="real-life-scenarios">
+                    <div class="scenario-card" onclick="toggleScenario(this)">
+                        <div class="title">🏠 Auszug von Zuhause</div>
+                        <div class="desc">Eigene Wohnung finden, einrichten, selbstständig leben</div>
+                        <div class="status">Noch nicht bereit</div>
+                    </div>
+                    <div class="scenario-card" onclick="toggleScenario(this)">
+                        <div class="title">💼 Ausbildung/Studium</div>
+                        <div class="desc">Bewerbung, Einstieg, neue Umgebung</div>
+                        <div class="status">Noch nicht bereit</div>
+                    </div>
+                    <div class="scenario-card" onclick="toggleScenario(this)">
+                        <div class="title">💑 Partnerschaft</div>
+                        <div class="desc">Beziehung führen, Verantwortung teilen</div>
+                        <div class="status">Noch nicht bereit</div>
+                    </div>
+                    <div class="scenario-card" onclick="toggleScenario(this)">
+                        <div class="title">🌍 Selbstständiges Reisen</div>
+                        <div class="desc">Alleine verreisen, sich organisieren</div>
+                        <div class="status">Noch nicht bereit</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Mein Aktionsplan</h3>
+                <div class="action-plan">
+                    <p style="margin-bottom: 15px;">Was will ich als Nächstes lernen?</p>
+                    <div class="plan-item">
+                        <div class="plan-num">1</div>
+                        <input type="text" id="plan1" placeholder="Mein nächstes Ziel..." oninput="saveData()">
+                    </div>
+                    <div class="plan-item">
+                        <div class="plan-num">2</div>
+                        <input type="text" id="plan2" placeholder="Dann möchte ich..." oninput="saveData()">
+                    </div>
+                    <div class="plan-item">
+                        <div class="plan-num">3</div>
+                        <input type="text" id="plan3" placeholder="Außerdem will ich..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Lebenskompetenzen hat der Jugendliche entwickelt? Wo zeigt er Selbstständigkeit? Welche Bereiche brauchen noch Förderung? Wie realistisch schätzt er sich ein?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleCheck(el) { el.classList.toggle('mastered'); updateReadiness(); saveData(); }
+        function toggleScenario(el) {
+            el.classList.toggle('ready');
+            const status = el.querySelector('.status');
+            status.textContent = el.classList.contains('ready') ? 'Bereit!' : 'Noch nicht bereit';
+            saveData();
+        }
+        function updateReadiness() {
+            const total = document.querySelectorAll('.skill-check').length;
+            const mastered = document.querySelectorAll('.skill-check.mastered').length;
+            const percent = Math.round((mastered / total) * 100);
+            document.getElementById('readinessPercent').textContent = percent + '%';
+            document.getElementById('readinessMeter').style.setProperty('--readiness', (percent * 3.6) + 'deg');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: [...document.querySelectorAll('.skill-check.mastered')].map(s => s.querySelector('span').textContent),
+                scenarios: document.querySelectorAll('.scenario-card.ready').length,
+                plan1: document.getElementById('plan1').value,
+                plan2: document.getElementById('plan2').value,
+                plan3: document.getElementById('plan3').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v5_lebenskompetenzen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v5_lebenskompetenzen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.skills) {
+                    document.querySelectorAll('.skill-check').forEach(check => {
+                        if (data.skills.includes(check.querySelector('span').textContent)) check.classList.add('mastered');
+                    });
+                }
+                updateReadiness();
+                const scenarios = document.querySelectorAll('.scenario-card');
+                for (let i = 0; i < (data.scenarios || 0); i++) {
+                    if (scenarios[i]) {
+                        scenarios[i].classList.add('ready');
+                        scenarios[i].querySelector('.status').textContent = 'Bereit!';
+                    }
+                }
+                document.getElementById('plan1').value = data.plan1 || '';
+                document.getElementById('plan2').value = data.plan2 || '';
+                document.getElementById('plan3').value = data.plan3 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

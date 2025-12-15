@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beziehungen pflegen - Verhalten Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffe6e6 0%, #fff5e6 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff6b6b; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .relationship-circles { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .circles-container { position: relative; width: 280px; height: 280px; margin: 0 auto; }
+        .circle { position: absolute; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: white; font-weight: bold; text-align: center; font-size: 0.8em; }
+        .circle:hover { transform: scale(1.1); }
+        .circle-me { width: 80px; height: 80px; background: #ff6b6b; top: 100px; left: 100px; }
+        .circle-family { width: 70px; height: 70px; background: #4CAF50; top: 20px; left: 105px; }
+        .circle-friends { width: 70px; height: 70px; background: #2196F3; top: 60px; left: 180px; }
+        .circle-school { width: 70px; height: 70px; background: #FF9800; top: 150px; left: 190px; }
+        .circle-others { width: 70px; height: 70px; background: #9C27B0; top: 190px; left: 105px; }
+        .circle-hobbies { width: 70px; height: 70px; background: #00BCD4; top: 150px; left: 20px; }
+        .circle-mentors { width: 70px; height: 70px; background: #E91E63; top: 60px; left: 10px; }
+        .circle-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; color: white; font-size: 0.85em; }
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #ff6b6b; }
+        .skill-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .skill-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .conflict-resolution { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .resolution-steps { display: flex; flex-direction: column; gap: 12px; }
+        .resolution-step { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
+        .resolution-step:hover { background: rgba(255,255,255,0.3); }
+        .resolution-step.done { background: rgba(255,255,255,0.4); }
+        .step-check { width: 30px; height: 30px; border: 3px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .done .step-check { background: white; color: #11998e; }
+        .relationship-tracker { margin: 20px 0; }
+        .tracker-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; margin-bottom: 10px; border: 3px solid #e0e0e0; }
+        .tracker-item input[type="text"] { flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; }
+        .tracker-item input[type="text"]:focus { outline: none; border-color: #ff6b6b; }
+        .tracker-item select { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; }
+        .tracker-item select:focus { outline: none; border-color: #ff6b6b; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff6b6b; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Verhalten - Stufe V</div>
+            <h1>Beziehungen pflegen</h1>
+            <p>Verbindungen aufbauen und erhalten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (V-32/V-33)</h3>
+                <p>Der Jugendliche kann stabile, positive Beziehungen aufbauen und pflegen. Er versteht die Bedeutung von Vertrauen, Respekt und Gegenseitigkeit.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌐</span> Mein Beziehungsnetzwerk</h3>
+                <p>Klicke auf die Bereiche, in denen du gute Beziehungen hast:</p>
+                <div class="relationship-circles">
+                    <div class="circles-container">
+                        <div class="circle circle-me">ICH</div>
+                        <div class="circle circle-family" onclick="toggleCircle(this)">Familie</div>
+                        <div class="circle circle-friends" onclick="toggleCircle(this)">Freunde</div>
+                        <div class="circle circle-school" onclick="toggleCircle(this)">Schule</div>
+                        <div class="circle circle-others" onclick="toggleCircle(this)">Andere</div>
+                        <div class="circle circle-hobbies" onclick="toggleCircle(this)">Hobbys</div>
+                        <div class="circle circle-mentors" onclick="toggleCircle(this)">Mentoren</div>
+                    </div>
+                    <div class="circle-legend">
+                        <span>🟢 Aktiv = Gute Beziehung</span>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💪</span> Beziehungsfähigkeiten</h3>
+                <p>Welche Fähigkeiten nutzt du in Beziehungen?</p>
+                <div class="skills-grid">
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">👂</div>
+                        <div class="title">Aktives Zuhören</div>
+                        <div class="desc">Aufmerksam sein und verstehen wollen</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">💬</div>
+                        <div class="title">Offen kommunizieren</div>
+                        <div class="desc">Ehrlich und respektvoll sprechen</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Kompromisse finden</div>
+                        <div class="desc">Aufeinander zugehen können</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">❤️</div>
+                        <div class="title">Empathie zeigen</div>
+                        <div class="desc">Gefühle anderer verstehen</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">🔒</div>
+                        <div class="title">Vertrauen aufbauen</div>
+                        <div class="desc">Zuverlässig und ehrlich sein</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="icon">🎁</div>
+                        <div class="title">Geben und Nehmen</div>
+                        <div class="desc">Balance in der Beziehung</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔧</span> Konflikte in Beziehungen lösen</h3>
+                <div class="conflict-resolution">
+                    <p style="margin-bottom: 15px;">Diese Schritte helfen bei Beziehungsproblemen:</p>
+                    <div class="resolution-steps">
+                        <div class="resolution-step" onclick="toggleResolution(this)"><div class="step-check">✓</div><span>1. Abkühlen - Erst beruhigen</span></div>
+                        <div class="resolution-step" onclick="toggleResolution(this)"><div class="step-check">✓</div><span>2. Ich-Botschaften nutzen</span></div>
+                        <div class="resolution-step" onclick="toggleResolution(this)"><div class="step-check">✓</div><span>3. Die andere Perspektive verstehen</span></div>
+                        <div class="resolution-step" onclick="toggleResolution(this)"><div class="step-check">✓</div><span>4. Gemeinsam Lösungen suchen</span></div>
+                        <div class="resolution-step" onclick="toggleResolution(this)"><div class="step-check">✓</div><span>5. Verzeihen und nach vorne schauen</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Meine wichtigen Beziehungen</h3>
+                <div class="relationship-tracker">
+                    <div class="tracker-item">
+                        <span>👤</span>
+                        <input type="text" id="person1" placeholder="Name/Person" oninput="saveData()">
+                        <select id="quality1" onchange="saveData()">
+                            <option value="">Qualität</option>
+                            <option value="super">🌟 Super</option>
+                            <option value="gut">👍 Gut</option>
+                            <option value="okay">👌 Okay</option>
+                            <option value="schwierig">⚠️ Schwierig</option>
+                        </select>
+                    </div>
+                    <div class="tracker-item">
+                        <span>👤</span>
+                        <input type="text" id="person2" placeholder="Name/Person" oninput="saveData()">
+                        <select id="quality2" onchange="saveData()">
+                            <option value="">Qualität</option>
+                            <option value="super">🌟 Super</option>
+                            <option value="gut">👍 Gut</option>
+                            <option value="okay">👌 Okay</option>
+                            <option value="schwierig">⚠️ Schwierig</option>
+                        </select>
+                    </div>
+                    <div class="tracker-item">
+                        <span>👤</span>
+                        <input type="text" id="person3" placeholder="Name/Person" oninput="saveData()">
+                        <select id="quality3" onchange="saveData()">
+                            <option value="">Qualität</option>
+                            <option value="super">🌟 Super</option>
+                            <option value="gut">👍 Gut</option>
+                            <option value="okay">👌 Okay</option>
+                            <option value="schwierig">⚠️ Schwierig</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie pflegt der Jugendliche Beziehungen? Kann er Konflikte konstruktiv lösen? Zeigt er Empathie? Wo braucht er Unterstützung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleCircle(el) {
+            el.style.opacity = el.style.opacity === '0.5' ? '1' : '0.5';
+            el.style.transform = el.style.opacity === '1' ? 'scale(1.1)' : 'scale(1)';
+            saveData();
+        }
+        function toggleSkill(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleResolution(el) { el.classList.toggle('done'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-card.practiced').length,
+                resolutions: document.querySelectorAll('.resolution-step.done').length,
+                person1: document.getElementById('person1').value,
+                quality1: document.getElementById('quality1').value,
+                person2: document.getElementById('person2').value,
+                quality2: document.getElementById('quality2').value,
+                person3: document.getElementById('person3').value,
+                quality3: document.getElementById('quality3').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_v5_beziehungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v5_beziehungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('practiced'); }
+                const resolutions = document.querySelectorAll('.resolution-step');
+                for (let i = 0; i < (data.resolutions || 0); i++) { if (resolutions[i]) resolutions[i].classList.add('done'); }
+                document.getElementById('person1').value = data.person1 || '';
+                document.getElementById('quality1').value = data.quality1 || '';
+                document.getElementById('person2').value = data.person2 || '';
+                document.getElementById('quality2').value = data.quality2 || '';
+                document.getElementById('person3').value = data.person3 || '';
+                document.getElementById('quality3').value = data.quality3 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
