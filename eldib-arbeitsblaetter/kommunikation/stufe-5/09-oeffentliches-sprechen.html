@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Öffentliches Sprechen - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff6a00; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .speech-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .speech-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .speech-card:hover { border-color: #ff6a00; transform: translateY(-3px); }
+        .speech-card.experienced { border-color: #4CAF50; background: #e8f5e9; }
+        .speech-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .speech-card .title { font-weight: bold; margin-bottom: 5px; }
+        .speech-card .desc { font-size: 0.8em; color: #666; }
+        .structure-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .structure-steps { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .structure-step { text-align: center; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 15px; min-width: 120px; cursor: pointer; transition: all 0.3s; }
+        .structure-step:hover { background: rgba(255,255,255,0.3); }
+        .structure-step.mastered { background: rgba(76, 175, 80, 0.4); }
+        .step-icon { font-size: 2em; margin-bottom: 10px; }
+        .step-name { font-weight: bold; }
+        .step-tip { font-size: 0.8em; opacity: 0.9; margin-top: 5px; }
+        .presentation-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-row { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-row:hover { border-color: #ff6a00; }
+        .skill-row.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 1.5em; }
+        .skill-content { flex: 1; }
+        .skill-name { font-weight: bold; }
+        .skill-tip { font-size: 0.9em; color: #666; }
+        .skill-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .skill-row.achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .anxiety-section { background: #fff3e0; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ff9800; }
+        .anxiety-title { font-weight: bold; color: #e65100; margin-bottom: 15px; }
+        .anxiety-tips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .anxiety-tip { background: white; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-icon { font-size: 1.3em; }
+        .tip-content { flex: 1; }
+        .tip-name { font-weight: bold; margin-bottom: 5px; }
+        .tip-text { font-size: 0.9em; color: #666; }
+        .practice-builder { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .builder-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .builder-prompt { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #4CAF50; }
+        .builder-inputs { display: flex; flex-direction: column; gap: 15px; }
+        .builder-row { }
+        .builder-label { font-size: 0.9em; color: #666; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .builder-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .builder-input:focus { outline: none; border-color: #4CAF50; }
+        .feedback-criteria { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .criteria-title { font-weight: bold; margin-bottom: 15px; }
+        .criteria-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .criterion { display: flex; align-items: center; gap: 10px; padding: 10px; background: white; border-radius: 8px; }
+        .criterion-icon { font-size: 1.2em; }
+        .criterion-scale { display: flex; gap: 5px; margin-left: auto; }
+        .scale-dot { width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 50%; cursor: pointer; transition: all 0.2s; }
+        .scale-dot:hover { border-color: #ff6a00; }
+        .scale-dot.selected { background: #ff6a00; border-color: #ff6a00; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff6a00; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .speech-types { grid-template-columns: 1fr; } .anxiety-tips, .criteria-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Öffentliches Sprechen</h1>
+            <p>Vor Gruppen überzeugend präsentieren</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-27/K-28)</h3>
+                <p>Der Jugendliche kann vor Gruppen sicher und überzeugend sprechen. Er beherrscht Präsentationstechniken und kann mit Redeangst umgehen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎤</span> Arten des öffentlichen Sprechens</h3>
+                <p>In diesen Situationen kann der Jugendliche vor anderen sprechen:</p>
+                <div class="speech-types">
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">📊</div><div class="title">Referat</div><div class="desc">Sachvortrag</div></div>
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">💭</div><div class="title">Meinung</div><div class="desc">Standpunkt vertreten</div></div>
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">📖</div><div class="title">Geschichte</div><div class="desc">Erzählen/Vorlesen</div></div>
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">🎭</div><div class="title">Moderation</div><div class="desc">Veranstaltung leiten</div></div>
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">❓</div><div class="title">Fragen</div><div class="desc">Vor der Klasse fragen</div></div>
+                    <div class="speech-card" onclick="toggleType(this)"><div class="icon">🏆</div><div class="title">Ehrung</div><div class="desc">Laudatio/Dank</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏗️</span> Aufbau einer Präsentation</h3>
+                <div class="structure-section">
+                    <div class="structure-steps">
+                        <div class="structure-step" onclick="toggleStructure(this)">
+                            <div class="step-icon">🎬</div>
+                            <div class="step-name">Einstieg</div>
+                            <div class="step-tip">Aufmerksamkeit gewinnen</div>
+                        </div>
+                        <div class="structure-step" onclick="toggleStructure(this)">
+                            <div class="step-icon">🗺️</div>
+                            <div class="step-name">Überblick</div>
+                            <div class="step-tip">Was kommt?</div>
+                        </div>
+                        <div class="structure-step" onclick="toggleStructure(this)">
+                            <div class="step-icon">📚</div>
+                            <div class="step-name">Hauptteil</div>
+                            <div class="step-tip">Kernbotschaft</div>
+                        </div>
+                        <div class="structure-step" onclick="toggleStructure(this)">
+                            <div class="step-icon">🎯</div>
+                            <div class="step-name">Schluss</div>
+                            <div class="step-tip">Zusammenfassung</div>
+                        </div>
+                        <div class="structure-step" onclick="toggleStructure(this)">
+                            <div class="step-icon">❓</div>
+                            <div class="step-name">Q&A</div>
+                            <div class="step-tip">Fragen beantworten</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✨</span> Präsentationsfähigkeiten</h3>
+                <div class="presentation-skills">
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">👁️</span><div class="skill-content"><div class="skill-name">Blickkontakt</div><div class="skill-tip">Publikum ansehen, verteilen</div></div><span class="skill-check">✓</span></div>
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">🗣️</span><div class="skill-content"><div class="skill-name">Deutliche Aussprache</div><div class="skill-tip">Laut und klar sprechen</div></div><span class="skill-check">✓</span></div>
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">⏸️</span><div class="skill-content"><div class="skill-name">Pausen nutzen</div><div class="skill-tip">Wirkung entfalten lassen</div></div><span class="skill-check">✓</span></div>
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">🧍</span><div class="skill-content"><div class="skill-name">Körperhaltung</div><div class="skill-tip">Aufrecht, offen stehen</div></div><span class="skill-check">✓</span></div>
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">👐</span><div class="skill-content"><div class="skill-name">Gestik</div><div class="skill-tip">Hände sinnvoll einsetzen</div></div><span class="skill-check">✓</span></div>
+                    <div class="skill-row" onclick="toggleSkill(this)"><span class="skill-icon">🎭</span><div class="skill-content"><div class="skill-name">Mimik</div><div class="skill-tip">Gesichtsausdruck zum Inhalt</div></div><span class="skill-check">✓</span></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">😰</span> Mit Lampenfieber umgehen</h3>
+                <div class="anxiety-section">
+                    <div class="anxiety-title">Tipps gegen Redeangst:</div>
+                    <div class="anxiety-tips">
+                        <div class="anxiety-tip"><span class="tip-icon">🧘</span><div class="tip-content"><div class="tip-name">Atmen</div><div class="tip-text">Tief ein- und ausatmen</div></div></div>
+                        <div class="anxiety-tip"><span class="tip-icon">📝</span><div class="tip-content"><div class="tip-name">Vorbereitung</div><div class="tip-text">Gut vorbereitet sein = sicherer</div></div></div>
+                        <div class="anxiety-tip"><span class="tip-icon">🎭</span><div class="tip-content"><div class="tip-name">Üben</div><div class="tip-text">Vorher laut üben</div></div></div>
+                        <div class="anxiety-tip"><span class="tip-icon">😊</span><div class="tip-content"><div class="tip-name">Positiv denken</div><div class="tip-text">„Ich schaffe das!"</div></div></div>
+                        <div class="anxiety-tip"><span class="tip-icon">👥</span><div class="tip-content"><div class="tip-name">Freundliche Gesichter</div><div class="tip-text">Zu netten Personen schauen</div></div></div>
+                        <div class="anxiety-tip"><span class="tip-icon">💪</span><div class="tip-content"><div class="tip-name">Power-Pose</div><div class="tip-text">Vorher Selbstbewusstsein tanken</div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✍️</span> Rede vorbereiten</h3>
+                <div class="practice-builder">
+                    <div class="builder-title">Übe den Aufbau einer kurzen Rede:</div>
+                    <div class="builder-prompt">Thema: „Etwas, das mir wichtig ist"</div>
+                    <div class="builder-inputs">
+                        <div class="builder-row">
+                            <div class="builder-label">🎬 Einstieg (Aufhänger):</div>
+                            <input type="text" class="builder-input" id="intro" placeholder="z.B. Eine Frage, ein Zitat, eine Geschichte..." oninput="saveData()">
+                        </div>
+                        <div class="builder-row">
+                            <div class="builder-label">📚 Hauptpunkt:</div>
+                            <input type="text" class="builder-input" id="main" placeholder="Was ist dir wichtig und warum?" oninput="saveData()">
+                        </div>
+                        <div class="builder-row">
+                            <div class="builder-label">🎯 Schluss (Appell):</div>
+                            <input type="text" class="builder-input" id="conclusion" placeholder="Was soll das Publikum mitnehmen?" oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Selbstbewertung</h3>
+                <div class="feedback-criteria">
+                    <div class="criteria-title">Bewerte deine letzte Präsentation (1-5):</div>
+                    <div class="criteria-grid">
+                        <div class="criterion"><span class="criterion-icon">🗣️</span><span>Lautstärke</span><div class="criterion-scale" data-criterion="volume"><div class="scale-dot" onclick="setRating('volume',1)"></div><div class="scale-dot" onclick="setRating('volume',2)"></div><div class="scale-dot" onclick="setRating('volume',3)"></div><div class="scale-dot" onclick="setRating('volume',4)"></div><div class="scale-dot" onclick="setRating('volume',5)"></div></div></div>
+                        <div class="criterion"><span class="criterion-icon">👁️</span><span>Blickkontakt</span><div class="criterion-scale" data-criterion="eye"><div class="scale-dot" onclick="setRating('eye',1)"></div><div class="scale-dot" onclick="setRating('eye',2)"></div><div class="scale-dot" onclick="setRating('eye',3)"></div><div class="scale-dot" onclick="setRating('eye',4)"></div><div class="scale-dot" onclick="setRating('eye',5)"></div></div></div>
+                        <div class="criterion"><span class="criterion-icon">🧍</span><span>Körperhaltung</span><div class="criterion-scale" data-criterion="posture"><div class="scale-dot" onclick="setRating('posture',1)"></div><div class="scale-dot" onclick="setRating('posture',2)"></div><div class="scale-dot" onclick="setRating('posture',3)"></div><div class="scale-dot" onclick="setRating('posture',4)"></div><div class="scale-dot" onclick="setRating('posture',5)"></div></div></div>
+                        <div class="criterion"><span class="criterion-icon">📊</span><span>Struktur</span><div class="criterion-scale" data-criterion="structure"><div class="scale-dot" onclick="setRating('structure',1)"></div><div class="scale-dot" onclick="setRating('structure',2)"></div><div class="scale-dot" onclick="setRating('structure',3)"></div><div class="scale-dot" onclick="setRating('structure',4)"></div><div class="scale-dot" onclick="setRating('structure',5)"></div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie präsentiert der Jugendliche vor Gruppen? Wie geht er mit Nervosität um? Welche Stärken und Entwicklungsbereiche hat er?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let ratings = { volume: 0, eye: 0, posture: 0, structure: 0 };
+        function toggleType(el) { el.classList.toggle('experienced'); saveData(); }
+        function toggleStructure(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function setRating(criterion, value) {
+            ratings[criterion] = value;
+            const scale = document.querySelector(`[data-criterion="${criterion}"]`);
+            scale.querySelectorAll('.scale-dot').forEach((d, i) => {
+                d.classList.toggle('selected', i < value);
+            });
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                types: document.querySelectorAll('.speech-card.experienced').length,
+                structures: document.querySelectorAll('.structure-step.mastered').length,
+                skills: document.querySelectorAll('.skill-row.achieved').length,
+                ratings,
+                intro: document.getElementById('intro').value,
+                main: document.getElementById('main').value,
+                conclusion: document.getElementById('conclusion').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_oeffentlich', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_oeffentlich');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const types = document.querySelectorAll('.speech-card');
+                for (let i = 0; i < (data.types || 0); i++) { if (types[i]) types[i].classList.add('experienced'); }
+                const structures = document.querySelectorAll('.structure-step');
+                for (let i = 0; i < (data.structures || 0); i++) { if (structures[i]) structures[i].classList.add('mastered'); }
+                const skills = document.querySelectorAll('.skill-row');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                if (data.ratings) {
+                    ratings = data.ratings;
+                    for (const [key, value] of Object.entries(ratings)) {
+                        if (value > 0) setRating(key, value);
+                    }
+                }
+                document.getElementById('intro').value = data.intro || '';
+                document.getElementById('main').value = data.main || '';
+                document.getElementById('conclusion').value = data.conclusion || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

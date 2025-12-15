@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulation erkennen - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #434343 0%, #000000 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #434343 0%, #000000 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fafafa 0%, #e0e0e0 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #434343; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .manipulation-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .type-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .type-card:hover { border-color: #f44336; transform: translateY(-3px); }
+        .type-card.recognized { border-color: #4CAF50; background: #e8f5e9; }
+        .type-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .type-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; color: #c62828; }
+        .type-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .type-card .example { font-size: 0.8em; color: #999; text-align: center; font-style: italic; margin-top: 8px; }
+        .detection-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .game-scenario { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; }
+        .scenario-text { font-size: 1.1em; margin-bottom: 15px; }
+        .game-options { display: flex; flex-direction: column; gap: 10px; }
+        .game-option { padding: 12px 20px; background: rgba(255,255,255,0.2); border: 2px solid transparent; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .game-option:hover { background: rgba(255,255,255,0.3); }
+        .game-option.correct { background: rgba(76, 175, 80, 0.5); border-color: #4CAF50; }
+        .game-option.wrong { background: rgba(244, 67, 54, 0.5); border-color: #f44336; }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: white; color: #667eea; }
+        .game-score { text-align: center; margin-top: 15px; }
+        .warning-signs { background: #ffebee; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #f44336; }
+        .warning-title { font-weight: bold; color: #c62828; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .warning-list { display: flex; flex-direction: column; gap: 12px; }
+        .warning-item { display: flex; align-items: center; gap: 15px; padding: 12px; background: white; border-radius: 8px; cursor: pointer; border: 2px solid #ffcdd2; transition: all 0.3s; }
+        .warning-item:hover { border-color: #f44336; }
+        .warning-item.aware { background: #e8f5e9; border-color: #4CAF50; }
+        .warning-icon { font-size: 1.3em; }
+        .warning-text { flex: 1; }
+        .warning-check { width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .warning-item.aware .warning-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .defense-strategies { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .defense-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .defense-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .defense-card { background: white; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 10px; }
+        .defense-icon { font-size: 1.5em; }
+        .defense-content { flex: 1; }
+        .defense-name { font-weight: bold; color: #2e7d32; margin-bottom: 5px; }
+        .defense-desc { font-size: 0.9em; color: #666; }
+        .scenario-practice { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .practice-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .practice-situation { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107; }
+        .practice-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; margin-top: 10px; }
+        .practice-input:focus { outline: none; border-color: #ffc107; }
+        .practice-label { font-size: 0.9em; color: #666; margin-top: 15px; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #434343; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .manipulation-types, .defense-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Manipulation erkennen</h1>
+            <p>Beeinflussungsversuche durchschauen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-26/K-27)</h3>
+                <p>Der Jugendliche kann manipulative Kommunikationsstrategien erkennen. Er durchschaut Beeinflussungsversuche in Medien, Werbung und persönlichen Gesprächen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Manipulationstechniken</h3>
+                <p>Diese Techniken erkennt der Jugendliche:</p>
+                <div class="manipulation-types">
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">😨</div><div class="title">Angstmache</div><div class="desc">Durch Angst zum Handeln zwingen</div><div class="example">„Wenn du das nicht kaufst, passiert Schlimmes!"</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">😢</div><div class="title">Schuldgefühle</div><div class="desc">Schlechtes Gewissen erzeugen</div><div class="example">„Wie kannst du mir das antun?"</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">🎁</div><div class="title">Reziprozität</div><div class="desc">„Ich gebe, also musst du auch"</div><div class="example">„Nach allem, was ich für dich getan habe..."</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">👥</div><div class="title">Gruppendruck</div><div class="desc">Alle machen es – du auch?</div><div class="example">„Alle anderen machen mit!"</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">⏰</div><div class="title">Zeitdruck</div><div class="desc">Schnelle Entscheidung erzwingen</div><div class="example">„Nur noch heute! Jetzt oder nie!"</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">😍</div><div class="title">Schmeichelei</div><div class="desc">Komplimente für Einfluss</div><div class="example">„Nur du bist schlau genug dafür..."</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Manipulation erkennen</h3>
+                <div class="detection-game">
+                    <p style="text-align: center; margin-bottom: 15px;">Welche Manipulationstechnik wird hier verwendet?</p>
+                    <div class="game-scenario">
+                        <div class="scenario-text" id="scenarioText">„Dieses Angebot gilt nur noch 2 Stunden! Danach ist der Preis wieder höher!"</div>
+                        <div class="game-options" id="gameOptions">
+                            <div class="game-option" onclick="checkAnswer(this, false)">Schuldgefühle</div>
+                            <div class="game-option" onclick="checkAnswer(this, true)">Zeitdruck</div>
+                            <div class="game-option" onclick="checkAnswer(this, false)">Gruppendruck</div>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn" onclick="nextScenario()">➡️ Nächstes Beispiel</button>
+                    </div>
+                    <div class="game-score">Richtig erkannt: <strong id="scoreCount">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚠️</span> Warnzeichen</h3>
+                <div class="warning-signs">
+                    <div class="warning-title">🚨 Auf diese Zeichen achten:</div>
+                    <div class="warning-list">
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">⏰</span><span class="warning-text">Künstlicher Zeitdruck wird erzeugt</span><span class="warning-check">✓</span></div>
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">😰</span><span class="warning-text">Starke Emotionen werden ausgelöst</span><span class="warning-check">✓</span></div>
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">🚫</span><span class="warning-text">Nachdenken wird verhindert</span><span class="warning-check">✓</span></div>
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">🤐</span><span class="warning-text">„Sag es niemandem"</span><span class="warning-check">✓</span></div>
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">🎁</span><span class="warning-text">„Kostenlos" mit versteckten Kosten</span><span class="warning-check">✓</span></div>
+                        <div class="warning-item" onclick="toggleWarning(this)"><span class="warning-icon">✨</span><span class="warning-text">Zu gut, um wahr zu sein</span><span class="warning-check">✓</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛡️</span> Sich schützen</h3>
+                <div class="defense-strategies">
+                    <div class="defense-title">Strategien gegen Manipulation:</div>
+                    <div class="defense-grid">
+                        <div class="defense-card"><span class="defense-icon">⏸️</span><div class="defense-content"><div class="defense-name">Pause einlegen</div><div class="defense-desc">Nicht sofort entscheiden, nachdenken</div></div></div>
+                        <div class="defense-card"><span class="defense-icon">❓</span><div class="defense-content"><div class="defense-name">Fragen stellen</div><div class="defense-desc">„Warum soll ich das jetzt entscheiden?"</div></div></div>
+                        <div class="defense-card"><span class="defense-icon">👥</span><div class="defense-content"><div class="defense-name">Andere fragen</div><div class="defense-desc">Vertrauensperson um Rat bitten</div></div></div>
+                        <div class="defense-card"><span class="defense-icon">🔍</span><div class="defense-content"><div class="defense-name">Recherchieren</div><div class="defense-desc">Informationen überprüfen</div></div></div>
+                        <div class="defense-card"><span class="defense-icon">🚫</span><div class="defense-content"><div class="defense-name">Nein sagen</div><div class="defense-desc">„Nein" ist ein vollständiger Satz</div></div></div>
+                        <div class="defense-card"><span class="defense-icon">🎯</span><div class="defense-content"><div class="defense-name">Absicht hinterfragen</div><div class="defense-desc">„Was will die Person wirklich?"</div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Übungssituation</h3>
+                <div class="scenario-practice">
+                    <div class="practice-title">Wie würdest du reagieren?</div>
+                    <div class="practice-situation">Ein Online-„Freund" sagt: „Ich habe dir so viele Tipps gegeben. Jetzt musst du mir dein Passwort geben, damit ich dir bei deinem Account helfen kann. Das muss schnell passieren, sonst ist es zu spät!"</div>
+                    <div class="practice-label">🎭 Welche Manipulation erkennst du?</div>
+                    <input type="text" class="practice-input" id="practice1" placeholder="z.B. Reziprozität, Zeitdruck..." oninput="saveData()">
+                    <div class="practice-label">🛡️ Wie würdest du reagieren?</div>
+                    <input type="text" class="practice-input" id="practice2" placeholder="z.B. Ich gebe niemals mein Passwort weiter..." oninput="saveData()">
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Erkennt der Jugendliche Manipulationsversuche? Wie reagiert er darauf? Kann er sich abgrenzen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: "„Dieses Angebot gilt nur noch 2 Stunden! Danach ist der Preis wieder höher!"", correct: "Zeitdruck", options: ["Schuldgefühle", "Zeitdruck", "Gruppendruck"] },
+            { text: "„Nach allem, was ich für dich getan habe, ist das doch nicht zu viel verlangt!"", correct: "Reziprozität", options: ["Reziprozität", "Angstmache", "Schmeichelei"] },
+            { text: "„Alle deine Freunde haben schon zugestimmt. Du willst doch nicht der Einzige sein?"", correct: "Gruppendruck", options: ["Zeitdruck", "Schuldgefühle", "Gruppendruck"] },
+            { text: "„Wenn du das nicht machst, wirst du es bereuen. Glaub mir!"", correct: "Angstmache", options: ["Angstmache", "Reziprozität", "Schmeichelei"] },
+            { text: "„Du bist so schlau, deshalb vertraue ich nur dir dieses Geheimnis an..."", correct: "Schmeichelei", options: ["Gruppendruck", "Schmeichelei", "Zeitdruck"] }
+        ];
+        let currentScenario = 0;
+        let scoreCount = 0;
+        function toggleType(el) { el.classList.toggle('recognized'); saveData(); }
+        function toggleWarning(el) { el.classList.toggle('aware'); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            document.getElementById('gameOptions').innerHTML = s.options.map(o =>
+                `<div class="game-option" onclick="checkAnswer(this, ${o === s.correct})">${o}</div>`
+            ).join('');
+        }
+        function checkAnswer(el, isCorrect) {
+            document.querySelectorAll('.game-option').forEach(o => o.style.pointerEvents = 'none');
+            if (isCorrect) {
+                el.classList.add('correct');
+                scoreCount++;
+                document.getElementById('scoreCount').textContent = scoreCount;
+            } else {
+                el.classList.add('wrong');
+                document.querySelectorAll('.game-option').forEach(o => {
+                    if (o.textContent === scenarios[currentScenario].correct) o.classList.add('correct');
+                });
+            }
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                types: document.querySelectorAll('.type-card.recognized').length,
+                warnings: document.querySelectorAll('.warning-item.aware').length,
+                scoreCount,
+                practice1: document.getElementById('practice1').value,
+                practice2: document.getElementById('practice2').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_manipulation', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_manipulation');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const types = document.querySelectorAll('.type-card');
+                for (let i = 0; i < (data.types || 0); i++) { if (types[i]) types[i].classList.add('recognized'); }
+                const warnings = document.querySelectorAll('.warning-item');
+                for (let i = 0; i < (data.warnings || 0); i++) { if (warnings[i]) warnings[i].classList.add('aware'); }
+                scoreCount = data.scoreCount || 0;
+                document.getElementById('scoreCount').textContent = scoreCount;
+                document.getElementById('practice1').value = data.practice1 || '';
+                document.getElementById('practice2').value = data.practice2 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

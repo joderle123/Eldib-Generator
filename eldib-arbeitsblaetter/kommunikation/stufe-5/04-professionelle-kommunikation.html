@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professionelle Kommunikation - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4ca1af; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .contexts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .context-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .context-card:hover { border-color: #4ca1af; transform: translateY(-3px); }
+        .context-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .context-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .context-card .title { font-weight: bold; margin-bottom: 5px; }
+        .context-card .desc { font-size: 0.8em; color: #666; }
+        .email-builder { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .email-template { background: white; border-radius: 10px; padding: 20px; color: #333; }
+        .email-line { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .email-label { font-weight: bold; min-width: 80px; color: #667eea; }
+        .email-input { flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .email-input:focus { outline: none; border-color: #667eea; }
+        .email-body { width: 100%; min-height: 150px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; resize: vertical; }
+        .email-body:focus { outline: none; border-color: #667eea; }
+        .phone-skills { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .phone-skill { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .phone-skill:hover { border-color: #4ca1af; }
+        .phone-skill.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .phone-icon { font-size: 1.3em; }
+        .phone-text { flex: 1; }
+        .phone-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .phone-skill.mastered .phone-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .interview-section { background: #fff3e0; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ff9800; }
+        .interview-title { font-weight: bold; color: #e65100; margin-bottom: 15px; }
+        .interview-tips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .interview-tip { background: white; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-icon { font-size: 1.5em; }
+        .tip-content { flex: 1; }
+        .tip-title { font-weight: bold; margin-bottom: 5px; }
+        .tip-text { font-size: 0.9em; color: #666; }
+        .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .dos-box, .donts-box { border-radius: 15px; padding: 20px; }
+        .dos-box { background: #e8f5e9; border: 3px solid #4CAF50; }
+        .donts-box { background: #ffebee; border: 3px solid #f44336; }
+        .box-title { font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .box-title.dos { color: #2e7d32; }
+        .box-title.donts { color: #c62828; }
+        .box-list { list-style: none; }
+        .box-list li { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); font-size: 0.95em; }
+        .box-list li:last-child { border-bottom: none; }
+        .practice-scenario { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scenario-prompt { font-weight: bold; margin-bottom: 15px; }
+        .scenario-situation { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #4ca1af; }
+        .scenario-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .scenario-input:focus { outline: none; border-color: #4ca1af; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4ca1af; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .contexts-grid { grid-template-columns: 1fr; } .interview-tips, .dos-donts { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Professionelle Kommunikation</h1>
+            <p>Im beruflichen Kontext überzeugend kommunizieren</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-26/K-27)</h3>
+                <p>Der Jugendliche kann in professionellen Kontexten angemessen kommunizieren – schriftlich wie mündlich. Er beherrscht E-Mail-Etikette, Telefongespräche und Bewerbungssituationen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💼</span> Professionelle Kommunikationskontexte</h3>
+                <p>In diesen Kontexten kann der Jugendliche professionell kommunizieren:</p>
+                <div class="contexts-grid">
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">📧</div><div class="title">E-Mail</div><div class="desc">Formelle Nachrichten</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">📞</div><div class="title">Telefon</div><div class="desc">Geschäftliche Anrufe</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🎤</div><div class="title">Bewerbung</div><div class="desc">Vorstellungsgespräche</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🤝</div><div class="title">Meeting</div><div class="desc">Besprechungen</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">📋</div><div class="title">Praktikum</div><div class="desc">Arbeitsumfeld</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">💬</div><div class="title">Kundenkontakt</div><div class="desc">Serviceorientiert</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📧</span> Professionelle E-Mail</h3>
+                <div class="email-builder">
+                    <p style="text-align: center; margin-bottom: 15px;">Übe das Verfassen einer formellen E-Mail:</p>
+                    <div class="email-template">
+                        <div class="email-line"><span class="email-label">Betreff:</span><input type="text" class="email-input" id="emailSubject" placeholder="Anfrage: Praktikumsplatz im Bereich..." oninput="saveData()"></div>
+                        <div class="email-line"><span class="email-label">Anrede:</span><input type="text" class="email-input" id="emailGreeting" placeholder="Sehr geehrte Frau / Sehr geehrter Herr..." oninput="saveData()"></div>
+                        <textarea class="email-body" id="emailBody" placeholder="Haupttext der E-Mail...
+
+• Einleitung: Wer sind Sie? Warum schreiben Sie?
+• Hauptteil: Was ist Ihr Anliegen?
+• Schluss: Was wünschen Sie sich? Dank" oninput="saveData()"></textarea>
+                        <div class="email-line"><span class="email-label">Grußformel:</span><input type="text" class="email-input" id="emailClosing" placeholder="Mit freundlichen Grüßen" oninput="saveData()"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📞</span> Professionell telefonieren</h3>
+                <p>Diese Fähigkeiten zeigt der Jugendliche am Telefon:</p>
+                <div class="phone-skills">
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">👋</span><span class="phone-text">Sich korrekt melden (Name, ggf. Organisation)</span><span class="phone-check">✓</span></div>
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">🎯</span><span class="phone-text">Anliegen klar und präzise formulieren</span><span class="phone-check">✓</span></div>
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">📝</span><span class="phone-text">Wichtige Informationen notieren</span><span class="phone-check">✓</span></div>
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">🔄</span><span class="phone-text">Nachfragen bei Unklarheiten</span><span class="phone-check">✓</span></div>
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">😊</span><span class="phone-text">Freundlicher, professioneller Ton</span><span class="phone-check">✓</span></div>
+                    <div class="phone-skill" onclick="toggleSkill(this)"><span class="phone-icon">👋</span><span class="phone-text">Gespräch höflich beenden, Dank aussprechen</span><span class="phone-check">✓</span></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎤</span> Vorstellungsgespräch</h3>
+                <div class="interview-section">
+                    <div class="interview-title">Tipps für erfolgreiche Bewerbungsgespräche:</div>
+                    <div class="interview-tips">
+                        <div class="interview-tip"><span class="tip-icon">👔</span><div class="tip-content"><div class="tip-title">Erscheinungsbild</div><div class="tip-text">Angemessene, gepflegte Kleidung</div></div></div>
+                        <div class="interview-tip"><span class="tip-icon">⏰</span><div class="tip-content"><div class="tip-title">Pünktlichkeit</div><div class="tip-text">5-10 Minuten früher da sein</div></div></div>
+                        <div class="interview-tip"><span class="tip-icon">📚</span><div class="tip-content"><div class="tip-title">Vorbereitung</div><div class="tip-text">Über Unternehmen informieren</div></div></div>
+                        <div class="interview-tip"><span class="tip-icon">👁️</span><div class="tip-content"><div class="tip-title">Körpersprache</div><div class="tip-text">Blickkontakt, aufrechte Haltung</div></div></div>
+                        <div class="interview-tip"><span class="tip-icon">🗣️</span><div class="tip-content"><div class="tip-title">Klar antworten</div><div class="tip-text">Strukturiert, nicht abschweifen</div></div></div>
+                        <div class="interview-tip"><span class="tip-icon">❓</span><div class="tip-content"><div class="tip-title">Fragen stellen</div><div class="tip-text">Interesse zeigen</div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Dos and Don'ts</h3>
+                <div class="dos-donts">
+                    <div class="dos-box">
+                        <div class="box-title dos">✓ Professionell:</div>
+                        <ul class="box-list">
+                            <li>Höfliche, respektvolle Anrede</li>
+                            <li>Klare, sachliche Sprache</li>
+                            <li>Rechtschreibung prüfen</li>
+                            <li>Sich kurz fassen</li>
+                            <li>Danke sagen</li>
+                        </ul>
+                    </div>
+                    <div class="donts-box">
+                        <div class="box-title donts">✗ Vermeiden:</div>
+                        <ul class="box-list">
+                            <li>Umgangssprache, Slang</li>
+                            <li>Emojis in formellen E-Mails</li>
+                            <li>Rechtschreibfehler</li>
+                            <li>Zu persönlich werden</li>
+                            <li>Unhöflicher Ton</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Übungssituation</h3>
+                <div class="practice-scenario">
+                    <div class="scenario-prompt">Situation:</div>
+                    <div class="scenario-situation">Du rufst bei einem Unternehmen an, um dich nach einem Praktikumsplatz zu erkundigen. Was sagst du, nachdem sich jemand am Telefon meldet?</div>
+                    <input type="text" class="scenario-input" id="practiceResponse" placeholder="Guten Tag, mein Name ist... Ich rufe an, weil..." oninput="saveData()">
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie kommuniziert der Jugendliche in professionellen Situationen? Kann er sich angemessen ausdrücken? Wo braucht er noch Übung?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleContext(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('mastered'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                contexts: document.querySelectorAll('.context-card.practiced').length,
+                skills: document.querySelectorAll('.phone-skill.mastered').length,
+                emailSubject: document.getElementById('emailSubject').value,
+                emailGreeting: document.getElementById('emailGreeting').value,
+                emailBody: document.getElementById('emailBody').value,
+                emailClosing: document.getElementById('emailClosing').value,
+                practiceResponse: document.getElementById('practiceResponse').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_professionell', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_professionell');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const contexts = document.querySelectorAll('.context-card');
+                for (let i = 0; i < (data.contexts || 0); i++) { if (contexts[i]) contexts[i].classList.add('practiced'); }
+                const skills = document.querySelectorAll('.phone-skill');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('mastered'); }
+                document.getElementById('emailSubject').value = data.emailSubject || '';
+                document.getElementById('emailGreeting').value = data.emailGreeting || '';
+                document.getElementById('emailBody').value = data.emailBody || '';
+                document.getElementById('emailClosing').value = data.emailClosing || '';
+                document.getElementById('practiceResponse').value = data.practiceResponse || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

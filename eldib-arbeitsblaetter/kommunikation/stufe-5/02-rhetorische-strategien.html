@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhetorische Strategien - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #8e2de2; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .rhetoric-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .pillar { text-align: center; padding: 25px 15px; border-radius: 15px; cursor: pointer; transition: all 0.3s; }
+        .pillar:hover { transform: translateY(-5px); }
+        .pillar.mastered { box-shadow: 0 0 0 4px #4CAF50; }
+        .pillar.ethos { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .pillar.pathos { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
+        .pillar.logos { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; }
+        .pillar .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .pillar .title { font-weight: bold; font-size: 1.2em; margin-bottom: 5px; }
+        .pillar .desc { font-size: 0.85em; opacity: 0.9; }
+        .techniques-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .technique-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .technique-tab { padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 20px; color: white; cursor: pointer; transition: all 0.3s; }
+        .technique-tab:hover, .technique-tab.active { background: rgba(255,255,255,0.4); }
+        .technique-content { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; min-height: 200px; }
+        .technique-list { list-style: none; }
+        .technique-list li { padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.15); border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .technique-list li:hover { background: rgba(255,255,255,0.25); }
+        .technique-list li.practiced { background: rgba(76, 175, 80, 0.4); }
+        .technique-name { font-weight: bold; }
+        .technique-example { font-size: 0.9em; opacity: 0.9; font-style: italic; margin-top: 5px; }
+        .analysis-game { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ffc107; }
+        .game-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .speech-sample { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107; font-style: italic; }
+        .analysis-options { display: flex; flex-wrap: wrap; gap: 10px; }
+        .analysis-btn { padding: 10px 20px; background: #fff3e0; border: 2px solid #ffc107; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
+        .analysis-btn:hover { background: #ffe082; }
+        .analysis-btn.correct { background: #c8e6c9; border-color: #4CAF50; }
+        .analysis-btn.wrong { background: #ffcdd2; border-color: #f44336; }
+        .game-feedback { margin-top: 15px; padding: 15px; border-radius: 10px; display: none; }
+        .game-feedback.show { display: block; }
+        .game-feedback.correct { background: #e8f5e9; color: #2e7d32; }
+        .game-feedback.wrong { background: #ffebee; color: #c62828; }
+        .practice-builder { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .builder-title { font-weight: bold; margin-bottom: 15px; }
+        .builder-prompt { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #8e2de2; }
+        .builder-inputs { display: flex; flex-direction: column; gap: 15px; }
+        .builder-row { display: flex; align-items: center; gap: 10px; }
+        .builder-label { min-width: 100px; font-weight: bold; color: #8e2de2; }
+        .builder-input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .builder-input:focus { outline: none; border-color: #8e2de2; }
+        .effectiveness-scale { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .scale-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 2px solid #e0e0e0; }
+        .scale-label { flex: 1; }
+        .scale-dots { display: flex; gap: 8px; }
+        .scale-dot { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #8e2de2; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #8e2de2; }
+        .scale-dot:hover { background: #ede7f6; }
+        .scale-dot.selected { background: #8e2de2; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #8e2de2; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .rhetoric-pillars { grid-template-columns: 1fr; } .builder-row { flex-direction: column; align-items: stretch; } .builder-label { min-width: auto; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Rhetorische Strategien</h1>
+            <p>Die Kunst der überzeugenden Rede</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-25/K-26)</h3>
+                <p>Der Jugendliche kennt und versteht verschiedene rhetorische Strategien. Er kann diese analysieren, erkennen und selbst gezielt einsetzen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏛️</span> Die drei Säulen der Rhetorik (Aristoteles)</h3>
+                <div class="rhetoric-pillars">
+                    <div class="pillar ethos" onclick="togglePillar(this)">
+                        <div class="icon">👤</div>
+                        <div class="title">Ethos</div>
+                        <div class="desc">Glaubwürdigkeit des Sprechers</div>
+                    </div>
+                    <div class="pillar pathos" onclick="togglePillar(this)">
+                        <div class="icon">❤️</div>
+                        <div class="title">Pathos</div>
+                        <div class="desc">Emotionale Ansprache</div>
+                    </div>
+                    <div class="pillar logos" onclick="togglePillar(this)">
+                        <div class="icon">🧠</div>
+                        <div class="title">Logos</div>
+                        <div class="desc">Logische Argumentation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛠️</span> Rhetorische Stilmittel</h3>
+                <div class="techniques-section">
+                    <div class="technique-tabs">
+                        <button class="technique-tab active" onclick="showCategory(0)">Wiederholung</button>
+                        <button class="technique-tab" onclick="showCategory(1)">Bildsprache</button>
+                        <button class="technique-tab" onclick="showCategory(2)">Fragen</button>
+                    </div>
+                    <div class="technique-content" id="techniqueContent">
+                        <ul class="technique-list" id="techniqueList">
+                            <li onclick="toggleTechnique(this)"><div class="technique-name">Anapher</div><div class="technique-example">„Ich habe einen Traum... Ich habe einen Traum..."</div></li>
+                            <li onclick="toggleTechnique(this)"><div class="technique-name">Klimax (Steigerung)</div><div class="technique-example">„Gut, besser, am besten"</div></li>
+                            <li onclick="toggleTechnique(this)"><div class="technique-name">Dreierfigur</div><div class="technique-example">„Veni, vidi, vici" – „Ich kam, sah und siegte"</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Stilmittel erkennen</h3>
+                <div class="analysis-game">
+                    <div class="game-title">Welches Stilmittel wird hier verwendet?</div>
+                    <div class="speech-sample" id="speechSample">„Fragen Sie nicht, was Ihr Land für Sie tun kann – fragen Sie, was Sie für Ihr Land tun können."</div>
+                    <div class="analysis-options" id="analysisOptions">
+                        <button class="analysis-btn" onclick="checkAnalysis(this, false)">Metapher</button>
+                        <button class="analysis-btn" onclick="checkAnalysis(this, true)">Chiasmus (Überkreuzstellung)</button>
+                        <button class="analysis-btn" onclick="checkAnalysis(this, false)">Hyperbel</button>
+                    </div>
+                    <div class="game-feedback" id="gameFeedback"></div>
+                    <button class="game-btn" style="margin-top: 15px; padding: 10px 20px; background: #ffc107; border: none; border-radius: 10px; cursor: pointer;" onclick="nextSample()">➡️ Nächstes Beispiel</button>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✍️</span> Eigene Rede aufbauen</h3>
+                <div class="practice-builder">
+                    <div class="builder-title">Baue eine kurze überzeugende Aussage:</div>
+                    <div class="builder-prompt">Thema: „Warum ist es wichtig, Bücher zu lesen?"</div>
+                    <div class="builder-inputs">
+                        <div class="builder-row">
+                            <span class="builder-label">👤 Ethos:</span>
+                            <input type="text" class="builder-input" id="ethosInput" placeholder="z.B. Als jemand, der durch Bücher viel gelernt hat..." oninput="saveData()">
+                        </div>
+                        <div class="builder-row">
+                            <span class="builder-label">❤️ Pathos:</span>
+                            <input type="text" class="builder-input" id="pathosInput" placeholder="z.B. Stell dir vor, in andere Welten einzutauchen..." oninput="saveData()">
+                        </div>
+                        <div class="builder-row">
+                            <span class="builder-label">🧠 Logos:</span>
+                            <input type="text" class="builder-input" id="logosInput" placeholder="z.B. Studien zeigen, dass Lesen das Gehirn trainiert..." oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Selbsteinschätzung Rhetorik</h3>
+                <p>Wie gut beherrscht der Jugendliche diese Fähigkeiten?</p>
+                <div class="effectiveness-scale">
+                    <div class="scale-item">
+                        <div class="scale-label">Rhetorische Mittel erkennen</div>
+                        <div class="scale-dots" data-scale="recognize">
+                            <div class="scale-dot" onclick="setScale('recognize', 1)">1</div>
+                            <div class="scale-dot" onclick="setScale('recognize', 2)">2</div>
+                            <div class="scale-dot" onclick="setScale('recognize', 3)">3</div>
+                            <div class="scale-dot" onclick="setScale('recognize', 4)">4</div>
+                            <div class="scale-dot" onclick="setScale('recognize', 5)">5</div>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-label">Rhetorische Mittel anwenden</div>
+                        <div class="scale-dots" data-scale="apply">
+                            <div class="scale-dot" onclick="setScale('apply', 1)">1</div>
+                            <div class="scale-dot" onclick="setScale('apply', 2)">2</div>
+                            <div class="scale-dot" onclick="setScale('apply', 3)">3</div>
+                            <div class="scale-dot" onclick="setScale('apply', 4)">4</div>
+                            <div class="scale-dot" onclick="setScale('apply', 5)">5</div>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-label">Überzeugend sprechen</div>
+                        <div class="scale-dots" data-scale="persuade">
+                            <div class="scale-dot" onclick="setScale('persuade', 1)">1</div>
+                            <div class="scale-dot" onclick="setScale('persuade', 2)">2</div>
+                            <div class="scale-dot" onclick="setScale('persuade', 3)">3</div>
+                            <div class="scale-dot" onclick="setScale('persuade', 4)">4</div>
+                            <div class="scale-dot" onclick="setScale('persuade', 5)">5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Erkennt der Jugendliche rhetorische Mittel in Reden? Kann er sie selbst einsetzen? Wie überzeugend kommuniziert er?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const categories = [
+            { name: "Wiederholung", techniques: [
+                { name: "Anapher", example: "„Ich habe einen Traum... Ich habe einen Traum..."" },
+                { name: "Klimax (Steigerung)", example: "„Gut, besser, am besten"" },
+                { name: "Dreierfigur", example: "„Veni, vidi, vici" – „Ich kam, sah und siegte"" }
+            ]},
+            { name: "Bildsprache", techniques: [
+                { name: "Metapher", example: "„Das Leben ist eine Reise"" },
+                { name: "Vergleich", example: "„Schnell wie der Wind"" },
+                { name: "Personifikation", example: "„Die Sonne lacht"" }
+            ]},
+            { name: "Fragen", techniques: [
+                { name: "Rhetorische Frage", example: "„Wollen wir das wirklich zulassen?"" },
+                { name: "Suggestivfrage", example: "„Du willst doch auch Erfolg haben, oder?"" },
+                { name: "Scheinfrage", example: "„Was ist wichtiger als unsere Kinder?"" }
+            ]}
+        ];
+        const samples = [
+            { text: "„Fragen Sie nicht, was Ihr Land für Sie tun kann – fragen Sie, was Sie für Ihr Land tun können."", correct: "Chiasmus (Überkreuzstellung)", options: ["Metapher", "Chiasmus (Überkreuzstellung)", "Hyperbel"] },
+            { text: "„Er war ein Löwe im Kampf."", correct: "Metapher", options: ["Metapher", "Vergleich", "Personifikation"] },
+            { text: "„Heute, morgen, für immer – wir werden kämpfen!"", correct: "Klimax", options: ["Anapher", "Klimax", "Dreierfigur"] },
+            { text: "„Die Zeit heilt alle Wunden."", correct: "Personifikation", options: ["Metapher", "Vergleich", "Personifikation"] }
+        ];
+        let currentSample = 0;
+        let scales = { recognize: 0, apply: 0, persuade: 0 };
+        function togglePillar(el) { el.classList.toggle('mastered'); saveData(); }
+        function showCategory(index) {
+            document.querySelectorAll('.technique-tab').forEach((t, i) => t.classList.toggle('active', i === index));
+            const cat = categories[index];
+            document.getElementById('techniqueList').innerHTML = cat.techniques.map(t =>
+                `<li onclick="toggleTechnique(this)"><div class="technique-name">${t.name}</div><div class="technique-example">${t.example}</div></li>`
+            ).join('');
+        }
+        function toggleTechnique(el) { el.classList.toggle('practiced'); saveData(); }
+        function loadSample() {
+            const s = samples[currentSample];
+            document.getElementById('speechSample').textContent = s.text;
+            document.getElementById('analysisOptions').innerHTML = s.options.map(o =>
+                `<button class="analysis-btn" onclick="checkAnalysis(this, ${o === s.correct})">${o}</button>`
+            ).join('');
+            document.getElementById('gameFeedback').className = 'game-feedback';
+        }
+        function checkAnalysis(btn, isCorrect) {
+            document.querySelectorAll('.analysis-btn').forEach(b => b.disabled = true);
+            const feedback = document.getElementById('gameFeedback');
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.textContent = '✓ Richtig! ' + samples[currentSample].correct;
+                feedback.className = 'game-feedback show correct';
+            } else {
+                btn.classList.add('wrong');
+                feedback.textContent = '✗ Nicht ganz. Es ist: ' + samples[currentSample].correct;
+                feedback.className = 'game-feedback show wrong';
+            }
+            saveData();
+        }
+        function nextSample() {
+            currentSample = (currentSample + 1) % samples.length;
+            loadSample();
+        }
+        function setScale(scale, value) {
+            scales[scale] = value;
+            const dots = document.querySelector(`[data-scale="${scale}"]`).querySelectorAll('.scale-dot');
+            dots.forEach((d, i) => d.classList.toggle('selected', i < value));
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                pillars: document.querySelectorAll('.pillar.mastered').length,
+                techniques: document.querySelectorAll('.technique-list li.practiced').length,
+                scales,
+                ethosInput: document.getElementById('ethosInput').value,
+                pathosInput: document.getElementById('pathosInput').value,
+                logosInput: document.getElementById('logosInput').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_rhetorik', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_rhetorik');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const pillars = document.querySelectorAll('.pillar');
+                for (let i = 0; i < (data.pillars || 0); i++) { if (pillars[i]) pillars[i].classList.add('mastered'); }
+                if (data.scales) {
+                    scales = data.scales;
+                    for (const [key, value] of Object.entries(scales)) {
+                        if (value > 0) setScale(key, value);
+                    }
+                }
+                document.getElementById('ethosInput').value = data.ethosInput || '';
+                document.getElementById('pathosInput').value = data.pathosInput || '';
+                document.getElementById('logosInput').value = data.logosInput || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadSample();
+        loadData();
+    </script>
+</body>
+</html>

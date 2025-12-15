@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komplexe Gesprächsführung - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #5c258d 0%, #4389a2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #5c258d 0%, #4389a2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #5c258d; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .conversation-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .type-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .type-card:hover { border-color: #5c258d; transform: translateY(-3px); }
+        .type-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .type-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .type-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .type-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .techniques-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .technique-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .technique-card { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .technique-card:hover { background: rgba(255,255,255,0.3); }
+        .technique-card.practiced { background: rgba(76, 175, 80, 0.4); }
+        .technique-name { font-weight: bold; margin-bottom: 8px; }
+        .technique-example { font-size: 0.9em; opacity: 0.9; font-style: italic; }
+        .difficult-situations { background: #fff3e0; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ff9800; }
+        .situations-title { font-weight: bold; color: #e65100; margin-bottom: 15px; }
+        .situation-list { display: flex; flex-direction: column; gap: 12px; }
+        .situation-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid #ffe0b2; transition: all 0.3s; }
+        .situation-item:hover { border-color: #ff9800; }
+        .situation-item.handled { background: #e8f5e9; border-color: #4CAF50; }
+        .situation-icon { font-size: 1.3em; }
+        .situation-text { flex: 1; }
+        .situation-check { width: 25px; height: 25px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .situation-item.handled .situation-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .role-play { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .roleplay-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .scenario-box { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+        .scenario-setup { font-weight: bold; margin-bottom: 10px; color: #5c258d; }
+        .scenario-desc { margin-bottom: 15px; }
+        .response-areas { display: flex; flex-direction: column; gap: 15px; }
+        .response-area { }
+        .response-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .response-input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .response-input:focus { outline: none; border-color: #4CAF50; }
+        .scenario-controls { display: flex; gap: 15px; justify-content: center; }
+        .scenario-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #4CAF50; color: white; }
+        .listening-levels { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .levels-title { font-weight: bold; margin-bottom: 15px; }
+        .levels-pyramid { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .level-item { padding: 15px 25px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .level-item:hover { transform: scale(1.02); }
+        .level-item.achieved { box-shadow: 0 0 0 4px #4CAF50; }
+        .level-1 { background: linear-gradient(135deg, #4CAF50, #8BC34A); color: white; width: 90%; }
+        .level-2 { background: linear-gradient(135deg, #2196F3, #03A9F4); color: white; width: 75%; }
+        .level-3 { background: linear-gradient(135deg, #9C27B0, #E91E63); color: white; width: 60%; }
+        .level-4 { background: linear-gradient(135deg, #FF9800, #FFC107); color: white; width: 45%; }
+        .level-name { font-weight: bold; }
+        .level-desc { font-size: 0.85em; opacity: 0.9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #5c258d; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .conversation-types, .technique-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Komplexe Gesprächsführung</h1>
+            <p>Anspruchsvolle Gespräche meistern</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-27/K-28)</h3>
+                <p>Der Jugendliche kann komplexe Gesprächssituationen meistern. Er beherrscht verschiedene Gesprächstechniken und kann auch schwierige Gespräche konstruktiv führen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Komplexe Gesprächstypen</h3>
+                <p>Diese anspruchsvollen Gesprächstypen beherrscht der Jugendliche:</p>
+                <div class="conversation-types">
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">🤝</div><div class="title">Verhandlung</div><div class="desc">Win-Win-Lösungen finden</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">🔥</div><div class="title">Kritikgespräch</div><div class="desc">Kritik geben und annehmen</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">💔</div><div class="title">Schwierige Nachricht</div><div class="desc">Unangenehmes mitteilen</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">⚡</div><div class="title">Konfliktgespräch</div><div class="desc">Streit konstruktiv lösen</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">🎤</div><div class="title">Moderation</div><div class="desc">Gruppengespräche leiten</div></div>
+                    <div class="type-card" onclick="toggleType(this)"><div class="icon">💭</div><div class="title">Beratung</div><div class="desc">Anderen zuhören und helfen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🛠️</span> Fortgeschrittene Techniken</h3>
+                <div class="techniques-section">
+                    <div class="technique-grid">
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Paraphrasieren</div><div class="technique-example">„Wenn ich dich richtig verstehe..."</div></div>
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Verbalisieren</div><div class="technique-example">„Du fühlst dich also..."</div></div>
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Reframing</div><div class="technique-example">Perspektive ändern, neu rahmen</div></div>
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Ich-Botschaften</div><div class="technique-example">„Ich fühle mich..., wenn..."</div></div>
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Aktives Schweigen</div><div class="technique-example">Pausen aushalten, Raum geben</div></div>
+                        <div class="technique-card" onclick="toggleTechnique(this)"><div class="technique-name">Zusammenfassen</div><div class="technique-example">„Also zusammengefasst..."</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚠️</span> Schwierige Situationen</h3>
+                <div class="difficult-situations">
+                    <div class="situations-title">Der Jugendliche kann diese Situationen meistern:</div>
+                    <div class="situation-list">
+                        <div class="situation-item" onclick="toggleSituation(this)"><span class="situation-icon">😠</span><span class="situation-text">Wenn jemand wütend wird</span><span class="situation-check">✓</span></div>
+                        <div class="situation-item" onclick="toggleSituation(this)"><span class="situation-icon">😢</span><span class="situation-text">Wenn jemand weint</span><span class="situation-check">✓</span></div>
+                        <div class="situation-item" onclick="toggleSituation(this)"><span class="situation-icon">🤐</span><span class="situation-text">Wenn jemand blockiert/schweigt</span><span class="situation-check">✓</span></div>
+                        <div class="situation-item" onclick="toggleSituation(this)"><span class="situation-icon">🔄</span><span class="situation-text">Wenn das Gespräch im Kreis dreht</span><span class="situation-check">✓</span></div>
+                        <div class="situation-item" onclick="toggleSituation(this)"><span class="situation-icon">🎯</span><span class="situation-text">Wenn Positionen verhärtet sind</span><span class="situation-check">✓</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Rollenspiel-Übung</h3>
+                <div class="role-play">
+                    <div class="roleplay-title">Szenario zum Üben:</div>
+                    <div class="scenario-box">
+                        <div class="scenario-setup" id="scenarioSetup">Konfliktgespräch</div>
+                        <div class="scenario-desc" id="scenarioDesc">Dein Freund ist sauer, weil du ein Geheimnis weitererzählt hast. Er konfrontiert dich damit.</div>
+                        <div class="response-areas">
+                            <div class="response-area">
+                                <div class="response-label">Wie würdest du das Gespräch beginnen?</div>
+                                <input type="text" class="response-input" id="response1" placeholder="z.B. Ich kann verstehen, dass du wütend bist..." oninput="saveData()">
+                            </div>
+                            <div class="response-area">
+                                <div class="response-label">Welche Technik würdest du verwenden?</div>
+                                <input type="text" class="response-input" id="response2" placeholder="z.B. Ich-Botschaft, aktives Zuhören..." oninput="saveData()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scenario-controls">
+                        <button class="scenario-btn" onclick="nextScenario()">🔄 Nächstes Szenario</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👂</span> Zuhör-Ebenen</h3>
+                <div class="listening-levels">
+                    <div class="levels-title">Ebenen des Zuhörens (von oben nach unten entwickeln):</div>
+                    <div class="levels-pyramid">
+                        <div class="level-item level-4" onclick="toggleLevel(this)"><div class="level-name">Empathisches Zuhören</div><div class="level-desc">Gefühle und Bedürfnisse erkennen</div></div>
+                        <div class="level-item level-3" onclick="toggleLevel(this)"><div class="level-name">Aufmerksames Zuhören</div><div class="level-desc">Aktiv verstehen wollen</div></div>
+                        <div class="level-item level-2" onclick="toggleLevel(this)"><div class="level-name">Selektives Zuhören</div><div class="level-desc">Nur das Interessante hören</div></div>
+                        <div class="level-item level-1" onclick="toggleLevel(this)"><div class="level-name">Schein-Zuhören</div><div class="level-desc">Nur so tun als ob</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie führt der Jugendliche komplexe Gespräche? Welche Techniken wendet er an? Wie geht er mit schwierigen Situationen um?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { setup: "Konfliktgespräch", desc: "Dein Freund ist sauer, weil du ein Geheimnis weitererzählt hast. Er konfrontiert dich damit." },
+            { setup: "Kritikgespräch", desc: "Du musst einem Gruppenmitglied sagen, dass es sich mehr einbringen soll." },
+            { setup: "Schwierige Nachricht", desc: "Du musst jemandem absagen, obwohl du weißt, dass es ihn enttäuschen wird." },
+            { setup: "Moderation", desc: "Zwei Personen in deiner Gruppe streiten sich. Du sollst vermitteln." },
+            { setup: "Beratungsgespräch", desc: "Ein Freund erzählt dir von seinen Problemen und bittet um Rat." }
+        ];
+        let currentScenario = 0;
+        function toggleType(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleTechnique(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleSituation(el) { el.classList.toggle('handled'); saveData(); }
+        function toggleLevel(el) { el.classList.toggle('achieved'); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioSetup').textContent = s.setup;
+            document.getElementById('scenarioDesc').textContent = s.desc;
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+            document.getElementById('response1').value = '';
+            document.getElementById('response2').value = '';
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                types: document.querySelectorAll('.type-card.mastered').length,
+                techniques: document.querySelectorAll('.technique-card.practiced').length,
+                situations: document.querySelectorAll('.situation-item.handled').length,
+                levels: document.querySelectorAll('.level-item.achieved').length,
+                response1: document.getElementById('response1').value,
+                response2: document.getElementById('response2').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_komplex', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_komplex');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const types = document.querySelectorAll('.type-card');
+                for (let i = 0; i < (data.types || 0); i++) { if (types[i]) types[i].classList.add('mastered'); }
+                const techniques = document.querySelectorAll('.technique-card');
+                for (let i = 0; i < (data.techniques || 0); i++) { if (techniques[i]) techniques[i].classList.add('practiced'); }
+                const situations = document.querySelectorAll('.situation-item');
+                for (let i = 0; i < (data.situations || 0); i++) { if (situations[i]) situations[i].classList.add('handled'); }
+                const levels = document.querySelectorAll('.level-item');
+                for (let i = 0; i < (data.levels || 0); i++) { if (levels[i]) levels[i].classList.add('achieved'); }
+                document.getElementById('response1').value = data.response1 || '';
+                document.getElementById('response2').value = data.response2 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

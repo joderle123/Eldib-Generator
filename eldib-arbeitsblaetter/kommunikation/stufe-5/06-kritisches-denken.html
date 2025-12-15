@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kritisches Denken - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #2c5364; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .thinking-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #2c5364; transform: translateY(-3px); }
+        .skill-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .skill-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .source-evaluation { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .source-checklist { display: flex; flex-direction: column; gap: 12px; }
+        .check-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .check-item:hover { background: rgba(255,255,255,0.3); }
+        .check-item.checked { background: rgba(76, 175, 80, 0.4); }
+        .check-letter { width: 35px; height: 35px; background: white; color: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .check-content { flex: 1; }
+        .check-title { font-weight: bold; }
+        .check-desc { font-size: 0.9em; opacity: 0.9; }
+        .fallacy-section { background: #ffebee; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #f44336; }
+        .fallacy-title { font-weight: bold; color: #c62828; margin-bottom: 15px; }
+        .fallacy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .fallacy-card { background: white; border-radius: 10px; padding: 15px; border-left: 4px solid #f44336; }
+        .fallacy-name { font-weight: bold; color: #c62828; margin-bottom: 5px; }
+        .fallacy-example { font-size: 0.9em; color: #666; font-style: italic; }
+        .analysis-game { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ffc107; }
+        .game-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .statement-box { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107; }
+        .statement-text { font-size: 1.1em; margin-bottom: 15px; }
+        .analysis-questions { display: flex; flex-direction: column; gap: 10px; }
+        .analysis-input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .analysis-input:focus { outline: none; border-color: #ffc107; }
+        .analysis-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #ffc107; color: #333; }
+        .questions-section { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .questions-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .question-cards { display: flex; flex-direction: column; gap: 10px; }
+        .question-card { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 2px solid #4CAF50; cursor: pointer; transition: all 0.3s; }
+        .question-card:hover { background: #f1f8e9; }
+        .question-card.used { background: #c8e6c9; }
+        .question-icon { font-size: 1.3em; }
+        .question-text { flex: 1; }
+        .bias-awareness { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .bias-title { font-weight: bold; margin-bottom: 15px; }
+        .bias-list { display: flex; flex-direction: column; gap: 12px; }
+        .bias-item { display: flex; align-items: flex-start; gap: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .bias-icon { font-size: 1.5em; }
+        .bias-content { flex: 1; }
+        .bias-name { font-weight: bold; margin-bottom: 5px; }
+        .bias-desc { font-size: 0.9em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #2c5364; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .thinking-skills, .fallacy-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Kritisches Denken</h1>
+            <p>Informationen hinterfragen und bewerten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-26/K-27)</h3>
+                <p>Der Jugendliche kann Informationen kritisch hinterfragen. Er erkennt Fehlinformationen, bewertet Quellen und identifiziert logische Fehlschlüsse.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🧠</span> Kritische Denkfähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt der Jugendliche:</p>
+                <div class="thinking-skills">
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">❓</div><div class="title">Hinterfragen</div><div class="desc">Nicht alles einfach glauben</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🔍</div><div class="title">Recherchieren</div><div class="desc">Informationen überprüfen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">⚖️</div><div class="title">Abwägen</div><div class="desc">Verschiedene Seiten betrachten</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🎯</div><div class="title">Schlussfolgerungen</div><div class="desc">Logisch denken</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🪞</div><div class="title">Selbstreflexion</div><div class="desc">Eigene Vorurteile erkennen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🔄</div><div class="title">Meinung ändern</div><div class="desc">Bei besseren Argumenten</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📚</span> Quellen bewerten (CRAAP-Test)</h3>
+                <div class="source-evaluation">
+                    <p style="text-align: center; margin-bottom: 15px;">Prüfe Quellen mit diesen Kriterien:</p>
+                    <div class="source-checklist">
+                        <div class="check-item" onclick="toggleCheck(this)"><div class="check-letter">C</div><div class="check-content"><div class="check-title">Currency (Aktualität)</div><div class="check-desc">Wie aktuell ist die Information?</div></div></div>
+                        <div class="check-item" onclick="toggleCheck(this)"><div class="check-letter">R</div><div class="check-content"><div class="check-title">Relevance (Relevanz)</div><div class="check-desc">Passt die Info zum Thema?</div></div></div>
+                        <div class="check-item" onclick="toggleCheck(this)"><div class="check-letter">A</div><div class="check-content"><div class="check-title">Authority (Autorität)</div><div class="check-desc">Wer ist die Quelle? Ist sie qualifiziert?</div></div></div>
+                        <div class="check-item" onclick="toggleCheck(this)"><div class="check-letter">A</div><div class="check-content"><div class="check-title">Accuracy (Genauigkeit)</div><div class="check-desc">Sind die Fakten überprüfbar?</div></div></div>
+                        <div class="check-item" onclick="toggleCheck(this)"><div class="check-letter">P</div><div class="check-content"><div class="check-title">Purpose (Zweck)</div><div class="check-desc">Was ist die Absicht? Werbung? Information?</div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚠️</span> Logische Fehlschlüsse erkennen</h3>
+                <div class="fallacy-section">
+                    <div class="fallacy-title">Diese Denkfehler sollte man erkennen:</div>
+                    <div class="fallacy-grid">
+                        <div class="fallacy-card"><div class="fallacy-name">Ad Hominem</div><div class="fallacy-example">Die Person angreifen statt das Argument</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">Strohmann</div><div class="fallacy-example">Argument verzerren, um es leichter anzugreifen</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">Falsche Dichotomie</div><div class="fallacy-example">„Entweder... oder" – als gäbe es nur 2 Optionen</div></div>
+                        <div class="fallacy-card"><div class="fallacy-name">Bandwagon</div><div class="fallacy-example">„Alle anderen machen das auch!"</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔬</span> Analyse-Übung</h3>
+                <div class="analysis-game">
+                    <div class="game-title">Analysiere diese Aussage:</div>
+                    <div class="statement-box">
+                        <div class="statement-text" id="statementText">„Eine Studie hat gezeigt, dass Produkt X gesund ist. Kaufe jetzt Produkt X!"</div>
+                        <div class="analysis-questions">
+                            <div>
+                                <div class="analysis-label">❓ Welche Fragen würdest du stellen?</div>
+                                <input type="text" class="analysis-input" id="analysisQ" placeholder="z.B. Wer hat die Studie gemacht? Wer hat sie bezahlt?" oninput="saveData()">
+                            </div>
+                            <div>
+                                <div class="analysis-label">⚠️ Welche Probleme siehst du?</div>
+                                <input type="text" class="analysis-input" id="analysisP" placeholder="z.B. Werbung nutzt Studie für Verkauf..." oninput="saveData()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn" onclick="nextStatement()">🔄 Nächste Aussage</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Kritische Fragen</h3>
+                <div class="questions-section">
+                    <div class="questions-title">Diese Fragen stellt der Jugendliche:</div>
+                    <div class="question-cards">
+                        <div class="question-card" onclick="toggleQuestion(this)"><span class="question-icon">📰</span><span class="question-text">Wer ist die Quelle dieser Information?</span></div>
+                        <div class="question-card" onclick="toggleQuestion(this)"><span class="question-icon">🎯</span><span class="question-text">Was ist das Ziel dieser Aussage?</span></div>
+                        <div class="question-card" onclick="toggleQuestion(this)"><span class="question-icon">📊</span><span class="question-text">Gibt es Beweise oder nur Behauptungen?</span></div>
+                        <div class="question-card" onclick="toggleQuestion(this)"><span class="question-icon">🔄</span><span class="question-text">Was sagen andere Quellen?</span></div>
+                        <div class="question-card" onclick="toggleQuestion(this)"><span class="question-icon">🤔</span><span class="question-text">Was wird nicht erwähnt?</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Eigene Voreingenommenheit</h3>
+                <div class="bias-awareness">
+                    <div class="bias-title">Typische kognitive Verzerrungen:</div>
+                    <div class="bias-list">
+                        <div class="bias-item"><span class="bias-icon">✅</span><div class="bias-content"><div class="bias-name">Bestätigungsfehler</div><div class="bias-desc">Wir suchen Infos, die unsere Meinung bestätigen</div></div></div>
+                        <div class="bias-item"><span class="bias-icon">👥</span><div class="bias-content"><div class="bias-name">In-Group Bias</div><div class="bias-desc">Wir bevorzugen „unsere" Gruppe</div></div></div>
+                        <div class="bias-item"><span class="bias-icon">🔊</span><div class="bias-content"><div class="bias-name">Verfügbarkeitsheuristik</div><div class="bias-desc">Was wir oft hören, halten wir für häufiger</div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie kritisch hinterfragt der Jugendliche Informationen? Prüft er Quellen? Erkennt er Manipulationsversuche?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const statements = [
+            "„Eine Studie hat gezeigt, dass Produkt X gesund ist. Kaufe jetzt Produkt X!"",
+            "„95% der Ärzte empfehlen dieses Medikament." (Quelle: Hersteller)",
+            "„Ein Freund hat mir erzählt, dass Impfungen gefährlich sind."",
+            "„Im Internet steht, dass diese Diät 10kg in einer Woche abnehmen lässt."",
+            "„Dieser Politiker lügt immer – nichts von ihm stimmt!""
+        ];
+        let currentStatement = 0;
+        function toggleSkill(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleCheck(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleQuestion(el) { el.classList.toggle('used'); saveData(); }
+        function nextStatement() {
+            currentStatement = (currentStatement + 1) % statements.length;
+            document.getElementById('statementText').textContent = statements[currentStatement];
+            document.getElementById('analysisQ').value = '';
+            document.getElementById('analysisP').value = '';
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-card.mastered').length,
+                checks: document.querySelectorAll('.check-item.checked').length,
+                questions: document.querySelectorAll('.question-card.used').length,
+                analysisQ: document.getElementById('analysisQ').value,
+                analysisP: document.getElementById('analysisP').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_kritisch', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_kritisch');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('mastered'); }
+                const checks = document.querySelectorAll('.check-item');
+                for (let i = 0; i < (data.checks || 0); i++) { if (checks[i]) checks[i].classList.add('checked'); }
+                const questions = document.querySelectorAll('.question-card');
+                for (let i = 0; i < (data.questions || 0); i++) { if (questions[i]) questions[i].classList.add('used'); }
+                document.getElementById('analysisQ').value = data.analysisQ || '';
+                document.getElementById('analysisP').value = data.analysisP || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

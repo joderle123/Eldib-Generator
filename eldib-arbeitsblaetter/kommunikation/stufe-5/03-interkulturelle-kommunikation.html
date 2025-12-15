@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interkulturelle Kommunikation - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5af19; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .culture-aspects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .aspect-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .aspect-card:hover { border-color: #f5af19; transform: translateY(-3px); }
+        .aspect-card.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .aspect-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .aspect-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .aspect-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .comparison-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .comparison-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: start; margin: 20px 0; }
+        .culture-box { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; }
+        .culture-title { font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 1.1em; }
+        .culture-traits { list-style: none; }
+        .culture-traits li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.2); font-size: 0.95em; }
+        .culture-traits li:last-child { border-bottom: none; }
+        .comparison-divider { display: flex; align-items: center; justify-content: center; font-size: 2em; }
+        .scenario-section { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .scenario-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .scenario-box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .scenario-situation { font-style: italic; margin-bottom: 10px; }
+        .scenario-question { font-weight: bold; }
+        .response-input { width: 100%; padding: 12px; border: 2px solid #4CAF50; border-radius: 10px; font-size: 1em; margin-top: 10px; }
+        .response-input:focus { outline: none; border-color: #2e7d32; }
+        .skills-checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .skill-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-item:hover { border-color: #f5af19; }
+        .skill-item.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 1.5em; }
+        .skill-text { flex: 1; }
+        .skill-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .skill-item.mastered .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .tip-card { background: white; border-radius: 10px; padding: 15px; border-left: 4px solid #ffc107; }
+        .tip-card .do { color: #2e7d32; font-weight: bold; margin-bottom: 5px; }
+        .tip-card .dont { color: #c62828; font-weight: bold; margin-bottom: 5px; }
+        .tip-card .text { font-size: 0.9em; color: #666; }
+        .reflection-prompts { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .prompt-item { padding: 15px; background: white; border-radius: 10px; margin-bottom: 10px; }
+        .prompt-question { font-weight: bold; margin-bottom: 10px; }
+        .prompt-input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .prompt-input:focus { outline: none; border-color: #f5af19; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5af19; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .culture-aspects, .tips-grid { grid-template-columns: 1fr; } .comparison-grid { grid-template-columns: 1fr; } .comparison-divider { transform: rotate(90deg); padding: 10px 0; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Interkulturelle Kommunikation</h1>
+            <p>Über kulturelle Grenzen hinweg kommunizieren</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-26/K-27)</h3>
+                <p>Der Jugendliche versteht kulturelle Unterschiede in der Kommunikation. Er kann respektvoll und sensibel mit Menschen verschiedener kultureller Hintergründe kommunizieren.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌍</span> Kulturelle Kommunikationsaspekte</h3>
+                <p>Diese Unterschiede in der Kommunikation versteht der Jugendliche:</p>
+                <div class="culture-aspects">
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">👋</div><div class="title">Begrüßungsformen</div><div class="desc">Handschlag, Verbeugung, Umarmung</div></div>
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">👁️</div><div class="title">Blickkontakt</div><div class="desc">Respekt vs. Direktheit</div></div>
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">📏</div><div class="title">Körperlicher Abstand</div><div class="desc">Nähe und Distanz</div></div>
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">🗣️</div><div class="title">Direktheit</div><div class="desc">Direkt vs. indirekt kommunizieren</div></div>
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">⏰</div><div class="title">Zeitverständnis</div><div class="desc">Pünktlichkeit und Flexibilität</div></div>
+                    <div class="aspect-card" onclick="toggleAspect(this)"><div class="icon">🤫</div><div class="title">Stille und Pausen</div><div class="desc">Bedeutung von Schweigen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Kommunikationsstile im Vergleich</h3>
+                <div class="comparison-section">
+                    <div class="comparison-grid">
+                        <div class="culture-box">
+                            <div class="culture-title">🇩🇪 Low-Context Kulturen</div>
+                            <ul class="culture-traits">
+                                <li>Direkte, explizite Kommunikation</li>
+                                <li>Worte haben hohe Bedeutung</li>
+                                <li>Weniger Kontext nötig</li>
+                                <li>„Sag, was du meinst"</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-divider">↔️</div>
+                        <div class="culture-box">
+                            <div class="culture-title">🌏 High-Context Kulturen</div>
+                            <ul class="culture-traits">
+                                <li>Indirekte, implizite Kommunikation</li>
+                                <li>Kontext und Beziehung wichtig</li>
+                                <li>„Zwischen den Zeilen lesen"</li>
+                                <li>Harmonie bewahren</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Interkulturelle Situation</h3>
+                <div class="scenario-section">
+                    <div class="scenario-title">Wie würdest du reagieren?</div>
+                    <div class="scenario-box">
+                        <div class="scenario-situation">Ein neuer Mitschüler aus Japan vermeidet direkten Blickkontakt, wenn er mit Lehrern spricht. Einige Mitschüler halten ihn deswegen für unhöflich oder desinteressiert.</div>
+                        <div class="scenario-question">Wie könntest du die Situation erklären und vermitteln?</div>
+                        <input type="text" class="response-input" id="scenarioResponse" placeholder="In manchen Kulturen zeigt man Respekt durch..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Interkulturelle Kompetenzen</h3>
+                <div class="skills-checklist">
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">🤔</span><span class="skill-text">Eigene kulturelle Prägung reflektieren</span><span class="skill-check">✓</span></div>
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">👂</span><span class="skill-text">Offen für andere Kommunikationsstile sein</span><span class="skill-check">✓</span></div>
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">❓</span><span class="skill-text">Bei Unsicherheit respektvoll nachfragen</span><span class="skill-check">✓</span></div>
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">🚫</span><span class="skill-text">Vorurteile und Stereotype hinterfragen</span><span class="skill-check">✓</span></div>
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">🔄</span><span class="skill-text">Kommunikationsstil anpassen können</span><span class="skill-check">✓</span></div>
+                    <div class="skill-item" onclick="toggleSkill(this)"><span class="skill-icon">🤝</span><span class="skill-text">Missverständnisse geduldig klären</span><span class="skill-check">✓</span></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Tipps für interkulturelle Kommunikation</h3>
+                <div class="tips-section">
+                    <div class="tips-grid">
+                        <div class="tip-card"><div class="do">✓ TUN:</div><div class="text">Neugierig sein und Fragen stellen</div></div>
+                        <div class="tip-card"><div class="dont">✗ VERMEIDEN:</div><div class="text">Verallgemeinerungen über „alle" aus einer Kultur</div></div>
+                        <div class="tip-card"><div class="do">✓ TUN:</div><div class="text">Eigene Annahmen überprüfen</div></div>
+                        <div class="tip-card"><div class="dont">✗ VERMEIDEN:</div><div class="text">Anderen das eigene Verhalten aufzwingen</div></div>
+                        <div class="tip-card"><div class="do">✓ TUN:</div><div class="text">Geduld bei Missverständnissen haben</div></div>
+                        <div class="tip-card"><div class="dont">✗ VERMEIDEN:</div><div class="text">Unterschiede als „falsch" bewerten</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Selbstreflexion</h3>
+                <div class="reflection-prompts">
+                    <div class="prompt-item">
+                        <div class="prompt-question">Welche kulturellen Prägungen beeinflussen meine Kommunikation?</div>
+                        <input type="text" class="prompt-input" id="reflection1" placeholder="z.B. Ich bin es gewohnt, direkt zu sagen, was ich denke..." oninput="saveData()">
+                    </div>
+                    <div class="prompt-item">
+                        <div class="prompt-question">In welcher Situation hatte ich schon ein interkulturelles Missverständnis?</div>
+                        <input type="text" class="prompt-input" id="reflection2" placeholder="z.B. Als ich dachte, jemand sei unhöflich, aber..." oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie geht der Jugendliche mit kulturellen Unterschieden um? Zeigt er Offenheit und Respekt? Kann er seine Kommunikation anpassen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleAspect(el) { el.classList.toggle('understood'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('mastered'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                aspects: document.querySelectorAll('.aspect-card.understood').length,
+                skills: document.querySelectorAll('.skill-item.mastered').length,
+                scenarioResponse: document.getElementById('scenarioResponse').value,
+                reflection1: document.getElementById('reflection1').value,
+                reflection2: document.getElementById('reflection2').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_interkulturell', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_interkulturell');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const aspects = document.querySelectorAll('.aspect-card');
+                for (let i = 0; i < (data.aspects || 0); i++) { if (aspects[i]) aspects[i].classList.add('understood'); }
+                const skills = document.querySelectorAll('.skill-item');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('mastered'); }
+                document.getElementById('scenarioResponse').value = data.scenarioResponse || '';
+                document.getElementById('reflection1').value = data.reflection1 || '';
+                document.getElementById('reflection2').value = data.reflection2 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kommunikative Kompetenz - Kommunikation Stufe V</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #12c2e9 0%, #c471ed 50%, #f64f59 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #12c2e9 0%, #c471ed 50%, #f64f59 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #c471ed; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .competence-wheel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .competence-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .competence-card:hover { border-color: #c471ed; transform: scale(1.02); }
+        .competence-card.strong { border-color: #4CAF50; background: #e8f5e9; }
+        .competence-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .competence-card .title { font-weight: bold; margin-bottom: 5px; }
+        .competence-card .level { font-size: 0.8em; color: #666; }
+        .self-assessment { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .assessment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .assessment-box { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 20px; }
+        .assessment-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .assessment-title.strengths { color: #a5d6a7; }
+        .assessment-title.goals { color: #ffcc80; }
+        .assessment-input { width: 100%; padding: 10px; border: none; border-radius: 8px; margin-bottom: 10px; font-size: 0.95em; }
+        .assessment-input:focus { outline: 2px solid rgba(255,255,255,0.5); }
+        .progress-overview { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-title { font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .progress-areas { display: flex; flex-direction: column; gap: 15px; }
+        .progress-item { display: flex; align-items: center; gap: 15px; }
+        .progress-label { min-width: 150px; font-size: 0.9em; }
+        .progress-bar { flex: 1; height: 25px; background: #e0e0e0; border-radius: 12px; overflow: hidden; cursor: pointer; }
+        .progress-fill { height: 100%; border-radius: 12px; transition: width 0.5s; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-size: 0.8em; font-weight: bold; }
+        .progress-fill.listening { background: linear-gradient(90deg, #12c2e9, #00bcd4); }
+        .progress-fill.speaking { background: linear-gradient(90deg, #c471ed, #9c27b0); }
+        .progress-fill.nonverbal { background: linear-gradient(90deg, #f64f59, #e91e63); }
+        .progress-fill.social { background: linear-gradient(90deg, #4CAF50, #8BC34A); }
+        .progress-fill.media { background: linear-gradient(90deg, #ff9800, #ffc107); }
+        .milestone-section { background: #e8f5e9; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #4CAF50; }
+        .milestone-title { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .milestones { display: flex; flex-direction: column; gap: 12px; }
+        .milestone-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid #c8e6c9; transition: all 0.3s; }
+        .milestone-item:hover { border-color: #4CAF50; }
+        .milestone-item.achieved { background: #c8e6c9; border-color: #4CAF50; }
+        .milestone-icon { font-size: 1.3em; }
+        .milestone-text { flex: 1; }
+        .milestone-check { width: 25px; height: 25px; border: 2px solid #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #4CAF50; }
+        .milestone-item.achieved .milestone-check { background: #4CAF50; color: white; }
+        .future-goals { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; border: 3px solid #ffc107; }
+        .goals-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .goals-list { display: flex; flex-direction: column; gap: 15px; }
+        .goal-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .goal-number { width: 35px; height: 35px; background: #ffc107; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .goal-input { flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .goal-input:focus { outline: none; border-color: #ffc107; }
+        .reflection-section { background: linear-gradient(135deg, #f5f5f5, #e0e0e0); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .reflection-title { font-weight: bold; margin-bottom: 15px; }
+        .reflection-prompts { display: flex; flex-direction: column; gap: 15px; }
+        .prompt-item { background: white; padding: 15px; border-radius: 10px; }
+        .prompt-question { font-weight: bold; margin-bottom: 10px; color: #c471ed; }
+        .prompt-answer { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .prompt-answer:focus { outline: none; border-color: #c471ed; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #c471ed; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .competence-wheel { grid-template-columns: repeat(2, 1fr); } .assessment-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe V</div>
+            <h1>Kommunikative Kompetenz</h1>
+            <p>Gesamtbild der Kommunikationsfähigkeiten</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-28/Abschluss)</h3>
+                <p>Der Jugendliche reflektiert seine kommunikativen Fähigkeiten ganzheitlich. Er erkennt seine Stärken, Entwicklungsbereiche und setzt sich eigenständig Ziele für seine weitere Kommunikationsentwicklung.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Kommunikations-Kompetenzen</h3>
+                <p>In diesen Bereichen ist der Jugendliche stark (zum Markieren anklicken):</p>
+                <div class="competence-wheel">
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">👂</div><div class="title">Zuhören</div><div class="level">Aktiv & empathisch</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">🗣️</div><div class="title">Sprechen</div><div class="level">Klar & überzeugend</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">✍️</div><div class="title">Schreiben</div><div class="level">Formell & informell</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">👁️</div><div class="title">Nonverbal</div><div class="level">Körpersprache lesen</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">🤝</div><div class="title">Sozial</div><div class="level">Beziehungen gestalten</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">📱</div><div class="title">Digital</div><div class="level">Medienkompetent</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">⚡</div><div class="title">Konflikt</div><div class="level">Konstruktiv lösen</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">🎤</div><div class="title">Präsentation</div><div class="level">Vor Gruppen sprechen</div></div>
+                    <div class="competence-card" onclick="toggleCompetence(this)"><div class="icon">🌍</div><div class="title">Interkulturell</div><div class="level">Kulturen verbinden</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Kompetenz-Übersicht</h3>
+                <div class="progress-overview">
+                    <div class="progress-title">Klicke auf die Balken, um den Fortschritt einzustellen:</div>
+                    <div class="progress-areas">
+                        <div class="progress-item"><div class="progress-label">Zuhören & Verstehen</div><div class="progress-bar" onclick="cycleProgress(this, 'listening')"><div class="progress-fill listening" style="width: 0%"></div></div></div>
+                        <div class="progress-item"><div class="progress-label">Sprechen & Ausdrücken</div><div class="progress-bar" onclick="cycleProgress(this, 'speaking')"><div class="progress-fill speaking" style="width: 0%"></div></div></div>
+                        <div class="progress-item"><div class="progress-label">Nonverbale Kommunikation</div><div class="progress-bar" onclick="cycleProgress(this, 'nonverbal')"><div class="progress-fill nonverbal" style="width: 0%"></div></div></div>
+                        <div class="progress-item"><div class="progress-label">Soziale Kommunikation</div><div class="progress-bar" onclick="cycleProgress(this, 'social')"><div class="progress-fill social" style="width: 0%"></div></div></div>
+                        <div class="progress-item"><div class="progress-label">Mediale Kommunikation</div><div class="progress-bar" onclick="cycleProgress(this, 'media')"><div class="progress-fill media" style="width: 0%"></div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💪</span> Stärken & Ziele</h3>
+                <div class="self-assessment">
+                    <div class="assessment-grid">
+                        <div class="assessment-box">
+                            <div class="assessment-title strengths">✨ Meine Stärken</div>
+                            <input type="text" class="assessment-input" id="strength1" placeholder="1. Stärke..." oninput="saveData()">
+                            <input type="text" class="assessment-input" id="strength2" placeholder="2. Stärke..." oninput="saveData()">
+                            <input type="text" class="assessment-input" id="strength3" placeholder="3. Stärke..." oninput="saveData()">
+                        </div>
+                        <div class="assessment-box">
+                            <div class="assessment-title goals">🎯 Entwicklungsbereiche</div>
+                            <input type="text" class="assessment-input" id="develop1" placeholder="1. Bereich..." oninput="saveData()">
+                            <input type="text" class="assessment-input" id="develop2" placeholder="2. Bereich..." oninput="saveData()">
+                            <input type="text" class="assessment-input" id="develop3" placeholder="3. Bereich..." oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🏆</span> Erreichte Meilensteine</h3>
+                <div class="milestone-section">
+                    <div class="milestone-title">Diese Meilensteine hat der Jugendliche erreicht:</div>
+                    <div class="milestones">
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">💬</span><span class="milestone-text">Kann komplexe Gespräche führen</span><span class="milestone-check">✓</span></div>
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">🎤</span><span class="milestone-text">Kann vor Gruppen präsentieren</span><span class="milestone-check">✓</span></div>
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">⚡</span><span class="milestone-text">Kann Konflikte konstruktiv lösen</span><span class="milestone-check">✓</span></div>
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">🤔</span><span class="milestone-text">Kann kritisch denken und hinterfragen</span><span class="milestone-check">✓</span></div>
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">🌍</span><span class="milestone-text">Kann interkulturell kommunizieren</span><span class="milestone-check">✓</span></div>
+                        <div class="milestone-item" onclick="toggleMilestone(this)"><span class="milestone-icon">🔍</span><span class="milestone-text">Erkennt Manipulation und Fake News</span><span class="milestone-check">✓</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🚀</span> Ziele für die Zukunft</h3>
+                <div class="future-goals">
+                    <div class="goals-title">Konkrete Ziele für die weitere Entwicklung:</div>
+                    <div class="goals-list">
+                        <div class="goal-item"><div class="goal-number">1</div><input type="text" class="goal-input" id="goal1" placeholder="z.B. Sicherer bei Präsentationen werden" oninput="saveData()"></div>
+                        <div class="goal-item"><div class="goal-number">2</div><input type="text" class="goal-input" id="goal2" placeholder="z.B. Besser Feedback geben können" oninput="saveData()"></div>
+                        <div class="goal-item"><div class="goal-number">3</div><input type="text" class="goal-input" id="goal3" placeholder="z.B. Souveräner in Konflikten reagieren" oninput="saveData()"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Abschluss-Reflexion</h3>
+                <div class="reflection-section">
+                    <div class="reflection-prompts">
+                        <div class="prompt-item">
+                            <div class="prompt-question">Was habe ich über meine Kommunikation gelernt?</div>
+                            <input type="text" class="prompt-answer" id="reflection1" placeholder="Ich habe gelernt, dass..." oninput="saveData()">
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-question">Worauf bin ich stolz?</div>
+                            <input type="text" class="prompt-answer" id="reflection2" placeholder="Ich bin stolz auf..." oninput="saveData()">
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-question">Was möchte ich als nächstes lernen?</div>
+                            <input type="text" class="prompt-answer" id="reflection3" placeholder="Als nächstes möchte ich..." oninput="saveData()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie eine Gesamteinschätzung: Wie hat sich die kommunikative Kompetenz des Jugendlichen entwickelt? Welche Fortschritte wurden gemacht? Welche Empfehlungen gibt es für die Zukunft?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let progressLevels = { listening: 0, speaking: 0, nonverbal: 0, social: 0, media: 0 };
+        function toggleCompetence(el) { el.classList.toggle('strong'); saveData(); }
+        function toggleMilestone(el) { el.classList.toggle('achieved'); saveData(); }
+        function cycleProgress(bar, type) {
+            progressLevels[type] = (progressLevels[type] + 20) % 120;
+            if (progressLevels[type] > 100) progressLevels[type] = 0;
+            const fill = bar.querySelector('.progress-fill');
+            fill.style.width = progressLevels[type] + '%';
+            fill.textContent = progressLevels[type] > 0 ? progressLevels[type] + '%' : '';
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                competences: document.querySelectorAll('.competence-card.strong').length,
+                milestones: document.querySelectorAll('.milestone-item.achieved').length,
+                progressLevels,
+                strength1: document.getElementById('strength1').value,
+                strength2: document.getElementById('strength2').value,
+                strength3: document.getElementById('strength3').value,
+                develop1: document.getElementById('develop1').value,
+                develop2: document.getElementById('develop2').value,
+                develop3: document.getElementById('develop3').value,
+                goal1: document.getElementById('goal1').value,
+                goal2: document.getElementById('goal2').value,
+                goal3: document.getElementById('goal3').value,
+                reflection1: document.getElementById('reflection1').value,
+                reflection2: document.getElementById('reflection2').value,
+                reflection3: document.getElementById('reflection3').value,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k5_kompetenz', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k5_kompetenz');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const competences = document.querySelectorAll('.competence-card');
+                for (let i = 0; i < (data.competences || 0); i++) { if (competences[i]) competences[i].classList.add('strong'); }
+                const milestones = document.querySelectorAll('.milestone-item');
+                for (let i = 0; i < (data.milestones || 0); i++) { if (milestones[i]) milestones[i].classList.add('achieved'); }
+                if (data.progressLevels) {
+                    progressLevels = data.progressLevels;
+                    for (const [key, value] of Object.entries(progressLevels)) {
+                        const bar = document.querySelector(`.progress-fill.${key}`);
+                        if (bar) {
+                            bar.style.width = value + '%';
+                            bar.textContent = value > 0 ? value + '%' : '';
+                        }
+                    }
+                }
+                document.getElementById('strength1').value = data.strength1 || '';
+                document.getElementById('strength2').value = data.strength2 || '';
+                document.getElementById('strength3').value = data.strength3 || '';
+                document.getElementById('develop1').value = data.develop1 || '';
+                document.getElementById('develop2').value = data.develop2 || '';
+                document.getElementById('develop3').value = data.develop3 || '';
+                document.getElementById('goal1').value = data.goal1 || '';
+                document.getElementById('goal2').value = data.goal2 || '';
+                document.getElementById('goal3').value = data.goal3 || '';
+                document.getElementById('reflection1').value = data.reflection1 || '';
+                document.getElementById('reflection2').value = data.reflection2 || '';
+                document.getElementById('reflection3').value = data.reflection3 || '';
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
