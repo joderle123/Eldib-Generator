@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kommunikationsregeln - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #f3e7e9 0%, #e3eeff 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #a18cd1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .rules-list { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .rule-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .rule-card:hover { border-color: #a18cd1; }
+        .rule-card.understood { border-color: #4CAF50; background: #e8f5e9; }
+        .rule-header { display: flex; align-items: center; gap: 15px; }
+        .rule-icon { font-size: 2.5em; }
+        .rule-content { flex: 1; }
+        .rule-title { font-weight: bold; font-size: 1.1em; }
+        .rule-desc { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .rule-check { width: 35px; height: 35px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+        .understood .rule-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .situation-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .situation-display { text-align: center; padding: 20px; }
+        .situation-scene { font-size: 4em; margin: 15px 0; }
+        .situation-text { font-size: 1.1em; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 15px 0; }
+        .rule-options { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+        .rule-option { padding: 15px; background: rgba(255,255,255,0.2); border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 1em; text-align: left; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .rule-option:hover { background: rgba(255,255,255,0.3); }
+        .rule-option.correct { background: rgba(76, 175, 80, 0.6); }
+        .rule-option.wrong { background: rgba(244, 67, 54, 0.6); }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.next { background: white; color: #667eea; }
+        .score-display { text-align: center; margin-top: 15px; }
+        .context-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .context-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .context-card:hover { border-color: #a18cd1; }
+        .context-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .context-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .context-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .context-card .rules { font-size: 0.8em; color: #666; text-align: center; }
+        .daily-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-title { font-weight: bold; text-align: center; margin-bottom: 15px; }
+        .tracker-items { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; }
+        .tracker-item { text-align: center; padding: 15px; background: white; border-radius: 10px; min-width: 100px; cursor: pointer; }
+        .tracker-item:hover { background: #f3e7e9; }
+        .tracker-item .emoji { font-size: 2em; }
+        .tracker-item .count { font-size: 1.5em; font-weight: bold; color: #a18cd1; }
+        .tracker-item .label { font-size: 0.8em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #a18cd1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .context-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Kommunikationsregeln</h1>
+            <p>Wie wir miteinander reden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-18/K-19)</h3>
+                <p>Das Kind kennt und befolgt grundlegende Kommunikationsregeln. Es versteht, dass in verschiedenen Situationen unterschiedliche Regeln gelten.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📜</span> Wichtige Gesprächsregeln</h3>
+                <p>Diese Regeln kennt und befolgt das Kind:</p>
+                <div class="rules-list">
+                    <div class="rule-card" onclick="toggleRule(this)">
+                        <div class="rule-header">
+                            <div class="rule-icon">✋</div>
+                            <div class="rule-content">
+                                <div class="rule-title">Ausreden lassen</div>
+                                <div class="rule-desc">Andere nicht unterbrechen</div>
+                            </div>
+                            <div class="rule-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="rule-card" onclick="toggleRule(this)">
+                        <div class="rule-header">
+                            <div class="rule-icon">👀</div>
+                            <div class="rule-content">
+                                <div class="rule-title">Anschauen beim Sprechen</div>
+                                <div class="rule-desc">Blickkontakt halten</div>
+                            </div>
+                            <div class="rule-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="rule-card" onclick="toggleRule(this)">
+                        <div class="rule-header">
+                            <div class="rule-icon">🔊</div>
+                            <div class="rule-content">
+                                <div class="rule-title">Angemessene Lautstärke</div>
+                                <div class="rule-desc">Nicht zu laut, nicht zu leise</div>
+                            </div>
+                            <div class="rule-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="rule-card" onclick="toggleRule(this)">
+                        <div class="rule-header">
+                            <div class="rule-icon">🙏</div>
+                            <div class="rule-content">
+                                <div class="rule-title">Höflich sein</div>
+                                <div class="rule-desc">Bitte, Danke, Entschuldigung</div>
+                            </div>
+                            <div class="rule-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="rule-card" onclick="toggleRule(this)">
+                        <div class="rule-header">
+                            <div class="rule-icon">🎯</div>
+                            <div class="rule-content">
+                                <div class="rule-title">Beim Thema bleiben</div>
+                                <div class="rule-desc">Nicht abschweifen</div>
+                            </div>
+                            <div class="rule-check">✓</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Regeln-Quiz</h3>
+                <div class="situation-game">
+                    <div class="situation-display">
+                        <div class="situation-scene" id="situationScene">🏫</div>
+                        <div class="situation-text" id="situationText">Im Klassenzimmer möchtest du etwas sagen. Was machst du?</div>
+                        <div class="rule-options" id="ruleOptions">
+                            <button class="rule-option" onclick="checkRule(this, false)">📣 Einfach laut rufen</button>
+                            <button class="rule-option" onclick="checkRule(this, true)">✋ Hand heben und warten</button>
+                            <button class="rule-option" onclick="checkRule(this, false)">🗣️ Dem Nachbarn zuflüstern</button>
+                        </div>
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn next" onclick="nextSituation()">➡️ Nächste Situation</button>
+                    </div>
+                    <div class="score-display">Richtige Antworten: <strong id="score">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌍</span> Regeln in verschiedenen Situationen</h3>
+                <p>Das Kind kennt die besonderen Regeln für diese Situationen:</p>
+                <div class="context-cards">
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🏫</div><div class="title">In der Schule/Kita</div><div class="rules">Melden, leise sein</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🏠</div><div class="title">Zu Hause</div><div class="rules">Respektvoll, offen</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🛒</div><div class="title">Im Geschäft</div><div class="rules">Höflich, nicht laut</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">📞</div><div class="title">Am Telefon</div><div class="rules">Deutlich sprechen, grüßen</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">🎭</div><div class="title">Bei Vorführungen</div><div class="rules">Leise, aufmerksam</div></div>
+                    <div class="context-card" onclick="toggleContext(this)"><div class="icon">👨‍👩‍👧</div><div class="title">Mit Erwachsenen</div><div class="rules">Siezen, respektvoll</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Tages-Beobachtung</h3>
+                <div class="daily-tracker">
+                    <div class="tracker-title">Wie oft hat das Kind heute Regeln befolgt?</div>
+                    <div class="tracker-items">
+                        <div class="tracker-item" onclick="incrementTracker(0)"><div class="emoji">✋</div><div class="count" id="track0">0</div><div class="label">Ausreden lassen</div></div>
+                        <div class="tracker-item" onclick="incrementTracker(1)"><div class="emoji">🙏</div><div class="count" id="track1">0</div><div class="label">Höflich</div></div>
+                        <div class="tracker-item" onclick="incrementTracker(2)"><div class="emoji">👀</div><div class="count" id="track2">0</div><div class="label">Blickkontakt</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Regeln befolgt das Kind gut? Wo braucht es noch Übung? Versteht es situationsabhängige Regeln?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const situations = [
+            { scene: "🏫", text: "Im Klassenzimmer möchtest du etwas sagen. Was machst du?", options: [{ text: "📣 Einfach laut rufen", correct: false }, { text: "✋ Hand heben und warten", correct: true }, { text: "🗣️ Dem Nachbarn zuflüstern", correct: false }] },
+            { scene: "📚", text: "In der Bücherei siehst du einen Freund. Was machst du?", options: [{ text: "📣 Laut seinen Namen rufen", correct: false }, { text: "🤫 Leise hingehen und flüstern", correct: true }, { text: "🏃 Zu ihm rennen", correct: false }] },
+            { scene: "👵", text: "Du triffst eine ältere Dame, die du nicht kennst. Wie grüßt du?", options: [{ text: "👋 Hey!", correct: false }, { text: "🙂 Guten Tag!", correct: true }, { text: "😶 Gar nicht", correct: false }] },
+            { scene: "📞", text: "Das Telefon klingelt und du nimmst ab. Was sagst du?", options: [{ text: "😶 Ja?", correct: false }, { text: "👋 Hallo, hier ist [Name]", correct: true }, { text: "❓ Was willst du?", correct: false }] }
+        ];
+        let currentSituation = 0;
+        let score = 0;
+        let trackerCounts = [0, 0, 0];
+        function toggleRule(el) { el.classList.toggle('understood'); saveData(); }
+        function toggleContext(el) { el.classList.toggle('practiced'); saveData(); }
+        function loadSituation() {
+            const s = situations[currentSituation];
+            document.getElementById('situationScene').textContent = s.scene;
+            document.getElementById('situationText').textContent = s.text;
+            document.getElementById('ruleOptions').innerHTML = s.options.map(o =>
+                `<button class="rule-option" onclick="checkRule(this, ${o.correct})">${o.text}</button>`
+            ).join('');
+        }
+        function checkRule(btn, isCorrect) {
+            document.querySelectorAll('.rule-option').forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                btn.classList.add('wrong');
+            }
+            saveData();
+        }
+        function nextSituation() {
+            currentSituation = (currentSituation + 1) % situations.length;
+            loadSituation();
+        }
+        function incrementTracker(index) {
+            trackerCounts[index]++;
+            document.getElementById('track' + index).textContent = trackerCounts[index];
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                rules: document.querySelectorAll('.rule-card.understood').length,
+                contexts: document.querySelectorAll('.context-card.practiced').length,
+                score, trackerCounts,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_regeln', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_regeln');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const rules = document.querySelectorAll('.rule-card');
+                for (let i = 0; i < (data.rules || 0); i++) { if (rules[i]) rules[i].classList.add('understood'); }
+                const contexts = document.querySelectorAll('.context-card');
+                for (let i = 0; i < (data.contexts || 0); i++) { if (contexts[i]) contexts[i].classList.add('practiced'); }
+                score = data.score || 0;
+                document.getElementById('score').textContent = score;
+                if (data.trackerCounts) {
+                    trackerCounts = data.trackerCounts;
+                    trackerCounts.forEach((c, i) => document.getElementById('track' + i).textContent = c);
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadSituation();
+        loadData();
+    </script>
+</body>
+</html>

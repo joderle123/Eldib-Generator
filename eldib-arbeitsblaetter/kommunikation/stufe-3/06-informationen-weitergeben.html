@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informationen weitergeben - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fcb69f; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .info-chain { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .chain-visual { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+        .chain-person { display: flex; flex-direction: column; align-items: center; }
+        .chain-icon { font-size: 3em; }
+        .chain-label { font-size: 0.9em; margin-top: 5px; }
+        .chain-arrow { font-size: 2em; }
+        .message-display { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; text-align: center; }
+        .message-box { font-size: 1.2em; padding: 15px; background: rgba(255,255,255,0.3); border-radius: 10px; margin: 10px 0; }
+        .chain-buttons { display: flex; gap: 15px; justify-content: center; }
+        .chain-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .chain-btn.primary { background: white; color: #667eea; }
+        .chain-btn.secondary { background: rgba(255,255,255,0.3); color: white; }
+        .info-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-item:hover { border-color: #fcb69f; }
+        .skill-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 2em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; }
+        .skill-desc { font-size: 0.9em; color: #666; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .info-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .info-type { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .info-type:hover { border-color: #fcb69f; }
+        .info-type.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .info-type .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .info-type .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .info-type .example { font-size: 0.8em; color: #666; text-align: center; font-style: italic; }
+        .accuracy-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .accuracy-display { display: flex; justify-content: space-around; text-align: center; }
+        .accuracy-item { flex: 1; }
+        .accuracy-number { font-size: 2.5em; font-weight: bold; }
+        .accuracy-number.correct { color: #4CAF50; }
+        .accuracy-number.partial { color: #FF9800; }
+        .accuracy-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .accuracy-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .accuracy-btn.correct { background: #4CAF50; color: white; }
+        .accuracy-btn.partial { background: #FF9800; color: white; }
+        .accuracy-btn.reset { background: #9e9e9e; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fcb69f; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .info-types { grid-template-columns: 1fr; } .chain-visual { flex-direction: column; } .chain-arrow { transform: rotate(90deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Informationen weitergeben</h1>
+            <p>Nachrichten richtig übermitteln</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-15/K-16)</h3>
+                <p>Das Kind kann Informationen und Nachrichten an andere weitergeben. Es merkt sich wichtige Details und übermittelt sie korrekt.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📨</span> Stille-Post-Spiel</h3>
+                <div class="info-chain">
+                    <p style="text-align: center;">Kann das Kind eine Nachricht richtig weitergeben?</p>
+                    <div class="chain-visual">
+                        <div class="chain-person"><div class="chain-icon">👩</div><div class="chain-label">Sender</div></div>
+                        <div class="chain-arrow">➡️</div>
+                        <div class="chain-person"><div class="chain-icon">🧒</div><div class="chain-label">Kind</div></div>
+                        <div class="chain-arrow">➡️</div>
+                        <div class="chain-person"><div class="chain-icon">👨</div><div class="chain-label">Empfänger</div></div>
+                    </div>
+                    <div class="message-display">
+                        <p>Original-Nachricht:</p>
+                        <div class="message-box" id="originalMessage">"Bring bitte die rote Tasche aus dem Schlafzimmer."</div>
+                    </div>
+                    <div class="chain-buttons">
+                        <button class="chain-btn primary" onclick="newMessage()">🔄 Neue Nachricht</button>
+                        <button class="chain-btn secondary" onclick="markSuccess()">✓ Richtig weitergegeben</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">Erfolge: <strong id="successCount">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Informations-Fähigkeiten</h3>
+                <p>Welche Fähigkeiten zeigt das Kind beim Weitergeben von Informationen?</p>
+                <div class="info-skills">
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">👂</div>
+                        <div class="skill-content"><div class="skill-title">Aufmerksam zuhören</div><div class="skill-desc">Hört die Information vollständig an</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🧠</div>
+                        <div class="skill-content"><div class="skill-title">Details merken</div><div class="skill-desc">Behält wichtige Details im Kopf</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">❓</div>
+                        <div class="skill-content"><div class="skill-title">Nachfragen bei Unklarheiten</div><div class="skill-desc">Fragt nach, wenn etwas unklar ist</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🗣️</div>
+                        <div class="skill-content"><div class="skill-title">Klar formulieren</div><div class="skill-desc">Gibt Information verständlich weiter</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">✅</div>
+                        <div class="skill-content"><div class="skill-title">Vollständigkeit prüfen</div><div class="skill-desc">Stellt sicher, dass alles gesagt wurde</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Arten von Informationen</h3>
+                <p>Diese Arten von Informationen kann das Kind weitergeben:</p>
+                <div class="info-types">
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">📞</div><div class="title">Nachrichten</div><div class="example">"Mama sagt, du sollst..."</div></div>
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">📅</div><div class="title">Termine</div><div class="example">"Um 3 Uhr ist..."</div></div>
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">📍</div><div class="title">Ortsangaben</div><div class="example">"Es ist im Schrank"</div></div>
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">📝</div><div class="title">Aufträge</div><div class="example">"Du sollst bitte..."</div></div>
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">📖</div><div class="title">Geschehnisse</div><div class="example">"Heute ist passiert..."</div></div>
+                    <div class="info-type" onclick="toggleType(this)"><div class="icon">🔢</div><div class="title">Zahlen/Mengen</div><div class="example">"Wir brauchen 3 Stück"</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Genauigkeits-Tracker</h3>
+                <div class="accuracy-tracker">
+                    <p style="text-align: center; margin-bottom: 15px;">Wie genau gibt das Kind Informationen weiter?</p>
+                    <div class="accuracy-display">
+                        <div class="accuracy-item">
+                            <div class="accuracy-number correct" id="correctCount">0</div>
+                            <div>Vollständig richtig</div>
+                        </div>
+                        <div class="accuracy-item">
+                            <div class="accuracy-number partial" id="partialCount">0</div>
+                            <div>Teilweise richtig</div>
+                        </div>
+                    </div>
+                    <div class="accuracy-buttons">
+                        <button class="accuracy-btn correct" onclick="addCorrect()">✓ Richtig</button>
+                        <button class="accuracy-btn partial" onclick="addPartial()">~ Teilweise</button>
+                        <button class="accuracy-btn reset" onclick="resetAccuracy()">↻</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie genau gibt das Kind Informationen weiter? Was vergisst es oft? Wie lang dürfen Nachrichten sein?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const messages = [
+            "Bring bitte die rote Tasche aus dem Schlafzimmer.",
+            "Oma kommt um 15 Uhr zum Kaffee.",
+            "Die Schlüssel liegen auf dem Küchentisch.",
+            "Heute Nachmittag gehen wir in den Park.",
+            "Papa braucht 3 Äpfel aus dem Keller.",
+            "Morgen ist der Ausflug, vergiss die Mütze nicht."
+        ];
+        let currentMessage = 0;
+        let successCount = 0;
+        let correctCount = 0;
+        let partialCount = 0;
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleType(el) { el.classList.toggle('practiced'); saveData(); }
+        function newMessage() {
+            currentMessage = (currentMessage + 1) % messages.length;
+            document.getElementById('originalMessage').textContent = '"' + messages[currentMessage] + '"';
+        }
+        function markSuccess() {
+            successCount++;
+            document.getElementById('successCount').textContent = successCount;
+            newMessage();
+            saveData();
+        }
+        function addCorrect() {
+            correctCount++;
+            document.getElementById('correctCount').textContent = correctCount;
+            saveData();
+        }
+        function addPartial() {
+            partialCount++;
+            document.getElementById('partialCount').textContent = partialCount;
+            saveData();
+        }
+        function resetAccuracy() {
+            correctCount = 0;
+            partialCount = 0;
+            document.getElementById('correctCount').textContent = 0;
+            document.getElementById('partialCount').textContent = 0;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-item.achieved').length,
+                types: document.querySelectorAll('.info-type.practiced').length,
+                successCount, correctCount, partialCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_info', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_info');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-item');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const types = document.querySelectorAll('.info-type');
+                for (let i = 0; i < (data.types || 0); i++) { if (types[i]) types[i].classList.add('practiced'); }
+                successCount = data.successCount || 0;
+                correctCount = data.correctCount || 0;
+                partialCount = data.partialCount || 0;
+                document.getElementById('successCount').textContent = successCount;
+                document.getElementById('correctCount').textContent = correctCount;
+                document.getElementById('partialCount').textContent = partialCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

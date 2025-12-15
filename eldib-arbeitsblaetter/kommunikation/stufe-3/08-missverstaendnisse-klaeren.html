@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missverständnisse klären - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4db6ac; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .misunderstanding-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .step-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .step-card:hover { border-color: #4db6ac; }
+        .step-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .step-header { display: flex; align-items: center; gap: 15px; }
+        .step-number { width: 45px; height: 45px; background: linear-gradient(135deg, #84fab0, #8fd3f4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; }
+        .mastered .step-number { background: #4CAF50; }
+        .step-content { flex: 1; }
+        .step-title { font-weight: bold; font-size: 1.1em; }
+        .step-example { font-size: 0.9em; color: #666; font-style: italic; margin-top: 5px; }
+        .step-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .step-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .scenario-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-display { text-align: center; padding: 20px; }
+        .scenario-icon { font-size: 4em; margin-bottom: 15px; }
+        .scenario-text { font-size: 1.1em; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 15px 0; }
+        .response-options { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+        .response-btn { padding: 15px; background: rgba(255,255,255,0.2); border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 1em; text-align: left; transition: all 0.3s; }
+        .response-btn:hover { background: rgba(255,255,255,0.3); }
+        .response-btn.best { background: rgba(76, 175, 80, 0.6); }
+        .response-btn.ok { background: rgba(255, 193, 7, 0.6); }
+        .response-btn.poor { background: rgba(244, 67, 54, 0.6); }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.next { background: white; color: #667eea; }
+        .phrases-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .phrase-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .phrase-item:hover { border-color: #4db6ac; }
+        .phrase-item.used { border-color: #4CAF50; background: #e8f5e9; }
+        .phrase-icon { font-size: 1.5em; }
+        .phrase-content { flex: 1; }
+        .phrase-text { font-weight: bold; }
+        .phrase-usage { font-size: 0.85em; color: #666; }
+        .phrase-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .used .phrase-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .tracker-section { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .tracker-item { text-align: center; padding: 15px; background: white; border-radius: 10px; cursor: pointer; }
+        .tracker-item:hover { background: #e0f7fa; }
+        .tracker-item .count { font-size: 2em; font-weight: bold; color: #4db6ac; }
+        .tracker-item .label { font-size: 0.9em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4db6ac; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .tracker-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Missverständnisse klären</h1>
+            <p>Wenn wir uns nicht verstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-16/K-17)</h3>
+                <p>Das Kind erkennt Missverständnisse und kann diese klären. Es fragt nach, wenn etwas unklar ist, und erklärt seine Aussagen bei Bedarf noch einmal.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔧</span> Schritte zum Klären</h3>
+                <p>Kann das Kind diese Schritte anwenden?</p>
+                <div class="misunderstanding-steps">
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Erkennen: "Da stimmt etwas nicht"</div>
+                                <div class="step-example">Merkt, wenn der andere nicht versteht</div>
+                            </div>
+                            <div class="step-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Stoppen und nachfragen</div>
+                                <div class="step-example">"Was meinst du damit?"</div>
+                            </div>
+                            <div class="step-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Anders erklären</div>
+                                <div class="step-example">"Ich meine..." / "Also, ..."</div>
+                            </div>
+                            <div class="step-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="step-card" onclick="toggleStep(this)">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Überprüfen: "Verstehst du jetzt?"</div>
+                                <div class="step-example">Sicherstellen, dass es klar ist</div>
+                            </div>
+                            <div class="step-check">✓</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Situations-Übung</h3>
+                <div class="scenario-game">
+                    <div class="scenario-display">
+                        <div class="scenario-icon">🤔</div>
+                        <div class="scenario-text" id="scenarioText">Du sagst: "Ich will das blaue." Aber dein Freund gibt dir das grüne. Was sagst du?</div>
+                        <div class="response-options" id="responseOptions">
+                            <button class="response-btn" onclick="checkResponse(this, 'poor')">😠 "Das ist falsch!"</button>
+                            <button class="response-btn" onclick="checkResponse(this, 'best')">😊 "Ich meinte das blaue, nicht das grüne."</button>
+                            <button class="response-btn" onclick="checkResponse(this, 'ok')">😐 "Nein, blau."</button>
+                        </div>
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn next" onclick="nextScenario()">➡️ Nächste Situation</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Hilfreiche Sätze</h3>
+                <p>Diese Sätze helfen beim Klären von Missverständnissen:</p>
+                <div class="phrases-list">
+                    <div class="phrase-item" onclick="togglePhrase(this)">
+                        <div class="phrase-icon">❓</div>
+                        <div class="phrase-content"><div class="phrase-text">"Was meinst du damit?"</div><div class="phrase-usage">Zum Nachfragen</div></div>
+                        <div class="phrase-check">✓</div>
+                    </div>
+                    <div class="phrase-item" onclick="togglePhrase(this)">
+                        <div class="phrase-icon">🔄</div>
+                        <div class="phrase-content"><div class="phrase-text">"Ich meine eigentlich..."</div><div class="phrase-usage">Zum Erklären</div></div>
+                        <div class="phrase-check">✓</div>
+                    </div>
+                    <div class="phrase-item" onclick="togglePhrase(this)">
+                        <div class="phrase-icon">🤔</div>
+                        <div class="phrase-content"><div class="phrase-text">"Hast du verstanden?"</div><div class="phrase-usage">Zum Überprüfen</div></div>
+                        <div class="phrase-check">✓</div>
+                    </div>
+                    <div class="phrase-item" onclick="togglePhrase(this)">
+                        <div class="phrase-icon">😅</div>
+                        <div class="phrase-content"><div class="phrase-text">"Das war ein Missverständnis"</div><div class="phrase-usage">Zum Benennen</div></div>
+                        <div class="phrase-check">✓</div>
+                    </div>
+                    <div class="phrase-item" onclick="togglePhrase(this)">
+                        <div class="phrase-icon">📝</div>
+                        <div class="phrase-content"><div class="phrase-text">"Lass mich das anders sagen"</div><div class="phrase-usage">Zum Umformulieren</div></div>
+                        <div class="phrase-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Beobachtungs-Tracker</h3>
+                <div class="tracker-section">
+                    <p style="text-align: center; margin-bottom: 15px;">Wie oft hat das Kind heute Missverständnisse geklärt?</p>
+                    <div class="tracker-grid">
+                        <div class="tracker-item" onclick="incrementTracker(0)"><div class="count" id="tracker0">0</div><div class="label">Nachgefragt</div></div>
+                        <div class="tracker-item" onclick="incrementTracker(1)"><div class="count" id="tracker1">0</div><div class="label">Neu erklärt</div></div>
+                        <div class="tracker-item" onclick="incrementTracker(2)"><div class="count" id="tracker2">0</div><div class="label">Verstanden durch Klärung</div></div>
+                        <div class="tracker-item" onclick="incrementTracker(3)"><div class="count" id="tracker3">0</div><div class="label">Gelöst ohne Streit</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert das Kind bei Missverständnissen? Kann es ruhig bleiben? Wie erklärt es seine Aussagen anders?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: 'Du sagst: "Ich will das blaue." Aber dein Freund gibt dir das grüne. Was sagst du?', responses: [{ text: '😠 "Das ist falsch!"', quality: 'poor' }, { text: '😊 "Ich meinte das blaue, nicht das grüne."', quality: 'best' }, { text: '😐 "Nein, blau."', quality: 'ok' }] },
+            { text: 'Dein Freund versteht nicht, welches Spiel du spielen willst. Was machst du?', responses: [{ text: '😊 Zeige es ihm und erkläre es anders', quality: 'best' }, { text: '😐 Sage es nochmal lauter', quality: 'ok' }, { text: '😠 Geh einfach weg', quality: 'poor' }] },
+            { text: 'Du hast "Morgen" gesagt, aber meintest "heute Nachmittag". Dein Freund ist verwirrt.', responses: [{ text: '😊 "Entschuldigung, ich meinte heute Nachmittag"', quality: 'best' }, { text: '😠 "Du hörst nie richtig zu!"', quality: 'poor' }, { text: '😐 "Egal"', quality: 'ok' }] }
+        ];
+        let currentScenario = 0;
+        let trackerCounts = [0, 0, 0, 0];
+        function toggleStep(el) { el.classList.toggle('mastered'); saveData(); }
+        function togglePhrase(el) { el.classList.toggle('used'); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            document.getElementById('responseOptions').innerHTML = s.responses.map(r =>
+                `<button class="response-btn" onclick="checkResponse(this, '${r.quality}')">${r.text}</button>`
+            ).join('');
+        }
+        function checkResponse(btn, quality) {
+            document.querySelectorAll('.response-btn').forEach(b => b.disabled = true);
+            btn.classList.add(quality);
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function incrementTracker(index) {
+            trackerCounts[index]++;
+            document.getElementById('tracker' + index).textContent = trackerCounts[index];
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                steps: document.querySelectorAll('.step-card.mastered').length,
+                phrases: document.querySelectorAll('.phrase-item.used').length,
+                trackerCounts,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_missverstaendnis', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_missverstaendnis');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.step-card');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('mastered'); }
+                const phrases = document.querySelectorAll('.phrase-item');
+                for (let i = 0; i < (data.phrases || 0); i++) { if (phrases[i]) phrases[i].classList.add('used'); }
+                if (data.trackerCounts) {
+                    trackerCounts = data.trackerCounts;
+                    trackerCounts.forEach((c, i) => document.getElementById('tracker' + i).textContent = c);
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenkommunikation - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #fce4ec 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #26c6da; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .group-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .group-skill { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .group-skill:hover { border-color: #26c6da; transform: translateY(-3px); }
+        .group-skill.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .group-skill .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .group-skill .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .group-skill .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .group-visual { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .group-circle { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+        .group-member { width: 80px; height: 80px; background: rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5em; cursor: pointer; transition: all 0.3s; }
+        .group-member:hover { transform: scale(1.1); }
+        .group-member.speaking { background: rgba(255,255,255,0.6); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .speech-bubble { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 15px; margin: 15px 0; min-height: 50px; }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.primary { background: white; color: #667eea; }
+        .game-btn.secondary { background: rgba(255,255,255,0.3); color: white; }
+        .situations-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .situation-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .situation-item:hover { border-color: #26c6da; }
+        .situation-item.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .situation-icon { font-size: 1.5em; }
+        .situation-content { flex: 1; }
+        .situation-title { font-weight: bold; }
+        .situation-desc { font-size: 0.85em; color: #666; }
+        .situation-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .practiced .situation-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .role-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .role-card { text-align: center; padding: 15px; background: white; border-radius: 10px; cursor: pointer; }
+        .role-card:hover { background: #e0f7fa; }
+        .role-card .icon { font-size: 2em; margin-bottom: 5px; }
+        .role-card .count { font-size: 1.5em; font-weight: bold; color: #26c6da; }
+        .role-card .label { font-size: 0.85em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #26c6da; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .group-skills { grid-template-columns: 1fr; } .role-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Gruppenkommunikation</h1>
+            <p>In der Gruppe sprechen und zuhören</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-16/K-17)</h3>
+                <p>Das Kind kann in einer Gruppe kommunizieren. Es meldet sich zu Wort, hört anderen zu und trägt konstruktiv zu Gruppengesprächen bei.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👥</span> Gruppen-Fähigkeiten</h3>
+                <p>Welche Kommunikationsfähigkeiten zeigt das Kind in der Gruppe?</p>
+                <div class="group-skills">
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">✋</div>
+                        <div class="title">Sich melden</div>
+                        <div class="desc">Wartet und meldet sich</div>
+                    </div>
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">👂</div>
+                        <div class="title">Allen zuhören</div>
+                        <div class="desc">Hört verschiedenen Sprechern zu</div>
+                    </div>
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">🔊</div>
+                        <div class="title">Laut genug sprechen</div>
+                        <div class="desc">Alle können es verstehen</div>
+                    </div>
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">⏱️</div>
+                        <div class="title">Sich kurz fassen</div>
+                        <div class="desc">Gibt anderen auch Raum</div>
+                    </div>
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">🔗</div>
+                        <div class="title">Bezug nehmen</div>
+                        <div class="desc">Bezieht sich auf Vorredner</div>
+                    </div>
+                    <div class="group-skill" onclick="toggleSkill(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Alle einbeziehen</div>
+                        <div class="desc">Spricht auch ruhige Kinder an</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Gruppen-Simulation</h3>
+                <div class="group-visual">
+                    <p>Klicke auf ein Gruppenmitglied, das gerade spricht:</p>
+                    <div class="group-circle">
+                        <div class="group-member" onclick="toggleSpeaking(this)">👧</div>
+                        <div class="group-member" onclick="toggleSpeaking(this)">👦</div>
+                        <div class="group-member" onclick="toggleSpeaking(this)">👩</div>
+                        <div class="group-member" onclick="toggleSpeaking(this)">👨</div>
+                        <div class="group-member" onclick="toggleSpeaking(this)">🧒</div>
+                    </div>
+                    <div class="speech-bubble" id="speechBubble">Wer spricht gerade?</div>
+                    <div class="game-buttons">
+                        <button class="game-btn primary" onclick="resetGroup()">🔄 Neu starten</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Gruppen-Situationen</h3>
+                <p>In diesen Situationen hat das Kind erfolgreich in der Gruppe kommuniziert:</p>
+                <div class="situations-list">
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🏫</div>
+                        <div class="situation-content"><div class="situation-title">Im Morgenkreis</div><div class="situation-desc">Erzählt vor der ganzen Gruppe</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🎮</div>
+                        <div class="situation-content"><div class="situation-title">Beim Gruppenspiel</div><div class="situation-desc">Erklärt Regeln oder Ideen</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🍽️</div>
+                        <div class="situation-content"><div class="situation-title">Beim gemeinsamen Essen</div><div class="situation-desc">Beteiligt sich am Tischgespräch</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">📖</div>
+                        <div class="situation-content"><div class="situation-title">Bei Gruppenarbeit</div><div class="situation-desc">Bringt Ideen ein</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🎉</div>
+                        <div class="situation-content"><div class="situation-title">Bei Feiern/Festen</div><div class="situation-desc">Spricht mit verschiedenen Leuten</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Rollen in der Gruppe</h3>
+                <div class="role-tracker">
+                    <p style="margin-bottom: 15px; text-align: center;">Wie oft hat das Kind diese Rollen übernommen?</p>
+                    <div class="role-grid">
+                        <div class="role-card" onclick="incrementRole(0)"><div class="icon">📣</div><div class="count" id="role0">0</div><div class="label">Sprecher</div></div>
+                        <div class="role-card" onclick="incrementRole(1)"><div class="icon">👂</div><div class="count" id="role1">0</div><div class="label">Zuhörer</div></div>
+                        <div class="role-card" onclick="incrementRole(2)"><div class="icon">❓</div><div class="count" id="role2">0</div><div class="label">Fragesteller</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie verhält sich das Kind in der Gruppe? Meldet es sich aktiv? Hört es zu? Wie groß ist die Gruppe, in der es sich wohlfühlt?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let roleCounts = [0, 0, 0];
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleSituation(el) { el.classList.toggle('practiced'); saveData(); }
+        function toggleSpeaking(el) {
+            document.querySelectorAll('.group-member').forEach(m => m.classList.remove('speaking'));
+            el.classList.add('speaking');
+            document.getElementById('speechBubble').textContent = el.textContent + ' spricht gerade!';
+        }
+        function resetGroup() {
+            document.querySelectorAll('.group-member').forEach(m => m.classList.remove('speaking'));
+            document.getElementById('speechBubble').textContent = 'Wer spricht gerade?';
+        }
+        function incrementRole(index) {
+            roleCounts[index]++;
+            document.getElementById('role' + index).textContent = roleCounts[index];
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.group-skill.achieved').length,
+                situations: document.querySelectorAll('.situation-item.practiced').length,
+                roleCounts,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_gruppe', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_gruppe');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.group-skill');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const situations = document.querySelectorAll('.situation-item');
+                for (let i = 0; i < (data.situations || 0); i++) { if (situations[i]) situations[i].classList.add('practiced'); }
+                if (data.roleCounts) {
+                    roleCounts = data.roleCounts;
+                    roleCounts.forEach((c, i) => document.getElementById('role' + i).textContent = c);
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

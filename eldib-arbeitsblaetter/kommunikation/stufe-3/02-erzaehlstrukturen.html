@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erzählstrukturen - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .story-structure { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+        .structure-part { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; position: relative; }
+        .structure-part:not(:last-child)::after { content: '↓'; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 1.5em; color: #f5576c; z-index: 1; }
+        .structure-part { margin-bottom: 25px; }
+        .structure-part:hover { border-color: #f5576c; }
+        .structure-part.completed { border-color: #4CAF50; background: #e8f5e9; }
+        .structure-header { display: flex; align-items: center; gap: 15px; }
+        .structure-number { width: 40px; height: 40px; background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .completed .structure-number { background: #4CAF50; }
+        .structure-title { font-weight: bold; flex: 1; }
+        .structure-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; }
+        .completed .structure-check { background: #4CAF50; border-color: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; }
+        .structure-desc { font-size: 0.9em; color: #666; margin-top: 10px; padding-left: 55px; }
+        .story-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .story-cards { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+        .story-card { width: 100px; height: 120px; background: white; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .story-card:hover { transform: scale(1.05); }
+        .story-card.selected { box-shadow: 0 0 0 4px #4CAF50; }
+        .story-card .icon { font-size: 2.5em; }
+        .story-card .label { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .story-result { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 20px; margin: 20px 0; min-height: 100px; }
+        .story-result-item { display: inline-flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(255,255,255,0.3); border-radius: 20px; margin: 5px; }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.clear { background: rgba(255,255,255,0.3); color: white; }
+        .game-btn.tell { background: white; color: #667eea; }
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #f5576c; }
+        .skill-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; text-align: center; font-size: 0.9em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } .story-cards { justify-content: center; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Erzählstrukturen</h1>
+            <p>Geschichten mit Aufbau erzählen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-15/K-16)</h3>
+                <p>Das Kind lernt, Geschichten strukturiert zu erzählen mit Anfang, Mitte und Ende. Es verwendet erzähltypische Elemente und hält eine logische Reihenfolge ein.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📖</span> Geschichten-Aufbau</h3>
+                <p>Kann das Kind diese Teile einer Geschichte erzählen?</p>
+                <div class="story-structure">
+                    <div class="structure-part" onclick="toggleStructure(this)">
+                        <div class="structure-header">
+                            <div class="structure-number">1</div>
+                            <div class="structure-title">Einleitung - Wer? Wo? Wann?</div>
+                            <div class="structure-check">✓</div>
+                        </div>
+                        <div class="structure-desc">"Es war einmal..." / "Eines Tages..."</div>
+                    </div>
+                    <div class="structure-part" onclick="toggleStructure(this)">
+                        <div class="structure-header">
+                            <div class="structure-number">2</div>
+                            <div class="structure-title">Problem oder Ereignis</div>
+                            <div class="structure-check">✓</div>
+                        </div>
+                        <div class="structure-desc">"Aber dann..." / "Plötzlich..."</div>
+                    </div>
+                    <div class="structure-part" onclick="toggleStructure(this)">
+                        <div class="structure-header">
+                            <div class="structure-number">3</div>
+                            <div class="structure-title">Handlung und Reaktion</div>
+                            <div class="structure-check">✓</div>
+                        </div>
+                        <div class="structure-desc">"Also machte er..." / "Deshalb..."</div>
+                    </div>
+                    <div class="structure-part" onclick="toggleStructure(this)">
+                        <div class="structure-header">
+                            <div class="structure-number">4</div>
+                            <div class="structure-title">Lösung oder Ende</div>
+                            <div class="structure-check">✓</div>
+                        </div>
+                        <div class="structure-desc">"Am Ende..." / "Und so..."</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Geschichten-Karten</h3>
+                <div class="story-game">
+                    <p style="text-align: center; margin-bottom: 15px;">Wähle Karten aus und erzähle eine Geschichte:</p>
+                    <div class="story-cards">
+                        <div class="story-card" onclick="selectCard(this, '👦', 'Kind')"><div class="icon">👦</div><div class="label">Kind</div></div>
+                        <div class="story-card" onclick="selectCard(this, '🐕', 'Hund')"><div class="icon">🐕</div><div class="label">Hund</div></div>
+                        <div class="story-card" onclick="selectCard(this, '🏰', 'Schloss')"><div class="icon">🏰</div><div class="label">Schloss</div></div>
+                        <div class="story-card" onclick="selectCard(this, '🌲', 'Wald')"><div class="icon">🌲</div><div class="label">Wald</div></div>
+                        <div class="story-card" onclick="selectCard(this, '💎', 'Schatz')"><div class="icon">💎</div><div class="label">Schatz</div></div>
+                        <div class="story-card" onclick="selectCard(this, '🐉', 'Drache')"><div class="icon">🐉</div><div class="label">Drache</div></div>
+                    </div>
+                    <div class="story-result" id="storyResult">Gewählte Elemente erscheinen hier...</div>
+                    <div class="game-buttons">
+                        <button class="game-btn clear" onclick="clearStory()">🗑️ Neu wählen</button>
+                        <button class="game-btn tell" onclick="markTold()">📖 Geschichte erzählt!</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">Erzählte Geschichten: <strong id="storyCount">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Erzähl-Fähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind beim Erzählen:</p>
+                <div class="skills-grid">
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">📅</div><div class="title">Zeitliche Reihenfolge einhalten</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">👥</div><div class="title">Personen vorstellen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">📍</div><div class="title">Ort beschreiben</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">😱</div><div class="title">Spannung aufbauen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">💬</div><div class="title">Direkte Rede einbauen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🎬</div><div class="title">Ende gestalten</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie strukturiert erzählt das Kind? Welche Elemente fehlen noch? Wie spannend und detailliert sind die Geschichten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let selectedCards = [];
+        let storyCount = 0;
+        function toggleStructure(el) { el.classList.toggle('completed'); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function selectCard(el, icon, label) {
+            el.classList.toggle('selected');
+            if (el.classList.contains('selected')) {
+                selectedCards.push({ icon, label });
+            } else {
+                selectedCards = selectedCards.filter(c => c.label !== label);
+            }
+            renderSelectedCards();
+        }
+        function renderSelectedCards() {
+            if (selectedCards.length === 0) {
+                document.getElementById('storyResult').innerHTML = 'Gewählte Elemente erscheinen hier...';
+            } else {
+                document.getElementById('storyResult').innerHTML = selectedCards.map(c =>
+                    `<span class="story-result-item">${c.icon} ${c.label}</span>`
+                ).join('');
+            }
+        }
+        function clearStory() {
+            selectedCards = [];
+            document.querySelectorAll('.story-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('storyResult').innerHTML = 'Gewählte Elemente erscheinen hier...';
+        }
+        function markTold() {
+            if (selectedCards.length > 0) {
+                storyCount++;
+                document.getElementById('storyCount').textContent = storyCount;
+                clearStory();
+                saveData();
+            }
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                structure: document.querySelectorAll('.structure-part.completed').length,
+                skills: document.querySelectorAll('.skill-card.achieved').length,
+                storyCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_erzaehl', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_erzaehl');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const structure = document.querySelectorAll('.structure-part');
+                for (let i = 0; i < (data.structure || 0); i++) { if (structure[i]) structure[i].classList.add('completed'); }
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                storyCount = data.storyCount || 0;
+                document.getElementById('storyCount').textContent = storyCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

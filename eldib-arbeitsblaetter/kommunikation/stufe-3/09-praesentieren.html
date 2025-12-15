@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Präsentieren - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fda085; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .presentation-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .skill-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #fda085; transform: translateY(-3px); }
+        .skill-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .skill-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .skill-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .stage-visual { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .stage-scene { position: relative; height: 200px; background: rgba(255,255,255,0.1); border-radius: 15px; margin: 15px 0; display: flex; align-items: center; justify-content: center; }
+        .presenter { font-size: 5em; transition: all 0.3s; }
+        .presenter.confident { animation: bounce 0.5s ease infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .audience { position: absolute; bottom: 10px; display: flex; gap: 15px; font-size: 2em; }
+        .feedback-display { padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 10px 0; }
+        .stage-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .stage-btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .stage-btn.action { background: white; color: #667eea; }
+        .stage-btn.feedback { background: rgba(255,255,255,0.3); color: white; }
+        .topic-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .topic-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .topic-card:hover { border-color: #fda085; transform: scale(1.05); }
+        .topic-card.presented { border-color: #4CAF50; background: #e8f5e9; }
+        .topic-card .icon { font-size: 2em; margin-bottom: 5px; }
+        .topic-card .title { font-size: 0.9em; }
+        .checklist-items { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .checklist-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .checklist-item:hover { border-color: #fda085; }
+        .checklist-item.done { border-color: #4CAF50; background: #e8f5e9; }
+        .checklist-icon { font-size: 1.5em; }
+        .checklist-text { flex: 1; }
+        .checklist-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .done .checklist-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .counter-section { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center; }
+        .counter-display { font-size: 3em; font-weight: bold; color: #fda085; margin: 10px 0; }
+        .counter-buttons { display: flex; gap: 10px; justify-content: center; }
+        .counter-btn { width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.5em; }
+        .counter-btn.add { background: #4CAF50; color: white; }
+        .counter-btn.reset { background: #9e9e9e; color: white; font-size: 1em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fda085; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .presentation-skills, .topic-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Präsentieren</h1>
+            <p>Vor anderen sprechen und zeigen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-17/K-18)</h3>
+                <p>Das Kind kann vor einer Gruppe etwas präsentieren. Es spricht verständlich, blickt die Zuhörer an und strukturiert seinen Vortrag.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎤</span> Präsentations-Fähigkeiten</h3>
+                <p>Welche Fähigkeiten zeigt das Kind beim Präsentieren?</p>
+                <div class="presentation-skills">
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🔊</div><div class="title">Laut sprechen</div><div class="desc">Alle können es hören</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">👀</div><div class="title">Blickkontakt</div><div class="desc">Schaut die Zuhörer an</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🎯</div><div class="title">Struktur</div><div class="desc">Anfang, Mitte, Ende</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">⏱️</div><div class="title">Tempo</div><div class="desc">Nicht zu schnell sprechen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">🖼️</div><div class="title">Zeigen</div><div class="desc">Dinge vorzeigen</div></div>
+                    <div class="skill-card" onclick="toggleSkill(this)"><div class="icon">❓</div><div class="title">Fragen beantworten</div><div class="desc">Reagiert auf Fragen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Präsentations-Bühne</h3>
+                <div class="stage-visual">
+                    <p>Simuliere eine Präsentation:</p>
+                    <div class="stage-scene">
+                        <div class="presenter" id="presenter">🧒</div>
+                        <div class="audience">👧 👦 👩 👨</div>
+                    </div>
+                    <div class="feedback-display" id="feedbackDisplay">Klicke auf die Buttons für Feedback</div>
+                    <div class="stage-buttons">
+                        <button class="stage-btn action" onclick="startPresentation()">🎬 Start</button>
+                        <button class="stage-btn feedback" onclick="giveFeedback('👍 Super laut!')">🔊 Laut</button>
+                        <button class="stage-btn feedback" onclick="giveFeedback('👀 Guter Blickkontakt!')">👀 Blick</button>
+                        <button class="stage-btn feedback" onclick="giveFeedback('⭐ Toll erklärt!')">⭐ Gut</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Präsentations-Themen</h3>
+                <p>Diese Themen hat das Kind schon präsentiert:</p>
+                <div class="topic-cards">
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">🧸</div><div class="title">Lieblings-spielzeug</div></div>
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">🐕</div><div class="title">Mein Haustier</div></div>
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">📚</div><div class="title">Lieblings-buch</div></div>
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">🎨</div><div class="title">Mein Bild</div></div>
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">🏖️</div><div class="title">Mein Urlaub</div></div>
+                    <div class="topic-card" onclick="toggleTopic(this)"><div class="icon">🎂</div><div class="title">Mein Geburtstag</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Vor dem Präsentieren</h3>
+                <p>Kann das Kind sich auf eine Präsentation vorbereiten?</p>
+                <div class="checklist-items">
+                    <div class="checklist-item" onclick="toggleChecklist(this)"><div class="checklist-icon">🤔</div><div class="checklist-text">Thema überlegen</div><div class="checklist-check">✓</div></div>
+                    <div class="checklist-item" onclick="toggleChecklist(this)"><div class="checklist-icon">📝</div><div class="checklist-text">Wichtiges merken</div><div class="checklist-check">✓</div></div>
+                    <div class="checklist-item" onclick="toggleChecklist(this)"><div class="checklist-icon">🗣️</div><div class="checklist-text">Üben/Durchsprechen</div><div class="checklist-check">✓</div></div>
+                    <div class="checklist-item" onclick="toggleChecklist(this)"><div class="checklist-icon">🎒</div><div class="checklist-text">Material vorbereiten</div><div class="checklist-check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Präsentations-Zähler</h3>
+                <div class="counter-section">
+                    <p>Anzahl erfolgreicher Präsentationen:</p>
+                    <div class="counter-display" id="presentationCount">0</div>
+                    <div class="counter-buttons">
+                        <button class="counter-btn add" onclick="addPresentation()">+</button>
+                        <button class="counter-btn reset" onclick="resetCount()">↻</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie sicher fühlt sich das Kind beim Präsentieren? Worüber spricht es gerne? Was kann noch verbessert werden?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let presentationCount = 0;
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleTopic(el) { el.classList.toggle('presented'); saveData(); }
+        function toggleChecklist(el) { el.classList.toggle('done'); saveData(); }
+        function startPresentation() {
+            const presenter = document.getElementById('presenter');
+            presenter.classList.add('confident');
+            document.getElementById('feedbackDisplay').textContent = '🎬 Präsentation läuft...';
+            setTimeout(() => presenter.classList.remove('confident'), 3000);
+        }
+        function giveFeedback(text) {
+            document.getElementById('feedbackDisplay').textContent = text;
+        }
+        function addPresentation() {
+            presentationCount++;
+            document.getElementById('presentationCount').textContent = presentationCount;
+            saveData();
+        }
+        function resetCount() {
+            presentationCount = 0;
+            document.getElementById('presentationCount').textContent = 0;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-card.achieved').length,
+                topics: document.querySelectorAll('.topic-card.presented').length,
+                checklist: document.querySelectorAll('.checklist-item.done').length,
+                presentationCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_praesentieren', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_praesentieren');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const topics = document.querySelectorAll('.topic-card');
+                for (let i = 0; i < (data.topics || 0); i++) { if (topics[i]) topics[i].classList.add('presented'); }
+                const checklist = document.querySelectorAll('.checklist-item');
+                for (let i = 0; i < (data.checklist || 0); i++) { if (checklist[i]) checklist[i].classList.add('done'); }
+                presentationCount = data.presentationCount || 0;
+                document.getElementById('presentationCount').textContent = presentationCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

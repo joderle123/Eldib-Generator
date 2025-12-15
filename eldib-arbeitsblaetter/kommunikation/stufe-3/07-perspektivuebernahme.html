@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perspektivübernahme - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #fff8e1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #d299c2; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .scenario-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-display { text-align: center; }
+        .scenario-image { font-size: 5em; margin: 15px 0; }
+        .scenario-text { font-size: 1.1em; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 15px 0; }
+        .scenario-question { font-weight: bold; margin: 15px 0; }
+        .answer-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+        .answer-btn { padding: 12px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 1em; transition: all 0.3s; }
+        .answer-btn:hover { background: rgba(255,255,255,0.3); }
+        .answer-btn.correct { background: rgba(76, 175, 80, 0.6); }
+        .answer-btn.wrong { background: rgba(244, 67, 54, 0.6); }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.next { background: white; color: #667eea; }
+        .score-display { text-align: center; margin-top: 15px; }
+        .perspective-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-card { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-card:hover { border-color: #d299c2; }
+        .skill-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 2em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; }
+        .skill-example { font-size: 0.9em; color: #666; font-style: italic; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .phrases-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .phrase-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .phrase-card:hover { border-color: #d299c2; }
+        .phrase-card.used { border-color: #4CAF50; background: #e8f5e9; }
+        .phrase-card .phrase { font-weight: bold; margin-bottom: 5px; }
+        .phrase-card .meaning { font-size: 0.85em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #d299c2; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .phrases-grid { grid-template-columns: 1fr; } .answer-options { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Perspektivübernahme</h1>
+            <p>Verstehen, was andere denken und fühlen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-17/K-18)</h3>
+                <p>Das Kind kann die Perspektive anderer einnehmen. Es versteht, dass andere Menschen andere Gedanken, Gefühle und Sichtweisen haben können.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Perspektiven-Quiz</h3>
+                <div class="scenario-game">
+                    <div class="scenario-display">
+                        <div class="scenario-image" id="scenarioImage">👧</div>
+                        <div class="scenario-text" id="scenarioText">Lisa hat ein Eis bekommen. Ihr kleiner Bruder schaut traurig zu.</div>
+                        <div class="scenario-question">Wie fühlt sich der kleine Bruder?</div>
+                        <div class="answer-options" id="answerOptions">
+                            <button class="answer-btn" onclick="checkAnswer(this, true)">😢 Traurig/Neidisch</button>
+                            <button class="answer-btn" onclick="checkAnswer(this, false)">😊 Glücklich</button>
+                            <button class="answer-btn" onclick="checkAnswer(this, false)">😠 Wütend auf Lisa</button>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn next" onclick="nextScenario()">➡️ Nächste Situation</button>
+                    </div>
+                    <div class="score-display">Richtige Antworten: <strong id="score">0</strong> / <span id="total">0</span></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👀</span> Perspektiven-Fähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind:</p>
+                <div class="perspective-skills">
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">😊</div>
+                        <div class="skill-content"><div class="skill-title">Gefühle anderer erkennen</div><div class="skill-example">"Er sieht traurig aus"</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">💭</div>
+                        <div class="skill-content"><div class="skill-title">Gedanken anderer verstehen</div><div class="skill-example">"Sie denkt vielleicht, dass..."</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">❓</div>
+                        <div class="skill-content"><div class="skill-title">Gründe für Verhalten verstehen</div><div class="skill-example">"Er weint, weil..."</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🤝</div>
+                        <div class="skill-content"><div class="skill-title">Unterschiedliche Meinungen akzeptieren</div><div class="skill-example">"Du magst das, ich nicht"</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-card" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🎯</div>
+                        <div class="skill-content"><div class="skill-title">Absichten verstehen</div><div class="skill-example">"Sie wollte helfen"</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Hilfreiche Ausdrücke</h3>
+                <p>Diese Ausdrücke verwendet das Kind, um Perspektiven zu beschreiben:</p>
+                <div class="phrases-grid">
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Ich glaube, er fühlt..."</div><div class="meaning">Gefühle vermuten</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Vielleicht denkt sie..."</div><div class="meaning">Gedanken vermuten</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Aus seiner Sicht..."</div><div class="meaning">Perspektive wechseln</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Wenn ich er wäre..."</div><div class="meaning">Sich hineinversetzen</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Er weiß nicht, dass..."</div><div class="meaning">Wissen unterscheiden</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Sie mag das, weil..."</div><div class="meaning">Präferenzen verstehen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut kann das Kind sich in andere hineinversetzen? In welchen Situationen zeigt es Verständnis für andere Perspektiven?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { image: "👧", text: "Lisa hat ein Eis bekommen. Ihr kleiner Bruder schaut traurig zu.", question: "Wie fühlt sich der kleine Bruder?", answers: ["😢 Traurig/Neidisch", "😊 Glücklich", "😠 Wütend auf Lisa"], correct: 0 },
+            { image: "👦", text: "Tom sucht seinen Ball. Er weiß nicht, dass Mama ihn im Schrank versteckt hat.", question: "Was denkt Tom?", answers: ["Ball ist weg", "Ball ist im Schrank", "Mama hat ihn"], correct: 0 },
+            { image: "👩", text: "Anna hat Mia versehentlich gestoßen. Mia weint.", question: "Was sollte Anna tun?", answers: ["Weggehen", "Sich entschuldigen", "Lachen"], correct: 1 },
+            { image: "🧒", text: "Max hat Angst vor Hunden. Seine Freundin will ihm ihren Hund zeigen.", question: "Wie fühlt sich Max?", answers: ["Aufgeregt", "Ängstlich", "Wütend"], correct: 1 }
+        ];
+        let currentScenario = 0;
+        let score = 0;
+        let total = 0;
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioImage').textContent = s.image;
+            document.getElementById('scenarioText').textContent = s.text;
+            document.getElementById('answerOptions').innerHTML = s.answers.map((a, i) =>
+                `<button class="answer-btn" onclick="checkAnswer(this, ${i === s.correct})">${a}</button>`
+            ).join('');
+        }
+        function checkAnswer(btn, isCorrect) {
+            document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+            total++;
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+            }
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = total;
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function togglePhrase(el) { el.classList.toggle('used'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-card.achieved').length,
+                phrases: document.querySelectorAll('.phrase-card.used').length,
+                score, total,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_perspektive', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_perspektive');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-card');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const phrases = document.querySelectorAll('.phrase-card');
+                for (let i = 0; i < (data.phrases || 0); i++) { if (phrases[i]) phrases[i].classList.add('used'); }
+                score = data.score || 0;
+                total = data.total || 0;
+                document.getElementById('score').textContent = score;
+                document.getElementById('total').textContent = total;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

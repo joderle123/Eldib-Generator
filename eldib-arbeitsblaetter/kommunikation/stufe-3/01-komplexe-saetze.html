@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komplexe Sätze - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .connector-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .connector-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .connector-card:hover { border-color: #667eea; transform: translateY(-3px); }
+        .connector-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .connector-card .word { font-size: 1.5em; font-weight: bold; color: #667eea; text-align: center; margin-bottom: 10px; }
+        .connector-card .example { font-size: 0.9em; color: #666; text-align: center; font-style: italic; }
+        .sentence-builder { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .builder-parts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+        .builder-part { padding: 12px 20px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .builder-part:hover { background: rgba(255,255,255,0.3); }
+        .builder-part.selected { background: rgba(255,255,255,0.5); }
+        .builder-result { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 20px; margin: 20px 0; min-height: 60px; font-size: 1.1em; text-align: center; }
+        .builder-buttons { display: flex; gap: 15px; justify-content: center; }
+        .builder-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .builder-btn.clear { background: rgba(255,255,255,0.3); color: white; }
+        .builder-btn.check { background: white; color: #11998e; }
+        .sentence-types { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .type-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .type-item:hover { border-color: #667eea; }
+        .type-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .type-icon { font-size: 1.5em; }
+        .type-content { flex: 1; }
+        .type-title { font-weight: bold; }
+        .type-example { font-size: 0.85em; color: #666; font-style: italic; }
+        .type-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .type-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .custom-sentences { background: #f5f5f5; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .sentence-input { display: flex; gap: 10px; margin-bottom: 10px; }
+        .sentence-input input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; }
+        .sentence-input button { padding: 12px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .saved-sentences { display: flex; flex-direction: column; gap: 8px; }
+        .saved-sentence { padding: 10px 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .connector-cards { grid-template-columns: 1fr; } .sentence-input { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Komplexe Sätze</h1>
+            <p>Sätze mit Bindewörtern verbinden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-14/K-15)</h3>
+                <p>Das Kind bildet komplexere Sätze mit Nebensätzen und Bindewörtern. Es kann mehrere Gedanken in einem Satz verbinden.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔗</span> Bindewörter</h3>
+                <p>Welche Bindewörter verwendet das Kind bereits korrekt?</p>
+                <div class="connector-cards">
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">und</div>
+                        <div class="example">"Ich esse Brot und trinke Milch."</div>
+                    </div>
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">aber</div>
+                        <div class="example">"Ich will spielen, aber es regnet."</div>
+                    </div>
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">weil</div>
+                        <div class="example">"Ich bin müde, weil ich gespielt habe."</div>
+                    </div>
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">wenn</div>
+                        <div class="example">"Wenn es regnet, bleibe ich drinnen."</div>
+                    </div>
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">dass</div>
+                        <div class="example">"Ich weiß, dass du da bist."</div>
+                    </div>
+                    <div class="connector-card" onclick="toggleConnector(this)">
+                        <div class="word">oder</div>
+                        <div class="example">"Willst du malen oder spielen?"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔧</span> Satz-Verbinder</h3>
+                <div class="sentence-builder">
+                    <p style="text-align: center; margin-bottom: 15px;">Verbinde die Satzteile zu einem komplexen Satz:</p>
+                    <div class="builder-parts">
+                        <div class="builder-part" onclick="addPart(this)">Ich gehe raus</div>
+                        <div class="builder-part" onclick="addPart(this)">weil</div>
+                        <div class="builder-part" onclick="addPart(this)">die Sonne scheint</div>
+                    </div>
+                    <div class="builder-result" id="builderResult">Klicke auf die Teile in der richtigen Reihenfolge</div>
+                    <div class="builder-buttons">
+                        <button class="builder-btn clear" onclick="clearBuilder()">🗑️ Löschen</button>
+                        <button class="builder-btn check" onclick="checkSentence()">✓ Prüfen</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Satzarten-Fortschritt</h3>
+                <p>Diese Satzarten kann das Kind bilden:</p>
+                <div class="sentence-types">
+                    <div class="type-item" onclick="toggleType(this)">
+                        <div class="type-icon">➕</div>
+                        <div class="type-content"><div class="type-title">Reihungen mit "und"</div><div class="type-example">"Ich male und singe und tanze."</div></div>
+                        <div class="type-check">✓</div>
+                    </div>
+                    <div class="type-item" onclick="toggleType(this)">
+                        <div class="type-icon">↔️</div>
+                        <div class="type-content"><div class="type-title">Gegensätze mit "aber"</div><div class="type-example">"Das ist groß, aber das ist klein."</div></div>
+                        <div class="type-check">✓</div>
+                    </div>
+                    <div class="type-item" onclick="toggleType(this)">
+                        <div class="type-icon">❓</div>
+                        <div class="type-content"><div class="type-title">Begründungen mit "weil"</div><div class="type-example">"Ich bin traurig, weil mein Ball weg ist."</div></div>
+                        <div class="type-check">✓</div>
+                    </div>
+                    <div class="type-item" onclick="toggleType(this)">
+                        <div class="type-icon">⏰</div>
+                        <div class="type-content"><div class="type-title">Zeitangaben mit "wenn/als"</div><div class="type-example">"Wenn ich groß bin, werde ich..."</div></div>
+                        <div class="type-check">✓</div>
+                    </div>
+                    <div class="type-item" onclick="toggleType(this)">
+                        <div class="type-icon">🔄</div>
+                        <div class="type-content"><div class="type-title">Relativsätze</div><div class="type-example">"Das Kind, das dort spielt, ist mein Freund."</div></div>
+                        <div class="type-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✏️</span> Gesammelte Sätze</h3>
+                <p>Dokumentiere komplexe Sätze des Kindes:</p>
+                <div class="custom-sentences">
+                    <div class="sentence-input">
+                        <input type="text" id="newSentence" placeholder="Komplexen Satz des Kindes eingeben...">
+                        <button onclick="addSentence()">+ Speichern</button>
+                    </div>
+                    <div class="saved-sentences" id="savedSentences"></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Satzstrukturen verwendet das Kind? Wo macht es noch Fehler? Wie flüssig sind die komplexen Sätze?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let builtSentence = [];
+        let customSentences = [];
+        function toggleConnector(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleType(el) { el.classList.toggle('achieved'); saveData(); }
+        function addPart(el) {
+            el.classList.add('selected');
+            builtSentence.push(el.textContent);
+            document.getElementById('builderResult').textContent = builtSentence.join(' ');
+        }
+        function clearBuilder() {
+            builtSentence = [];
+            document.querySelectorAll('.builder-part').forEach(p => p.classList.remove('selected'));
+            document.getElementById('builderResult').textContent = 'Klicke auf die Teile in der richtigen Reihenfolge';
+        }
+        function checkSentence() {
+            const result = document.getElementById('builderResult');
+            if (builtSentence.length >= 3) {
+                result.style.background = 'rgba(76, 175, 80, 0.5)';
+                setTimeout(() => result.style.background = 'rgba(255,255,255,0.2)', 2000);
+            }
+        }
+        function addSentence() {
+            const input = document.getElementById('newSentence');
+            if (input.value.trim()) {
+                customSentences.push(input.value.trim());
+                input.value = '';
+                renderSentences();
+                saveData();
+            }
+        }
+        function renderSentences() {
+            document.getElementById('savedSentences').innerHTML = customSentences.map(s =>
+                `<div class="saved-sentence">"${s}"</div>`
+            ).join('');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                connectors: document.querySelectorAll('.connector-card.mastered').length,
+                types: document.querySelectorAll('.type-item.achieved').length,
+                customSentences,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_komplexe', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_komplexe');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const connectors = document.querySelectorAll('.connector-card');
+                for (let i = 0; i < (data.connectors || 0); i++) { if (connectors[i]) connectors[i].classList.add('mastered'); }
+                const types = document.querySelectorAll('.type-item');
+                for (let i = 0; i < (data.types || 0); i++) { if (types[i]) types[i].classList.add('achieved'); }
+                if (data.customSentences) { customSentences = data.customSentences; renderSentences(); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

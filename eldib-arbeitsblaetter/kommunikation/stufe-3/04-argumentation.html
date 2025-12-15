@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argumentation - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff9a9e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .argument-structure { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
+        .argument-part { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .argument-part:hover { border-color: #ff9a9e; }
+        .argument-part.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .argument-header { display: flex; align-items: center; gap: 15px; }
+        .argument-icon { font-size: 2em; }
+        .argument-content { flex: 1; }
+        .argument-title { font-weight: bold; font-size: 1.1em; }
+        .argument-example { font-size: 0.9em; color: #666; font-style: italic; margin-top: 5px; }
+        .argument-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .argument-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .debate-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .debate-topic { font-size: 1.3em; text-align: center; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 15px; margin: 15px 0; }
+        .debate-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .debate-side { padding: 20px; background: rgba(255,255,255,0.2); border-radius: 15px; cursor: pointer; transition: all 0.3s; }
+        .debate-side:hover { background: rgba(255,255,255,0.3); }
+        .debate-side.selected { background: rgba(255,255,255,0.4); }
+        .debate-side .title { font-weight: bold; text-align: center; margin-bottom: 10px; }
+        .argument-input { margin-top: 10px; }
+        .argument-input input { width: 100%; padding: 10px; border: none; border-radius: 8px; font-size: 0.9em; }
+        .saved-arguments { margin-top: 10px; font-size: 0.9em; }
+        .saved-arg { padding: 5px 10px; background: rgba(255,255,255,0.3); border-radius: 5px; margin: 5px 0; }
+        .debate-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .debate-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .debate-btn.new { background: white; color: #667eea; }
+        .debate-btn.save { background: rgba(255,255,255,0.3); color: white; }
+        .phrase-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .phrase-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .phrase-card:hover { border-color: #ff9a9e; }
+        .phrase-card.used { border-color: #4CAF50; background: #e8f5e9; }
+        .phrase-card .phrase { font-weight: bold; margin-bottom: 5px; }
+        .phrase-card .usage { font-size: 0.85em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff9a9e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .debate-sides, .phrase-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Argumentation</h1>
+            <p>Seine Meinung begründen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-16/K-17)</h3>
+                <p>Das Kind lernt, seine Meinung zu äußern und mit Gründen zu unterstützen. Es kann einfache Argumente formulieren und andere Meinungen anhören.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Aufbau eines Arguments</h3>
+                <p>Kann das Kind diese Teile eines Arguments verwenden?</p>
+                <div class="argument-structure">
+                    <div class="argument-part" onclick="toggleArgument(this)">
+                        <div class="argument-header">
+                            <div class="argument-icon">💭</div>
+                            <div class="argument-content">
+                                <div class="argument-title">1. Meinung äußern</div>
+                                <div class="argument-example">"Ich finde, dass..." / "Ich glaube..."</div>
+                            </div>
+                            <div class="argument-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="argument-part" onclick="toggleArgument(this)">
+                        <div class="argument-header">
+                            <div class="argument-icon">🎯</div>
+                            <div class="argument-content">
+                                <div class="argument-title">2. Begründung geben</div>
+                                <div class="argument-example">"...weil..." / "Der Grund ist..."</div>
+                            </div>
+                            <div class="argument-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="argument-part" onclick="toggleArgument(this)">
+                        <div class="argument-header">
+                            <div class="argument-icon">📋</div>
+                            <div class="argument-content">
+                                <div class="argument-title">3. Beispiel nennen</div>
+                                <div class="argument-example">"Zum Beispiel..." / "Einmal..."</div>
+                            </div>
+                            <div class="argument-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="argument-part" onclick="toggleArgument(this)">
+                        <div class="argument-header">
+                            <div class="argument-icon">🤝</div>
+                            <div class="argument-content">
+                                <div class="argument-title">4. Andere Meinung akzeptieren</div>
+                                <div class="argument-example">"Du hast auch recht, aber..."</div>
+                            </div>
+                            <div class="argument-check">✓</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">⚖️</span> Meinungs-Übung</h3>
+                <div class="debate-game">
+                    <p style="text-align: center;">Diskutiere dieses Thema mit dem Kind:</p>
+                    <div class="debate-topic" id="debateTopic">Was ist besser: Sommer oder Winter?</div>
+                    <div class="debate-sides">
+                        <div class="debate-side" onclick="selectSide(this, 'pro')">
+                            <div class="title">☀️ Sommer</div>
+                            <div class="argument-input"><input type="text" id="proArg" placeholder="Argument eingeben..."></div>
+                            <div class="saved-arguments" id="proArgs"></div>
+                        </div>
+                        <div class="debate-side" onclick="selectSide(this, 'contra')">
+                            <div class="title">❄️ Winter</div>
+                            <div class="argument-input"><input type="text" id="contraArg" placeholder="Argument eingeben..."></div>
+                            <div class="saved-arguments" id="contraArgs"></div>
+                        </div>
+                    </div>
+                    <div class="debate-buttons">
+                        <button class="debate-btn save" onclick="saveArg()">💾 Argument speichern</button>
+                        <button class="debate-btn new" onclick="newTopic()">🔄 Neues Thema</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Nützliche Redewendungen</h3>
+                <p>Diese Formulierungen verwendet das Kind beim Argumentieren:</p>
+                <div class="phrase-cards">
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Ich finde..."</div><div class="usage">Meinung äußern</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"...weil..."</div><div class="usage">Begründen</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Zum Beispiel..."</div><div class="usage">Beispiele geben</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Ich bin anderer Meinung"</div><div class="usage">Widersprechen</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Das stimmt, aber..."</div><div class="usage">Teilweise zustimmen</div></div>
+                    <div class="phrase-card" onclick="togglePhrase(this)"><div class="phrase">"Ich verstehe, dass..."</div><div class="usage">Verständnis zeigen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut kann das Kind seine Meinung begründen? Hört es auf andere Meinungen? Wie reagiert es auf Widerspruch?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const topics = [
+            { topic: "Was ist besser: Sommer oder Winter?", sides: ["☀️ Sommer", "❄️ Winter"] },
+            { topic: "Was ist besser: Hund oder Katze?", sides: ["🐕 Hund", "🐱 Katze"] },
+            { topic: "Was ist besser: drinnen oder draußen spielen?", sides: ["🏠 Drinnen", "🌳 Draußen"] },
+            { topic: "Was ist besser: malen oder basteln?", sides: ["🎨 Malen", "✂️ Basteln"] }
+        ];
+        let currentTopic = 0;
+        let selectedSide = '';
+        let proArgs = [];
+        let contraArgs = [];
+        function toggleArgument(el) { el.classList.toggle('mastered'); saveData(); }
+        function togglePhrase(el) { el.classList.toggle('used'); saveData(); }
+        function selectSide(el, side) {
+            document.querySelectorAll('.debate-side').forEach(s => s.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSide = side;
+        }
+        function saveArg() {
+            const proInput = document.getElementById('proArg');
+            const contraInput = document.getElementById('contraArg');
+            if (proInput.value.trim()) {
+                proArgs.push(proInput.value.trim());
+                proInput.value = '';
+            }
+            if (contraInput.value.trim()) {
+                contraArgs.push(contraInput.value.trim());
+                contraInput.value = '';
+            }
+            renderArgs();
+            saveData();
+        }
+        function renderArgs() {
+            document.getElementById('proArgs').innerHTML = proArgs.map(a => `<div class="saved-arg">• ${a}</div>`).join('');
+            document.getElementById('contraArgs').innerHTML = contraArgs.map(a => `<div class="saved-arg">• ${a}</div>`).join('');
+        }
+        function newTopic() {
+            currentTopic = (currentTopic + 1) % topics.length;
+            const t = topics[currentTopic];
+            document.getElementById('debateTopic').textContent = t.topic;
+            document.querySelectorAll('.debate-side .title')[0].textContent = t.sides[0];
+            document.querySelectorAll('.debate-side .title')[1].textContent = t.sides[1];
+            proArgs = [];
+            contraArgs = [];
+            renderArgs();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                arguments: document.querySelectorAll('.argument-part.mastered').length,
+                phrases: document.querySelectorAll('.phrase-card.used').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_argumentation', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_argumentation');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const args = document.querySelectorAll('.argument-part');
+                for (let i = 0; i < (data.arguments || 0); i++) { if (args[i]) args[i].classList.add('mastered'); }
+                const phrases = document.querySelectorAll('.phrase-card');
+                for (let i = 0; i < (data.phrases || 0); i++) { if (phrases[i]) phrases[i].classList.add('used'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

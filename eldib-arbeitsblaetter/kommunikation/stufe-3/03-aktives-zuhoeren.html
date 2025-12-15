@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktives Zuhören - Kommunikation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .listening-skills { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .skill-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 4px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-item:hover { border-color: #11998e; }
+        .skill-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 2.5em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
+        .skill-desc { font-size: 0.9em; color: #666; }
+        .skill-check { width: 35px; height: 35px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .listening-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .game-display { text-align: center; padding: 20px; }
+        .story-text { font-size: 1.2em; line-height: 1.6; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 15px; margin: 15px 0; }
+        .questions { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .question-item { padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .question-item:hover { background: rgba(255,255,255,0.3); }
+        .question-item.answered { background: rgba(76, 175, 80, 0.5); }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.new { background: white; color: #667eea; }
+        .game-btn.check { background: rgba(255,255,255,0.3); color: white; }
+        .response-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .response-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .response-card:hover { border-color: #11998e; }
+        .response-card.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .response-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .response-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .response-card .example { font-size: 0.8em; color: #666; text-align: center; font-style: italic; }
+        .listening-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .tracker-title { font-weight: bold; }
+        .tracker-buttons { display: flex; gap: 10px; }
+        .tracker-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2em; }
+        .tracker-btn.add { background: #4CAF50; color: white; }
+        .tracker-btn.reset { background: #9e9e9e; color: white; }
+        .tracker-display { text-align: center; }
+        .tracker-number { font-size: 3em; font-weight: bold; color: #11998e; }
+        .tracker-label { color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .response-types { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe III</div>
+            <h1>Aktives Zuhören</h1>
+            <p>Aufmerksam zuhören und verstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-14/K-15)</h3>
+                <p>Das Kind hört aktiv zu, versteht Inhalte und kann auf Gehörtes angemessen reagieren. Es zeigt Interesse und stellt Verständnisfragen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👂</span> Zuhör-Fähigkeiten</h3>
+                <p>Welche Zuhör-Fähigkeiten zeigt das Kind?</p>
+                <div class="listening-skills">
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">👀</div>
+                        <div class="skill-content"><div class="skill-title">Blickkontakt halten</div><div class="skill-desc">Schaut den Sprecher an</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🤫</div>
+                        <div class="skill-content"><div class="skill-title">Nicht unterbrechen</div><div class="skill-desc">Lässt andere ausreden</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">❓</div>
+                        <div class="skill-content"><div class="skill-title">Nachfragen</div><div class="skill-desc">Stellt Verständnisfragen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🔄</div>
+                        <div class="skill-content"><div class="skill-title">Zusammenfassen</div><div class="skill-desc">Kann Gehörtes wiedergeben</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">😊</div>
+                        <div class="skill-content"><div class="skill-title">Reaktionen zeigen</div><div class="skill-desc">Nickt, lächelt, zeigt Interesse</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Zuhör-Spiel</h3>
+                <div class="listening-game">
+                    <div class="game-display">
+                        <p>Lies diese kurze Geschichte vor und stelle dann Fragen:</p>
+                        <div class="story-text" id="storyText">
+                            Ein kleiner Hund namens Max fand im Park einen roten Ball. Er spielte den ganzen Nachmittag damit. Als es dunkel wurde, trug er den Ball nach Hause.
+                        </div>
+                        <p style="margin: 15px 0;">Hat das Kind diese Fragen richtig beantwortet?</p>
+                        <div class="questions">
+                            <div class="question-item" onclick="toggleQuestion(this)">Wie heißt der Hund?</div>
+                            <div class="question-item" onclick="toggleQuestion(this)">Was hat er gefunden?</div>
+                            <div class="question-item" onclick="toggleQuestion(this)">Wo hat er gespielt?</div>
+                            <div class="question-item" onclick="toggleQuestion(this)">Wann ging er nach Hause?</div>
+                        </div>
+                        <div class="game-buttons">
+                            <button class="game-btn new" onclick="newStory()">📖 Neue Geschichte</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> Reaktionen auf Gehörtes</h3>
+                <p>So reagiert das Kind, wenn es zuhört:</p>
+                <div class="response-types">
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">👍</div><div class="title">Bestätigen</div><div class="example">"Mhm", "Ja", Nicken</div></div>
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">❓</div><div class="title">Nachfragen</div><div class="example">"Und dann?", "Warum?"</div></div>
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">😮</div><div class="title">Emotional reagieren</div><div class="example">"Oh!", "Wow!", "Wirklich?"</div></div>
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">🔗</div><div class="title">Verbindungen herstellen</div><div class="example">"Das kenne ich auch!"</div></div>
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">🔄</div><div class="title">Wiederholen</div><div class="example">"Also, er hat..."</div></div>
+                    <div class="response-card" onclick="toggleResponse(this)"><div class="icon">💭</div><div class="title">Kommentieren</div><div class="example">"Das finde ich toll!"</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Aufmerksamkeits-Tracker</h3>
+                <div class="listening-tracker">
+                    <div class="tracker-header">
+                        <div class="tracker-title">Minuten aufmerksames Zuhören heute:</div>
+                        <div class="tracker-buttons">
+                            <button class="tracker-btn add" onclick="addMinute()">+</button>
+                            <button class="tracker-btn reset" onclick="resetMinutes()">↻</button>
+                        </div>
+                    </div>
+                    <div class="tracker-display">
+                        <div class="tracker-number" id="minuteCount">0</div>
+                        <div class="tracker-label">Minuten</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie lange kann das Kind aufmerksam zuhören? In welchen Situationen hört es besonders gut zu? Was lenkt es ab?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const stories = [
+            { text: "Ein kleiner Hund namens Max fand im Park einen roten Ball. Er spielte den ganzen Nachmittag damit. Als es dunkel wurde, trug er den Ball nach Hause.", questions: ["Wie heißt der Hund?", "Was hat er gefunden?", "Wo hat er gespielt?", "Wann ging er nach Hause?"] },
+            { text: "Lisa ging mit ihrer Oma in den Zoo. Sie sahen Elefanten, Löwen und Affen. Am liebsten mochte Lisa die Pinguine. Zum Schluss aßen sie Eis.", questions: ["Mit wem ging Lisa in den Zoo?", "Welche Tiere mochte Lisa am liebsten?", "Was aßen sie zum Schluss?", "Welche Tiere haben sie gesehen?"] },
+            { text: "Tom backte mit Papa einen Kuchen. Sie brauchten Mehl, Eier und Zucker. Der Kuchen war für Mamas Geburtstag. Er schmeckte sehr lecker.", questions: ["Was backte Tom?", "Mit wem backte er?", "Für wen war der Kuchen?", "Was brauchten sie dafür?"] }
+        ];
+        let currentStory = 0;
+        let minuteCount = 0;
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleQuestion(el) { el.classList.toggle('answered'); saveData(); }
+        function toggleResponse(el) { el.classList.toggle('observed'); saveData(); }
+        function newStory() {
+            currentStory = (currentStory + 1) % stories.length;
+            const story = stories[currentStory];
+            document.getElementById('storyText').textContent = story.text;
+            document.querySelector('.questions').innerHTML = story.questions.map(q =>
+                `<div class="question-item" onclick="toggleQuestion(this)">${q}</div>`
+            ).join('');
+        }
+        function addMinute() {
+            minuteCount++;
+            document.getElementById('minuteCount').textContent = minuteCount;
+            saveData();
+        }
+        function resetMinutes() {
+            minuteCount = 0;
+            document.getElementById('minuteCount').textContent = 0;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-item.achieved').length,
+                responses: document.querySelectorAll('.response-card.observed').length,
+                minuteCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k3_zuhoeren', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k3_zuhoeren');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-item');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const responses = document.querySelectorAll('.response-card');
+                for (let i = 0; i < (data.responses || 0); i++) { if (responses[i]) responses[i].classList.add('observed'); }
+                minuteCount = data.minuteCount || 0;
+                document.getElementById('minuteCount').textContent = minuteCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
