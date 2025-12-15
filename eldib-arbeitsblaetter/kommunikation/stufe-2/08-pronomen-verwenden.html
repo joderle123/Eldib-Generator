@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronomen verwenden - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #84fab0; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .pronoun-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .pronoun-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .pronoun-card:hover { border-color: #84fab0; transform: translateY(-3px); }
+        .pronoun-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .pronoun-card .word { font-size: 2em; font-weight: bold; color: #667eea; margin-bottom: 10px; }
+        .pronoun-card .example { font-size: 0.85em; color: #666; font-style: italic; }
+        .pronoun-card .icon { font-size: 1.5em; margin-bottom: 5px; }
+        .usage-tracker { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .usage-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+        .usage-btn { padding: 12px 25px; background: rgba(255,255,255,0.2); border: none; border-radius: 25px; color: white; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .usage-btn:hover { background: rgba(255,255,255,0.3); }
+        .usage-btn.active { background: rgba(255,255,255,0.5); }
+        .usage-count { text-align: center; font-size: 1.2em; margin-top: 15px; }
+        .usage-count .number { font-size: 2em; font-weight: bold; }
+        .sentence-examples { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .example-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .example-item:hover { border-color: #84fab0; }
+        .example-item.heard { border-color: #4CAF50; background: #e8f5e9; }
+        .example-pronoun { font-weight: bold; color: #667eea; font-size: 1.2em; min-width: 50px; }
+        .example-sentence { flex: 1; }
+        .example-check { width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .heard .example-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .progress-stages { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .stage-item { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .stage-item:hover { border-color: #84fab0; }
+        .stage-item.reached { border-color: #4CAF50; background: #e8f5e9; }
+        .stage-header { display: flex; align-items: center; gap: 15px; }
+        .stage-number { width: 40px; height: 40px; background: linear-gradient(135deg, #84fab0, #8fd3f4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .reached .stage-number { background: #4CAF50; }
+        .stage-title { font-weight: bold; flex: 1; }
+        .stage-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; }
+        .reached .stage-check { background: #4CAF50; border-color: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #84fab0; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .pronoun-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Pronomen verwenden</h1>
+            <p>Ich, du, er, sie...</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-9/K-10)</h3>
+                <p>Das Kind lernt, Pronomen korrekt zu verwenden. Es unterscheidet zwischen ich/du/er/sie und setzt sie im richtigen Kontext ein.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👤</span> Pronomen-Übersicht</h3>
+                <p>Welche Pronomen verwendet das Kind bereits korrekt?</p>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">👆</div>
+                        <div class="word">Ich</div>
+                        <div class="example">"Ich will spielen"</div>
+                    </div>
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">👉</div>
+                        <div class="word">Du</div>
+                        <div class="example">"Du bist dran"</div>
+                    </div>
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">👨</div>
+                        <div class="word">Er</div>
+                        <div class="example">"Er hat den Ball"</div>
+                    </div>
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">👩</div>
+                        <div class="word">Sie</div>
+                        <div class="example">"Sie ist nett"</div>
+                    </div>
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">👥</div>
+                        <div class="word">Wir</div>
+                        <div class="example">"Wir spielen"</div>
+                    </div>
+                    <div class="pronoun-card" onclick="togglePronoun(this)">
+                        <div class="icon">🎁</div>
+                        <div class="word">Mein/Dein</div>
+                        <div class="example">"Das ist meins"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Verwendungs-Tracker</h3>
+                <div class="usage-tracker">
+                    <p style="text-align: center;">Klicke, wenn das Kind ein Pronomen verwendet:</p>
+                    <div class="usage-buttons">
+                        <button class="usage-btn" onclick="trackUsage('ich')">Ich</button>
+                        <button class="usage-btn" onclick="trackUsage('du')">Du</button>
+                        <button class="usage-btn" onclick="trackUsage('er')">Er</button>
+                        <button class="usage-btn" onclick="trackUsage('sie')">Sie</button>
+                        <button class="usage-btn" onclick="trackUsage('wir')">Wir</button>
+                        <button class="usage-btn" onclick="trackUsage('mein')">Mein/Dein</button>
+                    </div>
+                    <div class="usage-count">
+                        Gezählte Verwendungen heute: <span class="number" id="usageCount">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Beispiel-Sätze</h3>
+                <p>Diese Sätze hat das Kind schon richtig gebildet:</p>
+                <div class="sentence-examples">
+                    <div class="example-item" onclick="toggleExample(this)">
+                        <div class="example-pronoun">Ich</div>
+                        <div class="example-sentence">"Ich bin fertig" / "Ich will..."</div>
+                        <div class="example-check">✓</div>
+                    </div>
+                    <div class="example-item" onclick="toggleExample(this)">
+                        <div class="example-pronoun">Du</div>
+                        <div class="example-sentence">"Du auch" / "Hilfst du mir?"</div>
+                        <div class="example-check">✓</div>
+                    </div>
+                    <div class="example-item" onclick="toggleExample(this)">
+                        <div class="example-pronoun">Er/Sie</div>
+                        <div class="example-sentence">"Er hat..." / "Sie macht..."</div>
+                        <div class="example-check">✓</div>
+                    </div>
+                    <div class="example-item" onclick="toggleExample(this)">
+                        <div class="example-pronoun">Wir</div>
+                        <div class="example-sentence">"Wir gehen" / "Spielen wir?"</div>
+                        <div class="example-check">✓</div>
+                    </div>
+                    <div class="example-item" onclick="toggleExample(this)">
+                        <div class="example-pronoun">Mein</div>
+                        <div class="example-sentence">"Das ist meins" / "Mein Ball"</div>
+                        <div class="example-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Entwicklungsstufen</h3>
+                <p>Markiere erreichte Meilensteine:</p>
+                <div class="progress-stages">
+                    <div class="stage-item" onclick="toggleStage(this)">
+                        <div class="stage-header">
+                            <div class="stage-number">1</div>
+                            <div class="stage-title">Eigenen Namen statt "ich" verwenden</div>
+                            <div class="stage-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="stage-item" onclick="toggleStage(this)">
+                        <div class="stage-header">
+                            <div class="stage-number">2</div>
+                            <div class="stage-title">"Ich" korrekt verwenden</div>
+                            <div class="stage-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="stage-item" onclick="toggleStage(this)">
+                        <div class="stage-header">
+                            <div class="stage-number">3</div>
+                            <div class="stage-title">"Du" von "ich" unterscheiden</div>
+                            <div class="stage-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="stage-item" onclick="toggleStage(this)">
+                        <div class="stage-header">
+                            <div class="stage-number">4</div>
+                            <div class="stage-title">"Er/Sie" für andere Personen nutzen</div>
+                            <div class="stage-check">✓</div>
+                        </div>
+                    </div>
+                    <div class="stage-item" onclick="toggleStage(this)">
+                        <div class="stage-header">
+                            <div class="stage-number">5</div>
+                            <div class="stage-title">Besitzanzeiger (mein/dein) unterscheiden</div>
+                            <div class="stage-check">✓</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Pronomen verwechselt das Kind noch? In welchen Situationen gelingt die Verwendung gut? Gibt es typische Fehler?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let usageCount = 0;
+        function togglePronoun(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleExample(el) { el.classList.toggle('heard'); saveData(); }
+        function toggleStage(el) { el.classList.toggle('reached'); saveData(); }
+        function trackUsage(pronoun) {
+            usageCount++;
+            document.getElementById('usageCount').textContent = usageCount;
+            document.querySelectorAll('.usage-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            setTimeout(() => event.target.classList.remove('active'), 500);
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                pronouns: document.querySelectorAll('.pronoun-card.mastered').length,
+                examples: document.querySelectorAll('.example-item.heard').length,
+                stages: document.querySelectorAll('.stage-item.reached').length,
+                usageCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_pronomen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_pronomen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const pronouns = document.querySelectorAll('.pronoun-card');
+                for (let i = 0; i < (data.pronouns || 0); i++) { if (pronouns[i]) pronouns[i].classList.add('mastered'); }
+                const examples = document.querySelectorAll('.example-item');
+                for (let i = 0; i < (data.examples || 0); i++) { if (examples[i]) examples[i].classList.add('heard'); }
+                const stages = document.querySelectorAll('.stage-item');
+                for (let i = 0; i < (data.stages || 0); i++) { if (stages[i]) stages[i].classList.add('reached'); }
+                usageCount = data.usageCount || 0;
+                document.getElementById('usageCount').textContent = usageCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

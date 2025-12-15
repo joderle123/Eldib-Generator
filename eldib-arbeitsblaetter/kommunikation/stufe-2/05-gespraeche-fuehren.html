@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gespräche führen - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #26c6da; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .conversation-visual { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .chat-bubbles { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .bubble { max-width: 80%; padding: 15px 20px; border-radius: 20px; }
+        .bubble.adult { background: rgba(255,255,255,0.3); align-self: flex-start; border-bottom-left-radius: 5px; }
+        .bubble.child { background: rgba(255,255,255,0.5); align-self: flex-end; border-bottom-right-radius: 5px; }
+        .bubble-label { font-size: 0.8em; opacity: 0.8; margin-bottom: 5px; }
+        .conversation-skills { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .skill-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .skill-item:hover { border-color: #26c6da; }
+        .skill-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 1.8em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; }
+        .skill-desc { font-size: 0.85em; color: #666; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .turn-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .turn-counter { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 15px 0; }
+        .turn-display { font-size: 3em; font-weight: bold; color: #667eea; }
+        .turn-buttons { display: flex; gap: 10px; }
+        .turn-btn { width: 50px; height: 50px; border-radius: 50%; border: none; font-size: 1.5em; cursor: pointer; }
+        .turn-btn.plus { background: #4CAF50; color: white; }
+        .turn-btn.minus { background: #f44336; color: white; }
+        .turn-btn.reset { background: #9e9e9e; color: white; font-size: 1em; }
+        .conversation-scenarios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .scenario-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .scenario-card:hover { border-color: #26c6da; }
+        .scenario-card.practiced { border-color: #4CAF50; background: #e8f5e9; }
+        .scenario-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .scenario-card .title { font-weight: bold; text-align: center; font-size: 0.9em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #26c6da; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .conversation-scenarios { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Gespräche führen</h1>
+            <p>Hin und her - miteinander reden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-11/K-12)</h3>
+                <p>Das Kind kann einfache Gespräche führen. Es bleibt beim Thema, reagiert auf Aussagen anderer und trägt aktiv zum Gespräch bei.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💬</span> So sieht ein Gespräch aus</h3>
+                <div class="conversation-visual">
+                    <p style="text-align: center; margin-bottom: 15px;">Beispiel für einen Gesprächsverlauf:</p>
+                    <div class="chat-bubbles">
+                        <div class="bubble adult"><div class="bubble-label">Erwachsener:</div>Was hast du heute gespielt?</div>
+                        <div class="bubble child"><div class="bubble-label">Kind:</div>Mit Autos!</div>
+                        <div class="bubble adult"><div class="bubble-label">Erwachsener:</div>Oh, welches Auto magst du am liebsten?</div>
+                        <div class="bubble child"><div class="bubble-label">Kind:</div>Das rote! Es ist schnell.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Gesprächs-Fähigkeiten</h3>
+                <p>Welche Fähigkeiten zeigt das Kind im Gespräch?</p>
+                <div class="conversation-skills">
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">👂</div>
+                        <div class="skill-content"><div class="skill-title">Zuhören</div><div class="skill-desc">Hört zu, wenn andere sprechen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🔄</div>
+                        <div class="skill-content"><div class="skill-title">Abwechseln</div><div class="skill-desc">Wartet, bis es dran ist</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🎯</div>
+                        <div class="skill-content"><div class="skill-title">Beim Thema bleiben</div><div class="skill-desc">Antwortet passend zum Thema</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">❓</div>
+                        <div class="skill-content"><div class="skill-title">Nachfragen</div><div class="skill-desc">Stellt Rückfragen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">➕</div>
+                        <div class="skill-content"><div class="skill-title">Beitragen</div><div class="skill-desc">Fügt eigene Gedanken hinzu</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔢</span> Gesprächs-Wechsel zählen</h3>
+                <div class="turn-tracker">
+                    <p style="text-align: center;">Wie viele Wechsel schafft das Kind in einem Gespräch?</p>
+                    <div class="turn-counter">
+                        <div class="turn-buttons">
+                            <button class="turn-btn minus" onclick="changeTurns(-1)">-</button>
+                        </div>
+                        <div class="turn-display" id="turnCount">0</div>
+                        <div class="turn-buttons">
+                            <button class="turn-btn plus" onclick="changeTurns(1)">+</button>
+                            <button class="turn-btn reset" onclick="resetTurns()">↻</button>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #666; font-size: 0.9em;">Rekord: <strong id="recordCount">0</strong> Wechsel</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Gesprächs-Situationen</h3>
+                <p>In welchen Situationen führt das Kind Gespräche?</p>
+                <div class="conversation-scenarios">
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">🍽️</div><div class="title">Beim Essen</div></div>
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">🎮</div><div class="title">Beim Spielen</div></div>
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">📖</div><div class="title">Beim Vorlesen</div></div>
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">🚗</div><div class="title">Unterwegs</div></div>
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">🛁</div><div class="title">Bei Routinen</div></div>
+                    <div class="scenario-card" onclick="toggleScenario(this)"><div class="icon">👫</div><div class="title">Mit anderen Kindern</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Worüber spricht das Kind gerne? Wie lange kann es ein Gespräch aufrechterhalten? Mit wem spricht es am liebsten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let turnCount = 0;
+        let recordCount = 0;
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleScenario(el) { el.classList.toggle('practiced'); saveData(); }
+        function changeTurns(delta) {
+            turnCount = Math.max(0, turnCount + delta);
+            document.getElementById('turnCount').textContent = turnCount;
+            if (turnCount > recordCount) {
+                recordCount = turnCount;
+                document.getElementById('recordCount').textContent = recordCount;
+            }
+            saveData();
+        }
+        function resetTurns() {
+            turnCount = 0;
+            document.getElementById('turnCount').textContent = 0;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                skills: document.querySelectorAll('.skill-item.achieved').length,
+                scenarios: document.querySelectorAll('.scenario-card.practiced').length,
+                turnCount, recordCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_gespraeche', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_gespraeche');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const skills = document.querySelectorAll('.skill-item');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                const scenarios = document.querySelectorAll('.scenario-card');
+                for (let i = 0; i < (data.scenarios || 0); i++) { if (scenarios[i]) scenarios[i].classList.add('practiced'); }
+                turnCount = data.turnCount || 0;
+                recordCount = data.recordCount || 0;
+                document.getElementById('turnCount').textContent = turnCount;
+                document.getElementById('recordCount').textContent = recordCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

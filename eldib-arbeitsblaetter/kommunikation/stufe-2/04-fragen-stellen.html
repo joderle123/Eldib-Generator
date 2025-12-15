@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragen stellen - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff9a9e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .question-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .question-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .question-card:hover { border-color: #ff9a9e; transform: translateY(-3px); }
+        .question-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .question-card .word { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .question-card .title { font-weight: bold; text-align: center; margin-bottom: 8px; }
+        .question-card .example { font-size: 0.85em; color: #666; text-align: center; font-style: italic; }
+        .question-card .check { position: absolute; top: 10px; right: 10px; width: 25px; height: 25px; background: #4CAF50; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; }
+        .question-card.mastered .check { display: flex; }
+        .question-card { position: relative; }
+        .question-counter { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .counter-display { display: flex; justify-content: space-around; text-align: center; }
+        .counter-item { flex: 1; }
+        .counter-number { font-size: 3em; font-weight: bold; }
+        .counter-label { font-size: 0.9em; opacity: 0.9; }
+        .counter-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .counter-btn { padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; font-size: 1.2em; font-weight: bold; }
+        .counter-btn.add { background: white; color: #667eea; }
+        .counter-btn.reset { background: rgba(255,255,255,0.3); color: white; }
+        .question-examples { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .example-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .example-item:hover { border-color: #ff9a9e; }
+        .example-item.heard { border-color: #4CAF50; background: #e8f5e9; }
+        .example-icon { font-size: 1.5em; }
+        .example-check { margin-left: auto; width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .heard .example-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .custom-questions { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .question-input { display: flex; gap: 10px; margin-bottom: 15px; }
+        .question-input input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 1em; }
+        .question-input button { padding: 12px 20px; background: #ff9a9e; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .saved-questions { display: flex; flex-direction: column; gap: 8px; }
+        .saved-question { padding: 10px 15px; background: white; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .saved-question .remove { cursor: pointer; color: #999; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff9a9e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .question-types { grid-template-columns: 1fr; } .counter-display { flex-direction: column; gap: 20px; } .question-input { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Fragen stellen</h1>
+            <p>Die Welt entdecken durch Fragen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-10/K-11)</h3>
+                <p>Das Kind beginnt, Fragen zu stellen. Es nutzt W-Fragen um Informationen zu erhalten und seine Neugier zu stillen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">❓</span> Frageworte</h3>
+                <p>Welche Frageworte verwendet das Kind?</p>
+                <div class="question-types">
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Was?</div>
+                        <div class="title">Was-Fragen</div>
+                        <div class="example">"Was ist das?"</div>
+                    </div>
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Wo?</div>
+                        <div class="title">Wo-Fragen</div>
+                        <div class="example">"Wo ist Mama?"</div>
+                    </div>
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Wer?</div>
+                        <div class="title">Wer-Fragen</div>
+                        <div class="example">"Wer ist das?"</div>
+                    </div>
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Warum?</div>
+                        <div class="title">Warum-Fragen</div>
+                        <div class="example">"Warum regnet es?"</div>
+                    </div>
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Wie?</div>
+                        <div class="title">Wie-Fragen</div>
+                        <div class="example">"Wie geht das?"</div>
+                    </div>
+                    <div class="question-card" onclick="toggleQuestion(this)">
+                        <div class="check">✓</div>
+                        <div class="word">Wann?</div>
+                        <div class="title">Wann-Fragen</div>
+                        <div class="example">"Wann gehen wir?"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Fragen-Zähler</h3>
+                <div class="question-counter">
+                    <p style="text-align: center; margin-bottom: 15px;">Zähle die Fragen des Kindes heute:</p>
+                    <div class="counter-display">
+                        <div class="counter-item">
+                            <div class="counter-number" id="questionCount">0</div>
+                            <div class="counter-label">Fragen heute</div>
+                        </div>
+                    </div>
+                    <div class="counter-buttons">
+                        <button class="counter-btn add" onclick="addQuestion()">+ Frage</button>
+                        <button class="counter-btn reset" onclick="resetCounter()">↻ Zurücksetzen</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Gehörte Fragen</h3>
+                <p>Diese typischen Fragen hat das Kind schon gestellt:</p>
+                <div class="question-examples">
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">🤔</span><span>"Was ist das?"</span><div class="example-check">✓</div></div>
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">📍</span><span>"Wo ist Papa/Mama?"</span><div class="example-check">✓</div></div>
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">👤</span><span>"Wer ist das?"</span><div class="example-check">✓</div></div>
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">❓</span><span>"Warum?"</span><div class="example-check">✓</div></div>
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">⏰</span><span>"Wann gehen wir?"</span><div class="example-check">✓</div></div>
+                    <div class="example-item" onclick="toggleExample(this)"><span class="example-icon">🍪</span><span>"Kann ich haben?"</span><div class="example-check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✏️</span> Eigene Fragen dokumentieren</h3>
+                <div class="custom-questions">
+                    <div class="question-input">
+                        <input type="text" id="newQuestion" placeholder="Frage eintragen, die das Kind gestellt hat...">
+                        <button onclick="addCustomQuestion()">+ Speichern</button>
+                    </div>
+                    <div class="saved-questions" id="savedQuestions"></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Fragen stellt das Kind am häufigsten? In welchen Situationen fragt es besonders viel? Wie reagiert es auf Antworten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let questionCount = 0;
+        let customQuestions = [];
+        function toggleQuestion(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleExample(el) { el.classList.toggle('heard'); saveData(); }
+        function addQuestion() {
+            questionCount++;
+            document.getElementById('questionCount').textContent = questionCount;
+            saveData();
+        }
+        function resetCounter() {
+            questionCount = 0;
+            document.getElementById('questionCount').textContent = 0;
+            saveData();
+        }
+        function addCustomQuestion() {
+            const input = document.getElementById('newQuestion');
+            if (input.value.trim()) {
+                customQuestions.push(input.value.trim());
+                input.value = '';
+                renderCustomQuestions();
+                saveData();
+            }
+        }
+        function removeCustomQuestion(index) {
+            customQuestions.splice(index, 1);
+            renderCustomQuestions();
+            saveData();
+        }
+        function renderCustomQuestions() {
+            document.getElementById('savedQuestions').innerHTML = customQuestions.map((q, i) =>
+                `<div class="saved-question"><span>"${q}"</span><span class="remove" onclick="removeCustomQuestion(${i})">✕</span></div>`
+            ).join('');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                questionTypes: document.querySelectorAll('.question-card.mastered').length,
+                examples: document.querySelectorAll('.example-item.heard').length,
+                questionCount,
+                customQuestions,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_fragen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_fragen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const types = document.querySelectorAll('.question-card');
+                for (let i = 0; i < (data.questionTypes || 0); i++) { if (types[i]) types[i].classList.add('mastered'); }
+                const examples = document.querySelectorAll('.example-item');
+                for (let i = 0; i < (data.examples || 0); i++) { if (examples[i]) examples[i].classList.add('heard'); }
+                questionCount = data.questionCount || 0;
+                document.getElementById('questionCount').textContent = questionCount;
+                if (data.customQuestions) { customQuestions = data.customQuestions; renderCustomQuestions(); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

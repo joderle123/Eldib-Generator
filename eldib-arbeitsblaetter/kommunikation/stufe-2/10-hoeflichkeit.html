@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Höflichkeit - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #fff8e1 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #d299c2; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .polite-words { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .polite-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; position: relative; }
+        .polite-card:hover { border-color: #d299c2; transform: translateY(-3px); }
+        .polite-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .polite-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .polite-card .word { font-size: 1.3em; font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .polite-card .usage { font-size: 0.85em; color: #666; text-align: center; }
+        .polite-card .check { position: absolute; top: 10px; right: 10px; width: 25px; height: 25px; background: #4CAF50; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; }
+        .mastered .check { display: flex; }
+        .scenario-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .scenario-display { background: rgba(255,255,255,0.2); border-radius: 15px; padding: 20px; margin: 15px 0; text-align: center; }
+        .scenario-text { font-size: 1.2em; margin-bottom: 15px; }
+        .scenario-question { font-weight: bold; }
+        .answer-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+        .answer-btn { padding: 12px 25px; background: rgba(255,255,255,0.2); border: none; border-radius: 25px; color: white; cursor: pointer; font-size: 1em; transition: all 0.3s; }
+        .answer-btn:hover { background: rgba(255,255,255,0.3); }
+        .answer-btn.correct { background: #4CAF50; }
+        .answer-btn.wrong { background: #f44336; }
+        .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .game-btn.next { background: white; color: #667eea; }
+        .score-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .situation-checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .situation-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .situation-item:hover { border-color: #d299c2; }
+        .situation-item.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .situation-icon { font-size: 1.5em; }
+        .situation-content { flex: 1; }
+        .situation-title { font-weight: bold; }
+        .situation-example { font-size: 0.85em; color: #666; font-style: italic; }
+        .situation-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .observed .situation-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .daily-tracker { background: #f0f0f0; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tracker-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .tracker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .tracker-item { text-align: center; padding: 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .tracker-item:hover { background: #e8f5e9; }
+        .tracker-item .count { font-size: 2em; font-weight: bold; color: #d299c2; }
+        .tracker-item .label { font-size: 0.85em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #d299c2; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .polite-words { grid-template-columns: 1fr; } .tracker-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Höflichkeit</h1>
+            <p>Bitte, Danke und mehr</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-12/K-13)</h3>
+                <p>Das Kind lernt grundlegende Höflichkeitsformen. Es verwendet "Bitte" und "Danke" und kennt einfache soziale Konventionen in der Kommunikation.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🙏</span> Höfliche Wörter</h3>
+                <p>Welche höflichen Ausdrücke verwendet das Kind?</p>
+                <div class="polite-words">
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">🙏</div>
+                        <div class="word">Bitte</div>
+                        <div class="usage">Wenn man etwas möchte</div>
+                    </div>
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">💝</div>
+                        <div class="word">Danke</div>
+                        <div class="usage">Wenn man etwas bekommt</div>
+                    </div>
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">👋</div>
+                        <div class="word">Hallo</div>
+                        <div class="usage">Zur Begrüßung</div>
+                    </div>
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">🌙</div>
+                        <div class="word">Tschüss</div>
+                        <div class="usage">Zum Abschied</div>
+                    </div>
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">😊</div>
+                        <div class="word">Gern geschehen</div>
+                        <div class="usage">Antwort auf Danke</div>
+                    </div>
+                    <div class="polite-card" onclick="togglePolite(this)">
+                        <div class="check">✓</div>
+                        <div class="icon">😔</div>
+                        <div class="word">Entschuldigung</div>
+                        <div class="usage">Wenn man stört</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Höflichkeits-Quiz</h3>
+                <div class="scenario-game">
+                    <div class="scenario-display">
+                        <div class="scenario-text" id="scenarioText">Du bekommst ein Geschenk von Oma.</div>
+                        <div class="scenario-question">Was sagst du?</div>
+                    </div>
+                    <div class="answer-options" id="answerOptions">
+                        <button class="answer-btn" onclick="checkAnswer(this, false)">Mehr!</button>
+                        <button class="answer-btn" onclick="checkAnswer(this, true)">Danke!</button>
+                        <button class="answer-btn" onclick="checkAnswer(this, false)">Meins!</button>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn next" onclick="nextScenario()">➡️ Nächste Situation</button>
+                    </div>
+                    <div class="score-display">Richtige Antworten: <strong id="scoreDisplay">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Höflichkeit im Alltag</h3>
+                <p>In welchen Situationen zeigt das Kind höfliches Verhalten?</p>
+                <div class="situation-checklist">
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🍪</div>
+                        <div class="situation-content"><div class="situation-title">Beim Bitten um etwas</div><div class="situation-example">"Kann ich bitte einen Keks haben?"</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🎁</div>
+                        <div class="situation-content"><div class="situation-title">Beim Erhalten von etwas</div><div class="situation-example">"Danke für das Geschenk!"</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">🚪</div>
+                        <div class="situation-content"><div class="situation-title">Bei der Begrüßung</div><div class="situation-example">"Hallo!" / "Guten Tag!"</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">👋</div>
+                        <div class="situation-content"><div class="situation-title">Beim Verabschieden</div><div class="situation-example">"Tschüss!" / "Auf Wiedersehen!"</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                    <div class="situation-item" onclick="toggleSituation(this)">
+                        <div class="situation-icon">😣</div>
+                        <div class="situation-content"><div class="situation-title">Nach Fehler/Unfall</div><div class="situation-example">"Entschuldigung" / "Tut mir leid"</div></div>
+                        <div class="situation-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Tages-Zähler</h3>
+                <div class="daily-tracker">
+                    <div class="tracker-title">Wie oft hat das Kind heute höfliche Wörter benutzt?</div>
+                    <div class="tracker-grid">
+                        <div class="tracker-item" onclick="incrementCount(0)"><div class="count" id="count0">0</div><div class="label">Bitte</div></div>
+                        <div class="tracker-item" onclick="incrementCount(1)"><div class="count" id="count1">0</div><div class="label">Danke</div></div>
+                        <div class="tracker-item" onclick="incrementCount(2)"><div class="count" id="count2">0</div><div class="label">Hallo</div></div>
+                        <div class="tracker-item" onclick="incrementCount(3)"><div class="count" id="count3">0</div><div class="label">Tschüss</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie selbstständig verwendet das Kind höfliche Ausdrücke? Braucht es noch Erinnerungen? In welchen Situationen klappt es gut?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const scenarios = [
+            { text: "Du bekommst ein Geschenk von Oma.", answers: ["Mehr!", "Danke!", "Meins!"], correct: 1 },
+            { text: "Du möchtest noch ein Stück Kuchen.", answers: ["Gib her!", "Bitte noch eins!", "Ich will!"], correct: 1 },
+            { text: "Jemand kommt zu Besuch.", answers: ["Was willst du?", "Hallo!", "Geh weg!"], correct: 1 },
+            { text: "Du gehst nach Hause.", answers: ["Tschüss!", "Endlich!", "Egal."], correct: 0 },
+            { text: "Du stolperst und trittst jemandem auf den Fuß.", answers: ["Ha ha!", "Entschuldigung!", "Selber schuld!"], correct: 1 },
+            { text: "Jemand hält dir die Tür auf.", answers: ["War ja klar!", "Danke!", "Na endlich!"], correct: 1 }
+        ];
+        let currentScenario = 0;
+        let score = 0;
+        let counts = [0, 0, 0, 0];
+        function togglePolite(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleSituation(el) { el.classList.toggle('observed'); saveData(); }
+        function loadScenario() {
+            const s = scenarios[currentScenario];
+            document.getElementById('scenarioText').textContent = s.text;
+            document.getElementById('answerOptions').innerHTML = s.answers.map((a, i) =>
+                `<button class="answer-btn" onclick="checkAnswer(this, ${i === s.correct})">${a}</button>`
+            ).join('');
+        }
+        function checkAnswer(btn, isCorrect) {
+            document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score++;
+                document.getElementById('scoreDisplay').textContent = score;
+            } else {
+                btn.classList.add('wrong');
+            }
+            saveData();
+        }
+        function nextScenario() {
+            currentScenario = (currentScenario + 1) % scenarios.length;
+            loadScenario();
+        }
+        function incrementCount(index) {
+            counts[index]++;
+            document.getElementById('count' + index).textContent = counts[index];
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                politeWords: document.querySelectorAll('.polite-card.mastered').length,
+                situations: document.querySelectorAll('.situation-item.observed').length,
+                score, counts,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_hoeflichkeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_hoeflichkeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const polite = document.querySelectorAll('.polite-card');
+                for (let i = 0; i < (data.politeWords || 0); i++) { if (polite[i]) polite[i].classList.add('mastered'); }
+                const situations = document.querySelectorAll('.situation-item');
+                for (let i = 0; i < (data.situations || 0); i++) { if (situations[i]) situations[i].classList.add('observed'); }
+                score = data.score || 0;
+                document.getElementById('scoreDisplay').textContent = score;
+                if (data.counts) {
+                    counts = data.counts;
+                    counts.forEach((c, i) => document.getElementById('count' + i).textContent = c);
+                }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadScenario();
+        loadData();
+    </script>
+</body>
+</html>

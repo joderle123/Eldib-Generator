@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gefühle ausdrücken - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #f3e7e9 0%, #e3eeff 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #a18cd1; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .feelings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .feeling-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .feeling-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .feeling-card.expressed { border-color: #4CAF50; background: #e8f5e9; }
+        .feeling-card .face { font-size: 3em; margin-bottom: 10px; }
+        .feeling-card .name { font-weight: bold; margin-bottom: 5px; }
+        .feeling-card .phrase { font-size: 0.8em; color: #666; font-style: italic; }
+        .feeling-meter { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .meter-display { display: flex; justify-content: space-around; margin: 20px 0; }
+        .meter-item { text-align: center; cursor: pointer; padding: 15px; border-radius: 10px; transition: all 0.3s; }
+        .meter-item:hover { background: rgba(255,255,255,0.2); }
+        .meter-item.selected { background: rgba(255,255,255,0.3); }
+        .meter-item .face { font-size: 3em; }
+        .meter-item .label { margin-top: 10px; }
+        .feeling-log { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .log-entry { padding: 10px 15px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; gap: 10px; }
+        .expression-methods { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .method-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .method-item:hover { border-color: #a18cd1; }
+        .method-item.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .method-icon { font-size: 1.8em; }
+        .method-content { flex: 1; }
+        .method-title { font-weight: bold; }
+        .method-desc { font-size: 0.85em; color: #666; }
+        .method-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .observed .method-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .feeling-words { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+        .feeling-word { padding: 10px 20px; background: white; border: 3px solid #e0e0e0; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+        .feeling-word:hover { border-color: #a18cd1; }
+        .feeling-word.known { border-color: #4CAF50; background: #e8f5e9; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #a18cd1; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .feelings-grid { grid-template-columns: repeat(2, 1fr); } .meter-display { flex-wrap: wrap; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Gefühle ausdrücken</h1>
+            <p>Sagen, wie ich mich fühle</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-10/K-11)</h3>
+                <p>Das Kind lernt, seine Gefühle verbal auszudrücken. Es benennt eigene Emotionen und kann sie anderen mitteilen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Gefühle erkennen und benennen</h3>
+                <p>Welche Gefühle kann das Kind benennen?</p>
+                <div class="feelings-grid">
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😊</div>
+                        <div class="name">Froh</div>
+                        <div class="phrase">"Ich bin froh"</div>
+                    </div>
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😢</div>
+                        <div class="name">Traurig</div>
+                        <div class="phrase">"Ich bin traurig"</div>
+                    </div>
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😠</div>
+                        <div class="name">Wütend</div>
+                        <div class="phrase">"Ich bin wütend"</div>
+                    </div>
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😨</div>
+                        <div class="name">Ängstlich</div>
+                        <div class="phrase">"Ich habe Angst"</div>
+                    </div>
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😮</div>
+                        <div class="name">Überrascht</div>
+                        <div class="phrase">"Ich bin überrascht"</div>
+                    </div>
+                    <div class="feeling-card" onclick="toggleFeeling(this)">
+                        <div class="face">😴</div>
+                        <div class="name">Müde</div>
+                        <div class="phrase">"Ich bin müde"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Gefühls-Barometer</h3>
+                <div class="feeling-meter">
+                    <p style="text-align: center; margin-bottom: 10px;">Wie fühlt sich das Kind gerade?</p>
+                    <div class="meter-display">
+                        <div class="meter-item" onclick="selectMood(this, '😢', 'sehr traurig')"><div class="face">😢</div><div class="label">Sehr traurig</div></div>
+                        <div class="meter-item" onclick="selectMood(this, '😐', 'okay')"><div class="face">😐</div><div class="label">Okay</div></div>
+                        <div class="meter-item" onclick="selectMood(this, '🙂', 'gut')"><div class="face">🙂</div><div class="label">Gut</div></div>
+                        <div class="meter-item" onclick="selectMood(this, '😊', 'sehr gut')"><div class="face">😊</div><div class="label">Sehr gut</div></div>
+                        <div class="meter-item" onclick="selectMood(this, '🤩', 'super')"><div class="face">🤩</div><div class="label">Super!</div></div>
+                    </div>
+                    <div class="feeling-log" id="feelingLog"></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Wie drückt das Kind Gefühle aus?</h3>
+                <div class="expression-methods">
+                    <div class="method-item" onclick="toggleMethod(this)">
+                        <div class="method-icon">💬</div>
+                        <div class="method-content"><div class="method-title">Mit Worten</div><div class="method-desc">"Ich bin..." / "Mir geht es..."</div></div>
+                        <div class="method-check">✓</div>
+                    </div>
+                    <div class="method-item" onclick="toggleMethod(this)">
+                        <div class="method-icon">😊</div>
+                        <div class="method-content"><div class="method-title">Mit Mimik</div><div class="method-desc">Gesichtsausdruck zeigt Gefühl</div></div>
+                        <div class="method-check">✓</div>
+                    </div>
+                    <div class="method-item" onclick="toggleMethod(this)">
+                        <div class="method-icon">🏃</div>
+                        <div class="method-content"><div class="method-title">Mit Körper</div><div class="method-desc">Stampfen, Hüpfen, Verstecken</div></div>
+                        <div class="method-check">✓</div>
+                    </div>
+                    <div class="method-item" onclick="toggleMethod(this)">
+                        <div class="method-icon">🎨</div>
+                        <div class="method-content"><div class="method-title">Durch Malen/Spielen</div><div class="method-desc">Drückt Gefühle kreativ aus</div></div>
+                        <div class="method-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📖</span> Gefühls-Wörter</h3>
+                <p>Diese Gefühls-Wörter kennt und benutzt das Kind:</p>
+                <div class="feeling-words">
+                    <div class="feeling-word" onclick="toggleWord(this)">glücklich</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">traurig</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">wütend</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">müde</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">hungrig</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">froh</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">böse</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">lieb</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">aufgeregt</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">ängstlich</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">stolz</div>
+                    <div class="feeling-word" onclick="toggleWord(this)">einsam</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie drückt das Kind verschiedene Gefühle aus? Welche Gefühle benennt es am häufigsten? In welchen Situationen spricht es über Gefühle?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let moodLog = [];
+        function toggleFeeling(el) { el.classList.toggle('expressed'); saveData(); }
+        function toggleMethod(el) { el.classList.toggle('observed'); saveData(); }
+        function toggleWord(el) { el.classList.toggle('known'); saveData(); }
+        function selectMood(el, emoji, label) {
+            document.querySelectorAll('.meter-item').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+            const entry = { emoji, label, time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) };
+            moodLog.push(entry);
+            if (moodLog.length > 5) moodLog.shift();
+            renderMoodLog();
+            saveData();
+        }
+        function renderMoodLog() {
+            document.getElementById('feelingLog').innerHTML = moodLog.map(m =>
+                `<div class="log-entry"><span>${m.emoji}</span><span>${m.label}</span><span style="margin-left: auto; opacity: 0.7;">${m.time}</span></div>`
+            ).join('');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                feelings: document.querySelectorAll('.feeling-card.expressed').length,
+                methods: document.querySelectorAll('.method-item.observed').length,
+                words: document.querySelectorAll('.feeling-word.known').length,
+                moodLog,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_gefuehle', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_gefuehle');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const feelings = document.querySelectorAll('.feeling-card');
+                for (let i = 0; i < (data.feelings || 0); i++) { if (feelings[i]) feelings[i].classList.add('expressed'); }
+                const methods = document.querySelectorAll('.method-item');
+                for (let i = 0; i < (data.methods || 0); i++) { if (methods[i]) methods[i].classList.add('observed'); }
+                const words = document.querySelectorAll('.feeling-word');
+                for (let i = 0; i < (data.words || 0); i++) { if (words[i]) words[i].classList.add('known'); }
+                if (data.moodLog) { moodLog = data.moodLog; renderMoodLog(); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

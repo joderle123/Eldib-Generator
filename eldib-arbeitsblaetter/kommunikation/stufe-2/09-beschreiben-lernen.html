@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beschreiben lernen - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fcb69f; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .description-categories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .category-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .category-card:hover { border-color: #fcb69f; }
+        .category-card.expanded { border-color: #fcb69f; }
+        .category-card .header-row { display: flex; align-items: center; gap: 10px; }
+        .category-card .icon { font-size: 2em; }
+        .category-card .title { font-weight: bold; flex: 1; }
+        .category-card .count { font-size: 0.85em; color: #666; }
+        .word-list { display: none; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #e0e0e0; }
+        .expanded .word-list { display: block; }
+        .word-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .word-chip { padding: 8px 15px; background: #f5f5f5; border-radius: 20px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
+        .word-chip:hover { background: #e0e0e0; }
+        .word-chip.known { background: #e8f5e9; color: #2e7d32; }
+        .describe-game { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .object-display { font-size: 5em; margin: 20px 0; }
+        .description-prompt { font-size: 1.2em; margin: 15px 0; }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .game-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .game-btn.new { background: white; color: #667eea; }
+        .game-btn.correct { background: #4CAF50; color: white; }
+        .game-btn.hint { background: rgba(255,255,255,0.3); color: white; }
+        .hint-display { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; display: none; }
+        .skills-checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .skill-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .skill-item:hover { border-color: #fcb69f; }
+        .skill-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .skill-icon { font-size: 1.5em; }
+        .skill-content { flex: 1; }
+        .skill-title { font-weight: bold; }
+        .skill-desc { font-size: 0.85em; color: #666; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .achieved .skill-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fcb69f; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .description-categories { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Beschreiben lernen</h1>
+            <p>Dinge mit Worten beschreiben</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-11/K-12)</h3>
+                <p>Das Kind lernt, Dinge, Personen und Situationen zu beschreiben. Es verwendet beschreibende Wörter für Farben, Größen, Formen und andere Eigenschaften.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎨</span> Beschreibende Wörter</h3>
+                <p>Welche beschreibenden Wörter kennt und verwendet das Kind?</p>
+                <div class="description-categories">
+                    <div class="category-card" onclick="toggleCategory(this)">
+                        <div class="header-row"><div class="icon">🌈</div><div class="title">Farben</div><div class="count">0/8</div></div>
+                        <div class="word-list">
+                            <div class="word-chips">
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">rot</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">blau</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">grün</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">gelb</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">weiß</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">schwarz</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">orange</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">lila</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="toggleCategory(this)">
+                        <div class="header-row"><div class="icon">📏</div><div class="title">Größen</div><div class="count">0/6</div></div>
+                        <div class="word-list">
+                            <div class="word-chips">
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">groß</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">klein</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">lang</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">kurz</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">dick</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">dünn</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="toggleCategory(this)">
+                        <div class="header-row"><div class="icon">⭕</div><div class="title">Formen</div><div class="count">0/4</div></div>
+                        <div class="word-list">
+                            <div class="word-chips">
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">rund</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">eckig</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">spitz</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">flach</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="toggleCategory(this)">
+                        <div class="header-row"><div class="icon">✨</div><div class="title">Eigenschaften</div><div class="count">0/8</div></div>
+                        <div class="word-list">
+                            <div class="word-chips">
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">weich</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">hart</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">warm</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">kalt</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">nass</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">trocken</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">schnell</div>
+                                <div class="word-chip" onclick="event.stopPropagation(); toggleWord(this)">langsam</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Beschreibe-Spiel</h3>
+                <div class="describe-game">
+                    <p>Kann das Kind diesen Gegenstand beschreiben?</p>
+                    <div class="object-display" id="objectDisplay">🍎</div>
+                    <div class="description-prompt">Beschreibe: Was siehst du?</div>
+                    <div class="game-buttons">
+                        <button class="game-btn new" onclick="newObject()">🎲 Neues Objekt</button>
+                        <button class="game-btn correct" onclick="markDescribed()">✓ Gut beschrieben!</button>
+                        <button class="game-btn hint" onclick="showHint()">💡 Hilfe-Fragen</button>
+                    </div>
+                    <div class="hint-display" id="hintDisplay">
+                        <strong>Hilfe-Fragen:</strong><br>
+                        • Welche Farbe hat es?<br>
+                        • Ist es groß oder klein?<br>
+                        • Wie fühlt es sich an?<br>
+                        • Was kann man damit machen?
+                    </div>
+                    <p style="margin-top: 15px;">Beschriebene Objekte: <strong id="describedCount">0</strong></p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Beschreibungs-Fähigkeiten</h3>
+                <div class="skills-checklist">
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🌈</div>
+                        <div class="skill-content"><div class="skill-title">Farben benennen</div><div class="skill-desc">Sagt die richtige Farbe von Dingen</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">📏</div>
+                        <div class="skill-content"><div class="skill-title">Größen vergleichen</div><div class="skill-desc">Unterscheidet groß/klein, lang/kurz</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">👆</div>
+                        <div class="skill-content"><div class="skill-title">Tasteindrücke beschreiben</div><div class="skill-desc">Sagt weich, hart, rau, glatt</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">📍</div>
+                        <div class="skill-content"><div class="skill-title">Positionen beschreiben</div><div class="skill-desc">Verwendet oben, unten, drin, drauf</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                    <div class="skill-item" onclick="toggleSkill(this)">
+                        <div class="skill-icon">🔢</div>
+                        <div class="skill-content"><div class="skill-title">Mengen beschreiben</div><div class="skill-desc">Unterscheidet viel/wenig, mehr/weniger</div></div>
+                        <div class="skill-check">✓</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Beschreibungen verwendet das Kind? Wie detailliert beschreibt es Dinge? Welche Kategorien fallen ihm leicht/schwer?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const objects = ['🍎', '🚗', '🐕', '🏠', '⚽', '🌸', '🧸', '📚', '🎈', '🌞', '🍌', '👕', '🎁', '🌲', '🐱'];
+        let describedCount = 0;
+        function toggleCategory(el) { el.classList.toggle('expanded'); updateCounts(); }
+        function toggleWord(el) { el.classList.toggle('known'); updateCounts(); saveData(); }
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function updateCounts() {
+            document.querySelectorAll('.category-card').forEach(card => {
+                const total = card.querySelectorAll('.word-chip').length;
+                const known = card.querySelectorAll('.word-chip.known').length;
+                card.querySelector('.count').textContent = `${known}/${total}`;
+            });
+        }
+        function newObject() {
+            const obj = objects[Math.floor(Math.random() * objects.length)];
+            document.getElementById('objectDisplay').textContent = obj;
+            document.getElementById('hintDisplay').style.display = 'none';
+        }
+        function markDescribed() {
+            describedCount++;
+            document.getElementById('describedCount').textContent = describedCount;
+            saveData();
+            newObject();
+        }
+        function showHint() {
+            const hint = document.getElementById('hintDisplay');
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const categories = [];
+            document.querySelectorAll('.category-card').forEach(card => {
+                categories.push([...card.querySelectorAll('.word-chip.known')].map(w => w.textContent));
+            });
+            const data = {
+                categories,
+                skills: document.querySelectorAll('.skill-item.achieved').length,
+                describedCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_beschreiben', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_beschreiben');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.categories) {
+                    document.querySelectorAll('.category-card').forEach((card, ci) => {
+                        if (data.categories[ci]) {
+                            card.querySelectorAll('.word-chip').forEach(chip => {
+                                if (data.categories[ci].includes(chip.textContent)) {
+                                    chip.classList.add('known');
+                                }
+                            });
+                        }
+                    });
+                    updateCounts();
+                }
+                const skills = document.querySelectorAll('.skill-item');
+                for (let i = 0; i < (data.skills || 0); i++) { if (skills[i]) skills[i].classList.add('achieved'); }
+                describedCount = data.describedCount || 0;
+                document.getElementById('describedCount').textContent = describedCount;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anweisungen verstehen - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .instruction-levels { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .level-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; overflow: hidden; transition: all 0.3s; }
+        .level-card:hover { border-color: #11998e; }
+        .level-card.completed { border-color: #4CAF50; }
+        .level-header { display: flex; align-items: center; gap: 15px; padding: 20px; cursor: pointer; }
+        .level-badge { width: 50px; height: 50px; background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em; }
+        .completed .level-badge { background: #4CAF50; }
+        .level-title { font-weight: bold; flex: 1; }
+        .level-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; }
+        .completed .level-check { background: #4CAF50; border-color: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; }
+        .level-content { padding: 0 20px 20px; display: none; }
+        .level-card.expanded .level-content { display: block; }
+        .instruction-list { display: flex; flex-direction: column; gap: 10px; }
+        .instruction-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f5f5f5; border-radius: 10px; cursor: pointer; }
+        .instruction-item:hover { background: #e8f5e9; }
+        .instruction-item.done { background: #e8f5e9; }
+        .instruction-check { width: 24px; height: 24px; border: 2px solid #ccc; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .done .instruction-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .game-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; text-align: center; }
+        .game-instruction { font-size: 1.5em; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 15px; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+        .game-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .game-btn { padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .game-btn.new { background: white; color: #667eea; }
+        .game-btn.success { background: #4CAF50; color: white; }
+        .game-btn.retry { background: rgba(255,255,255,0.3); color: white; }
+        .score-display { margin-top: 20px; font-size: 1.2em; }
+        .daily-checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .daily-item { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .daily-item:hover { border-color: #11998e; }
+        .daily-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .daily-item .icon { font-size: 2em; text-align: center; margin-bottom: 8px; }
+        .daily-item .text { text-align: center; font-size: 0.9em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .daily-checklist { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Anweisungen verstehen</h1>
+            <p>Aufforderungen folgen können</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-9/K-10)</h3>
+                <p>Das Kind versteht und befolgt einfache bis komplexere Anweisungen. Es kann ein- und mehrteilige Aufforderungen umsetzen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Anweisungs-Level</h3>
+                <p>Welche Anweisungen kann das Kind verstehen und befolgen?</p>
+                <div class="instruction-levels">
+                    <div class="level-card" onclick="toggleLevel(this)">
+                        <div class="level-header">
+                            <div class="level-badge">1</div>
+                            <div class="level-title">Einfache Ein-Schritt-Anweisungen</div>
+                            <div class="level-check">✓</div>
+                        </div>
+                        <div class="level-content">
+                            <div class="instruction-list">
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Komm her"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Setz dich"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Gib mir das"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Zeig mir..."</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-card" onclick="toggleLevel(this)">
+                        <div class="level-header">
+                            <div class="level-badge">2</div>
+                            <div class="level-title">Anweisungen mit Objekten</div>
+                            <div class="level-check">✓</div>
+                        </div>
+                        <div class="level-content">
+                            <div class="instruction-list">
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Hol den Ball"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Leg das Buch hin"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Bring mir die Schuhe"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Räum die Spielsachen auf"</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-card" onclick="toggleLevel(this)">
+                        <div class="level-header">
+                            <div class="level-badge">3</div>
+                            <div class="level-title">Zwei-Schritt-Anweisungen</div>
+                            <div class="level-check">✓</div>
+                        </div>
+                        <div class="level-content">
+                            <div class="instruction-list">
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Hol das Buch und setz dich"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Wasch deine Hände und komm essen"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Zieh die Jacke an und warte"</span></div>
+                                <div class="instruction-item" onclick="event.stopPropagation(); toggleInstruction(this)"><div class="instruction-check">✓</div><span>"Nimm den Stift und mal ein Bild"</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Anweisungs-Spiel</h3>
+                <div class="game-section">
+                    <p>Übe Anweisungen mit dem Kind:</p>
+                    <div class="game-instruction" id="gameInstruction">Klicke auf "Neue Anweisung"</div>
+                    <div class="game-buttons">
+                        <button class="game-btn new" onclick="newInstruction()">🎲 Neue Anweisung</button>
+                        <button class="game-btn success" onclick="markSuccess()">✓ Geschafft!</button>
+                        <button class="game-btn retry" onclick="markRetry()">↻ Nochmal</button>
+                    </div>
+                    <div class="score-display">Erfolge: <strong id="successCount">0</strong> | Versuche: <strong id="totalCount">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Alltags-Anweisungen</h3>
+                <p>Welche Alltags-Anweisungen befolgt das Kind regelmäßig?</p>
+                <div class="daily-checklist">
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">🧹</div><div class="text">Aufräumen</div></div>
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">👕</div><div class="text">Anziehen</div></div>
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">🍽️</div><div class="text">Zu Tisch kommen</div></div>
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">🧼</div><div class="text">Hände waschen</div></div>
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">🛏️</div><div class="text">Ins Bett gehen</div></div>
+                    <div class="daily-item" onclick="toggleDaily(this)"><div class="icon">🚪</div><div class="text">Türe schließen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Anweisungen versteht das Kind gut? Bei welchen braucht es Unterstützung? Wie reagiert es auf mehrteilige Aufforderungen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        const instructions = [
+            "Klatsche in die Hände", "Zeig mir deine Nase", "Hol einen Ball",
+            "Spring einmal", "Dreh dich um", "Winke mir zu",
+            "Hol das Buch und setz dich", "Klatsche und stamp",
+            "Zeig mir etwas Rotes", "Leg den Stift auf den Tisch"
+        ];
+        let successCount = 0;
+        let totalCount = 0;
+        function toggleLevel(el) { el.classList.toggle('expanded'); updateLevelCompletion(el); }
+        function toggleInstruction(el) { el.classList.toggle('done'); saveData(); }
+        function toggleDaily(el) { el.classList.toggle('checked'); saveData(); }
+        function updateLevelCompletion(level) {
+            const items = level.querySelectorAll('.instruction-item');
+            const done = level.querySelectorAll('.instruction-item.done');
+            if (done.length === items.length && items.length > 0) {
+                level.classList.add('completed');
+            } else {
+                level.classList.remove('completed');
+            }
+        }
+        function newInstruction() {
+            const instruction = instructions[Math.floor(Math.random() * instructions.length)];
+            document.getElementById('gameInstruction').textContent = instruction;
+        }
+        function markSuccess() {
+            successCount++;
+            totalCount++;
+            updateScore();
+            saveData();
+        }
+        function markRetry() {
+            totalCount++;
+            updateScore();
+            saveData();
+        }
+        function updateScore() {
+            document.getElementById('successCount').textContent = successCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                levels: [],
+                daily: document.querySelectorAll('.daily-item.checked').length,
+                successCount, totalCount,
+                notes: document.getElementById('notes').value
+            };
+            document.querySelectorAll('.level-card').forEach(level => {
+                data.levels.push(level.querySelectorAll('.instruction-item.done').length);
+            });
+            localStorage.setItem('eldib_k2_anweisungen', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_anweisungen');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.levels) {
+                    document.querySelectorAll('.level-card').forEach((level, li) => {
+                        const items = level.querySelectorAll('.instruction-item');
+                        for (let i = 0; i < (data.levels[li] || 0); i++) {
+                            if (items[i]) items[i].classList.add('done');
+                        }
+                        updateLevelCompletion(level);
+                    });
+                }
+                const daily = document.querySelectorAll('.daily-item');
+                for (let i = 0; i < (data.daily || 0); i++) { if (daily[i]) daily[i].classList.add('checked'); }
+                successCount = data.successCount || 0;
+                totalCount = data.totalCount || 0;
+                updateScore();
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

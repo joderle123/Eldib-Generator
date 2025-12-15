@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einfache Sätze - Kommunikation Stufe II</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .sentence-types { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .sentence-type { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .sentence-type:hover { border-color: #f5576c; }
+        .sentence-type.mastered { border-color: #4CAF50; background: #e8f5e9; }
+        .sentence-type .header-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .sentence-type .icon { font-size: 2em; }
+        .sentence-type .title { font-weight: bold; flex: 1; }
+        .sentence-type .check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mastered .check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .sentence-type .examples { font-size: 0.9em; color: #666; padding-left: 55px; }
+        .sentence-builder { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .builder-slots { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .slot { min-width: 100px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; border: 3px dashed rgba(255,255,255,0.5); }
+        .slot.filled { background: rgba(255,255,255,0.3); border-style: solid; }
+        .word-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; }
+        .word-option { padding: 10px 20px; background: white; color: #667eea; border-radius: 25px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .word-option:hover { transform: scale(1.05); }
+        .word-option.used { opacity: 0.5; }
+        .builder-result { text-align: center; font-size: 1.5em; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; min-height: 60px; }
+        .builder-buttons { display: flex; gap: 10px; justify-content: center; }
+        .builder-btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .builder-btn.reset { background: rgba(255,255,255,0.3); color: white; }
+        .builder-btn.save { background: white; color: #667eea; }
+        .saved-sentences { margin-top: 20px; }
+        .saved-sentence { padding: 10px 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 5px 0; display: flex; align-items: center; justify-content: space-between; }
+        .progress-tracker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .progress-item { text-align: center; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .progress-item:hover { border-color: #f5576c; }
+        .progress-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .progress-item .number { font-size: 1.5em; font-weight: bold; color: #f5576c; }
+        .achieved .number { color: #4CAF50; }
+        .progress-item .label { font-size: 0.8em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .builder-slots { flex-direction: column; align-items: center; } .progress-tracker { grid-template-columns: repeat(3, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe II</div>
+            <h1>Einfache Sätze</h1>
+            <p>Zwei- und Mehrwortsätze bilden</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-8/K-9)</h3>
+                <p>Das Kind beginnt, einfache Sätze zu bilden. Es verbindet zwei oder mehr Wörter zu sinnvollen Aussagen und drückt damit seine Gedanken aus.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Satzarten</h3>
+                <p>Welche Satzarten verwendet das Kind bereits?</p>
+                <div class="sentence-types">
+                    <div class="sentence-type" onclick="toggleSentenceType(this)">
+                        <div class="header-row"><div class="icon">2️⃣</div><div class="title">Zwei-Wort-Sätze</div><div class="check">✓</div></div>
+                        <div class="examples">"Mama komm", "Ball haben", "Auto da"</div>
+                    </div>
+                    <div class="sentence-type" onclick="toggleSentenceType(this)">
+                        <div class="header-row"><div class="icon">3️⃣</div><div class="title">Drei-Wort-Sätze</div><div class="check">✓</div></div>
+                        <div class="examples">"Ich will Ball", "Papa ist da", "Teddy ist müde"</div>
+                    </div>
+                    <div class="sentence-type" onclick="toggleSentenceType(this)">
+                        <div class="header-row"><div class="icon">❓</div><div class="title">Einfache Fragen</div><div class="check">✓</div></div>
+                        <div class="examples">"Was ist das?", "Wo ist Mama?", "Wer ist das?"</div>
+                    </div>
+                    <div class="sentence-type" onclick="toggleSentenceType(this)">
+                        <div class="header-row"><div class="icon">❌</div><div class="title">Verneinungen</div><div class="check">✓</div></div>
+                        <div class="examples">"Nicht haben", "Will nicht", "Nein, das nicht"</div>
+                    </div>
+                    <div class="sentence-type" onclick="toggleSentenceType(this)">
+                        <div class="header-row"><div class="icon">🎯</div><div class="title">Wünsche ausdrücken</div><div class="check">✓</div></div>
+                        <div class="examples">"Ich möchte...", "Will haben", "Bitte mehr"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔧</span> Satz-Baukasten</h3>
+                <div class="sentence-builder">
+                    <p>Baue einen Satz - klicke auf die Wörter:</p>
+                    <div class="builder-slots">
+                        <div class="slot" id="slot1">Wer?</div>
+                        <div class="slot" id="slot2">Tut was?</div>
+                        <div class="slot" id="slot3">Was/Wo?</div>
+                    </div>
+                    <div class="word-options">
+                        <div class="word-option" onclick="addWord('Ich')">Ich</div>
+                        <div class="word-option" onclick="addWord('Mama')">Mama</div>
+                        <div class="word-option" onclick="addWord('Papa')">Papa</div>
+                        <div class="word-option" onclick="addWord('will')">will</div>
+                        <div class="word-option" onclick="addWord('ist')">ist</div>
+                        <div class="word-option" onclick="addWord('hat')">hat</div>
+                        <div class="word-option" onclick="addWord('Ball')">Ball</div>
+                        <div class="word-option" onclick="addWord('da')">da</div>
+                        <div class="word-option" onclick="addWord('weg')">weg</div>
+                    </div>
+                    <div class="builder-result" id="builderResult"></div>
+                    <div class="builder-buttons">
+                        <button class="builder-btn reset" onclick="resetBuilder()">🔄 Neu</button>
+                        <button class="builder-btn save" onclick="saveSentence()">💾 Speichern</button>
+                    </div>
+                    <div class="saved-sentences" id="savedSentences"></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Satzlängen-Fortschritt</h3>
+                <p>Längste Sätze, die das Kind gebildet hat:</p>
+                <div class="progress-tracker">
+                    <div class="progress-item achieved" onclick="toggleProgress(this)"><div class="number">2</div><div class="label">Wörter</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="number">3</div><div class="label">Wörter</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="number">4</div><div class="label">Wörter</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="number">5</div><div class="label">Wörter</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="number">6+</div><div class="label">Wörter</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Sätze bildet das Kind? Wie komplex sind sie? In welchen Situationen spricht es in Sätzen?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let currentSlot = 1;
+        let sentence = ['', '', ''];
+        let savedSentences = [];
+        function toggleSentenceType(el) { el.classList.toggle('mastered'); saveData(); }
+        function toggleProgress(el) { el.classList.toggle('achieved'); saveData(); }
+        function addWord(word) {
+            if (currentSlot <= 3) {
+                sentence[currentSlot - 1] = word;
+                document.getElementById('slot' + currentSlot).textContent = word;
+                document.getElementById('slot' + currentSlot).classList.add('filled');
+                currentSlot++;
+                updateResult();
+            }
+        }
+        function updateResult() {
+            document.getElementById('builderResult').textContent = sentence.filter(w => w).join(' ');
+        }
+        function resetBuilder() {
+            currentSlot = 1;
+            sentence = ['', '', ''];
+            document.querySelectorAll('.slot').forEach((slot, i) => {
+                slot.textContent = ['Wer?', 'Tut was?', 'Was/Wo?'][i];
+                slot.classList.remove('filled');
+            });
+            document.getElementById('builderResult').textContent = '';
+        }
+        function saveSentence() {
+            const s = sentence.filter(w => w).join(' ');
+            if (s && !savedSentences.includes(s)) {
+                savedSentences.push(s);
+                renderSavedSentences();
+                resetBuilder();
+                saveData();
+            }
+        }
+        function renderSavedSentences() {
+            document.getElementById('savedSentences').innerHTML = savedSentences.map(s =>
+                `<div class="saved-sentence"><span>${s}</span></div>`
+            ).join('');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                sentenceTypes: document.querySelectorAll('.sentence-type.mastered').length,
+                progress: document.querySelectorAll('.progress-item.achieved').length,
+                savedSentences: savedSentences,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k2_saetze', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k2_saetze');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const types = document.querySelectorAll('.sentence-type');
+                for (let i = 0; i < (data.sentenceTypes || 0); i++) { if (types[i]) types[i].classList.add('mastered'); }
+                const progress = document.querySelectorAll('.progress-item');
+                for (let i = 0; i < (data.progress || 0); i++) { if (progress[i]) progress[i].classList.add('achieved'); }
+                if (data.savedSentences) { savedSentences = data.savedSentences; renderSavedSentences(); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
