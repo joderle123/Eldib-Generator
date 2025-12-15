@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auf Geräusche reagieren - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3cd 0%, #ffe5b4 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5af19; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .sound-game { padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .sound-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .sound-btn { padding: 25px; background: white; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s; border: 4px solid transparent; }
+        .sound-btn:hover { transform: scale(1.05); }
+        .sound-btn.reacted { border-color: #4CAF50; background: #e8f5e9; }
+        .sound-btn .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .sound-btn .label { font-weight: bold; }
+        .reaction-counter { text-align: center; color: white; margin-top: 20px; font-size: 1.2em; }
+        .checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .check-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .check-item:hover { border-color: #f5af19; }
+        .check-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .check-box { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+        .checked .check-box { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .volume-test { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .volume-levels { display: flex; justify-content: space-between; align-items: flex-end; height: 100px; margin: 20px 0; }
+        .volume-bar { flex: 1; margin: 0 5px; background: #e0e0e0; border-radius: 10px 10px 0 0; cursor: pointer; transition: all 0.3s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; color: white; font-weight: bold; }
+        .volume-bar:hover { opacity: 0.8; }
+        .volume-bar.active { background: linear-gradient(to top, #f5af19, #f12711); }
+        .volume-bar:nth-child(1) { height: 30%; }
+        .volume-bar:nth-child(2) { height: 50%; }
+        .volume-bar:nth-child(3) { height: 70%; }
+        .volume-bar:nth-child(4) { height: 90%; }
+        .volume-bar:nth-child(5) { height: 100%; }
+        .volume-labels { display: flex; justify-content: space-between; font-size: 0.8em; color: #666; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5af19; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .sound-buttons { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Auf Geräusche reagieren</h1>
+            <p>Die Welt der Klänge entdecken</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-2/K-3)</h3>
+                <p>Das Kind reagiert auf Geräusche in seiner Umgebung. Es wendet den Kopf zu Geräuschquellen und zeigt Interesse an verschiedenen Klängen.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔊</span> Geräusche-Spiel</h3>
+                <p>Klicke auf ein Geräusch, wenn das Kind darauf reagiert:</p>
+                <div class="sound-game">
+                    <div class="sound-buttons">
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">🔔</div><div class="label">Glocke</div></div>
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">👏</div><div class="label">Klatschen</div></div>
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">🎵</div><div class="label">Musik</div></div>
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">🗣️</div><div class="label">Stimme</div></div>
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">🎺</div><div class="label">Instrument</div></div>
+                        <div class="sound-btn" onclick="toggleSound(this)"><div class="icon">🚗</div><div class="label">Spielzeug</div></div>
+                    </div>
+                    <div class="reaction-counter">Reaktionen: <strong id="soundCount">0</strong></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Reaktions-Arten</h3>
+                <p>Wie reagiert das Kind auf Geräusche?</p>
+                <div class="checklist">
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Wendet den Kopf</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Hört auf mit aktueller Aktivität</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Schaut in Richtung des Geräuschs</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Zeigt Freude (Lächeln, Strampeln)</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Erschrickt bei lauten Geräuschen</div></div>
+                    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div>Beruhigt sich bei bestimmten Klängen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📢</span> Lautstärke-Test</h3>
+                <p>Bei welcher Lautstärke reagiert das Kind? Markiere:</p>
+                <div class="volume-test">
+                    <div class="volume-levels">
+                        <div class="volume-bar" onclick="setVolume(this, 1)">1</div>
+                        <div class="volume-bar" onclick="setVolume(this, 2)">2</div>
+                        <div class="volume-bar" onclick="setVolume(this, 3)">3</div>
+                        <div class="volume-bar" onclick="setVolume(this, 4)">4</div>
+                        <div class="volume-bar" onclick="setVolume(this, 5)">5</div>
+                    </div>
+                    <div class="volume-labels">
+                        <span>Sehr leise</span>
+                        <span>Normal</span>
+                        <span>Laut</span>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Auf welche Geräusche reagiert das Kind besonders? Wie ist die Reaktionszeit? Gibt es bevorzugte oder abgelehnte Klänge?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let soundCount = 0;
+        let volumeLevel = 0;
+        function toggleSound(el) {
+            el.classList.toggle('reacted');
+            soundCount = document.querySelectorAll('.sound-btn.reacted').length;
+            document.getElementById('soundCount').textContent = soundCount;
+            saveData();
+        }
+        function toggleCheck(el) { el.classList.toggle('checked'); saveData(); }
+        function setVolume(el, level) {
+            document.querySelectorAll('.volume-bar').forEach((bar, i) => {
+                bar.classList.toggle('active', i < level);
+            });
+            volumeLevel = level;
+            saveData();
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                sounds: [...document.querySelectorAll('.sound-btn.reacted')].map(s => s.querySelector('.label').textContent),
+                checks: document.querySelectorAll('.check-item.checked').length,
+                volumeLevel: volumeLevel,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_geraeusche', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_geraeusche');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.sounds) {
+                    document.querySelectorAll('.sound-btn').forEach(btn => {
+                        if (data.sounds.includes(btn.querySelector('.label').textContent)) btn.classList.add('reacted');
+                    });
+                    soundCount = data.sounds.length;
+                    document.getElementById('soundCount').textContent = soundCount;
+                }
+                const checks = document.querySelectorAll('.check-item');
+                for (let i = 0; i < (data.checks || 0); i++) { if (checks[i]) checks[i].classList.add('checked'); }
+                if (data.volumeLevel) setVolume(null, data.volumeLevel);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

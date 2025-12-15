@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laute produzieren - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #4facfe; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .sound-bubbles { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .bubble { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; cursor: pointer; transition: all 0.3s; border: 4px solid transparent; }
+        .bubble:hover { transform: scale(1.1); }
+        .bubble.heard { border-color: #4CAF50; background: #e8f5e9; animation: pulse 0.5s; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .sound-counter { text-align: center; color: white; margin-top: 20px; font-size: 1.2em; }
+        .development-stages { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .stage { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .stage:hover { border-color: #4facfe; }
+        .stage.reached { border-color: #4CAF50; background: #e8f5e9; }
+        .stage-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; }
+        .reached .stage-icon { background: #4CAF50; }
+        .stage-content { flex: 1; }
+        .stage-title { font-weight: bold; }
+        .stage-desc { font-size: 0.85em; color: #666; }
+        .daily-sounds { background: #f5f5f5; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .sounds-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .add-sound { display: flex; gap: 10px; }
+        .add-sound input { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; flex: 1; }
+        .add-sound button { padding: 10px 20px; background: #4facfe; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .sounds-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .sound-tag { padding: 8px 15px; background: white; border-radius: 20px; border: 2px solid #4facfe; display: flex; align-items: center; gap: 8px; }
+        .remove-sound { cursor: pointer; color: #f44336; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #4facfe; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Laute produzieren</h1>
+            <p>Die ersten Klänge der Sprache</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-5/K-6)</h3>
+                <p>Das Kind produziert verschiedene Laute und Töne. Es brabbelt, macht Geräusche und experimentiert mit seiner Stimme.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🗣️</span> Laut-Sammlung</h3>
+                <p>Klicke auf die Laute, die das Kind macht:</p>
+                <div class="sound-bubbles">
+                    <div class="bubble" onclick="toggleBubble(this)">Ah</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Oh</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Eh</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Ba</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Ma</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Da</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Ga</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Pa</div>
+                    <div class="bubble" onclick="toggleBubble(this)">Ta</div>
+                </div>
+                <div class="sound-counter">Verschiedene Laute: <strong id="soundCount">0</strong></div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Entwicklungsstufen</h3>
+                <p>Markiere erreichte Stufen:</p>
+                <div class="development-stages">
+                    <div class="stage" onclick="toggleStage(this)">
+                        <div class="stage-icon">1</div>
+                        <div class="stage-content"><div class="stage-title">Reflexlaute</div><div class="stage-desc">Schreien, Weinen, Gurgeln</div></div>
+                    </div>
+                    <div class="stage" onclick="toggleStage(this)">
+                        <div class="stage-icon">2</div>
+                        <div class="stage-content"><div class="stage-title">Gurren</div><div class="stage-desc">Zufriedene Laute, "Oooh", "Aaah"</div></div>
+                    </div>
+                    <div class="stage" onclick="toggleStage(this)">
+                        <div class="stage-icon">3</div>
+                        <div class="stage-content"><div class="stage-title">Lallphase</div><div class="stage-desc">Silbenketten: "bababa", "mamama"</div></div>
+                    </div>
+                    <div class="stage" onclick="toggleStage(this)">
+                        <div class="stage-icon">4</div>
+                        <div class="stage-content"><div class="stage-title">Variiertes Lallen</div><div class="stage-desc">Verschiedene Silben: "bada", "mapa"</div></div>
+                    </div>
+                    <div class="stage" onclick="toggleStage(this)">
+                        <div class="stage-icon">5</div>
+                        <div class="stage-content"><div class="stage-title">Erste Wörter</div><div class="stage-desc">Bedeutungsvolle Laute: "Mama", "Papa"</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Gehörte Laute notieren</h3>
+                <div class="daily-sounds">
+                    <div class="add-sound">
+                        <input type="text" id="newSound" placeholder="Neuen Laut eingeben...">
+                        <button onclick="addSound()">Hinzufügen</button>
+                    </div>
+                    <div class="sounds-list" id="soundsList"></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Laute produziert das Kind? In welchen Situationen? Wie oft? Gibt es Lieblingslaute?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let customSounds = [];
+        function toggleBubble(el) {
+            el.classList.toggle('heard');
+            document.getElementById('soundCount').textContent = document.querySelectorAll('.bubble.heard').length;
+            saveData();
+        }
+        function toggleStage(el) { el.classList.toggle('reached'); saveData(); }
+        function addSound() {
+            const input = document.getElementById('newSound');
+            if (input.value.trim()) {
+                customSounds.push(input.value);
+                input.value = '';
+                renderSounds();
+                saveData();
+            }
+        }
+        function removeSound(index) {
+            customSounds.splice(index, 1);
+            renderSounds();
+            saveData();
+        }
+        function renderSounds() {
+            document.getElementById('soundsList').innerHTML = customSounds.map((s, i) =>
+                `<div class="sound-tag"><span>${s}</span><span class="remove-sound" onclick="removeSound(${i})">✕</span></div>`
+            ).join('');
+        }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                bubbles: [...document.querySelectorAll('.bubble.heard')].map(b => b.textContent),
+                stages: document.querySelectorAll('.stage.reached').length,
+                customSounds: customSounds,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_laute', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_laute');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.bubbles) {
+                    document.querySelectorAll('.bubble').forEach(bubble => {
+                        if (data.bubbles.includes(bubble.textContent)) bubble.classList.add('heard');
+                    });
+                    document.getElementById('soundCount').textContent = data.bubbles.length;
+                }
+                const stages = document.querySelectorAll('.stage');
+                for (let i = 0; i < (data.stages || 0); i++) { if (stages[i]) stages[i].classList.add('reached'); }
+                if (data.customSounds) { customSounds = data.customSounds; renderSounds(); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

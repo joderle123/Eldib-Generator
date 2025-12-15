@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedürfnisse ausdrücken - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ff9a9e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .needs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .need-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .need-card:hover { border-color: #ff9a9e; transform: translateY(-3px); }
+        .need-card.expressed { border-color: #4CAF50; background: #e8f5e9; }
+        .need-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .need-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .need-card .signals { font-size: 0.85em; color: #666; text-align: center; }
+        .expression-tracker { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; margin: 20px 0; color: white; }
+        .tracker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .tracker-cell { padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; cursor: pointer; }
+        .tracker-cell:hover { background: rgba(255,255,255,0.3); }
+        .tracker-cell.noted { background: rgba(76, 175, 80, 0.5); }
+        .tracker-cell .time { font-weight: bold; margin-bottom: 5px; }
+        .signal-types { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .signal-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .signal-item:hover { border-color: #ff9a9e; }
+        .signal-item.observed { border-color: #4CAF50; background: #e8f5e9; }
+        .signal-icon { font-size: 1.8em; }
+        .signal-check { margin-left: auto; width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 50%; }
+        .observed .signal-check { background: #4CAF50; border-color: #4CAF50; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ff9a9e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .needs-grid { grid-template-columns: 1fr; } .tracker-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Bedürfnisse ausdrücken</h1>
+            <p>Was ich brauche - mitteilen können</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-5/K-6)</h3>
+                <p>Das Kind drückt einfache Bedürfnisse aus. Es signalisiert durch Laute, Bewegungen oder Gesten, was es möchte oder braucht.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💭</span> Grundbedürfnisse</h3>
+                <p>Welche Bedürfnisse kann das Kind ausdrücken?</p>
+                <div class="needs-grid">
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">🍼</div><div class="title">Hunger</div><div class="signals">Weinen, Saugen, Unruhe</div></div>
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">😴</div><div class="title">Müdigkeit</div><div class="signals">Quengeln, Augen reiben</div></div>
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">🤗</div><div class="title">Nähe</div><div class="signals">Arme strecken, Weinen</div></div>
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">😣</div><div class="title">Unbehagen</div><div class="signals">Schreien, Strampeln</div></div>
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">🎮</div><div class="title">Spielen</div><div class="signals">Zeigen, Greifen, Laute</div></div>
+                    <div class="need-card" onclick="toggleNeed(this)"><div class="icon">🔄</div><div class="title">Veränderung</div><div class="signals">Unruhe, Ablenkungssuche</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Tages-Tracker</h3>
+                <p>Wann hat das Kind heute Bedürfnisse ausgedrückt?</p>
+                <div class="expression-tracker">
+                    <div class="tracker-grid">
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Morgens</div><div>🌅</div></div>
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Vormittag</div><div>☀️</div></div>
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Mittag</div><div>🌞</div></div>
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Nachmittag</div><div>🌤️</div></div>
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Abend</div><div>🌅</div></div>
+                        <div class="tracker-cell" onclick="toggleTracker(this)"><div class="time">Nacht</div><div>🌙</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Ausdrucksformen</h3>
+                <p>Wie drückt das Kind seine Bedürfnisse aus?</p>
+                <div class="signal-types">
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">😢</span><span>Weinen (verschiedene Arten)</span><div class="signal-check"></div></div>
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">🗣️</span><span>Laute und Töne</span><div class="signal-check"></div></div>
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">🤚</span><span>Gesten (zeigen, greifen)</span><div class="signal-check"></div></div>
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">👀</span><span>Blickkontakt suchen</span><div class="signal-check"></div></div>
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">🏃</span><span>Körperbewegungen</span><div class="signal-check"></div></div>
+                    <div class="signal-item" onclick="toggleSignal(this)"><span class="signal-icon">😊</span><span>Mimik</span><div class="signal-check"></div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie drückt das Kind verschiedene Bedürfnisse aus? Wie eindeutig sind die Signale? Wie reagiert es, wenn es verstanden wird?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function toggleNeed(el) { el.classList.toggle('expressed'); saveData(); }
+        function toggleTracker(el) { el.classList.toggle('noted'); saveData(); }
+        function toggleSignal(el) { el.classList.toggle('observed'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                needs: document.querySelectorAll('.need-card.expressed').length,
+                tracker: document.querySelectorAll('.tracker-cell.noted').length,
+                signals: document.querySelectorAll('.signal-item.observed').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_beduerfnisse', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_beduerfnisse');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const needs = document.querySelectorAll('.need-card');
+                for (let i = 0; i < (data.needs || 0); i++) { if (needs[i]) needs[i].classList.add('expressed'); }
+                const trackers = document.querySelectorAll('.tracker-cell');
+                for (let i = 0; i < (data.tracker || 0); i++) { if (trackers[i]) trackers[i].classList.add('noted'); }
+                const signals = document.querySelectorAll('.signal-item');
+                for (let i = 0; i < (data.signals || 0); i++) { if (signals[i]) signals[i].classList.add('observed'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

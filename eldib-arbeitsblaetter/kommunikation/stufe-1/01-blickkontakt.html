@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blickkontakt aufnehmen - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #74ebd5; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .eye-game { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; }
+        .eyes-container { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .eye { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .eye:hover { transform: scale(1.1); }
+        .eye.looking { box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        .pupil { width: 30px; height: 30px; background: #333; border-radius: 50%; transition: all 0.3s; }
+        .looking .pupil { background: #4CAF50; }
+        .counter { color: white; font-size: 2em; margin-top: 20px; }
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .tip-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; }
+        .tip-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .tip-card .text { font-size: 0.9em; text-align: center; }
+        .progress-tracker { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .progress-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .progress-item:hover { border-color: #74ebd5; }
+        .progress-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .progress-icon { width: 40px; height: 40px; background: #e0e0e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; }
+        .achieved .progress-icon { background: #4CAF50; }
+        .observation-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .day-cell { text-align: center; padding: 10px; background: #f5f5f5; border-radius: 10px; cursor: pointer; }
+        .day-cell:hover { background: #e0e0e0; }
+        .day-cell.marked { background: #c8e6c9; }
+        .day-cell .day { font-size: 0.8em; color: #666; }
+        .day-cell .icon { font-size: 1.5em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #74ebd5; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media print { .activity { break-inside: avoid; } }
+        @media (max-width: 600px) { .tips-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Blickkontakt aufnehmen</h1>
+            <p>Die Augen sind das Tor zur Kommunikation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-1/K-2)</h3>
+                <p>Das Kind nimmt Blickkontakt mit vertrauten Personen auf. Es schaut Bezugspersonen an und reagiert auf deren Blick.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👀</span> Augen-Spiel</h3>
+                <p>Klicke auf die Augen, wenn das Kind Blickkontakt aufnimmt:</p>
+                <div class="eye-game">
+                    <div class="eyes-container">
+                        <div class="eye" onclick="toggleEye(this)"><div class="pupil"></div></div>
+                        <div class="eye" onclick="toggleEye(this)"><div class="pupil"></div></div>
+                    </div>
+                    <div class="counter">Blickkontakte: <span id="eyeCount">0</span></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Tipps zur Förderung</h3>
+                <div class="tips-grid">
+                    <div class="tip-card"><div class="icon">🎵</div><div class="text">Singe Lieder und schaue das Kind an</div></div>
+                    <div class="tip-card"><div class="icon">🤗</div><div class="text">Auf Augenhöhe gehen</div></div>
+                    <div class="tip-card"><div class="icon">😊</div><div class="text">Freundliche Mimik zeigen</div></div>
+                    <div class="tip-card"><div class="icon">🎯</div><div class="text">Interessante Objekte nah am Gesicht</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Entwicklungsschritte</h3>
+                <p>Markiere erreichte Meilensteine:</p>
+                <div class="progress-tracker">
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-icon">👶</div><div>Reagiert auf Gesichter</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-icon">👀</div><div>Kurzer Blickkontakt (1-2 Sekunden)</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-icon">😊</div><div>Lächelt bei Blickkontakt</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-icon">🔍</div><div>Folgt Blickrichtung</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-icon">⏱️</div><div>Längerer Blickkontakt (3+ Sekunden)</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📅</span> Wochen-Tracker</h3>
+                <p>Klicke auf die Tage, an denen Blickkontakt gut gelang:</p>
+                <div class="observation-grid">
+                    <div class="day-cell" onclick="toggleDay(this)"><div class="day">Mo</div><div class="icon">👀</div></div>
+                    <div class="day-cell" onclick="toggleDay(this)"><div class="day">Di</div><div class="icon">👀</div></div>
+                    <div class="day-cell" onclick="toggleDay(this)"><div class="day">Mi</div><div class="icon">👀</div></div>
+                    <div class="day-cell" onclick="toggleDay(this)"><div class="day">Do</div><div class="icon">👀</div></div>
+                    <div class="day-cell" onclick="toggleDay(this)"><div class="day">Fr</div><div class="icon">👀</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wann nimmt das Kind Blickkontakt auf? Wie lange? Mit wem bevorzugt? In welchen Situationen gelingt es besonders gut?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let eyeCount = 0;
+        function toggleEye(el) {
+            el.classList.toggle('looking');
+            if (el.classList.contains('looking')) { eyeCount++; document.getElementById('eyeCount').textContent = eyeCount; }
+            saveData();
+        }
+        function toggleProgress(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleDay(el) { el.classList.toggle('marked'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                eyeCount: eyeCount,
+                progress: document.querySelectorAll('.progress-item.achieved').length,
+                days: document.querySelectorAll('.day-cell.marked').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_blickkontakt', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_blickkontakt');
+            if (saved) {
+                const data = JSON.parse(saved);
+                eyeCount = data.eyeCount || 0;
+                document.getElementById('eyeCount').textContent = eyeCount;
+                const progress = document.querySelectorAll('.progress-item');
+                for (let i = 0; i < (data.progress || 0); i++) { if (progress[i]) progress[i].classList.add('achieved'); }
+                const days = document.querySelectorAll('.day-cell');
+                for (let i = 0; i < (data.days || 0); i++) { if (days[i]) days[i].classList.add('marked'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

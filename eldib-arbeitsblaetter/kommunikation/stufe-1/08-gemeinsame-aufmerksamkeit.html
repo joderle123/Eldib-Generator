@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemeinsame Aufmerksamkeit - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .attention-visual { text-align: center; padding: 30px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 15px; margin: 20px 0; }
+        .visual-scene { display: flex; justify-content: space-around; align-items: center; margin: 20px 0; }
+        .person { display: flex; flex-direction: column; align-items: center; }
+        .person-icon { font-size: 4em; }
+        .person-label { color: white; margin-top: 10px; font-weight: bold; }
+        .object { font-size: 4em; cursor: pointer; transition: all 0.3s; }
+        .object:hover { transform: scale(1.2); }
+        .object.focused { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .attention-arrows { display: flex; justify-content: center; color: white; font-size: 2em; margin: 10px 0; }
+        .joint-attention-steps { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .ja-step { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 12px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .ja-step:hover { border-color: #667eea; }
+        .ja-step.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .step-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .achieved .step-icon { background: #4CAF50; }
+        .step-content { flex: 1; }
+        .step-title { font-weight: bold; }
+        .step-desc { font-size: 0.85em; color: #666; }
+        .activities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .activity-card { background: white; border: 3px solid #e0e0e0; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .activity-card:hover { border-color: #667eea; }
+        .activity-card.tried { border-color: #4CAF50; background: #e8f5e9; }
+        .activity-card .icon { font-size: 2em; text-align: center; margin-bottom: 10px; }
+        .activity-card .title { font-weight: bold; text-align: center; font-size: 0.9em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .activities-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Gemeinsame Aufmerksamkeit</h1>
+            <p>Zusammen auf etwas schauen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-4/K-5)</h3>
+                <p>Das Kind kann gemeinsam mit einer anderen Person auf ein Objekt oder Ereignis achten. Es folgt dem Blick anderer und teilt seine Aufmerksamkeit.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">👁️</span> Was ist gemeinsame Aufmerksamkeit?</h3>
+                <div class="attention-visual">
+                    <div class="visual-scene">
+                        <div class="person"><div class="person-icon">👶</div><div class="person-label">Kind</div></div>
+                        <div class="object" onclick="focusObject(this)">🧸</div>
+                        <div class="person"><div class="person-icon">👨</div><div class="person-label">Erwachsener</div></div>
+                    </div>
+                    <div class="attention-arrows">← 👀 →</div>
+                    <p style="color: white;">Beide schauen auf dasselbe Objekt!</p>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Entwicklungsschritte</h3>
+                <p>Markiere erreichte Meilensteine:</p>
+                <div class="joint-attention-steps">
+                    <div class="ja-step" onclick="toggleStep(this)">
+                        <div class="step-icon">1</div>
+                        <div class="step-content"><div class="step-title">Blick folgen</div><div class="step-desc">Kind folgt dem Blick des Erwachsenen</div></div>
+                    </div>
+                    <div class="ja-step" onclick="toggleStep(this)">
+                        <div class="step-icon">2</div>
+                        <div class="step-content"><div class="step-title">Zeigegeste folgen</div><div class="step-desc">Kind schaut, wohin gezeigt wird</div></div>
+                    </div>
+                    <div class="ja-step" onclick="toggleStep(this)">
+                        <div class="step-icon">3</div>
+                        <div class="step-content"><div class="step-title">Aufmerksamkeit teilen</div><div class="step-desc">Kind zeigt Erwachsenem etwas</div></div>
+                    </div>
+                    <div class="ja-step" onclick="toggleStep(this)">
+                        <div class="step-icon">4</div>
+                        <div class="step-content"><div class="step-title">Blick wechseln</div><div class="step-desc">Kind schaut zwischen Objekt und Person hin und her</div></div>
+                    </div>
+                    <div class="ja-step" onclick="toggleStep(this)">
+                        <div class="step-icon">5</div>
+                        <div class="step-content"><div class="step-title">Freude teilen</div><div class="step-desc">Kind teilt Begeisterung über etwas mit</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎯</span> Übungs-Aktivitäten</h3>
+                <p>Diese Aktivitäten fördern gemeinsame Aufmerksamkeit:</p>
+                <div class="activities-grid">
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">📖</div><div class="title">Bilderbuch anschauen</div></div>
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">🎈</div><div class="title">Seifenblasen verfolgen</div></div>
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">🐦</div><div class="title">Tiere beobachten</div></div>
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">🚗</div><div class="title">Autos/Züge schauen</div></div>
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">🎵</div><div class="title">Musik hören & zeigen</div></div>
+                    <div class="activity-card" onclick="toggleActivity(this)"><div class="icon">🪟</div><div class="title">Aus dem Fenster schauen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: In welchen Situationen zeigt das Kind gemeinsame Aufmerksamkeit? Wie lange kann es die Aufmerksamkeit teilen? Initiiert es selbst?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        function focusObject(el) { el.classList.toggle('focused'); }
+        function toggleStep(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleActivity(el) { el.classList.toggle('tried'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                steps: document.querySelectorAll('.ja-step.achieved').length,
+                activities: document.querySelectorAll('.activity-card.tried').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_aufmerksamkeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_aufmerksamkeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const steps = document.querySelectorAll('.ja-step');
+                for (let i = 0; i < (data.steps || 0); i++) { if (steps[i]) steps[i].classList.add('achieved'); }
+                const activities = document.querySelectorAll('.activity-card');
+                for (let i = 0; i < (data.activities || 0); i++) { if (activities[i]) activities[i].classList.add('tried'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

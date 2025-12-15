@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auf Mimik reagieren - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fcb69f; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .face-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .face-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .face-card:hover { border-color: #fcb69f; transform: scale(1.05); }
+        .face-card.recognized { border-color: #4CAF50; background: #e8f5e9; }
+        .face-card .face { font-size: 4em; margin-bottom: 10px; }
+        .face-card .label { font-weight: bold; }
+        .mirror-game { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; color: white; }
+        .current-face { font-size: 6em; margin: 20px 0; transition: all 0.3s; }
+        .mirror-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .mirror-btn { padding: 15px 25px; background: white; color: #667eea; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; transition: all 0.3s; }
+        .mirror-btn:hover { transform: scale(1.05); }
+        .mirror-btn.mirrored { background: #4CAF50; color: white; }
+        .response-checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .response-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .response-item:hover { border-color: #fcb69f; }
+        .response-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .response-icon { font-size: 1.5em; }
+        .response-check { margin-left: auto; width: 25px; height: 25px; border: 3px solid #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .checked .response-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fcb69f; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .face-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Auf Mimik reagieren</h1>
+            <p>Gesichtsausdrücke lesen lernen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-3/K-4)</h3>
+                <p>Das Kind reagiert auf Gesichtsausdrücke anderer Menschen. Es erkennt Emotionen in Gesichtern und reagiert entsprechend darauf.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">😊</span> Gesichter erkennen</h3>
+                <p>Auf welche Gesichtsausdrücke reagiert das Kind?</p>
+                <div class="face-grid">
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">😊</div><div class="label">Freude</div></div>
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">😢</div><div class="label">Trauer</div></div>
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">😮</div><div class="label">Überraschung</div></div>
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">😠</div><div class="label">Ärger</div></div>
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">😨</div><div class="label">Angst</div></div>
+                    <div class="face-card" onclick="toggleFace(this)"><div class="face">🥰</div><div class="label">Zuneigung</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🪞</span> Spiegel-Spiel</h3>
+                <div class="mirror-game">
+                    <p>Zeigen Sie dem Kind dieses Gesicht und notieren Sie, ob es nachahmt:</p>
+                    <div class="current-face" id="currentFace">😊</div>
+                    <div class="mirror-buttons">
+                        <button class="mirror-btn" onclick="setFace('😊')">😊</button>
+                        <button class="mirror-btn" onclick="setFace('😢')">😢</button>
+                        <button class="mirror-btn" onclick="setFace('😮')">😮</button>
+                        <button class="mirror-btn" onclick="setFace('😝')">😝</button>
+                        <button class="mirror-btn" onclick="markMirrored()">✓ Nachgeahmt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Reaktionsweisen</h3>
+                <p>Wie reagiert das Kind auf Gesichtsausdrücke?</p>
+                <div class="response-checklist">
+                    <div class="response-item" onclick="toggleResponse(this)"><span class="response-icon">👀</span><span>Schaut aufmerksam ins Gesicht</span><div class="response-check">✓</div></div>
+                    <div class="response-item" onclick="toggleResponse(this)"><span class="response-icon">😊</span><span>Lächelt zurück bei Lächeln</span><div class="response-check">✓</div></div>
+                    <div class="response-item" onclick="toggleResponse(this)"><span class="response-icon">😟</span><span>Wird unruhig bei ernsten Gesichtern</span><div class="response-check">✓</div></div>
+                    <div class="response-item" onclick="toggleResponse(this)"><span class="response-icon">🪞</span><span>Ahmt Gesichtsausdrücke nach</span><div class="response-check">✓</div></div>
+                    <div class="response-item" onclick="toggleResponse(this)"><span class="response-icon">🤗</span><span>Sucht Trost bei besorgtem Ausdruck</span><div class="response-check">✓</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie reagiert das Kind auf verschiedene Gesichtsausdrücke? Welche Emotionen erkennt es am besten? Ahmt es Mimik nach?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let mirrorCount = 0;
+        function toggleFace(el) { el.classList.toggle('recognized'); saveData(); }
+        function toggleResponse(el) { el.classList.toggle('checked'); saveData(); }
+        function setFace(face) { document.getElementById('currentFace').textContent = face; }
+        function markMirrored() { mirrorCount++; saveData(); alert('Nachgeahmt! Gesamt: ' + mirrorCount); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                faces: document.querySelectorAll('.face-card.recognized').length,
+                responses: document.querySelectorAll('.response-item.checked').length,
+                mirrorCount: mirrorCount,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_mimik', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_mimik');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const faces = document.querySelectorAll('.face-card');
+                for (let i = 0; i < (data.faces || 0); i++) { if (faces[i]) faces[i].classList.add('recognized'); }
+                const responses = document.querySelectorAll('.response-item');
+                for (let i = 0; i < (data.responses || 0); i++) { if (responses[i]) responses[i].classList.add('checked'); }
+                mirrorCount = data.mirrorCount || 0;
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

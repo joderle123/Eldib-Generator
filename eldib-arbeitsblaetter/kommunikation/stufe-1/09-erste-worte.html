@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erste Worte - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #f5576c; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .word-collection { padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; color: white; }
+        .word-input-area { display: flex; gap: 10px; margin-bottom: 20px; }
+        .word-input-area input { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 1.1em; }
+        .word-input-area button { padding: 15px 25px; background: white; color: #667eea; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1em; }
+        .words-display { display: flex; flex-wrap: wrap; gap: 10px; }
+        .word-tag { padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 25px; display: flex; align-items: center; gap: 10px; }
+        .word-tag .remove { cursor: pointer; opacity: 0.7; }
+        .word-tag .remove:hover { opacity: 1; }
+        .word-count { text-align: center; margin-top: 20px; font-size: 1.2em; }
+        .common-words { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .common-word { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .common-word:hover { border-color: #f5576c; transform: translateY(-3px); }
+        .common-word.spoken { border-color: #4CAF50; background: #e8f5e9; }
+        .common-word .icon { font-size: 2em; margin-bottom: 5px; }
+        .common-word .word { font-weight: bold; }
+        .progress-timeline { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .timeline-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .timeline-item:hover { border-color: #f5576c; }
+        .timeline-item.reached { border-color: #4CAF50; background: #e8f5e9; }
+        .timeline-dot { width: 20px; height: 20px; background: #e0e0e0; border-radius: 50%; flex-shrink: 0; }
+        .reached .timeline-dot { background: #4CAF50; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #f5576c; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .common-words { grid-template-columns: repeat(2, 1fr); } .word-input-area { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Erste Worte</h1>
+            <p>Die ersten bedeutungsvollen Laute</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-6)</h3>
+                <p>Das Kind beginnt, erste bedeutungsvolle Wörter zu sprechen. Es verbindet Laute mit Bedeutungen und nutzt sie gezielt zur Kommunikation.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Wort-Sammlung</h3>
+                <p>Trage die ersten Wörter des Kindes ein:</p>
+                <div class="word-collection">
+                    <div class="word-input-area">
+                        <input type="text" id="newWord" placeholder="Neues Wort eingeben...">
+                        <button onclick="addWord()">+ Hinzufügen</button>
+                    </div>
+                    <div class="words-display" id="wordsDisplay"></div>
+                    <div class="word-count">Wortschatz: <strong id="wordCount">0</strong> Wörter</div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🌟</span> Häufige erste Wörter</h3>
+                <p>Markiere die Wörter, die das Kind schon sagt:</p>
+                <div class="common-words">
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">👩</div><div class="word">Mama</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">👨</div><div class="word">Papa</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">🐶</div><div class="word">Wauwau</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">🚗</div><div class="word">Auto</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">⚽</div><div class="word">Ball</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">🍼</div><div class="word">Mehr</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">👋</div><div class="word">Hallo</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">❌</div><div class="word">Nein</div></div>
+                    <div class="common-word" onclick="toggleCommon(this)"><div class="icon">✅</div><div class="word">Ja</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📈</span> Sprachentwicklung</h3>
+                <p>Markiere erreichte Meilensteine:</p>
+                <div class="progress-timeline">
+                    <div class="timeline-item" onclick="toggleTimeline(this)"><div class="timeline-dot"></div><div>Erste Silbenketten (bababa)</div></div>
+                    <div class="timeline-item" onclick="toggleTimeline(this)"><div class="timeline-dot"></div><div>Bedeutungsvolle Laute für Personen</div></div>
+                    <div class="timeline-item" onclick="toggleTimeline(this)"><div class="timeline-dot"></div><div>Erstes echtes Wort</div></div>
+                    <div class="timeline-item" onclick="toggleTimeline(this)"><div class="timeline-dot"></div><div>5+ verschiedene Wörter</div></div>
+                    <div class="timeline-item" onclick="toggleTimeline(this)"><div class="timeline-dot"></div><div>Wörter werden gezielt eingesetzt</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Wörter sagt das Kind? In welchem Kontext? Wie deutlich ist die Aussprache? Wann trat das erste Wort auf?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let words = [];
+        function addWord() {
+            const input = document.getElementById('newWord');
+            if (input.value.trim()) {
+                words.push(input.value.trim());
+                input.value = '';
+                renderWords();
+                saveData();
+            }
+        }
+        function removeWord(index) { words.splice(index, 1); renderWords(); saveData(); }
+        function renderWords() {
+            document.getElementById('wordsDisplay').innerHTML = words.map((w, i) =>
+                `<div class="word-tag"><span>${w}</span><span class="remove" onclick="removeWord(${i})">✕</span></div>`
+            ).join('');
+            document.getElementById('wordCount').textContent = words.length;
+        }
+        function toggleCommon(el) { el.classList.toggle('spoken'); saveData(); }
+        function toggleTimeline(el) { el.classList.toggle('reached'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                words: words,
+                commonWords: [...document.querySelectorAll('.common-word.spoken')].map(w => w.querySelector('.word').textContent),
+                timeline: document.querySelectorAll('.timeline-item.reached').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_erste_worte', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_erste_worte');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.words) { words = data.words; renderWords(); }
+                if (data.commonWords) {
+                    document.querySelectorAll('.common-word').forEach(w => {
+                        if (data.commonWords.includes(w.querySelector('.word').textContent)) w.classList.add('spoken');
+                    });
+                }
+                const timeline = document.querySelectorAll('.timeline-item');
+                for (let i = 0; i < (data.timeline || 0); i++) { if (timeline[i]) timeline[i].classList.add('reached'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>

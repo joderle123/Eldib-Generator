@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wechselseitigkeit - Kommunikation Stufe I</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #11998e; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .turn-taking-visual { text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin: 20px 0; color: white; }
+        .conversation-flow { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+        .turn { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
+        .turn:hover { background: rgba(255,255,255,0.3); }
+        .turn.active { background: rgba(255,255,255,0.4); }
+        .turn-icon { font-size: 2em; }
+        .turn-label { flex: 1; }
+        .turn-count { background: white; color: #667eea; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        .play-button { padding: 15px 30px; background: white; color: #667eea; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; margin-top: 15px; }
+        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .game-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; }
+        .game-card:hover { border-color: #11998e; transform: translateY(-3px); }
+        .game-card.played { border-color: #4CAF50; background: #e8f5e9; }
+        .game-card .icon { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
+        .game-card .title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .game-card .desc { font-size: 0.85em; color: #666; text-align: center; }
+        .progress-checklist { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .progress-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; }
+        .progress-item:hover { border-color: #11998e; }
+        .progress-item.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .progress-check { width: 30px; height: 30px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .achieved .progress-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #11998e; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .games-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Kommunikation - Stufe I</div>
+            <h1>Wechselseitigkeit</h1>
+            <p>Erst ich, dann du - Turn-Taking</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (K-5/K-6)</h3>
+                <p>Das Kind versteht das Prinzip des Wechsels in der Kommunikation. Es wartet ab und reagiert dann - die Grundlage für spätere Gespräche.</p>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Kommunikations-Pingpong</h3>
+                <div class="turn-taking-visual">
+                    <p style="margin-bottom: 15px;">Klicke abwechselnd, um den Wechsel zu üben:</p>
+                    <div class="conversation-flow">
+                        <div class="turn" onclick="takeTurn('adult')">
+                            <div class="turn-icon">👨</div>
+                            <div class="turn-label">Erwachsener spricht/macht</div>
+                            <div class="turn-count" id="adultCount">0</div>
+                        </div>
+                        <div class="turn" onclick="takeTurn('child')">
+                            <div class="turn-icon">👶</div>
+                            <div class="turn-label">Kind antwortet/reagiert</div>
+                            <div class="turn-count" id="childCount">0</div>
+                        </div>
+                    </div>
+                    <button class="play-button" onclick="resetTurns()">🔄 Neu starten</button>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">🎮</span> Turn-Taking Spiele</h3>
+                <p>Diese Spiele fördern das Abwechseln:</p>
+                <div class="games-grid">
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">🎵</div><div class="title">Lied mit Pausen</div><div class="desc">Singen und auf Reaktion warten</div></div>
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">🙈</div><div class="title">Kuckuck-Spiel</div><div class="desc">Verstecken und zeigen</div></div>
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">⚽</div><div class="title">Ball rollen</div><div class="desc">Hin und her rollen</div></div>
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">🧱</div><div class="title">Turm bauen</div><div class="desc">Abwechselnd Steine stapeln</div></div>
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">👏</div><div class="title">Klatschspiele</div><div class="desc">Rhythmisches Klatschen</div></div>
+                    <div class="game-card" onclick="toggleGame(this)"><div class="icon">🗣️</div><div class="title">Echo-Spiel</div><div class="desc">Laute nachahmen</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Entwicklungsfortschritte</h3>
+                <p>Markiere beobachtete Fähigkeiten:</p>
+                <div class="progress-checklist">
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-check">✓</div><div>Reagiert auf Ansprache</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-check">✓</div><div>Wartet auf Reaktion des Erwachsenen</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-check">✓</div><div>Macht Laute als Antwort</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-check">✓</div><div>Initiiert selbst Wechselspiele</div></div>
+                    <div class="progress-item" onclick="toggleProgress(this)"><div class="progress-check">✓</div><div>Mehrere Wechsel hintereinander</div></div>
+                </div>
+            </div>
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wie gut versteht das Kind das Wechselprinzip? Bei welchen Aktivitäten gelingt es am besten? Wie viele Wechsel schafft es hintereinander?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+    <script>
+        let adultTurns = 0;
+        let childTurns = 0;
+        let lastTurn = '';
+        function takeTurn(who) {
+            if (who === 'adult') { adultTurns++; document.getElementById('adultCount').textContent = adultTurns; }
+            else { childTurns++; document.getElementById('childCount').textContent = childTurns; }
+            document.querySelectorAll('.turn').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            saveData();
+        }
+        function resetTurns() { adultTurns = 0; childTurns = 0; document.getElementById('adultCount').textContent = 0; document.getElementById('childCount').textContent = 0; document.querySelectorAll('.turn').forEach(t => t.classList.remove('active')); }
+        function toggleGame(el) { el.classList.toggle('played'); saveData(); }
+        function toggleProgress(el) { el.classList.toggle('achieved'); saveData(); }
+        function showSaveNotice() { const n = document.getElementById('saveNotice'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000); }
+        function saveData() {
+            const data = {
+                adultTurns: adultTurns,
+                childTurns: childTurns,
+                games: document.querySelectorAll('.game-card.played').length,
+                progress: document.querySelectorAll('.progress-item.achieved').length,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_k1_wechsel', JSON.stringify(data));
+            showSaveNotice();
+        }
+        function loadData() {
+            const saved = localStorage.getItem('eldib_k1_wechsel');
+            if (saved) {
+                const data = JSON.parse(saved);
+                adultTurns = data.adultTurns || 0;
+                childTurns = data.childTurns || 0;
+                document.getElementById('adultCount').textContent = adultTurns;
+                document.getElementById('childCount').textContent = childTurns;
+                const games = document.querySelectorAll('.game-card');
+                for (let i = 0; i < (data.games || 0); i++) { if (games[i]) games[i].classList.add('played'); }
+                const progress = document.querySelectorAll('.progress-item');
+                for (let i = 0; i < (data.progress || 0); i++) { if (progress[i]) progress[i].classList.add('achieved'); }
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
