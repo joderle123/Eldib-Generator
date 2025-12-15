@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andere einbeziehen - Sozialisation Stufe III - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #26a69a, #00897b);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #26a69a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Circle of Friends */
+        .circle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .friend-circle {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border: 4px dashed #26a69a;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-center {
+            text-align: center;
+        }
+
+        .circle-text {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .circle-emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .person-dot {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #26a69a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .person-dot.outside {
+            background: #bdbdbd;
+        }
+
+        .person-dot:hover {
+            transform: scale(1.2);
+        }
+
+        /* Scenario Cards */
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #26a69a;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scenario-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .scenario-character {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .response-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .response-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .response-btn:hover {
+            border-color: #26a69a;
+            background: #e0f2f1;
+        }
+
+        .response-btn.selected {
+            border-color: #26a69a;
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+        }
+
+        .response-btn.kind {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .response-btn.unkind {
+            border-color: #f44336;
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .response-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Ways to Include */
+        .ways-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .way-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .way-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .way-card.practiced {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .way-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .way-text {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .way-example {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Feelings Section */
+        .feelings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feelings-column {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .feelings-column.included {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .feelings-column.excluded {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .feelings-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .feeling-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feeling-item:hover {
+            transform: translateX(5px);
+        }
+
+        .feeling-item.selected {
+            border: 2px solid #26a69a;
+        }
+
+        .feeling-emoji {
+            font-size: 1.5rem;
+        }
+
+        /* My Pledge */
+        .pledge-card {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .pledge-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .pledge-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pledge-item:hover {
+            transform: translateX(5px);
+        }
+
+        .pledge-item.checked {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .pledge-checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #26a69a;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .pledge-item.checked .pledge-checkbox {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pledge-text {
+            text-align: left;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        /* Story Input */
+        .story-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .story-input:focus {
+            outline: none;
+            border-color: #26a69a;
+        }
+
+        .story-label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .story-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #26a69a;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #26a69a, #00897b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .feelings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ways-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 { font-size: 1.5rem; }
+
+            .friend-circle {
+                width: 220px;
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe III (5-9 Jahre)</div>
+            <h1>🤗 Andere einbeziehen</h1>
+            <p class="subtitle">Niemanden ausschließen - alle gehören dazu!</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Warum ist Einbeziehen wichtig?</h2>
+            <div class="intro-text">
+                <p>Jeder Mensch möchte <strong>dazugehören</strong> und <strong>Freunde haben</strong>.
+                Wenn wir andere einbeziehen, fühlen sie sich gut und wir machen die Welt freundlicher.
+                Ausgeschlossen zu werden tut weh - deshalb achten wir darauf, dass alle mitmachen können!</p>
+            </div>
+
+            <div class="circle-container">
+                <div class="friend-circle">
+                    <div class="circle-center">
+                        <div class="circle-emoji">👥</div>
+                        <div class="circle-text">Alle gehören<br>dazu!</div>
+                    </div>
+                    <div class="person-dot" style="top: 5%; left: 50%; transform: translateX(-50%);">😊</div>
+                    <div class="person-dot" style="top: 25%; right: 5%;">😄</div>
+                    <div class="person-dot" style="bottom: 25%; right: 5%;">🙂</div>
+                    <div class="person-dot" style="bottom: 5%; left: 50%; transform: translateX(-50%);">😃</div>
+                    <div class="person-dot" style="bottom: 25%; left: 5%;">😊</div>
+                    <div class="person-dot" style="top: 25%; left: 5%;">🙂</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">😢</span> Wie fühlt es sich an?</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf die Gefühle, die du kennst:</p>
+
+            <div class="feelings-grid">
+                <div class="feelings-column excluded">
+                    <div class="feelings-title">😔 Wenn ich ausgeschlossen werde...</div>
+                    <div class="feeling-item" data-feeling="sad">
+                        <span class="feeling-emoji">😢</span>
+                        <span>Ich bin traurig</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="alone">
+                        <span class="feeling-emoji">😞</span>
+                        <span>Ich fühle mich allein</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="angry">
+                        <span class="feeling-emoji">😠</span>
+                        <span>Ich bin wütend</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="hurt">
+                        <span class="feeling-emoji">💔</span>
+                        <span>Es tut weh</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="confused">
+                        <span class="feeling-emoji">😕</span>
+                        <span>Ich verstehe nicht warum</span>
+                    </div>
+                </div>
+                <div class="feelings-column included">
+                    <div class="feelings-title">😊 Wenn ich einbezogen werde...</div>
+                    <div class="feeling-item" data-feeling="happy">
+                        <span class="feeling-emoji">😄</span>
+                        <span>Ich bin fröhlich</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="belonging">
+                        <span class="feeling-emoji">🤗</span>
+                        <span>Ich gehöre dazu</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="valuable">
+                        <span class="feeling-emoji">⭐</span>
+                        <span>Ich bin wichtig</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="confident">
+                        <span class="feeling-emoji">💪</span>
+                        <span>Ich fühle mich stark</span>
+                    </div>
+                    <div class="feeling-item" data-feeling="grateful">
+                        <span class="feeling-emoji">💕</span>
+                        <span>Ich bin dankbar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Was würdest du tun?</h2>
+
+            <div class="scenario" id="scenario1">
+                <div class="scenario-title">
+                    <span>🏃</span> Situation 1: Das neue Kind
+                </div>
+                <div class="scenario-character">👧 Lisa ist neu in der Klasse</div>
+                <div class="scenario-description">
+                    Lisa ist neu in deiner Klasse. In der Pause steht sie alleine am Rand des Schulhofs.
+                    Deine Freunde spielen gerade Fangen.
+                </div>
+                <div class="response-options" data-scenario="1">
+                    <button class="response-btn" data-response="ignore" data-kind="false">
+                        <span class="response-icon">🙈</span>
+                        <span>Ich spiele weiter und achte nicht auf sie</span>
+                    </button>
+                    <button class="response-btn" data-response="invite" data-kind="true">
+                        <span class="response-icon">👋</span>
+                        <span>Ich frage Lisa, ob sie mitspielen möchte</span>
+                    </button>
+                    <button class="response-btn" data-response="talk" data-kind="true">
+                        <span class="response-icon">💬</span>
+                        <span>Ich gehe zu ihr und stelle mich vor</span>
+                    </button>
+                    <button class="response-btn" data-response="exclude" data-kind="false">
+                        <span class="response-icon">🚫</span>
+                        <span>Ich sage meinen Freunden, dass sie nicht mitmachen darf</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario" id="scenario2">
+                <div class="scenario-title">
+                    <span>⚽</span> Situation 2: Mannschaft wählen
+                </div>
+                <div class="scenario-character">🧒 Tim ist nicht so sportlich</div>
+                <div class="scenario-description">
+                    Beim Sport sollen zwei Mannschaften gewählt werden. Tim wird als Letzter gewählt,
+                    weil er nicht so gut im Fußball ist. Du siehst, dass er traurig aussieht.
+                </div>
+                <div class="response-options" data-scenario="2">
+                    <button class="response-btn" data-response="laugh" data-kind="false">
+                        <span class="response-icon">😂</span>
+                        <span>Ich lache mit den anderen</span>
+                    </button>
+                    <button class="response-btn" data-response="encourage" data-kind="true">
+                        <span class="response-icon">💪</span>
+                        <span>Ich sage Tim, dass er toll ist und gebe ihm Tipps</span>
+                    </button>
+                    <button class="response-btn" data-response="pass" data-kind="true">
+                        <span class="response-icon">⚽</span>
+                        <span>Ich passe ihm im Spiel oft den Ball zu</span>
+                    </button>
+                    <button class="response-btn" data-response="ignore2" data-kind="false">
+                        <span class="response-icon">🙅</span>
+                        <span>Das ist mir egal, Hauptsache wir gewinnen</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="scenario" id="scenario3">
+                <div class="scenario-title">
+                    <span>🎂</span> Situation 3: Die Geburtstagsfeier
+                </div>
+                <div class="scenario-character">👦 Max wurde nicht eingeladen</div>
+                <div class="scenario-description">
+                    Du hast Geburtstag und darfst 5 Freunde einladen. Dein Freund Max hört, dass fast alle
+                    eingeladen sind, nur er nicht. Er ist sehr traurig.
+                </div>
+                <div class="response-options" data-scenario="3">
+                    <button class="response-btn" data-response="hide" data-kind="false">
+                        <span class="response-icon">🤫</span>
+                        <span>Ich rede nicht mehr über die Party, wenn Max dabei ist</span>
+                    </button>
+                    <button class="response-btn" data-response="ask_parents" data-kind="true">
+                        <span class="response-icon">👨‍👩‍👦</span>
+                        <span>Ich frage meine Eltern, ob Max auch noch kommen darf</span>
+                    </button>
+                    <button class="response-btn" data-response="mean" data-kind="false">
+                        <span class="response-icon">😤</span>
+                        <span>Pech gehabt, ich darf ja nur 5 einladen</span>
+                    </button>
+                    <button class="response-btn" data-response="separate" data-kind="true">
+                        <span class="response-icon">🎮</span>
+                        <span>Ich verabrede mich extra nochmal nur mit Max</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">✨</span> Wie kann ich andere einbeziehen?</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf die Dinge, die du schon machst:</p>
+
+            <div class="ways-grid">
+                <div class="way-card" data-way="invite">
+                    <div class="way-emoji">👋</div>
+                    <div class="way-text">Einladen mitzuspielen</div>
+                    <div class="way-example">"Möchtest du mitmachen?"</div>
+                </div>
+                <div class="way-card" data-way="sit">
+                    <div class="way-emoji">🪑</div>
+                    <div class="way-text">Platz machen</div>
+                    <div class="way-example">"Hier ist noch ein Platz frei!"</div>
+                </div>
+                <div class="way-card" data-way="share">
+                    <div class="way-emoji">🎨</div>
+                    <div class="way-text">Teilen</div>
+                    <div class="way-example">"Willst du auch mal?"</div>
+                </div>
+                <div class="way-card" data-way="introduce">
+                    <div class="way-emoji">🤝</div>
+                    <div class="way-text">Vorstellen</div>
+                    <div class="way-example">"Das ist mein Freund..."</div>
+                </div>
+                <div class="way-card" data-way="help">
+                    <div class="way-emoji">🙋</div>
+                    <div class="way-text">Helfen</div>
+                    <div class="way-example">"Ich kann dir zeigen, wie das geht!"</div>
+                </div>
+                <div class="way-card" data-way="listen">
+                    <div class="way-emoji">👂</div>
+                    <div class="way-text">Zuhören</div>
+                    <div class="way-example">"Erzähl mir davon!"</div>
+                </div>
+                <div class="way-card" data-way="compliment">
+                    <div class="way-emoji">⭐</div>
+                    <div class="way-text">Loben</div>
+                    <div class="way-example">"Das hast du toll gemacht!"</div>
+                </div>
+                <div class="way-card" data-way="stand">
+                    <div class="way-emoji">🛡️</div>
+                    <div class="way-text">Für andere einstehen</div>
+                    <div class="way-example">"Hey, das ist nicht nett!"</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🌟</span> Mein Versprechen</h2>
+            <div class="pledge-card">
+                <div class="pledge-title">Ich verspreche...</div>
+
+                <div class="pledge-item" data-pledge="notice">
+                    <div class="pledge-checkbox"></div>
+                    <div class="pledge-text">Ich achte darauf, wenn jemand alleine ist</div>
+                </div>
+                <div class="pledge-item" data-pledge="invite_new">
+                    <div class="pledge-checkbox"></div>
+                    <div class="pledge-text">Ich frage neue Kinder, ob sie mitspielen möchten</div>
+                </div>
+                <div class="pledge-item" data-pledge="defend">
+                    <div class="pledge-checkbox"></div>
+                    <div class="pledge-text">Ich verteidige andere, wenn sie ausgelacht werden</div>
+                </div>
+                <div class="pledge-item" data-pledge="share_friends">
+                    <div class="pledge-checkbox"></div>
+                    <div class="pledge-text">Ich teile meine Freunde und bin nicht eifersüchtig</div>
+                </div>
+                <div class="pledge-item" data-pledge="kind">
+                    <div class="pledge-checkbox"></div>
+                    <div class="pledge-text">Ich bin freundlich zu allen, auch zu Kindern die anders sind</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📖</span> Meine Erfahrungen</h2>
+
+            <div class="story-section">
+                <label class="story-label">Eine Situation, in der ich jemanden einbezogen habe:</label>
+                <textarea class="story-input" id="included_story" placeholder="Was ist passiert? Wie hat sich die Person gefühlt?"></textarea>
+            </div>
+
+            <div class="story-section">
+                <label class="story-label">Eine Situation, in der ich mich ausgeschlossen gefühlt habe:</label>
+                <textarea class="story-input" id="excluded_story" placeholder="Was ist passiert? Wie hast du dich gefühlt?"></textarea>
+            </div>
+
+            <div class="story-section">
+                <label class="story-label">Was ich noch besser machen möchte:</label>
+                <textarea class="story-input" id="improve_story" placeholder="Wie kannst du anderen noch besser helfen, dazuzugehören?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zum Thema Einbeziehen..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-45, S-46 - Andere einbeziehen, soziale Integration fördern
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let selectedFeelings = [];
+        let scenarioResponses = {};
+        let practicedWays = [];
+        let pledges = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Feeling items
+            document.querySelectorAll('.feeling-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const feeling = this.dataset.feeling;
+                    if (this.classList.contains('selected')) {
+                        if (!selectedFeelings.includes(feeling)) {
+                            selectedFeelings.push(feeling);
+                        }
+                    } else {
+                        selectedFeelings = selectedFeelings.filter(f => f !== feeling);
+                    }
+                    saveData();
+                });
+            });
+
+            // Scenario responses
+            document.querySelectorAll('.response-options').forEach(container => {
+                container.querySelectorAll('.response-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const scenario = container.dataset.scenario;
+                        const response = this.dataset.response;
+                        const isKind = this.dataset.kind === 'true';
+
+                        // Remove previous selection
+                        container.querySelectorAll('.response-btn').forEach(b => {
+                            b.classList.remove('selected', 'kind', 'unkind');
+                        });
+
+                        // Add new selection
+                        this.classList.add('selected', isKind ? 'kind' : 'unkind');
+                        scenarioResponses[scenario] = { response, isKind };
+                        saveData();
+                    });
+                });
+            });
+
+            // Ways to include
+            document.querySelectorAll('.way-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('practiced');
+                    const way = this.dataset.way;
+                    if (this.classList.contains('practiced')) {
+                        if (!practicedWays.includes(way)) {
+                            practicedWays.push(way);
+                        }
+                    } else {
+                        practicedWays = practicedWays.filter(w => w !== way);
+                    }
+                    saveData();
+                });
+            });
+
+            // Pledge items
+            document.querySelectorAll('.pledge-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    const pledge = this.dataset.pledge;
+                    this.querySelector('.pledge-checkbox').textContent =
+                        this.classList.contains('checked') ? '✓' : '';
+
+                    if (this.classList.contains('checked')) {
+                        if (!pledges.includes(pledge)) {
+                            pledges.push(pledge);
+                        }
+                    } else {
+                        pledges = pledges.filter(p => p !== pledge);
+                    }
+                    saveData();
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                selectedFeelings,
+                scenarioResponses,
+                practicedWays,
+                pledges,
+                stories: {
+                    included: document.getElementById('included_story').value,
+                    excluded: document.getElementById('excluded_story').value,
+                    improve: document.getElementById('improve_story').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_inklusion', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_inklusion');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.selectedFeelings) {
+                    selectedFeelings = data.selectedFeelings;
+                    selectedFeelings.forEach(feeling => {
+                        const el = document.querySelector(`.feeling-item[data-feeling="${feeling}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.scenarioResponses) {
+                    scenarioResponses = data.scenarioResponses;
+                    Object.entries(scenarioResponses).forEach(([scenario, {response, isKind}]) => {
+                        const btn = document.querySelector(`.response-options[data-scenario="${scenario}"] .response-btn[data-response="${response}"]`);
+                        if (btn) {
+                            btn.classList.add('selected', isKind ? 'kind' : 'unkind');
+                        }
+                    });
+                }
+
+                if (data.practicedWays) {
+                    practicedWays = data.practicedWays;
+                    practicedWays.forEach(way => {
+                        const el = document.querySelector(`.way-card[data-way="${way}"]`);
+                        if (el) el.classList.add('practiced');
+                    });
+                }
+
+                if (data.pledges) {
+                    pledges = data.pledges;
+                    pledges.forEach(pledge => {
+                        const el = document.querySelector(`.pledge-item[data-pledge="${pledge}"]`);
+                        if (el) {
+                            el.classList.add('checked');
+                            el.querySelector('.pledge-checkbox').textContent = '✓';
+                        }
+                    });
+                }
+
+                if (data.stories) {
+                    document.getElementById('included_story').value = data.stories.included || '';
+                    document.getElementById('excluded_story').value = data.stories.excluded || '';
+                    document.getElementById('improve_story').value = data.stories.improve || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

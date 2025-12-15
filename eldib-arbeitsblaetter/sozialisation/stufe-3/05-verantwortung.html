@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verantwortung übernehmen - Sozialisation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #fb8c00; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .responsibility-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .resp-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .resp-card:hover { border-color: #fb8c00; transform: scale(1.02); }
+        .resp-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .resp-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .resp-card .title { font-weight: bold; margin-bottom: 5px; }
+        .resp-card .desc { font-size: 0.85em; color: #666; }
+        .tasks-section { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tasks-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .tasks-list { display: flex; flex-direction: column; gap: 10px; }
+        .task-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .task-item:hover { background: #e3f2fd; }
+        .task-item.checked { background: #e8f5e9; }
+        .task-icon { font-size: 1.3em; }
+        .task-text { flex: 1; }
+        .task-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .task-item.checked .task-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .behavior-tracker { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .behavior-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .behavior-item { margin-bottom: 15px; padding: 15px; background: white; border-radius: 12px; }
+        .behavior-item:last-child { margin-bottom: 0; }
+        .behavior-question { font-weight: bold; margin-bottom: 10px; }
+        .behavior-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .behavior-btn { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .behavior-btn:hover { border-color: #fbc02d; }
+        .behavior-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .independence-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.needs { background: #ffcdd2; color: #c62828; }
+        .scale-btn.developing { background: #fff9c4; color: #f57f17; }
+        .scale-btn.good { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #fb8c00; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .responsibility-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe III</div>
+            <h1>🎯 Verantwortung übernehmen</h1>
+            <p>Pflichten erfüllen und für sich einstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-44/S-45)</h3>
+                <p>Das Kind übernimmt altersgemäß Verantwortung. Es erledigt zugewiesene Aufgaben selbstständig, steht zu seinen Handlungen und versteht Konsequenzen seines Verhaltens.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Verantwortungsbewusstsein</h3>
+                <p>Diese Fähigkeiten zeigt das Kind:</p>
+                <div class="responsibility-grid">
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">✅</div>
+                        <div class="title">Aufgaben erledigen</div>
+                        <div class="desc">Erledigt zugewiesene Aufgaben</div>
+                    </div>
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">🗣️</div>
+                        <div class="title">Zu Fehlern stehen</div>
+                        <div class="desc">Gibt Fehler zu</div>
+                    </div>
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">🔄</div>
+                        <div class="title">Fehler korrigieren</div>
+                        <div class="desc">Versucht Fehler zu beheben</div>
+                    </div>
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">📋</div>
+                        <div class="title">Selbstständig handeln</div>
+                        <div class="desc">Braucht wenig Erinnerung</div>
+                    </div>
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Versprechen halten</div>
+                        <div class="desc">Hält sich an Abmachungen</div>
+                    </div>
+                    <div class="resp-card" onclick="toggleResp(this)">
+                        <div class="icon">🌱</div>
+                        <div class="title">Für andere sorgen</div>
+                        <div class="desc">Kümmert sich um Tiere/Pflanzen/Jüngere</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📋</span> Übernommene Aufgaben</h3>
+                <div class="tasks-section">
+                    <div class="tasks-title">Diese Aufgaben erledigt das Kind regelmäßig:</div>
+                    <div class="tasks-list">
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">🛏️</span>
+                            <span class="task-text">Bett machen / Zimmer aufräumen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">🎒</span>
+                            <span class="task-text">Schultasche packen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">🍽️</span>
+                            <span class="task-text">Tisch decken/abräumen helfen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">🐕</span>
+                            <span class="task-text">Haustier versorgen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">📚</span>
+                            <span class="task-text">Hausaufgaben selbstständig machen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <span class="task-icon">🧹</span>
+                            <span class="task-text">Kleine Hausarbeiten erledigen</span>
+                            <span class="task-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎬</span> Verhalten bei Verantwortung</h3>
+                <div class="behavior-tracker">
+                    <div class="behavior-title">Wie verhält sich das Kind?</div>
+
+                    <div class="behavior-item">
+                        <div class="behavior-question">Wenn es einen Fehler gemacht hat:</div>
+                        <div class="behavior-options" data-behavior="fehler">
+                            <div class="behavior-btn" onclick="selectBehavior('fehler', this)">Gibt es offen zu</div>
+                            <div class="behavior-btn" onclick="selectBehavior('fehler', this)">Nach Nachfrage</div>
+                            <div class="behavior-btn" onclick="selectBehavior('fehler', this)">Leugnet/schiebt ab</div>
+                        </div>
+                    </div>
+
+                    <div class="behavior-item">
+                        <div class="behavior-question">Bei zugewiesenen Aufgaben:</div>
+                        <div class="behavior-options" data-behavior="aufgabe">
+                            <div class="behavior-btn" onclick="selectBehavior('aufgabe', this)">Erledigt selbstständig</div>
+                            <div class="behavior-btn" onclick="selectBehavior('aufgabe', this)">Braucht Erinnerung</div>
+                            <div class="behavior-btn" onclick="selectBehavior('aufgabe', this)">Vergisst oft</div>
+                        </div>
+                    </div>
+
+                    <div class="behavior-item">
+                        <div class="behavior-question">Bei Konsequenzen seines Handelns:</div>
+                        <div class="behavior-options" data-behavior="konsequenz">
+                            <div class="behavior-btn" onclick="selectBehavior('konsequenz', this)">Versteht Zusammenhang</div>
+                            <div class="behavior-btn" onclick="selectBehavior('konsequenz', this)">Teilweise</div>
+                            <div class="behavior-btn" onclick="selectBehavior('konsequenz', this)">Sieht keinen Zusammenhang</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Selbstständigkeit bei Verantwortung</h3>
+                <div class="independence-scale">
+                    <div class="scale-title">Wie selbstständig übernimmt das Kind Verantwortung?</div>
+                    <div class="scale-buttons">
+                        <button class="scale-btn needs" onclick="setLevel('needs')">🔴 Braucht viel Anleitung</button>
+                        <button class="scale-btn developing" onclick="setLevel('developing')">🟡 Entwickelnd</button>
+                        <button class="scale-btn good" onclick="setLevel('good')">🟢 Sehr selbstständig</button>
+                    </div>
+                    <div class="scale-display" id="levelDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Verantwortungsbewusstsein:</div>
+                    <div class="tip-item"><span class="tip-icon">📋</span>Klare, altersgemäße Aufgaben übertragen</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Verantwortungsvolles Verhalten loben</div>
+                    <div class="tip-item"><span class="tip-icon">🤝</span>Natürliche Konsequenzen zulassen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Über Verantwortung und deren Bedeutung sprechen</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Als Vorbild Verantwortung zeigen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Welche Aufgaben erledigt das Kind gut? Wo braucht es Unterstützung? Wie geht es mit Fehlern um?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let behaviors = {};
+        let level = '';
+
+        function toggleResp(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleTask(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectBehavior(behavior, el) {
+            behaviors[behavior] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.behavior-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setLevel(lvl) {
+            level = lvl;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${lvl}`).classList.add('selected');
+            const labels = {
+                needs: '🔴 Braucht noch viel Anleitung und Erinnerung',
+                developing: '🟡 Übernimmt zunehmend selbstständig Verantwortung',
+                good: '🟢 Ist sehr selbstständig und verantwortungsbewusst'
+            };
+            document.getElementById('levelDisplay').textContent = labels[lvl];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                responsibilities: [...document.querySelectorAll('.resp-card.achieved')].map(el => el.querySelector('.title').textContent),
+                tasks: [...document.querySelectorAll('.task-item.checked')].map(el => el.querySelector('.task-text').textContent),
+                behaviors,
+                level,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_verantwortung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_verantwortung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.resp-card').forEach(el => {
+                    if (data.responsibilities && data.responsibilities.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                document.querySelectorAll('.task-item').forEach(el => {
+                    if (data.tasks && data.tasks.includes(el.querySelector('.task-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.behaviors) {
+                    behaviors = data.behaviors;
+                    Object.keys(behaviors).forEach(behavior => {
+                        const container = document.querySelector(`[data-behavior="${behavior}"]`);
+                        if (container) {
+                            container.querySelectorAll('.behavior-btn').forEach(btn => {
+                                if (btn.textContent === behaviors[behavior]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                if (data.level) setLevel(data.level);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

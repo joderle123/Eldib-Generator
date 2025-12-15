@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fairness - Sozialisation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #66bb6a; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .fairness-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .fairness-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .fairness-card:hover { border-color: #66bb6a; transform: scale(1.02); }
+        .fairness-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .fairness-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .fairness-card .title { font-weight: bold; margin-bottom: 5px; }
+        .fairness-card .desc { font-size: 0.85em; color: #666; }
+        .scenario-section { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scenario-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .scenario-item { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
+        .scenario-item:last-child { margin-bottom: 0; }
+        .scenario-desc { font-weight: bold; margin-bottom: 12px; padding-left: 10px; border-left: 3px solid #2196F3; }
+        .scenario-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .scenario-btn { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; font-size: 0.85em; transition: all 0.3s; background: white; }
+        .scenario-btn:hover { border-color: #2196F3; }
+        .scenario-btn.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .rules-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .rules-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .rules-list { display: flex; flex-direction: column; gap: 10px; }
+        .rule-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .rule-item:hover { background: #fffde7; }
+        .rule-item.checked { background: #e8f5e9; }
+        .rule-icon { font-size: 1.3em; }
+        .rule-text { flex: 1; }
+        .rule-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .rule-item.checked .rule-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .fairness-scale { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-visual { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .scale-icon { font-size: 2.5em; cursor: pointer; opacity: 0.3; transition: all 0.2s; }
+        .scale-icon.active { opacity: 1; transform: scale(1.1); }
+        .scale-display { text-align: center; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #66bb6a; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .fairness-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe III</div>
+            <h1>⚖️ Fairness</h1>
+            <p>Gerecht spielen und handeln</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-40/S-41)</h3>
+                <p>Das Kind versteht das Konzept von Fairness. Es kann fair spielen, Regeln einhalten, gerecht teilen und unfaires Verhalten erkennen und benennen.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Fairness-Fähigkeiten</h3>
+                <p>Diese Fairness-Verhaltensweisen zeigt das Kind:</p>
+                <div class="fairness-grid">
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">📏</div>
+                        <div class="title">Regeln einhalten</div>
+                        <div class="desc">Hält sich an Spielregeln</div>
+                    </div>
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">🔄</div>
+                        <div class="title">Abwechseln</div>
+                        <div class="desc">Wartet geduldig, bis es dran ist</div>
+                    </div>
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">➗</div>
+                        <div class="title">Gerecht teilen</div>
+                        <div class="desc">Teilt gleichmäßig auf</div>
+                    </div>
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">🏆</div>
+                        <div class="title">Verlieren können</div>
+                        <div class="desc">Akzeptiert Niederlage sportlich</div>
+                    </div>
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Ehrlich sein</div>
+                        <div class="desc">Mogelt nicht und sagt die Wahrheit</div>
+                    </div>
+                    <div class="fairness-card" onclick="toggleFairness(this)">
+                        <div class="icon">👁️</div>
+                        <div class="title">Unfairness erkennen</div>
+                        <div class="desc">Bemerkt, wenn etwas ungerecht ist</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎬</span> Verhalten in Fairness-Situationen</h3>
+                <div class="scenario-section">
+                    <div class="scenario-title">Wie reagiert das Kind?</div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 Bei einem Spiel, das es verliert:</div>
+                        <div class="scenario-options" data-scenario="verlieren">
+                            <div class="scenario-btn" onclick="selectScenario('verlieren', this)">Gratuliert dem Gewinner</div>
+                            <div class="scenario-btn" onclick="selectScenario('verlieren', this)">Ist enttäuscht, akzeptiert</div>
+                            <div class="scenario-btn" onclick="selectScenario('verlieren', this)">Wird wütend/weint</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 Wenn ein anderes Kind mogelt:</div>
+                        <div class="scenario-options" data-scenario="mogeln">
+                            <div class="scenario-btn" onclick="selectScenario('mogeln', this)">Spricht es ruhig an</div>
+                            <div class="scenario-btn" onclick="selectScenario('mogeln', this)">Beschwert sich bei Erwachsenen</div>
+                            <div class="scenario-btn" onclick="selectScenario('mogeln', this)">Ignoriert es oder mogelt auch</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-item">
+                        <div class="scenario-desc">📖 Beim Aufteilen von Süßigkeiten:</div>
+                        <div class="scenario-options" data-scenario="teilen">
+                            <div class="scenario-btn" onclick="selectScenario('teilen', this)">Teilt gerecht auf</div>
+                            <div class="scenario-btn" onclick="selectScenario('teilen', this)">Braucht Hilfe beim Teilen</div>
+                            <div class="scenario-btn" onclick="selectScenario('teilen', this)">Will mehr für sich</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📜</span> Verständnis von Regeln</h3>
+                <div class="rules-section">
+                    <div class="rules-title">Das Kind versteht diese Aspekte von Regeln:</div>
+                    <div class="rules-list">
+                        <div class="rule-item" onclick="toggleRule(this)">
+                            <span class="rule-icon">🎯</span>
+                            <span class="rule-text">Regeln gelten für alle gleich</span>
+                            <span class="rule-check">✓</span>
+                        </div>
+                        <div class="rule-item" onclick="toggleRule(this)">
+                            <span class="rule-icon">🔍</span>
+                            <span class="rule-text">Regeln haben einen Sinn</span>
+                            <span class="rule-check">✓</span>
+                        </div>
+                        <div class="rule-item" onclick="toggleRule(this)">
+                            <span class="rule-icon">⚖️</span>
+                            <span class="rule-text">Regelverstöße haben Konsequenzen</span>
+                            <span class="rule-check">✓</span>
+                        </div>
+                        <div class="rule-item" onclick="toggleRule(this)">
+                            <span class="rule-icon">🗣️</span>
+                            <span class="rule-text">Regeln können besprochen werden</span>
+                            <span class="rule-check">✓</span>
+                        </div>
+                        <div class="rule-item" onclick="toggleRule(this)">
+                            <span class="rule-icon">🤝</span>
+                            <span class="rule-text">Regeln ermöglichen faires Zusammenspiel</span>
+                            <span class="rule-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Fairness-Entwicklung</h3>
+                <div class="fairness-scale">
+                    <div class="scale-title">Wie ausgeprägt ist das Fairness-Verständnis?</div>
+                    <div class="scale-visual">
+                        <span class="scale-icon" onclick="setLevel(1)">⚖️</span>
+                        <span class="scale-icon" onclick="setLevel(2)">⚖️</span>
+                        <span class="scale-icon" onclick="setLevel(3)">⚖️</span>
+                        <span class="scale-icon" onclick="setLevel(4)">⚖️</span>
+                        <span class="scale-icon" onclick="setLevel(5)">⚖️</span>
+                    </div>
+                    <div class="scale-display" id="levelDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Fairness:</div>
+                    <div class="tip-item"><span class="tip-icon">🎲</span>Brettspiele mit klaren Regeln spielen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Über Fairness und Unfairness sprechen</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Als Vorbild fair handeln</div>
+                    <div class="tip-item"><span class="tip-icon">👏</span>Faires Verhalten loben</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Geschichten über Gerechtigkeit lesen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: Wann zeigt das Kind faires Verhalten? Wo gibt es Schwierigkeiten? Wie reagiert es auf Unfairness?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let scenarios = {};
+        let level = 0;
+
+        function toggleFairness(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleRule(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectScenario(scenario, el) {
+            scenarios[scenario] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setLevel(lvl) {
+            level = lvl;
+            document.querySelectorAll('.scale-icon').forEach((icon, i) => {
+                icon.classList.toggle('active', i < lvl);
+            });
+            const labels = ['', 'Beginnend', 'Entwickelnd', 'Gut', 'Sehr gut', 'Ausgezeichnet'];
+            document.getElementById('levelDisplay').textContent = `${lvl}/5 - ${labels[lvl]}`;
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                fairnessSkills: [...document.querySelectorAll('.fairness-card.achieved')].map(el => el.querySelector('.title').textContent),
+                scenarios,
+                rules: [...document.querySelectorAll('.rule-item.checked')].map(el => el.querySelector('.rule-text').textContent),
+                level,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_fairness', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_fairness');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.fairness-card').forEach(el => {
+                    if (data.fairnessSkills && data.fairnessSkills.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                if (data.scenarios) {
+                    scenarios = data.scenarios;
+                    Object.keys(scenarios).forEach(scenario => {
+                        const container = document.querySelector(`[data-scenario="${scenario}"]`);
+                        if (container) {
+                            container.querySelectorAll('.scenario-btn').forEach(btn => {
+                                if (btn.textContent === scenarios[scenario]) btn.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                document.querySelectorAll('.rule-item').forEach(el => {
+                    if (data.rules && data.rules.includes(el.querySelector('.rule-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.level) setLevel(data.level);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

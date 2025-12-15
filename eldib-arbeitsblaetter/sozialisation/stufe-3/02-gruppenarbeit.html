@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppenarbeit - Sozialisation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #42a5f5; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .team-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .team-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .team-card:hover { border-color: #42a5f5; transform: scale(1.02); }
+        .team-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .team-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .team-card .title { font-weight: bold; margin-bottom: 5px; }
+        .team-card .desc { font-size: 0.85em; color: #666; }
+        .role-section { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .role-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .role-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .role-card { width: 110px; text-align: center; padding: 15px; background: white; border-radius: 15px; cursor: pointer; border: 4px solid #e0e0e0; transition: all 0.3s; }
+        .role-card:hover { border-color: #fbc02d; }
+        .role-card.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .role-card .role-icon { font-size: 2em; margin-bottom: 8px; }
+        .role-card .role-name { font-weight: bold; font-size: 0.85em; }
+        .behavior-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .behavior-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; border: 3px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
+        .behavior-item:hover { border-color: #42a5f5; }
+        .behavior-item.checked { border-color: #4CAF50; background: #e8f5e9; }
+        .behavior-icon { font-size: 1.3em; }
+        .behavior-text { flex: 1; }
+        .behavior-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .behavior-item.checked .behavior-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .challenge-tracker { background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .challenge-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .challenge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .challenge-item { padding: 12px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .challenge-item:hover { background: #fff3e0; }
+        .challenge-item.identified { background: #ffebee; border: 2px solid #e57373; }
+        .challenge-icon { font-size: 1.2em; }
+        .challenge-text { font-size: 0.9em; }
+        .participation-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .scale-btn { padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .scale-btn.low { background: #ffcdd2; color: #c62828; }
+        .scale-btn.medium { background: #fff9c4; color: #f57f17; }
+        .scale-btn.high { background: #c8e6c9; color: #2e7d32; }
+        .scale-btn.selected { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .scale-display { text-align: center; margin-top: 15px; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #42a5f5; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .team-skills, .challenge-grid { grid-template-columns: 1fr; } .role-options { flex-direction: column; align-items: center; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe III</div>
+            <h1>👥 Gruppenarbeit</h1>
+            <p>Im Team arbeiten und Ziele erreichen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-38/S-39)</h3>
+                <p>Das Kind kann in einer Gruppe effektiv arbeiten. Es bringt eigene Ideen ein, nimmt Beiträge anderer auf und arbeitet mit anderen auf ein gemeinsames Ziel hin.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⭐</span> Teamfähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind bei Gruppenarbeit:</p>
+                <div class="team-skills">
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">💡</div>
+                        <div class="title">Ideen einbringen</div>
+                        <div class="desc">Teilt eigene Gedanken mit</div>
+                    </div>
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">👂</div>
+                        <div class="title">Zuhören</div>
+                        <div class="desc">Hört anderen zu</div>
+                    </div>
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">🤝</div>
+                        <div class="title">Kompromisse finden</div>
+                        <div class="desc">Kann sich einigen</div>
+                    </div>
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">📋</div>
+                        <div class="title">Aufgaben übernehmen</div>
+                        <div class="desc">Erledigt seinen Teil</div>
+                    </div>
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">🆘</div>
+                        <div class="title">Hilfe anbieten</div>
+                        <div class="desc">Unterstützt andere</div>
+                    </div>
+                    <div class="team-card" onclick="toggleSkill(this)">
+                        <div class="icon">🎯</div>
+                        <div class="title">Ziel im Blick</div>
+                        <div class="desc">Arbeitet auf das Ergebnis hin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🎭</span> Bevorzugte Rolle im Team</h3>
+                <div class="role-section">
+                    <div class="role-title">Welche Rolle übernimmt das Kind am häufigsten?</div>
+                    <div class="role-options">
+                        <div class="role-card" onclick="selectRole(this, 'leader')">
+                            <div class="role-icon">👑</div>
+                            <div class="role-name">Anführer</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'kreativ')">
+                            <div class="role-icon">💡</div>
+                            <div class="role-name">Ideengeber</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'umsetzer')">
+                            <div class="role-icon">🔧</div>
+                            <div class="role-name">Umsetzer</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'vermittler')">
+                            <div class="role-icon">🤝</div>
+                            <div class="role-name">Vermittler</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole(this, 'flexibel')">
+                            <div class="role-icon">🔄</div>
+                            <div class="role-name">Flexibel</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">✅</span> Positive Verhaltensweisen</h3>
+                <div class="behavior-list">
+                    <div class="behavior-item" onclick="toggleBehavior(this)">
+                        <span class="behavior-icon">🗣️</span>
+                        <span class="behavior-text">Lässt andere ausreden</span>
+                        <span class="behavior-check">✓</span>
+                    </div>
+                    <div class="behavior-item" onclick="toggleBehavior(this)">
+                        <span class="behavior-icon">👍</span>
+                        <span class="behavior-text">Akzeptiert Mehrheitsentscheidungen</span>
+                        <span class="behavior-check">✓</span>
+                    </div>
+                    <div class="behavior-item" onclick="toggleBehavior(this)">
+                        <span class="behavior-icon">💪</span>
+                        <span class="behavior-text">Bleibt bei der Sache</span>
+                        <span class="behavior-check">✓</span>
+                    </div>
+                    <div class="behavior-item" onclick="toggleBehavior(this)">
+                        <span class="behavior-icon">🎉</span>
+                        <span class="behavior-text">Teilt Erfolge mit der Gruppe</span>
+                        <span class="behavior-check">✓</span>
+                    </div>
+                    <div class="behavior-item" onclick="toggleBehavior(this)">
+                        <span class="behavior-icon">😊</span>
+                        <span class="behavior-text">Ermutigt andere</span>
+                        <span class="behavior-check">✓</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">⚠️</span> Herausforderungen</h3>
+                <div class="challenge-tracker">
+                    <div class="challenge-title">Diese Schwierigkeiten treten manchmal auf:</div>
+                    <div class="challenge-grid">
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">👑</span>
+                            <span class="challenge-text">Will immer bestimmen</span>
+                        </div>
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">🙊</span>
+                            <span class="challenge-text">Bringt sich nicht ein</span>
+                        </div>
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">😤</span>
+                            <span class="challenge-text">Wird schnell frustriert</span>
+                        </div>
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">🏃</span>
+                            <span class="challenge-text">Macht eigenes Ding</span>
+                        </div>
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">🤷</span>
+                            <span class="challenge-text">Übernimmt keine Verantwortung</span>
+                        </div>
+                        <div class="challenge-item" onclick="toggleChallenge(this)">
+                            <span class="challenge-icon">⏰</span>
+                            <span class="challenge-text">Kann nicht warten</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Teamfähigkeit insgesamt</h3>
+                <div class="participation-scale">
+                    <div class="scale-title">Wie gut arbeitet das Kind im Team?</div>
+                    <div class="scale-buttons">
+                        <button class="scale-btn low" onclick="setParticipation('low')">🔴 Braucht viel Unterstützung</button>
+                        <button class="scale-btn medium" onclick="setParticipation('medium')">🟡 Arbeitet mit</button>
+                        <button class="scale-btn high" onclick="setParticipation('high')">🟢 Sehr guter Teamplayer</button>
+                    </div>
+                    <div class="scale-display" id="participationDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Teamarbeit:</div>
+                    <div class="tip-item"><span class="tip-icon">👥</span>Regelmäßig Gruppenaktivitäten anbieten</div>
+                    <div class="tip-item"><span class="tip-icon">🎯</span>Klare Rollen und Aufgaben verteilen</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Kommunikationsregeln einführen</div>
+                    <div class="tip-item"><span class="tip-icon">🏆</span>Gruppenerfolge feiern</div>
+                    <div class="tip-item"><span class="tip-icon">🔄</span>Verschiedene Teamkonstellationen ermöglichen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: In welchen Gruppen arbeitet das Kind gut? Welche Rollen liegen ihm? Wo gibt es Schwierigkeiten?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let role = '';
+        let participation = '';
+
+        function toggleSkill(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleBehavior(el) { el.classList.toggle('checked'); saveData(); }
+        function toggleChallenge(el) { el.classList.toggle('identified'); saveData(); }
+
+        function selectRole(el, r) {
+            role = r;
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setParticipation(level) {
+            participation = level;
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.scale-btn.${level}`).classList.add('selected');
+            const labels = {
+                low: '🔴 Braucht noch viel Unterstützung bei Gruppenarbeit',
+                medium: '🟡 Arbeitet meist gut im Team mit',
+                high: '🟢 Ist ein sehr guter Teamplayer'
+            };
+            document.getElementById('participationDisplay').textContent = labels[level];
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                skills: [...document.querySelectorAll('.team-card.achieved')].map(el => el.querySelector('.title').textContent),
+                role,
+                behaviors: [...document.querySelectorAll('.behavior-item.checked')].map(el => el.querySelector('.behavior-text').textContent),
+                challenges: [...document.querySelectorAll('.challenge-item.identified')].map(el => el.querySelector('.challenge-text').textContent),
+                participation,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_gruppenarbeit', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_gruppenarbeit');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.team-card').forEach(el => {
+                    if (data.skills && data.skills.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                if (data.role) {
+                    role = data.role;
+                    document.querySelectorAll('.role-card').forEach(c => {
+                        if (c.onclick.toString().includes(`'${data.role}'`)) c.classList.add('selected');
+                    });
+                }
+                document.querySelectorAll('.behavior-item').forEach(el => {
+                    if (data.behaviors && data.behaviors.includes(el.querySelector('.behavior-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                document.querySelectorAll('.challenge-item').forEach(el => {
+                    if (data.challenges && data.challenges.includes(el.querySelector('.challenge-text').textContent)) {
+                        el.classList.add('identified');
+                    }
+                });
+                if (data.participation) setParticipation(data.participation);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompromisse finden - Sozialisation Stufe III - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Balance Scale */
+        .balance-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .balance-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .balance-scale {
+            position: relative;
+            width: 300px;
+            height: 150px;
+        }
+
+        .balance-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            background: #795548;
+            border-radius: 5px;
+        }
+
+        .balance-pole {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 80px;
+            background: #795548;
+        }
+
+        .balance-beam {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) rotate(var(--beam-angle, 0deg));
+            transform-origin: center;
+            width: 280px;
+            height: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: transform 0.5s ease;
+        }
+
+        .balance-pan {
+            position: absolute;
+            top: -20px;
+            width: 80px;
+            height: 25px;
+            background: #f0e68c;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .pan-left {
+            left: 0;
+        }
+
+        .pan-right {
+            right: 0;
+        }
+
+        .balance-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Scenario Cards */
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .scenario-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .person-wants {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .person-box {
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .person-box.person-a {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        }
+
+        .person-box.person-b {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+        }
+
+        .person-name {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .person-wish {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .compromise-input {
+            margin-top: 15px;
+        }
+
+        .compromise-input label {
+            display: block;
+            font-weight: 500;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .compromise-input textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s;
+        }
+
+        .compromise-input textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .rating-container {
+            margin-top: 15px;
+        }
+
+        .rating-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .fairness-scale {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .fairness-btn {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .fairness-btn:hover {
+            border-color: #667eea;
+        }
+
+        .fairness-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Compromise Steps */
+        .steps-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+        }
+
+        .step.learned {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step.learned .step-number {
+            background: #4caf50;
+        }
+
+        .step-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Practice Game */
+        .game-container {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .game-situation {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .game-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .game-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .game-option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .game-option.correct {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-color: #4caf50;
+        }
+
+        .game-option.wrong {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border-color: #f44336;
+        }
+
+        .game-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .game-feedback.show {
+            display: block;
+        }
+
+        .game-score {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-top: 15px;
+        }
+
+        .next-btn {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        /* My Compromises */
+        .my-compromise {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .my-compromise textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .my-compromise textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .my-compromise label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .person-wants {
+                grid-template-columns: 1fr;
+            }
+
+            h1 { font-size: 1.5rem; }
+
+            .balance-scale {
+                width: 250px;
+            }
+
+            .balance-beam {
+                width: 230px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe III (5-9 Jahre)</div>
+            <h1>🤝 Kompromisse finden</h1>
+            <p class="subtitle">Gemeinsam eine faire Lösung finden</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">⚖️</span> Was ist ein Kompromiss?</h2>
+            <div class="intro-text">
+                <p>Ein <strong>Kompromiss</strong> ist eine Lösung, bei der beide Seiten ein bisschen nachgeben.
+                Keiner bekommt alles, was er will - aber beide bekommen etwas! So entsteht eine
+                <strong>faire Lösung</strong>, mit der alle zufrieden sein können.</p>
+            </div>
+
+            <div class="balance-container">
+                <div class="balance-title">Die Waage muss ausgeglichen sein!</div>
+                <div class="balance-scale">
+                    <div class="balance-beam" id="beam">
+                        <div class="balance-pan pan-left">Person A</div>
+                        <div class="balance-pan pan-right">Person B</div>
+                    </div>
+                    <div class="balance-pole"></div>
+                    <div class="balance-base"></div>
+                </div>
+                <div class="balance-message" id="balanceMessage"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📋</span> Schritte zum Kompromiss</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf jeden Schritt, den du schon kannst:</p>
+            <div class="steps-container" id="stepsContainer">
+                <div class="step" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Zuhören</h4>
+                        <p>Was will die andere Person? Lass sie ausreden.</p>
+                    </div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Erklären</h4>
+                        <p>Sag ruhig, was du möchtest und warum.</p>
+                    </div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Nachdenken</h4>
+                        <p>Was ist uns beiden wichtig? Was können wir teilen?</p>
+                    </div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Vorschläge machen</h4>
+                        <p>Ideen sammeln - "Wie wäre es, wenn...?"</p>
+                    </div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Einigen</h4>
+                        <p>Eine Lösung finden, die für beide okay ist.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Übungs-Situationen</h2>
+
+            <div class="scenario" id="scenario1">
+                <div class="scenario-title">Situation 1: Das Fernsehprogramm</div>
+                <div class="scenario-description">
+                    Zwei Geschwister möchten fernsehen, aber es gibt nur einen Fernseher.
+                </div>
+                <div class="person-wants">
+                    <div class="person-box person-a">
+                        <div class="person-name">🧒 Max</div>
+                        <div class="person-wish">Will einen Tierfilm schauen</div>
+                    </div>
+                    <div class="person-box person-b">
+                        <div class="person-name">👧 Mia</div>
+                        <div class="person-wish">Will eine Zeichentrickserie schauen</div>
+                    </div>
+                </div>
+                <div class="compromise-input">
+                    <label>💡 Dein Kompromiss-Vorschlag:</label>
+                    <textarea id="compromise1" placeholder="Was könnten Max und Mia machen?"></textarea>
+                </div>
+                <div class="rating-container">
+                    <span class="rating-label">Wie fair ist dein Vorschlag für beide?</span>
+                    <div class="fairness-scale" data-scenario="1">
+                        <button class="fairness-btn" data-value="1">Nur für Max gut</button>
+                        <button class="fairness-btn" data-value="2">Mehr für Max</button>
+                        <button class="fairness-btn" data-value="3">Gleich fair</button>
+                        <button class="fairness-btn" data-value="4">Mehr für Mia</button>
+                        <button class="fairness-btn" data-value="5">Nur für Mia gut</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario" id="scenario2">
+                <div class="scenario-title">Situation 2: Das letzte Stück Kuchen</div>
+                <div class="scenario-description">
+                    Nach dem Geburtstag ist noch ein Stück Kuchen übrig. Zwei Freunde möchten es beide.
+                </div>
+                <div class="person-wants">
+                    <div class="person-box person-a">
+                        <div class="person-name">🧑 Leon</div>
+                        <div class="person-wish">Hat vorhin weniger Kuchen bekommen</div>
+                    </div>
+                    <div class="person-box person-b">
+                        <div class="person-name">👦 Tim</div>
+                        <div class="person-wish">Liebt Schokoladenkuchen über alles</div>
+                    </div>
+                </div>
+                <div class="compromise-input">
+                    <label>💡 Dein Kompromiss-Vorschlag:</label>
+                    <textarea id="compromise2" placeholder="Was könnten Leon und Tim machen?"></textarea>
+                </div>
+                <div class="rating-container">
+                    <span class="rating-label">Wie fair ist dein Vorschlag für beide?</span>
+                    <div class="fairness-scale" data-scenario="2">
+                        <button class="fairness-btn" data-value="1">Nur für Leon gut</button>
+                        <button class="fairness-btn" data-value="2">Mehr für Leon</button>
+                        <button class="fairness-btn" data-value="3">Gleich fair</button>
+                        <button class="fairness-btn" data-value="4">Mehr für Tim</button>
+                        <button class="fairness-btn" data-value="5">Nur für Tim gut</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario" id="scenario3">
+                <div class="scenario-title">Situation 3: Spielplatz oder Eisdiele?</div>
+                <div class="scenario-description">
+                    Zwei Freundinnen treffen sich am Nachmittag. Sie haben nur eine Stunde Zeit.
+                </div>
+                <div class="person-wants">
+                    <div class="person-box person-a">
+                        <div class="person-name">👧 Emma</div>
+                        <div class="person-wish">Will auf den Spielplatz</div>
+                    </div>
+                    <div class="person-box person-b">
+                        <div class="person-name">👧 Lina</div>
+                        <div class="person-wish">Will in die Eisdiele</div>
+                    </div>
+                </div>
+                <div class="compromise-input">
+                    <label>💡 Dein Kompromiss-Vorschlag:</label>
+                    <textarea id="compromise3" placeholder="Was könnten Emma und Lina machen?"></textarea>
+                </div>
+                <div class="rating-container">
+                    <span class="rating-label">Wie fair ist dein Vorschlag für beide?</span>
+                    <div class="fairness-scale" data-scenario="3">
+                        <button class="fairness-btn" data-value="1">Nur für Emma gut</button>
+                        <button class="fairness-btn" data-value="2">Mehr für Emma</button>
+                        <button class="fairness-btn" data-value="3">Gleich fair</button>
+                        <button class="fairness-btn" data-value="4">Mehr für Lina</button>
+                        <button class="fairness-btn" data-value="5">Nur für Lina gut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎮</span> Kompromiss-Quiz</h2>
+            <div class="game-container" id="gameContainer">
+                <div class="game-situation" id="gameSituation"></div>
+                <div class="game-options" id="gameOptions"></div>
+                <div class="game-feedback" id="gameFeedback"></div>
+                <div class="game-score" id="gameScore">Punkte: 0</div>
+                <button class="next-btn" id="nextBtn">Nächste Frage</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Kompromisse</h2>
+            <p style="margin-bottom: 15px; color: #666;">Denke an echte Situationen aus deinem Leben:</p>
+
+            <div class="my-compromise">
+                <label>Ein Kompromiss, den ich mal mit einem Freund/einer Freundin gemacht habe:</label>
+                <textarea id="myCompromise1" placeholder="Schreibe hier..."></textarea>
+            </div>
+
+            <div class="my-compromise">
+                <label>Ein Kompromiss, den ich zuhause mit meiner Familie gemacht habe:</label>
+                <textarea id="myCompromise2" placeholder="Schreibe hier..."></textarea>
+            </div>
+
+            <div class="my-compromise">
+                <label>Ein Kompromiss, der mir schwer gefallen ist:</label>
+                <textarea id="myCompromise3" placeholder="Was war schwer daran? Schreibe hier..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Hier kannst du weitere Gedanken notieren..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-41, S-42 - Kompromisse finden, faire Lösungen aushandeln
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        // Quiz data
+        const quizQuestions = [
+            {
+                situation: "Zwei Kinder wollen das gleiche Spielzeug. Was ist ein guter Kompromiss?",
+                options: [
+                    { text: "Einer nimmt es und der andere guckt zu", correct: false },
+                    { text: "Sie spielen abwechselnd damit", correct: true },
+                    { text: "Keiner darf damit spielen", correct: false },
+                    { text: "Sie streiten, bis einer aufgibt", correct: false }
+                ],
+                feedback: "Super! Abwechseln ist fair - so kommt jeder dran!"
+            },
+            {
+                situation: "Dein Freund will Fußball spielen, du willst Verstecken spielen. Was tust du?",
+                options: [
+                    { text: "Ich spiele nur, was ich will", correct: false },
+                    { text: "Wir spielen erst das eine, dann das andere", correct: true },
+                    { text: "Ich gehe nach Hause", correct: false },
+                    { text: "Ich sage, sein Spiel ist doof", correct: false }
+                ],
+                feedback: "Genau! Beide Spiele nacheinander zu spielen ist ein toller Kompromiss!"
+            },
+            {
+                situation: "Du und deine Schwester wollt den Computer benutzen. Was ist fair?",
+                options: [
+                    { text: "Wer zuerst da war, darf ihn den ganzen Tag nutzen", correct: false },
+                    { text: "Wir teilen die Zeit gerecht auf", correct: true },
+                    { text: "Der Ältere entscheidet", correct: false },
+                    { text: "Wir sagen es Mama und sie entscheidet", correct: false }
+                ],
+                feedback: "Richtig! Die Zeit fair aufzuteilen ist ein guter Kompromiss!"
+            },
+            {
+                situation: "Beim Gruppenarbeit können sich alle nicht einigen, welches Thema sie nehmen. Was hilft?",
+                options: [
+                    { text: "Der Lauteste entscheidet", correct: false },
+                    { text: "Jeder sagt, was ihm wichtig ist, und wir finden eine Mischung", correct: true },
+                    { text: "Wir machen gar nichts", correct: false },
+                    { text: "Wir fragen den Lehrer, er soll entscheiden", correct: false }
+                ],
+                feedback: "Prima! Ideen sammeln und eine Mischung finden ist klug!"
+            },
+            {
+                situation: "Was gehört NICHT zu einem guten Kompromiss?",
+                options: [
+                    { text: "Zuhören, was der andere möchte", correct: false },
+                    { text: "Immer alles bekommen, was ich will", correct: true },
+                    { text: "Nachdenken über faire Lösungen", correct: false },
+                    { text: "Ein bisschen nachgeben", correct: false }
+                ],
+                feedback: "Stimmt! Bei einem Kompromiss bekommt niemand ALLES - man gibt auch etwas nach."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let stepsLearned = [];
+        let fairnessRatings = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initializeGame();
+            setupEventListeners();
+            animateBalance();
+        });
+
+        function setupEventListeners() {
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+
+            // Steps click
+            document.querySelectorAll('.step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNum = parseInt(this.dataset.step);
+                    this.classList.toggle('learned');
+
+                    if (this.classList.contains('learned')) {
+                        if (!stepsLearned.includes(stepNum)) {
+                            stepsLearned.push(stepNum);
+                        }
+                    } else {
+                        stepsLearned = stepsLearned.filter(s => s !== stepNum);
+                    }
+
+                    saveData();
+                });
+            });
+
+            // Fairness rating buttons
+            document.querySelectorAll('.fairness-scale').forEach(scale => {
+                scale.querySelectorAll('.fairness-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        scale.querySelectorAll('.fairness-btn').forEach(b => b.classList.remove('selected'));
+                        this.classList.add('selected');
+                        fairnessRatings[scale.dataset.scenario] = parseInt(this.dataset.value);
+                        saveData();
+                        updateBalance();
+                    });
+                });
+            });
+
+            // Next question button
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+        }
+
+        function animateBalance() {
+            updateBalance();
+            setInterval(() => {
+                const beam = document.getElementById('beam');
+                const currentAngle = parseFloat(getComputedStyle(beam).getPropertyValue('--beam-angle')) || 0;
+                const wobble = (Math.random() - 0.5) * 2;
+                beam.style.setProperty('--beam-angle', `${currentAngle + wobble}deg`);
+            }, 2000);
+        }
+
+        function updateBalance() {
+            const ratings = Object.values(fairnessRatings);
+            const beam = document.getElementById('beam');
+            const message = document.getElementById('balanceMessage');
+
+            if (ratings.length === 0) {
+                beam.style.setProperty('--beam-angle', '0deg');
+                message.textContent = 'Bewerte deine Kompromisse!';
+                message.style.background = '#e3f2fd';
+                message.style.color = '#1976d2';
+                return;
+            }
+
+            const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+            const angle = (avg - 3) * 10;
+
+            beam.style.setProperty('--beam-angle', `${angle}deg`);
+
+            if (Math.abs(avg - 3) < 0.5) {
+                message.textContent = '⚖️ Toll! Deine Kompromisse sind fair und ausgeglichen!';
+                message.style.background = '#e8f5e9';
+                message.style.color = '#2e7d32';
+            } else if (avg < 3) {
+                message.textContent = '↙️ Deine Lösungen bevorzugen eher die erste Person';
+                message.style.background = '#e3f2fd';
+                message.style.color = '#1976d2';
+            } else {
+                message.textContent = '↘️ Deine Lösungen bevorzugen eher die zweite Person';
+                message.style.background = '#fce4ec';
+                message.style.color = '#c2185b';
+            }
+        }
+
+        function initializeGame() {
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('gameSituation').textContent = q.situation;
+
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'game-option';
+                btn.textContent = option.text;
+                btn.addEventListener('click', () => selectAnswer(index, option.correct));
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('gameFeedback').classList.remove('show');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+
+        function selectAnswer(index, isCorrect) {
+            const options = document.querySelectorAll('.game-option');
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === index) {
+                    opt.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+                if (quizQuestions[currentQuestion].options[i].correct) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('gameScore').textContent = `Punkte: ${score}`;
+            }
+
+            const feedback = document.getElementById('gameFeedback');
+            feedback.textContent = isCorrect ?
+                '✅ ' + quizQuestions[currentQuestion].feedback :
+                '❌ Nicht ganz. ' + quizQuestions[currentQuestion].feedback;
+            feedback.style.background = isCorrect ? '#e8f5e9' : '#ffebee';
+            feedback.style.color = isCorrect ? '#2e7d32' : '#c62828';
+            feedback.classList.add('show');
+
+            document.getElementById('nextBtn').classList.add('show');
+
+            saveData();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showFinalScore() {
+            const container = document.getElementById('gameContainer');
+            container.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 20px;">🏆</div>
+                <div style="font-size: 1.5rem; margin-bottom: 15px;">Quiz beendet!</div>
+                <div style="font-size: 2rem; color: #667eea; margin-bottom: 20px;">
+                    ${score} von ${quizQuestions.length} richtig!
+                </div>
+                <div style="font-size: 1rem; color: #666;">
+                    ${score === quizQuestions.length ?
+                        '🌟 Perfekt! Du bist ein Kompromiss-Profi!' :
+                        score >= 3 ?
+                            '👍 Gut gemacht! Du verstehst, wie Kompromisse funktionieren.' :
+                            '💪 Übung macht den Meister! Lies nochmal die Schritte oben.'}
+                </div>
+                <button class="print-btn" onclick="resetQuiz()" style="margin-top: 20px;">🔄 Quiz wiederholen</button>
+            `;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('gameScore').textContent = 'Punkte: 0';
+            initializeGame();
+            document.getElementById('gameContainer').innerHTML = `
+                <div class="game-situation" id="gameSituation"></div>
+                <div class="game-options" id="gameOptions"></div>
+                <div class="game-feedback" id="gameFeedback"></div>
+                <div class="game-score" id="gameScore">Punkte: 0</div>
+                <button class="next-btn" id="nextBtn">Nächste Frage</button>
+            `;
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            showQuestion();
+        }
+
+        function saveData() {
+            const data = {
+                compromises: {
+                    c1: document.getElementById('compromise1').value,
+                    c2: document.getElementById('compromise2').value,
+                    c3: document.getElementById('compromise3').value
+                },
+                myCompromises: {
+                    m1: document.getElementById('myCompromise1').value,
+                    m2: document.getElementById('myCompromise2').value,
+                    m3: document.getElementById('myCompromise3').value
+                },
+                stepsLearned,
+                fairnessRatings,
+                quizScore: score,
+                quizProgress: currentQuestion,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_kompromisse', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_kompromisse');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.compromises) {
+                    document.getElementById('compromise1').value = data.compromises.c1 || '';
+                    document.getElementById('compromise2').value = data.compromises.c2 || '';
+                    document.getElementById('compromise3').value = data.compromises.c3 || '';
+                }
+
+                if (data.myCompromises) {
+                    document.getElementById('myCompromise1').value = data.myCompromises.m1 || '';
+                    document.getElementById('myCompromise2').value = data.myCompromises.m2 || '';
+                    document.getElementById('myCompromise3').value = data.myCompromises.m3 || '';
+                }
+
+                if (data.stepsLearned) {
+                    stepsLearned = data.stepsLearned;
+                    stepsLearned.forEach(step => {
+                        const stepEl = document.querySelector(`.step[data-step="${step}"]`);
+                        if (stepEl) stepEl.classList.add('learned');
+                    });
+                }
+
+                if (data.fairnessRatings) {
+                    fairnessRatings = data.fairnessRatings;
+                    Object.entries(fairnessRatings).forEach(([scenario, value]) => {
+                        const btn = document.querySelector(`.fairness-scale[data-scenario="${scenario}"] .fairness-btn[data-value="${value}"]`);
+                        if (btn) btn.classList.add('selected');
+                    });
+                }
+
+                if (data.quizScore) score = data.quizScore;
+                if (data.quizProgress) currentQuestion = data.quizProgress;
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

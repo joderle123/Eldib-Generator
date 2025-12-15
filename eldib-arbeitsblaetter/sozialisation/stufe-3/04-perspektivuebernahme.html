@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perspektivübernahme - Sozialisation Stufe III</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
+        .content { padding: 30px; }
+        .info-box { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: 15px; padding: 20px; margin-bottom: 25px; }
+        .activity { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border-left: 5px solid #ab47bc; }
+        .activity h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emoji { font-size: 1.5em; }
+        .perspective-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .perspective-card { background: white; border: 4px solid #e0e0e0; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .perspective-card:hover { border-color: #ab47bc; transform: scale(1.02); }
+        .perspective-card.achieved { border-color: #4CAF50; background: #e8f5e9; }
+        .perspective-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .perspective-card .title { font-weight: bold; margin-bottom: 5px; }
+        .perspective-card .desc { font-size: 0.85em; color: #666; }
+        .scenario-builder { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scenario-title { font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .scenario-story { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .story-text { font-style: italic; margin-bottom: 15px; padding: 15px; background: #f5f5f5; border-radius: 10px; line-height: 1.6; }
+        .story-question { font-weight: bold; margin-bottom: 10px; }
+        .story-options { display: flex; flex-direction: column; gap: 8px; }
+        .story-option { padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; background: white; }
+        .story-option:hover { border-color: #2196F3; }
+        .story-option.selected { border-color: #4CAF50; background: #e8f5e9; }
+        .theory-of-mind { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tom-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .tom-list { display: flex; flex-direction: column; gap: 10px; }
+        .tom-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .tom-item:hover { background: #fffde7; }
+        .tom-item.checked { background: #e8f5e9; }
+        .tom-icon { font-size: 1.3em; }
+        .tom-text { flex: 1; }
+        .tom-check { width: 22px; height: 22px; border: 3px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .tom-item.checked .tom-check { background: #4CAF50; border-color: #4CAF50; color: white; }
+        .development-scale { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .scale-title { font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .scale-visual { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .scale-eye { font-size: 2.5em; cursor: pointer; opacity: 0.3; transition: all 0.2s; }
+        .scale-eye.active { opacity: 1; transform: scale(1.1); }
+        .scale-display { text-align: center; font-size: 1.1em; }
+        .tips-section { background: #fff8e1; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .tips-title { font-weight: bold; color: #f57f17; margin-bottom: 15px; }
+        .tip-item { padding: 10px 0; border-bottom: 1px solid #ffe082; display: flex; align-items: flex-start; gap: 10px; }
+        .tip-item:last-child { border-bottom: none; }
+        .tip-icon { font-size: 1.2em; }
+        textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: #ab47bc; }
+        .save-notice { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 10px; opacity: 0; transition: opacity 0.3s; }
+        .save-notice.show { opacity: 1; }
+        @media (max-width: 600px) { .perspective-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ELDiB Sozialisation - Stufe III</div>
+            <h1>👁️ Perspektivübernahme</h1>
+            <p>Andere Sichtweisen verstehen</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>Lernziel (S-42/S-43)</h3>
+                <p>Das Kind kann sich in andere hineinversetzen. Es versteht, dass andere Menschen andere Gedanken, Gefühle und Wissen haben können als es selbst.</p>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🔄</span> Perspektivwechsel-Fähigkeiten</h3>
+                <p>Diese Fähigkeiten zeigt das Kind:</p>
+                <div class="perspective-grid">
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">😊</div>
+                        <div class="title">Gefühle erkennen</div>
+                        <div class="desc">Versteht, wie andere sich fühlen</div>
+                    </div>
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">💭</div>
+                        <div class="title">Gedanken vermuten</div>
+                        <div class="desc">Kann sich vorstellen, was andere denken</div>
+                    </div>
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">❓</div>
+                        <div class="title">Wissen unterscheiden</div>
+                        <div class="desc">Versteht, dass andere anderes wissen</div>
+                    </div>
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">🎭</div>
+                        <div class="title">Absichten verstehen</div>
+                        <div class="desc">Erkennt Absichten anderer</div>
+                    </div>
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">👀</div>
+                        <div class="title">Visuelle Perspektive</div>
+                        <div class="desc">Versteht, was andere sehen können</div>
+                    </div>
+                    <div class="perspective-card" onclick="togglePerspective(this)">
+                        <div class="icon">🤔</div>
+                        <div class="title">Erwartungen verstehen</div>
+                        <div class="desc">Kann Erwartungen anderer einschätzen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📖</span> Perspektiv-Szenarien</h3>
+                <div class="scenario-builder">
+                    <div class="scenario-title">Wie würde das Kind antworten?</div>
+
+                    <div class="scenario-story">
+                        <div class="story-text">
+                            "Anna legt ihre Schokolade in die blaue Dose und geht spielen. Ihre Mutter nimmt die Schokolade und legt sie in die rote Dose. Anna kommt zurück und will ihre Schokolade essen."
+                        </div>
+                        <div class="story-question">Wo wird Anna zuerst suchen?</div>
+                        <div class="story-options" data-story="schokolade">
+                            <div class="story-option" onclick="selectStory('schokolade', this)">In der blauen Dose (richtig - Anna weiß nicht vom Wechsel)</div>
+                            <div class="story-option" onclick="selectStory('schokolade', this)">In der roten Dose (noch nicht - kennt nur eigenes Wissen)</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-story">
+                        <div class="story-text">
+                            "Max fällt auf dem Schulhof hin und weint. Tim sieht das und geht zu ihm."
+                        </div>
+                        <div class="story-question">Warum geht Tim zu Max?</div>
+                        <div class="story-options" data-story="weinen">
+                            <div class="story-option" onclick="selectStory('weinen', this)">Er will ihm helfen/trösten (versteht Max' Gefühl)</div>
+                            <div class="story-option" onclick="selectStory('weinen', this)">Er will nur schauen was passiert ist</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">🧠</span> Theory of Mind - Entwicklungsschritte</h3>
+                <div class="theory-of-mind">
+                    <div class="tom-title">Diese Verständnisebenen hat das Kind erreicht:</div>
+                    <div class="tom-list">
+                        <div class="tom-item" onclick="toggleTom(this)">
+                            <span class="tom-icon">👀</span>
+                            <span class="tom-text">Versteht, dass andere etwas anderes sehen können</span>
+                            <span class="tom-check">✓</span>
+                        </div>
+                        <div class="tom-item" onclick="toggleTom(this)">
+                            <span class="tom-icon">🎭</span>
+                            <span class="tom-text">Versteht, dass andere sich anders fühlen können</span>
+                            <span class="tom-check">✓</span>
+                        </div>
+                        <div class="tom-item" onclick="toggleTom(this)">
+                            <span class="tom-icon">📚</span>
+                            <span class="tom-text">Versteht, dass andere etwas anderes wissen können</span>
+                            <span class="tom-check">✓</span>
+                        </div>
+                        <div class="tom-item" onclick="toggleTom(this)">
+                            <span class="tom-icon">🤥</span>
+                            <span class="tom-text">Versteht, dass man etwas Falsches glauben kann</span>
+                            <span class="tom-check">✓</span>
+                        </div>
+                        <div class="tom-item" onclick="toggleTom(this)">
+                            <span class="tom-icon">🎯</span>
+                            <span class="tom-text">Versteht, dass andere andere Absichten haben können</span>
+                            <span class="tom-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📊</span> Entwicklungsstand Perspektivübernahme</h3>
+                <div class="development-scale">
+                    <div class="scale-title">Wie gut kann das Kind Perspektiven übernehmen?</div>
+                    <div class="scale-visual">
+                        <span class="scale-eye" onclick="setLevel(1)">👁️</span>
+                        <span class="scale-eye" onclick="setLevel(2)">👁️</span>
+                        <span class="scale-eye" onclick="setLevel(3)">👁️</span>
+                        <span class="scale-eye" onclick="setLevel(4)">👁️</span>
+                        <span class="scale-eye" onclick="setLevel(5)">👁️</span>
+                    </div>
+                    <div class="scale-display" id="levelDisplay">Noch nicht bewertet</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">💡</span> Förder-Tipps</h3>
+                <div class="tips-section">
+                    <div class="tips-title">So fördern Sie Perspektivübernahme:</div>
+                    <div class="tip-item"><span class="tip-icon">❓</span>Fragen "Wie fühlt sich... wohl?"</div>
+                    <div class="tip-item"><span class="tip-icon">📖</span>Geschichten aus verschiedenen Perspektiven erzählen</div>
+                    <div class="tip-item"><span class="tip-icon">🎭</span>Rollenspiele mit Perspektivwechsel</div>
+                    <div class="tip-item"><span class="tip-icon">🗣️</span>Über Gedanken und Gefühle anderer sprechen</div>
+                    <div class="tip-item"><span class="tip-icon">🪞</span>Eigene Gedanken und Gefühle benennen</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3><span class="emoji">📝</span> Beobachtungsnotizen</h3>
+                <textarea id="notes" placeholder="Notieren Sie: In welchen Situationen zeigt das Kind Perspektivübernahme? Wo fällt es ihm schwer? Wie reagiert es auf die Gefühle anderer?" oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">Gespeichert!</div>
+
+    <script>
+        let stories = {};
+        let level = 0;
+
+        function togglePerspective(el) { el.classList.toggle('achieved'); saveData(); }
+        function toggleTom(el) { el.classList.toggle('checked'); saveData(); }
+
+        function selectStory(story, el) {
+            stories[story] = el.textContent;
+            const container = el.parentElement;
+            container.querySelectorAll('.story-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function setLevel(lvl) {
+            level = lvl;
+            document.querySelectorAll('.scale-eye').forEach((eye, i) => {
+                eye.classList.toggle('active', i < lvl);
+            });
+            const labels = ['', 'Beginnend', 'Entwickelnd', 'Gut', 'Sehr gut', 'Ausgezeichnet'];
+            document.getElementById('levelDisplay').textContent = `${lvl}/5 - ${labels[lvl]}`;
+            saveData();
+        }
+
+        function showSaveNotice() {
+            const n = document.getElementById('saveNotice');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2000);
+        }
+
+        function saveData() {
+            const data = {
+                perspectives: [...document.querySelectorAll('.perspective-card.achieved')].map(el => el.querySelector('.title').textContent),
+                stories,
+                tom: [...document.querySelectorAll('.tom-item.checked')].map(el => el.querySelector('.tom-text').textContent),
+                level,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_perspektive', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_perspektive');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.perspective-card').forEach(el => {
+                    if (data.perspectives && data.perspectives.includes(el.querySelector('.title').textContent)) {
+                        el.classList.add('achieved');
+                    }
+                });
+                if (data.stories) {
+                    stories = data.stories;
+                    Object.keys(stories).forEach(story => {
+                        const container = document.querySelector(`[data-story="${story}"]`);
+                        if (container) {
+                            container.querySelectorAll('.story-option').forEach(opt => {
+                                if (opt.textContent === stories[story]) opt.classList.add('selected');
+                            });
+                        }
+                    });
+                }
+                document.querySelectorAll('.tom-item').forEach(el => {
+                    if (data.tom && data.tom.includes(el.querySelector('.tom-text').textContent)) {
+                        el.classList.add('checked');
+                    }
+                });
+                if (data.level) setLevel(data.level);
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

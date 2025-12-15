@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soziale Normen verstehen - Sozialisation Stufe III - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #5c6bc0 0%, #7e57c2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #5c6bc0, #7e57c2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #5c6bc0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Places Grid */
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .place-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .place-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .place-card.active {
+            border-color: #5c6bc0;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+
+        .place-icon {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .place-name {
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        /* Rules for each place */
+        .rules-display {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .rules-display.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rules-title {
+            font-weight: bold;
+            color: #5c6bc0;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rule-item:hover {
+            transform: translateX(5px);
+        }
+
+        .rule-item.understood {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .rule-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #5c6bc0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .rule-item.understood .rule-checkbox {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .rule-text {
+            color: #333;
+        }
+
+        /* Scenario Sorting Game */
+        .scenario-game {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .behavior-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 12px;
+            border-left: 5px solid #bdbdbd;
+            transition: all 0.3s;
+        }
+
+        .behavior-card.sorted-correct {
+            border-left-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .behavior-card.sorted-wrong {
+            border-left-color: #f44336;
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .behavior-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sort-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .sort-btn.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .sort-btn.correct:hover {
+            background: #c8e6c9;
+        }
+
+        .sort-btn.wrong {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .sort-btn.wrong:hover {
+            background: #ffcdd2;
+        }
+
+        .sort-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Different Situations */
+        .situation-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .situation-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .situation-emoji {
+            font-size: 2rem;
+        }
+
+        .situation-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .norm-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .norm-input:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+        .norm-label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        /* Score Display */
+        .score-card {
+            background: linear-gradient(135deg, #5c6bc0, #7e57c2);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #5c6bc0, #7e57c2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .places-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 { font-size: 1.5rem; }
+
+            .sort-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe III (5-9 Jahre)</div>
+            <h1>📜 Soziale Normen verstehen</h1>
+            <p class="subtitle">Was sich an verschiedenen Orten gehört</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">🤔</span> Was sind soziale Normen?</h2>
+            <div class="intro-text">
+                <p><strong>Soziale Normen</strong> sind Regeln, die uns zeigen, wie wir uns an bestimmten Orten
+                oder in bestimmten Situationen verhalten sollten. Jeder Ort hat eigene Regeln - zum Beispiel
+                verhält man sich in der Bibliothek anders als auf dem Spielplatz!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🏠</span> Verschiedene Orte - Verschiedene Regeln</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf einen Ort, um seine Regeln zu sehen:</p>
+
+            <div class="places-grid">
+                <div class="place-card" data-place="school">
+                    <div class="place-icon">🏫</div>
+                    <div class="place-name">In der Schule</div>
+                </div>
+                <div class="place-card" data-place="library">
+                    <div class="place-icon">📚</div>
+                    <div class="place-name">In der Bibliothek</div>
+                </div>
+                <div class="place-card" data-place="playground">
+                    <div class="place-icon">🛝</div>
+                    <div class="place-name">Auf dem Spielplatz</div>
+                </div>
+                <div class="place-card" data-place="restaurant">
+                    <div class="place-icon">🍽️</div>
+                    <div class="place-name">Im Restaurant</div>
+                </div>
+                <div class="place-card" data-place="supermarket">
+                    <div class="place-icon">🛒</div>
+                    <div class="place-name">Im Supermarkt</div>
+                </div>
+                <div class="place-card" data-place="bus">
+                    <div class="place-icon">🚌</div>
+                    <div class="place-name">Im Bus</div>
+                </div>
+            </div>
+
+            <div class="rules-display" id="rulesDisplay">
+                <div class="rules-title" id="rulesTitle"></div>
+                <div id="rulesList"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Richtig oder Falsch?</h2>
+            <p style="margin-bottom: 20px; color: #666;">Entscheide: Ist dieses Verhalten an dem Ort okay oder nicht?</p>
+
+            <div class="scenario-game" id="scenarioGame">
+                <!-- Behaviors will be added dynamically -->
+            </div>
+
+            <div class="score-card" style="margin-top: 20px;">
+                <div class="score-number" id="scoreNumber">0</div>
+                <div class="score-label">Richtig beantwortet</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💭</span> Nachdenken über Situationen</h2>
+
+            <div class="situation-card">
+                <div class="situation-header">
+                    <div class="situation-emoji">👋</div>
+                    <div class="situation-title">Begrüßung</div>
+                </div>
+                <label class="norm-label">Wie begrüßt man verschiedene Menschen?</label>
+                <textarea class="norm-input" id="greeting" placeholder="z.B. Freunde, Lehrer, Oma, fremde Erwachsene..."></textarea>
+            </div>
+
+            <div class="situation-card">
+                <div class="situation-header">
+                    <div class="situation-emoji">🗣️</div>
+                    <div class="situation-title">Lautstärke</div>
+                </div>
+                <label class="norm-label">Wann spricht man leise, wann normal, wann darf man laut sein?</label>
+                <textarea class="norm-input" id="volume" placeholder="Beispiele für verschiedene Situationen..."></textarea>
+            </div>
+
+            <div class="situation-card">
+                <div class="situation-header">
+                    <div class="situation-emoji">⏰</div>
+                    <div class="situation-title">Warten</div>
+                </div>
+                <label class="norm-label">Wo muss man warten und warum ist das wichtig?</label>
+                <textarea class="norm-input" id="waiting" placeholder="z.B. in der Schlange, beim Arzt..."></textarea>
+            </div>
+
+            <div class="situation-card">
+                <div class="situation-header">
+                    <div class="situation-emoji">🙏</div>
+                    <div class="situation-title">Höflichkeit</div>
+                </div>
+                <label class="norm-label">Welche höflichen Wörter kennst du und wann benutzt man sie?</label>
+                <textarea class="norm-input" id="politeness" placeholder="Bitte, Danke, Entschuldigung..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🌟</span> Meine eigenen Beobachtungen</h2>
+
+            <div class="situation-card">
+                <label class="norm-label">Eine Regel, die ich manchmal schwer finde:</label>
+                <textarea class="norm-input" id="difficultRule" placeholder="Welche Regel fällt dir schwer und warum?"></textarea>
+            </div>
+
+            <div class="situation-card">
+                <label class="norm-label">Eine Regel, die ich gut finde und verstehe:</label>
+                <textarea class="norm-input" id="goodRule" placeholder="Welche Regel findest du sinnvoll?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu sozialen Regeln..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-43, S-44 - Soziale Normen verstehen und befolgen, situationsangemessenes Verhalten
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        // Rules data for each place
+        const placeRules = {
+            school: {
+                title: "📚 Regeln in der Schule",
+                rules: [
+                    "Ich melde mich, wenn ich etwas sagen möchte",
+                    "Ich lasse andere ausreden",
+                    "Ich bin pünktlich zum Unterricht",
+                    "Ich arbeite leise, wenn Stillarbeit ist",
+                    "Ich gehe respektvoll mit anderen um",
+                    "Ich halte meinen Platz ordentlich"
+                ]
+            },
+            library: {
+                title: "📖 Regeln in der Bibliothek",
+                rules: [
+                    "Ich spreche leise oder flüstere",
+                    "Ich renne nicht herum",
+                    "Ich behandle die Bücher vorsichtig",
+                    "Ich esse und trinke nicht",
+                    "Ich bringe geliehene Bücher pünktlich zurück",
+                    "Ich störe andere Leser nicht"
+                ]
+            },
+            playground: {
+                title: "🛝 Regeln auf dem Spielplatz",
+                rules: [
+                    "Ich warte, bis ich dran bin",
+                    "Ich schubse niemanden",
+                    "Ich teile die Spielgeräte mit anderen",
+                    "Ich lasse kleinere Kinder mitspielen",
+                    "Ich räume meinen Müll weg",
+                    "Ich gehe vorsichtig auf Geräten"
+                ]
+            },
+            restaurant: {
+                title: "🍽️ Regeln im Restaurant",
+                rules: [
+                    "Ich bleibe auf meinem Platz sitzen",
+                    "Ich rede in normaler Lautstärke",
+                    "Ich benutze Besteck richtig",
+                    "Ich sage bitte und danke",
+                    "Ich laufe nicht zwischen Tischen herum",
+                    "Ich warte geduldig auf das Essen"
+                ]
+            },
+            supermarket: {
+                title: "🛒 Regeln im Supermarkt",
+                rules: [
+                    "Ich fasse nur an, was ich kaufen will",
+                    "Ich bleibe bei meinen Eltern",
+                    "Ich renne nicht durch die Gänge",
+                    "Ich schreie nicht durch den Laden",
+                    "Ich stelle in den Wagen zurück",
+                    "Ich warte geduldig an der Kasse"
+                ]
+            },
+            bus: {
+                title: "🚌 Regeln im Bus",
+                rules: [
+                    "Ich mache Platz für ältere Menschen",
+                    "Ich spreche leise",
+                    "Ich halte mich fest",
+                    "Ich drängele nicht beim Einsteigen",
+                    "Ich esse und trinke nicht",
+                    "Ich lasse meinen Müll nicht liegen"
+                ]
+            }
+        };
+
+        // Behavior scenarios for the game
+        const behaviors = [
+            { text: "Im Unterricht laut mit dem Nachbarn reden", place: "Schule", correct: false },
+            { text: "In der Bibliothek leise flüstern", place: "Bibliothek", correct: true },
+            { text: "Auf dem Spielplatz schubsen", place: "Spielplatz", correct: false },
+            { text: "Im Restaurant geduldig auf das Essen warten", place: "Restaurant", correct: true },
+            { text: "Im Supermarkt alles anfassen", place: "Supermarkt", correct: false },
+            { text: "Im Bus älteren Menschen den Platz anbieten", place: "Bus", correct: true },
+            { text: "In der Schule melden, bevor man spricht", place: "Schule", correct: true },
+            { text: "In der Bibliothek rennen", place: "Bibliothek", correct: false },
+            { text: "Auf dem Spielplatz warten, bis man dran ist", place: "Spielplatz", correct: true },
+            { text: "Im Restaurant zwischen Tischen herumlaufen", place: "Restaurant", correct: false }
+        ];
+
+        let understoodRules = {};
+        let behaviorAnswers = {};
+        let score = 0;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+            renderBehaviorGame();
+            updateScore();
+        });
+
+        function setupEventListeners() {
+            // Place cards
+            document.querySelectorAll('.place-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const place = this.dataset.place;
+                    showRules(place);
+
+                    document.querySelectorAll('.place-card').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function showRules(place) {
+            const rulesDisplay = document.getElementById('rulesDisplay');
+            const rulesTitle = document.getElementById('rulesTitle');
+            const rulesList = document.getElementById('rulesList');
+
+            const placeData = placeRules[place];
+            rulesTitle.textContent = placeData.title;
+
+            rulesList.innerHTML = placeData.rules.map((rule, index) => {
+                const isUnderstood = understoodRules[place] && understoodRules[place].includes(index);
+                return `
+                    <div class="rule-item ${isUnderstood ? 'understood' : ''}"
+                         data-place="${place}" data-index="${index}">
+                        <div class="rule-checkbox">${isUnderstood ? '✓' : ''}</div>
+                        <div class="rule-text">${rule}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add click handlers
+            rulesList.querySelectorAll('.rule-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    toggleRule(this.dataset.place, parseInt(this.dataset.index));
+                });
+            });
+
+            rulesDisplay.classList.add('show');
+        }
+
+        function toggleRule(place, index) {
+            if (!understoodRules[place]) {
+                understoodRules[place] = [];
+            }
+
+            const idx = understoodRules[place].indexOf(index);
+            if (idx > -1) {
+                understoodRules[place].splice(idx, 1);
+            } else {
+                understoodRules[place].push(index);
+            }
+
+            showRules(place);
+            saveData();
+        }
+
+        function renderBehaviorGame() {
+            const container = document.getElementById('scenarioGame');
+            container.innerHTML = behaviors.map((behavior, index) => {
+                const answered = behaviorAnswers[index] !== undefined;
+                const wasCorrect = behaviorAnswers[index] === behavior.correct;
+
+                return `
+                    <div class="behavior-card ${answered ? (wasCorrect ? 'sorted-correct' : 'sorted-wrong') : ''}"
+                         data-index="${index}">
+                        <div class="behavior-text">
+                            <strong>${behavior.place}:</strong> ${behavior.text}
+                        </div>
+                        <div class="sort-buttons">
+                            <button class="sort-btn correct" ${answered ? 'disabled' : ''}
+                                    onclick="answerBehavior(${index}, true)">
+                                ✓ Richtig
+                            </button>
+                            <button class="sort-btn wrong" ${answered ? 'disabled' : ''}
+                                    onclick="answerBehavior(${index}, false)">
+                                ✗ Falsch
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function answerBehavior(index, answer) {
+            const behavior = behaviors[index];
+            behaviorAnswers[index] = answer;
+
+            if (answer === behavior.correct) {
+                score++;
+            }
+
+            renderBehaviorGame();
+            updateScore();
+            saveData();
+        }
+
+        function updateScore() {
+            document.getElementById('scoreNumber').textContent = score;
+            const totalAnswered = Object.keys(behaviorAnswers).length;
+            const progress = (totalAnswered / behaviors.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            const data = {
+                understoodRules,
+                behaviorAnswers,
+                score,
+                situations: {
+                    greeting: document.getElementById('greeting').value,
+                    volume: document.getElementById('volume').value,
+                    waiting: document.getElementById('waiting').value,
+                    politeness: document.getElementById('politeness').value
+                },
+                observations: {
+                    difficultRule: document.getElementById('difficultRule').value,
+                    goodRule: document.getElementById('goodRule').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_soziale_normen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_soziale_normen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.understoodRules) understoodRules = data.understoodRules;
+                if (data.behaviorAnswers) behaviorAnswers = data.behaviorAnswers;
+                if (data.score) score = data.score;
+
+                if (data.situations) {
+                    document.getElementById('greeting').value = data.situations.greeting || '';
+                    document.getElementById('volume').value = data.situations.volume || '';
+                    document.getElementById('waiting').value = data.situations.waiting || '';
+                    document.getElementById('politeness').value = data.situations.politeness || '';
+                }
+
+                if (data.observations) {
+                    document.getElementById('difficultRule').value = data.observations.difficultRule || '';
+                    document.getElementById('goodRule').value = data.observations.goodRule || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

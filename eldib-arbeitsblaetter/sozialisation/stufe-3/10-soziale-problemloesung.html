@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soziale Problemlösung - Sozialisation Stufe III - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7043 0%, #e64a19 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff7043, #e64a19);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #ff7043;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Steps Visualization */
+        .steps-path {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid #e0e0e0;
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-item.active {
+            border-left-color: #ff7043;
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+        }
+
+        .step-item.completed {
+            border-left-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff7043;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-item.completed .step-number {
+            background: #4caf50;
+        }
+
+        .step-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Problem Scenario */
+        .problem-card {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .problem-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .problem-emoji {
+            font-size: 3rem;
+        }
+
+        .problem-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .problem-description {
+            color: #555;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        /* Solution Steps */
+        .solution-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .solution-step-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ff7043;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .solution-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .solution-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .solution-input:focus {
+            outline: none;
+            border-color: #ff7043;
+        }
+
+        /* Idea Cards */
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .idea-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .idea-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .idea-card.selected {
+            border-color: #ff7043;
+            background: linear-gradient(135deg, #fbe9e7, #ffccbc);
+        }
+
+        .idea-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .idea-text {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Scenario Selection */
+        .scenario-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-tab {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .scenario-tab:hover {
+            border-color: #ff7043;
+        }
+
+        .scenario-tab.active {
+            background: linear-gradient(135deg, #ff7043, #e64a19);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Rating */
+        .rating-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .rating-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .rating-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rating-btn:hover {
+            border-color: #ff7043;
+        }
+
+        .rating-btn.selected {
+            background: linear-gradient(135deg, #ff7043, #e64a19);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Practice Game */
+        .game-container {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .game-problem {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .game-solutions {
+            display: grid;
+            gap: 10px;
+        }
+
+        .game-solution {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .game-solution:hover {
+            border-color: #ff7043;
+            transform: translateX(5px);
+        }
+
+        .game-solution.good {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-color: #4caf50;
+        }
+
+        .game-solution.bad {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border-color: #f44336;
+        }
+
+        .game-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .game-feedback.show {
+            display: block;
+        }
+
+        .game-score {
+            font-size: 1.5rem;
+            color: #ff7043;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff7043, #e64a19);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        /* My Problems */
+        .my-problem-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .my-problem-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .my-problem-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .my-problem-input:focus {
+            outline: none;
+            border-color: #ff7043;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #ff7043;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #ff7043, #e64a19);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-tabs {
+                flex-direction: column;
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe III (5-9 Jahre)</div>
+            <h1>🧩 Soziale Probleme lösen</h1>
+            <p class="subtitle">Schritt für Schritt zu einer guten Lösung</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was ist ein soziales Problem?</h2>
+            <div class="intro-text">
+                <p>Ein <strong>soziales Problem</strong> entsteht, wenn es zwischen Menschen Schwierigkeiten gibt.
+                Zum Beispiel: ein Streit, eine Meinungsverschiedenheit oder wenn jemand traurig ist.
+                Gute Nachrichten: Es gibt Schritte, die uns helfen, solche Probleme zu lösen!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🪜</span> Die 5 Schritte zur Lösung</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf jeden Schritt, den du verstanden hast:</p>
+
+            <div class="steps-path">
+                <div class="step-item" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>🛑 Stopp - Was ist das Problem?</h4>
+                        <p>Halte an und beschreibe genau, was passiert ist. Was ist schiefgelaufen?</p>
+                    </div>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>💭 Wie fühlen sich alle?</h4>
+                        <p>Überlege: Wie fühle ich mich? Wie fühlt sich der andere?</p>
+                    </div>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>💡 Welche Lösungen gibt es?</h4>
+                        <p>Sammle verschiedene Ideen. Was könnte helfen?</p>
+                    </div>
+                </div>
+                <div class="step-item" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>⚖️ Was ist die beste Lösung?</h4>
+                        <p>Wähle die Lösung, die für alle am besten ist.</p>
+                    </div>
+                </div>
+                <div class="step-item" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>✅ Probiere es aus!</h4>
+                        <p>Setze die Lösung um. Hat es funktioniert?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎭</span> Üben wir zusammen!</h2>
+            <p style="margin-bottom: 15px; color: #666;">Wähle ein Problem und löse es Schritt für Schritt:</p>
+
+            <div class="scenario-tabs">
+                <button class="scenario-tab active" data-scenario="1">Streit um Spielzeug</button>
+                <button class="scenario-tab" data-scenario="2">Ausgeschlossen werden</button>
+                <button class="scenario-tab" data-scenario="3">Unfaire Situation</button>
+            </div>
+
+            <div class="problem-card" id="problemDisplay">
+                <div class="problem-header">
+                    <div class="problem-emoji" id="problemEmoji">🧸</div>
+                    <div class="problem-title" id="problemTitle">Streit um ein Spielzeug</div>
+                </div>
+                <div class="problem-description" id="problemDescription">
+                    Du und dein Freund wollt beide gleichzeitig mit dem gleichen Spielzeugauto spielen.
+                    Ihr beide wollt es zuerst haben und fangt an zu streiten.
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <div class="solution-header">
+                    <div class="solution-step-num">1</div>
+                    <div class="solution-title">Das Problem ist...</div>
+                </div>
+                <textarea class="solution-input" id="sol_problem" placeholder="Was genau ist passiert?"></textarea>
+            </div>
+
+            <div class="solution-section">
+                <div class="solution-header">
+                    <div class="solution-step-num">2</div>
+                    <div class="solution-title">Gefühle...</div>
+                </div>
+                <textarea class="solution-input" id="sol_feelings" placeholder="Wie fühle ich mich? Wie fühlt sich der andere?"></textarea>
+            </div>
+
+            <div class="solution-section">
+                <div class="solution-header">
+                    <div class="solution-step-num">3</div>
+                    <div class="solution-title">Mögliche Lösungen...</div>
+                </div>
+                <textarea class="solution-input" id="sol_ideas" placeholder="Welche Ideen hast du? (Schreibe mindestens 3)"></textarea>
+            </div>
+
+            <div class="solution-section">
+                <div class="solution-header">
+                    <div class="solution-step-num">4</div>
+                    <div class="solution-title">Beste Lösung...</div>
+                </div>
+                <textarea class="solution-input" id="sol_best" placeholder="Welche Lösung ist am fairsten für alle?"></textarea>
+            </div>
+
+            <div class="rating-container">
+                <span class="rating-label">Wie gut hat deine Lösung funktioniert?</span>
+                <div class="rating-options" id="solutionRating">
+                    <button class="rating-btn" data-rating="1">😞 Nicht so gut</button>
+                    <button class="rating-btn" data-rating="2">😐 Okay</button>
+                    <button class="rating-btn" data-rating="3">🙂 Gut</button>
+                    <button class="rating-btn" data-rating="4">😊 Sehr gut</button>
+                    <button class="rating-btn" data-rating="5">🌟 Super!</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Hilfreiche Strategien</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Strategien, die du schon kennst:</p>
+
+            <div class="ideas-grid">
+                <div class="idea-card" data-strategy="talk">
+                    <div class="idea-emoji">🗣️</div>
+                    <div class="idea-text">Darüber reden</div>
+                </div>
+                <div class="idea-card" data-strategy="share">
+                    <div class="idea-emoji">🤝</div>
+                    <div class="idea-text">Teilen oder abwechseln</div>
+                </div>
+                <div class="idea-card" data-strategy="sorry">
+                    <div class="idea-emoji">🙏</div>
+                    <div class="idea-text">Sich entschuldigen</div>
+                </div>
+                <div class="idea-card" data-strategy="help">
+                    <div class="idea-emoji">👨‍🏫</div>
+                    <div class="idea-text">Erwachsene um Hilfe bitten</div>
+                </div>
+                <div class="idea-card" data-strategy="calm">
+                    <div class="idea-emoji">🧘</div>
+                    <div class="idea-text">Erst mal ruhig werden</div>
+                </div>
+                <div class="idea-card" data-strategy="listen">
+                    <div class="idea-emoji">👂</div>
+                    <div class="idea-text">Dem anderen zuhören</div>
+                </div>
+                <div class="idea-card" data-strategy="compromise">
+                    <div class="idea-emoji">⚖️</div>
+                    <div class="idea-text">Kompromiss finden</div>
+                </div>
+                <div class="idea-card" data-strategy="space">
+                    <div class="idea-emoji">🚶</div>
+                    <div class="idea-text">Abstand nehmen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎮</span> Problemlöse-Quiz</h2>
+            <div class="game-container" id="gameContainer">
+                <div class="game-problem" id="gameProblem"></div>
+                <div class="game-solutions" id="gameSolutions"></div>
+                <div class="game-feedback" id="gameFeedback"></div>
+                <div class="game-score" id="gameScore">Punkte: 0</div>
+                <button class="next-btn" id="nextBtn">Nächste Frage</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine echten Probleme</h2>
+
+            <div class="my-problem-section">
+                <label class="my-problem-label">Ein Problem, das ich gut gelöst habe:</label>
+                <textarea class="my-problem-input" id="good_problem" placeholder="Was war das Problem? Wie hast du es gelöst?"></textarea>
+            </div>
+
+            <div class="my-problem-section">
+                <label class="my-problem-label">Ein Problem, das noch schwierig ist:</label>
+                <textarea class="my-problem-input" id="hard_problem" placeholder="Womit brauchst du noch Hilfe?"></textarea>
+            </div>
+
+            <div class="my-problem-section">
+                <label class="my-problem-label">Was ich bei Problemen besser machen möchte:</label>
+                <textarea class="my-problem-input" id="improve_problem" placeholder="Was nimmst du dir vor?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zur Problemlösung..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-49, S-50 - Soziale Probleme erkennen und lösen, Konfliktlösung
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        // Scenarios data
+        const scenarios = {
+            1: {
+                emoji: "🧸",
+                title: "Streit um ein Spielzeug",
+                description: "Du und dein Freund wollt beide gleichzeitig mit dem gleichen Spielzeugauto spielen. Ihr beide wollt es zuerst haben und fangt an zu streiten."
+            },
+            2: {
+                emoji: "😔",
+                title: "Ausgeschlossen werden",
+                description: "In der Pause spielen deine Freunde Fangen, aber sie sagen, du kannst nicht mitspielen. Du fühlst dich traurig und allein."
+            },
+            3: {
+                emoji: "⚖️",
+                title: "Unfaire Situation",
+                description: "Beim Spielen behauptet jemand, du hättest geschummelt, obwohl das nicht stimmt. Die anderen glauben ihm und sind sauer auf dich."
+            }
+        };
+
+        // Quiz questions
+        const quizQuestions = [
+            {
+                problem: "Dein Freund hat dir ein Geheimnis verraten. Jetzt ist er sauer auf dich.",
+                solutions: [
+                    { text: "Sagen: 'Das war mir egal!'", good: false },
+                    { text: "Aufrichtig entschuldigen und erklären, dass es ein Fehler war", good: true },
+                    { text: "Auch sein Geheimnis verraten", good: false },
+                    { text: "So tun, als wäre nichts passiert", good: false }
+                ],
+                feedback: "Sich ehrlich entschuldigen zeigt, dass dir die Freundschaft wichtig ist!"
+            },
+            {
+                problem: "Zwei Freunde streiten sich und wollen, dass du eine Seite wählst.",
+                solutions: [
+                    { text: "Sofort für einen entscheiden", good: false },
+                    { text: "Beiden zuhören und versuchen zu vermitteln", good: true },
+                    { text: "Weggehen und nichts sagen", good: false },
+                    { text: "Beide anschreien", good: false }
+                ],
+                feedback: "Neutral bleiben und vermitteln hilft beiden Freunden!"
+            },
+            {
+                problem: "Du hast aus Versehen den Turm umgestoßen, den jemand gebaut hat.",
+                solutions: [
+                    { text: "Wegrennen und so tun, als wärst du es nicht gewesen", good: false },
+                    { text: "Dich entschuldigen und anbieten, beim Wiederaufbau zu helfen", good: true },
+                    { text: "Sagen: 'Der war eh nicht schön!'", good: false },
+                    { text: "Lachen und weiterspielen", good: false }
+                ],
+                feedback: "Entschuldigen und helfen macht den Fehler wieder gut!"
+            },
+            {
+                problem: "Jemand macht sich über dich lustig.",
+                solutions: [
+                    { text: "Zurück beleidigen", good: false },
+                    { text: "Ruhig sagen: 'Hör auf, das ist nicht nett' und weggehen", good: true },
+                    { text: "Anfangen zu weinen", good: false },
+                    { text: "Ihn schubsen", good: false }
+                ],
+                feedback: "Ruhig bleiben und klare Grenzen setzen ist am besten!"
+            },
+            {
+                problem: "Du merkst, dass ein Kind aus deiner Klasse immer alleine ist.",
+                solutions: [
+                    { text: "Das ist nicht mein Problem", good: false },
+                    { text: "Auf ihn zugehen und fragen, ob er mitspielen will", good: true },
+                    { text: "Mit anderen über ihn lachen", good: false },
+                    { text: "Ihn ignorieren", good: false }
+                ],
+                feedback: "Andere einzubeziehen ist mutig und freundlich!"
+            }
+        ];
+
+        let currentScenario = 1;
+        let stepsUnderstood = [];
+        let strategies = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let solutionRating = 0;
+        let scenarioSolutions = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+            showQuestion();
+        });
+
+        function setupEventListeners() {
+            // Steps
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const step = parseInt(this.dataset.step);
+                    this.classList.toggle('completed');
+
+                    if (this.classList.contains('completed')) {
+                        if (!stepsUnderstood.includes(step)) {
+                            stepsUnderstood.push(step);
+                        }
+                    } else {
+                        stepsUnderstood = stepsUnderstood.filter(s => s !== step);
+                    }
+                    saveData();
+                });
+            });
+
+            // Scenario tabs
+            document.querySelectorAll('.scenario-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentScenario = parseInt(this.dataset.scenario);
+                    loadScenario();
+                });
+            });
+
+            // Strategies
+            document.querySelectorAll('.idea-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const strategy = this.dataset.strategy;
+                    if (this.classList.contains('selected')) {
+                        if (!strategies.includes(strategy)) {
+                            strategies.push(strategy);
+                        }
+                    } else {
+                        strategies = strategies.filter(s => s !== strategy);
+                    }
+                    saveData();
+                });
+            });
+
+            // Rating buttons
+            document.querySelectorAll('#solutionRating .rating-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('#solutionRating .rating-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    solutionRating = parseInt(this.dataset.rating);
+                    saveData();
+                });
+            });
+
+            // Next button
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+
+            // Auto-save for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
+        }
+
+        function loadScenario() {
+            const scenario = scenarios[currentScenario];
+            document.getElementById('problemEmoji').textContent = scenario.emoji;
+            document.getElementById('problemTitle').textContent = scenario.title;
+            document.getElementById('problemDescription').textContent = scenario.description;
+
+            // Load saved solutions for this scenario
+            const saved = scenarioSolutions[currentScenario] || {};
+            document.getElementById('sol_problem').value = saved.problem || '';
+            document.getElementById('sol_feelings').value = saved.feelings || '';
+            document.getElementById('sol_ideas').value = saved.ideas || '';
+            document.getElementById('sol_best').value = saved.best || '';
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('gameProblem').textContent = '🤔 ' + q.problem;
+
+            const container = document.getElementById('gameSolutions');
+            container.innerHTML = q.solutions.map((sol, index) => {
+                return `<button class="game-solution" data-index="${index}" data-good="${sol.good}">${sol.text}</button>`;
+            }).join('');
+
+            container.querySelectorAll('.game-solution').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectAnswer(parseInt(this.dataset.index), this.dataset.good === 'true');
+                });
+            });
+
+            document.getElementById('gameFeedback').classList.remove('show');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+
+        function selectAnswer(index, isGood) {
+            const solutions = document.querySelectorAll('.game-solution');
+            solutions.forEach((sol, i) => {
+                sol.style.pointerEvents = 'none';
+                if (sol.dataset.good === 'true') {
+                    sol.classList.add('good');
+                }
+                if (i === index && !isGood) {
+                    sol.classList.add('bad');
+                }
+            });
+
+            if (isGood) {
+                score++;
+                document.getElementById('gameScore').textContent = `Punkte: ${score}`;
+            }
+
+            const feedback = document.getElementById('gameFeedback');
+            feedback.textContent = isGood ?
+                '✅ Richtig! ' + quizQuestions[currentQuestion].feedback :
+                '❌ ' + quizQuestions[currentQuestion].feedback;
+            feedback.style.background = isGood ? '#e8f5e9' : '#ffebee';
+            feedback.style.color = isGood ? '#2e7d32' : '#c62828';
+            feedback.classList.add('show');
+
+            document.getElementById('nextBtn').classList.add('show');
+            saveData();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showFinalScore() {
+            const container = document.getElementById('gameContainer');
+            container.innerHTML = `
+                <div style="font-size: 3rem; text-align: center; margin-bottom: 20px;">🏆</div>
+                <div style="font-size: 1.5rem; text-align: center; margin-bottom: 15px;">Quiz beendet!</div>
+                <div style="font-size: 2rem; color: #ff7043; text-align: center; margin-bottom: 20px;">
+                    ${score} von ${quizQuestions.length} richtig!
+                </div>
+                <div style="text-align: center; color: #666;">
+                    ${score === quizQuestions.length ?
+                        '🌟 Perfekt! Du bist ein Problemlöse-Profi!' :
+                        score >= 3 ?
+                            '👍 Gut gemacht! Du kennst viele gute Lösungen.' :
+                            '💪 Übe weiter! Die 5 Schritte helfen dir dabei.'}
+                </div>
+                <button class="print-btn" onclick="resetQuiz()" style="display: block; margin: 20px auto;">🔄 Quiz wiederholen</button>
+            `;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('gameScore').textContent = 'Punkte: 0';
+            document.getElementById('gameContainer').innerHTML = `
+                <div class="game-problem" id="gameProblem"></div>
+                <div class="game-solutions" id="gameSolutions"></div>
+                <div class="game-feedback" id="gameFeedback"></div>
+                <div class="game-score" id="gameScore">Punkte: 0</div>
+                <button class="next-btn" id="nextBtn">Nächste Frage</button>
+            `;
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            showQuestion();
+        }
+
+        function saveData() {
+            // Save current scenario solutions
+            scenarioSolutions[currentScenario] = {
+                problem: document.getElementById('sol_problem').value,
+                feelings: document.getElementById('sol_feelings').value,
+                ideas: document.getElementById('sol_ideas').value,
+                best: document.getElementById('sol_best').value
+            };
+
+            const data = {
+                stepsUnderstood,
+                strategies,
+                scenarioSolutions,
+                solutionRating,
+                quizScore: score,
+                quizProgress: currentQuestion,
+                myProblems: {
+                    good: document.getElementById('good_problem').value,
+                    hard: document.getElementById('hard_problem').value,
+                    improve: document.getElementById('improve_problem').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_problemloesung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_problemloesung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.stepsUnderstood) {
+                    stepsUnderstood = data.stepsUnderstood;
+                    stepsUnderstood.forEach(step => {
+                        const el = document.querySelector(`.step-item[data-step="${step}"]`);
+                        if (el) el.classList.add('completed');
+                    });
+                }
+
+                if (data.strategies) {
+                    strategies = data.strategies;
+                    strategies.forEach(s => {
+                        const el = document.querySelector(`.idea-card[data-strategy="${s}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.scenarioSolutions) {
+                    scenarioSolutions = data.scenarioSolutions;
+                    loadScenario();
+                }
+
+                if (data.solutionRating) {
+                    solutionRating = data.solutionRating;
+                    const btn = document.querySelector(`#solutionRating .rating-btn[data-rating="${solutionRating}"]`);
+                    if (btn) btn.classList.add('selected');
+                }
+
+                if (data.quizScore) score = data.quizScore;
+                if (data.quizProgress) currentQuestion = data.quizProgress;
+
+                if (data.myProblems) {
+                    document.getElementById('good_problem').value = data.myProblems.good || '';
+                    document.getElementById('hard_problem').value = data.myProblems.hard || '';
+                    document.getElementById('improve_problem').value = data.myProblems.improve || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>

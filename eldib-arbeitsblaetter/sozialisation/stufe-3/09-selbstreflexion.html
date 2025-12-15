@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selbstreflexion - Sozialisation Stufe III - ELDiB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ab47bc 0%, #7b1fa2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .domain-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #ab47bc;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .intro-text {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Mirror Section */
+        .mirror-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e8e8e8);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mirror-frame {
+            width: 200px;
+            height: 250px;
+            border: 15px solid #8d6e63;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        .mirror-emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .mirror-text {
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Strength Cards */
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .strength-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .strength-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .strength-card.selected {
+            border-color: #ab47bc;
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+        }
+
+        .strength-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .strength-text {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        /* Growth Areas */
+        .growth-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .growth-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .growth-emoji {
+            font-size: 2rem;
+        }
+
+        .growth-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .growth-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .growth-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, #ffcdd2, #c8e6c9);
+            outline: none;
+        }
+
+        .growth-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ab47bc;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .growth-value {
+            width: 60px;
+            text-align: center;
+            font-weight: bold;
+            color: #ab47bc;
+        }
+
+        /* Reflection Questions */
+        .question-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ab47bc;
+        }
+
+        .question-text {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #ab47bc;
+        }
+
+        /* Daily Check */
+        .day-check {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .day-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .day-item:hover {
+            transform: scale(1.05);
+        }
+
+        .day-item.good {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .day-item.medium {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+        }
+
+        .day-item.bad {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .day-emoji {
+            font-size: 1.5rem;
+        }
+
+        /* Emotion Selection */
+        .emotion-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .emotion-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .emotion-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .emotion-btn.selected {
+            border-color: #ab47bc;
+            box-shadow: 0 0 10px rgba(171, 71, 188, 0.3);
+        }
+
+        /* Goals */
+        .goal-card {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .goal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .goal-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .goal-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .goal-input:focus {
+            outline: none;
+            border-color: #ab47bc;
+        }
+
+        .goal-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 15px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        .progress-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .progress-btn.minus {
+            background: #ffcdd2;
+        }
+
+        .progress-btn.plus {
+            background: #c8e6c9;
+        }
+
+        /* Achievement Badges */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .badge {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.5;
+        }
+
+        .badge.earned {
+            opacity: 1;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            color: #333;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: #ab47bc;
+        }
+
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .save-notice.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            20%, 80% { opacity: 1; transform: translateY(0); }
+        }
+
+        .eldib-reference {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn, .save-notice { display: none !important; }
+        }
+
+        @media (max-width: 600px) {
+            .day-check {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .strengths-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe III (5-9 Jahre)</div>
+            <h1>🪞 Selbstreflexion</h1>
+            <p class="subtitle">Über mich selbst nachdenken</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💭</span> Was bedeutet Selbstreflexion?</h2>
+            <div class="intro-text">
+                <p><strong>Selbstreflexion</strong> bedeutet, über sich selbst nachzudenken: Was kann ich gut?
+                Was möchte ich lernen? Wie verhalte ich mich? Wenn wir über uns nachdenken, können wir
+                uns besser verstehen und uns weiterentwickeln!</p>
+            </div>
+
+            <div class="mirror-container">
+                <div class="mirror-frame">
+                    <div class="mirror-emoji">🪞</div>
+                    <div class="mirror-text">"Wenn ich in den Spiegel schaue, sehe ich jemanden, der jeden Tag dazulernt."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⭐</span> Meine Stärken</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf alle Stärken, die du hast:</p>
+
+            <div class="strengths-grid">
+                <div class="strength-card" data-strength="friendly">
+                    <div class="strength-emoji">😊</div>
+                    <div class="strength-text">Freundlich</div>
+                </div>
+                <div class="strength-card" data-strength="helpful">
+                    <div class="strength-emoji">🤝</div>
+                    <div class="strength-text">Hilfsbereit</div>
+                </div>
+                <div class="strength-card" data-strength="creative">
+                    <div class="strength-emoji">🎨</div>
+                    <div class="strength-text">Kreativ</div>
+                </div>
+                <div class="strength-card" data-strength="brave">
+                    <div class="strength-emoji">🦁</div>
+                    <div class="strength-text">Mutig</div>
+                </div>
+                <div class="strength-card" data-strength="honest">
+                    <div class="strength-emoji">💎</div>
+                    <div class="strength-text">Ehrlich</div>
+                </div>
+                <div class="strength-card" data-strength="patient">
+                    <div class="strength-emoji">🐢</div>
+                    <div class="strength-text">Geduldig</div>
+                </div>
+                <div class="strength-card" data-strength="funny">
+                    <div class="strength-emoji">😄</div>
+                    <div class="strength-text">Lustig</div>
+                </div>
+                <div class="strength-card" data-strength="caring">
+                    <div class="strength-emoji">💕</div>
+                    <div class="strength-text">Fürsorglich</div>
+                </div>
+                <div class="strength-card" data-strength="curious">
+                    <div class="strength-emoji">🔍</div>
+                    <div class="strength-text">Neugierig</div>
+                </div>
+                <div class="strength-card" data-strength="sporty">
+                    <div class="strength-emoji">⚽</div>
+                    <div class="strength-text">Sportlich</div>
+                </div>
+                <div class="strength-card" data-strength="smart">
+                    <div class="strength-emoji">🧠</div>
+                    <div class="strength-text">Schlau</div>
+                </div>
+                <div class="strength-card" data-strength="organized">
+                    <div class="strength-emoji">📋</div>
+                    <div class="strength-text">Ordentlich</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🌱</span> Daran möchte ich wachsen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Schätze ein: Wie gut bist du schon darin?</p>
+
+            <div class="growth-area">
+                <div class="growth-header">
+                    <div class="growth-emoji">👂</div>
+                    <div class="growth-title">Gut zuhören</div>
+                </div>
+                <div class="growth-slider-container">
+                    <span>Übe noch</span>
+                    <input type="range" class="growth-slider" id="growth_listening" min="1" max="5" value="3">
+                    <span>Kann ich gut</span>
+                    <div class="growth-value" id="growth_listening_val">3</div>
+                </div>
+            </div>
+
+            <div class="growth-area">
+                <div class="growth-header">
+                    <div class="growth-emoji">😤</div>
+                    <div class="growth-title">Mit Wut umgehen</div>
+                </div>
+                <div class="growth-slider-container">
+                    <span>Übe noch</span>
+                    <input type="range" class="growth-slider" id="growth_anger" min="1" max="5" value="3">
+                    <span>Kann ich gut</span>
+                    <div class="growth-value" id="growth_anger_val">3</div>
+                </div>
+            </div>
+
+            <div class="growth-area">
+                <div class="growth-header">
+                    <div class="growth-emoji">⏰</div>
+                    <div class="growth-title">Geduldig warten</div>
+                </div>
+                <div class="growth-slider-container">
+                    <span>Übe noch</span>
+                    <input type="range" class="growth-slider" id="growth_patience" min="1" max="5" value="3">
+                    <span>Kann ich gut</span>
+                    <div class="growth-value" id="growth_patience_val">3</div>
+                </div>
+            </div>
+
+            <div class="growth-area">
+                <div class="growth-header">
+                    <div class="growth-emoji">🤝</div>
+                    <div class="growth-title">Teilen mit anderen</div>
+                </div>
+                <div class="growth-slider-container">
+                    <span>Übe noch</span>
+                    <input type="range" class="growth-slider" id="growth_sharing" min="1" max="5" value="3">
+                    <span>Kann ich gut</span>
+                    <div class="growth-value" id="growth_sharing_val">3</div>
+                </div>
+            </div>
+
+            <div class="growth-area">
+                <div class="growth-header">
+                    <div class="growth-emoji">💪</div>
+                    <div class="growth-title">Nicht aufgeben</div>
+                </div>
+                <div class="growth-slider-container">
+                    <span>Übe noch</span>
+                    <input type="range" class="growth-slider" id="growth_perseverance" min="1" max="5" value="3">
+                    <span>Kann ich gut</span>
+                    <div class="growth-value" id="growth_perseverance_val">3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📅</span> Meine Woche</h2>
+            <p style="margin-bottom: 15px; color: #666;">Wie war dein Tag? Klicke auf jeden Tag:</p>
+
+            <div class="day-check">
+                <div class="day-item" data-day="mon">
+                    <div class="day-name">Mo</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="tue">
+                    <div class="day-name">Di</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="wed">
+                    <div class="day-name">Mi</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="thu">
+                    <div class="day-name">Do</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="fri">
+                    <div class="day-name">Fr</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="sat">
+                    <div class="day-name">Sa</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+                <div class="day-item" data-day="sun">
+                    <div class="day-name">So</div>
+                    <div class="day-emoji">😐</div>
+                </div>
+            </div>
+
+            <div class="emotion-selector">
+                <button class="emotion-btn" data-emotion="bad" title="Nicht so gut">😞</button>
+                <button class="emotion-btn" data-emotion="medium" title="Geht so">😐</button>
+                <button class="emotion-btn" data-emotion="good" title="Gut">😊</button>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9rem;">
+                Wähle eine Stimmung und klicke auf den Tag
+            </p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">❓</span> Fragen an mich selbst</h2>
+
+            <div class="question-section">
+                <div class="question-text">Was habe ich diese Woche Neues gelernt?</div>
+                <textarea class="answer-input" id="q_learned" placeholder="Schreibe hier..."></textarea>
+            </div>
+
+            <div class="question-section">
+                <div class="question-text">Was hat mich stolz gemacht?</div>
+                <textarea class="answer-input" id="q_proud" placeholder="Schreibe hier..."></textarea>
+            </div>
+
+            <div class="question-section">
+                <div class="question-text">Was war schwierig für mich?</div>
+                <textarea class="answer-input" id="q_difficult" placeholder="Schreibe hier..."></textarea>
+            </div>
+
+            <div class="question-section">
+                <div class="question-text">Wie war ich ein guter Freund?</div>
+                <textarea class="answer-input" id="q_friend" placeholder="Schreibe hier..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Meine Ziele</h2>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <span>🌟</span>
+                    <div class="goal-title">Mein erstes Ziel</div>
+                </div>
+                <input type="text" class="goal-input" id="goal1_text" placeholder="Was möchtest du erreichen?">
+                <div class="goal-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="goal1_progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-btns">
+                        <button class="progress-btn minus" onclick="updateGoalProgress(1, -10)">-</button>
+                        <button class="progress-btn plus" onclick="updateGoalProgress(1, 10)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <span>🌟</span>
+                    <div class="goal-title">Mein zweites Ziel</div>
+                </div>
+                <input type="text" class="goal-input" id="goal2_text" placeholder="Was möchtest du erreichen?">
+                <div class="goal-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="goal2_progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-btns">
+                        <button class="progress-btn minus" onclick="updateGoalProgress(2, -10)">-</button>
+                        <button class="progress-btn plus" onclick="updateGoalProgress(2, 10)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🏅</span> Meine Abzeichen</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Abzeichen, die du dir verdient hast:</p>
+
+            <div class="badges-grid">
+                <div class="badge" data-badge="helper">
+                    <div class="badge-icon">🤝</div>
+                    <div class="badge-name">Helfer</div>
+                </div>
+                <div class="badge" data-badge="listener">
+                    <div class="badge-icon">👂</div>
+                    <div class="badge-name">Zuhörer</div>
+                </div>
+                <div class="badge" data-badge="brave">
+                    <div class="badge-icon">🦸</div>
+                    <div class="badge-name">Mutiger</div>
+                </div>
+                <div class="badge" data-badge="kind">
+                    <div class="badge-icon">💕</div>
+                    <div class="badge-name">Lieber Freund</div>
+                </div>
+                <div class="badge" data-badge="learner">
+                    <div class="badge-icon">📚</div>
+                    <div class="badge-name">Lerner</div>
+                </div>
+                <div class="badge" data-badge="patient">
+                    <div class="badge-icon">⏰</div>
+                    <div class="badge-name">Geduldiger</div>
+                </div>
+                <div class="badge" data-badge="sharer">
+                    <div class="badge-icon">🎁</div>
+                    <div class="badge-name">Teiler</div>
+                </div>
+                <div class="badge" data-badge="includer">
+                    <div class="badge-icon">🤗</div>
+                    <div class="badge-name">Einbezieher</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken über dich selbst..."></textarea>
+
+            <div class="eldib-reference">
+                <strong>ELDiB-Bezug:</strong> S-47, S-48 - Selbstreflexion, eigenes Verhalten einschätzen
+            </div>
+
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let strengths = [];
+        let growthAreas = {};
+        let dayMoods = {};
+        let currentEmotion = 'medium';
+        let badges = [];
+        let goalProgress = { 1: 0, 2: 0 };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Strength cards
+            document.querySelectorAll('.strength-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const strength = this.dataset.strength;
+                    if (this.classList.contains('selected')) {
+                        if (!strengths.includes(strength)) {
+                            strengths.push(strength);
+                        }
+                    } else {
+                        strengths = strengths.filter(s => s !== strength);
+                    }
+                    saveData();
+                });
+            });
+
+            // Growth sliders
+            document.querySelectorAll('.growth-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const id = this.id;
+                    const val = this.value;
+                    document.getElementById(id + '_val').textContent = val;
+                    growthAreas[id.replace('growth_', '')] = parseInt(val);
+                    saveData();
+                });
+            });
+
+            // Emotion selector
+            document.querySelectorAll('.emotion-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentEmotion = this.dataset.emotion;
+                });
+            });
+
+            // Day items
+            document.querySelectorAll('.day-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    dayMoods[day] = currentEmotion;
+                    updateDayDisplay(this, currentEmotion);
+                    saveData();
+                });
+            });
+
+            // Badge items
+            document.querySelectorAll('.badge').forEach(badge => {
+                badge.addEventListener('click', function() {
+                    this.classList.toggle('earned');
+                    const badgeName = this.dataset.badge;
+                    if (this.classList.contains('earned')) {
+                        if (!badges.includes(badgeName)) {
+                            badges.push(badgeName);
+                        }
+                    } else {
+                        badges = badges.filter(b => b !== badgeName);
+                    }
+                    saveData();
+                });
+            });
+
+            // Auto-save for inputs
+            document.querySelectorAll('textarea, .goal-input').forEach(input => {
+                input.addEventListener('input', saveData);
+            });
+        }
+
+        function updateDayDisplay(dayEl, mood) {
+            dayEl.classList.remove('good', 'medium', 'bad');
+            dayEl.classList.add(mood);
+            const emojiMap = { good: '😊', medium: '😐', bad: '😞' };
+            dayEl.querySelector('.day-emoji').textContent = emojiMap[mood];
+        }
+
+        function updateGoalProgress(goalNum, change) {
+            goalProgress[goalNum] = Math.max(0, Math.min(100, goalProgress[goalNum] + change));
+            document.getElementById(`goal${goalNum}_progress`).style.width = goalProgress[goalNum] + '%';
+            saveData();
+        }
+
+        function saveData() {
+            const data = {
+                strengths,
+                growthAreas,
+                dayMoods,
+                badges,
+                goalProgress,
+                goals: {
+                    goal1: document.getElementById('goal1_text').value,
+                    goal2: document.getElementById('goal2_text').value
+                },
+                questions: {
+                    learned: document.getElementById('q_learned').value,
+                    proud: document.getElementById('q_proud').value,
+                    difficult: document.getElementById('q_difficult').value,
+                    friend: document.getElementById('q_friend').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s3_selbstreflexion', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s3_selbstreflexion');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.strengths) {
+                    strengths = data.strengths;
+                    strengths.forEach(s => {
+                        const el = document.querySelector(`.strength-card[data-strength="${s}"]`);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+                if (data.growthAreas) {
+                    growthAreas = data.growthAreas;
+                    Object.entries(growthAreas).forEach(([area, val]) => {
+                        const slider = document.getElementById(`growth_${area}`);
+                        const valDisplay = document.getElementById(`growth_${area}_val`);
+                        if (slider) slider.value = val;
+                        if (valDisplay) valDisplay.textContent = val;
+                    });
+                }
+
+                if (data.dayMoods) {
+                    dayMoods = data.dayMoods;
+                    Object.entries(dayMoods).forEach(([day, mood]) => {
+                        const dayEl = document.querySelector(`.day-item[data-day="${day}"]`);
+                        if (dayEl) updateDayDisplay(dayEl, mood);
+                    });
+                }
+
+                if (data.badges) {
+                    badges = data.badges;
+                    badges.forEach(b => {
+                        const el = document.querySelector(`.badge[data-badge="${b}"]`);
+                        if (el) el.classList.add('earned');
+                    });
+                }
+
+                if (data.goalProgress) {
+                    goalProgress = data.goalProgress;
+                    document.getElementById('goal1_progress').style.width = goalProgress[1] + '%';
+                    document.getElementById('goal2_progress').style.width = goalProgress[2] + '%';
+                }
+
+                if (data.goals) {
+                    document.getElementById('goal1_text').value = data.goals.goal1 || '';
+                    document.getElementById('goal2_text').value = data.goals.goal2 || '';
+                }
+
+                if (data.questions) {
+                    document.getElementById('q_learned').value = data.questions.learned || '';
+                    document.getElementById('q_proud').value = data.questions.proud || '';
+                    document.getElementById('q_difficult').value = data.questions.difficult || '';
+                    document.getElementById('q_friend').value = data.questions.friend || '';
+                }
+
+                if (data.notes) {
+                    document.getElementById('notes').value = data.notes;
+                }
+            }
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.remove('show');
+            void notice.offsetWidth;
+            notice.classList.add('show');
+        }
+    </script>
+</body>
+</html>
