@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesellschaftliches Engagement - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #a5d6a7;
+        }
+        .meta {
+            color: #c8e6c9;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #a5d6a7;
+        }
+        h2 {
+            color: #a5d6a7;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(165,214,167,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .cause-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .cause-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .cause-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+        .cause-card.selected {
+            border-color: #a5d6a7;
+            background: rgba(165,214,167,0.2);
+        }
+        .cause-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .cause-name {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .why-care {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .why-care label {
+            display: block;
+            color: #a5d6a7;
+            margin-bottom: 10px;
+        }
+        .why-care textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .engagement-levels {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .level-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+        .level-1 .level-icon { background: rgba(129,199,132,0.3); }
+        .level-2 .level-icon { background: rgba(102,187,106,0.3); }
+        .level-3 .level-icon { background: rgba(76,175,80,0.3); }
+        .level-4 .level-icon { background: rgba(67,160,71,0.3); }
+        .level-info h4 {
+            color: #a5d6a7;
+            margin-bottom: 5px;
+        }
+        .level-info p {
+            color: #bbb;
+            font-size: 0.9em;
+        }
+        .level-check {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #a5d6a7;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .level-check.checked {
+            background: #a5d6a7;
+        }
+        .level-check.checked::after {
+            content: "✓";
+            color: #1b5e20;
+            font-weight: bold;
+        }
+        .action-ideas {
+            background: rgba(255,152,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,152,0,0.3);
+        }
+        .action-ideas h3 {
+            color: #ffb74d;
+            margin-bottom: 15px;
+        }
+        .idea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .idea-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .idea-card:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .idea-card.selected {
+            background: rgba(255,152,0,0.2);
+            border: 1px solid #ffb74d;
+        }
+        .idea-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .idea-desc {
+            color: #bbb;
+            font-size: 0.85em;
+        }
+        .role-models {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .role-models h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .role-model-input {
+            display: grid;
+            gap: 15px;
+        }
+        .role-model-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .role-model-item label {
+            display: block;
+            color: #64b5f6;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .role-model-item input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .barrier-section {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .barrier-section h3 {
+            color: #ef5350;
+            margin-bottom: 15px;
+        }
+        .barrier-list {
+            display: grid;
+            gap: 10px;
+        }
+        .barrier-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .barrier-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .barrier-item.selected {
+            background: rgba(244,67,54,0.2);
+        }
+        .barrier-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ef5350;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .barrier-item.selected .barrier-checkbox {
+            background: #ef5350;
+        }
+        .barrier-item.selected .barrier-checkbox::after {
+            content: "✓";
+            color: #fff;
+            font-size: 0.8em;
+        }
+        .solution-input {
+            margin-top: 15px;
+        }
+        .solution-input label {
+            display: block;
+            color: #ef5350;
+            margin-bottom: 8px;
+        }
+        .solution-input textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .project-planner {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .project-planner h3 {
+            color: #ce93d8;
+            margin-bottom: 15px;
+        }
+        .project-steps {
+            display: grid;
+            gap: 15px;
+        }
+        .project-step {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: rgba(156,39,176,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            color: #ce93d8;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-content label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .step-content input, .step-content textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .step-content textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .impact-meter {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .impact-meter h3 {
+            color: #a5d6a7;
+            margin-bottom: 15px;
+        }
+        .impact-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .impact-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .impact-option:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        .impact-option:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        .impact-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .impact-option.selected {
+            background: rgba(165,214,167,0.3);
+            border-color: #a5d6a7;
+        }
+        .impact-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        .impact-label {
+            font-size: 0.8em;
+            color: #bbb;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #a5d6a7;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a5d6a7, #81c784);
+            color: #1b5e20;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(165,214,167,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #a5d6a7, #81c784);
+            color: #1b5e20;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .cause-grid { grid-template-columns: repeat(2, 1fr); }
+            .idea-grid { grid-template-columns: 1fr; }
+            .impact-scale { flex-direction: column; }
+            .impact-option { border-radius: 0; }
+            .impact-option:first-child { border-radius: 8px 8px 0 0; }
+            .impact-option:last-child { border-radius: 0 0 8px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Gesellschaftliches Engagement</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-81, S-82</p>
+        </header>
+
+        <section class="section">
+            <h2>💚 Wofür schlägt dein Herz?</h2>
+            <div class="intro-text">
+                <p>Jeder Mensch kann etwas bewirken - auch du! Gesellschaftliches Engagement bedeutet, sich für etwas einzusetzen, das über die eigenen Interessen hinausgeht. Es gibt viele Themen und Wege, sich zu engagieren. Was ist dir wichtig?</p>
+            </div>
+
+            <p style="margin-bottom: 15px; color: #c8e6c9;">Welche Themen liegen dir am Herzen? (Wähle mehrere)</p>
+
+            <div class="cause-grid" id="causeGrid">
+                <div class="cause-card" data-cause="environment">
+                    <div class="cause-icon">🌍</div>
+                    <div class="cause-name">Umwelt & Klima</div>
+                </div>
+                <div class="cause-card" data-cause="animals">
+                    <div class="cause-icon">🐾</div>
+                    <div class="cause-name">Tierschutz</div>
+                </div>
+                <div class="cause-card" data-cause="social">
+                    <div class="cause-icon">🤝</div>
+                    <div class="cause-name">Soziale Gerechtigkeit</div>
+                </div>
+                <div class="cause-card" data-cause="education">
+                    <div class="cause-icon">📚</div>
+                    <div class="cause-name">Bildung für alle</div>
+                </div>
+                <div class="cause-card" data-cause="health">
+                    <div class="cause-icon">💊</div>
+                    <div class="cause-name">Gesundheit</div>
+                </div>
+                <div class="cause-card" data-cause="refugees">
+                    <div class="cause-icon">🏠</div>
+                    <div class="cause-name">Flüchtlingshilfe</div>
+                </div>
+                <div class="cause-card" data-cause="elderly">
+                    <div class="cause-icon">👴</div>
+                    <div class="cause-name">Seniorenhilfe</div>
+                </div>
+                <div class="cause-card" data-cause="rights">
+                    <div class="cause-icon">⚖️</div>
+                    <div class="cause-name">Menschenrechte</div>
+                </div>
+                <div class="cause-card" data-cause="local">
+                    <div class="cause-icon">🏘️</div>
+                    <div class="cause-name">Lokale Gemeinschaft</div>
+                </div>
+                <div class="cause-card" data-cause="digital">
+                    <div class="cause-icon">💻</div>
+                    <div class="cause-name">Digitale Teilhabe</div>
+                </div>
+            </div>
+
+            <div class="why-care">
+                <label>Warum sind dir diese Themen wichtig?</label>
+                <textarea id="whyCare" placeholder="Diese Themen sind mir wichtig, weil..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Engagement-Stufen</h2>
+            <p style="margin-bottom: 15px; color: #c8e6c9;">Es gibt viele Wege, sich zu engagieren. Welche machst du bereits? (Klicke zum Markieren)</p>
+
+            <div class="engagement-levels">
+                <div class="level-card level-1" data-level="inform">
+                    <div class="level-icon">📖</div>
+                    <div class="level-info">
+                        <h4>Informieren</h4>
+                        <p>Sich über Themen informieren, Nachrichten verfolgen, Dokumentationen schauen</p>
+                    </div>
+                    <div class="level-check"></div>
+                </div>
+
+                <div class="level-card level-2" data-level="discuss">
+                    <div class="level-icon">💬</div>
+                    <div class="level-info">
+                        <h4>Diskutieren</h4>
+                        <p>Mit anderen über wichtige Themen sprechen, Meinungen austauschen</p>
+                    </div>
+                    <div class="level-check"></div>
+                </div>
+
+                <div class="level-card level-3" data-level="support">
+                    <div class="level-icon">✊</div>
+                    <div class="level-info">
+                        <h4>Unterstützen</h4>
+                        <p>Petitionen unterschreiben, spenden, bewusst konsumieren</p>
+                    </div>
+                    <div class="level-check"></div>
+                </div>
+
+                <div class="level-card level-4" data-level="active">
+                    <div class="level-icon">🌟</div>
+                    <div class="level-info">
+                        <h4>Aktiv werden</h4>
+                        <p>Ehrenamtlich helfen, Projekte starten, an Aktionen teilnehmen</p>
+                    </div>
+                    <div class="level-check"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Ideen zum Mitmachen</h2>
+            <div class="action-ideas">
+                <h3>Was könntest du konkret tun?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Wähle Ideen, die dich ansprechen:</p>
+
+                <div class="idea-grid" id="ideaGrid">
+                    <div class="idea-card" data-idea="cleanup">
+                        <div class="idea-title">🧹 Cleanup-Aktion</div>
+                        <div class="idea-desc">Müll sammeln im Park oder am Strand</div>
+                    </div>
+                    <div class="idea-card" data-idea="tutor">
+                        <div class="idea-title">📝 Nachhilfe geben</div>
+                        <div class="idea-desc">Jüngeren bei Hausaufgaben helfen</div>
+                    </div>
+                    <div class="idea-card" data-idea="food">
+                        <div class="idea-title">🍲 Tafel-Mitarbeit</div>
+                        <div class="idea-desc">Bei Lebensmittelausgabe helfen</div>
+                    </div>
+                    <div class="idea-card" data-idea="visit">
+                        <div class="idea-title">👴 Seniorenbesuche</div>
+                        <div class="idea-desc">Ältere Menschen besuchen, vorlesen</div>
+                    </div>
+                    <div class="idea-card" data-idea="shelter">
+                        <div class="idea-title">🐕 Tierheim-Hilfe</div>
+                        <div class="idea-desc">Mit Tieren Gassi gehen, pflegen</div>
+                    </div>
+                    <div class="idea-card" data-idea="awareness">
+                        <div class="idea-title">📢 Aufklären</div>
+                        <div class="idea-desc">Social Media für gute Sachen nutzen</div>
+                    </div>
+                    <div class="idea-card" data-idea="fundraise">
+                        <div class="idea-title">💰 Spendenaktion</div>
+                        <div class="idea-desc">Geld für einen guten Zweck sammeln</div>
+                    </div>
+                    <div class="idea-card" data-idea="buddy">
+                        <div class="idea-title">🤗 Buddy-System</div>
+                        <div class="idea-desc">Neue Schüler integrieren helfen</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⭐ Vorbilder</h2>
+            <div class="role-models">
+                <h3>Wer inspiriert dich?</h3>
+                <div class="role-model-input">
+                    <div class="role-model-item">
+                        <label>Eine Person (berühmt oder bekannt), die sich engagiert:</label>
+                        <input type="text" id="roleModel1" placeholder="Name...">
+                    </div>
+                    <div class="role-model-item">
+                        <label>Was bewunderst du an dieser Person?</label>
+                        <input type="text" id="roleModel2" placeholder="Ich bewundere...">
+                    </div>
+                    <div class="role-model-item">
+                        <label>Was kannst du dir von ihr/ihm abschauen?</label>
+                        <input type="text" id="roleModel3" placeholder="Ich könnte...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚧 Hindernisse überwinden</h2>
+            <div class="barrier-section">
+                <h3>Was hält dich vielleicht zurück?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Markiere, was auf dich zutrifft:</p>
+
+                <div class="barrier-list" id="barrierList">
+                    <div class="barrier-item" data-barrier="time">
+                        <div class="barrier-checkbox"></div>
+                        <span>Ich habe zu wenig Zeit</span>
+                    </div>
+                    <div class="barrier-item" data-barrier="knowledge">
+                        <div class="barrier-checkbox"></div>
+                        <span>Ich weiß nicht, wo ich anfangen soll</span>
+                    </div>
+                    <div class="barrier-item" data-barrier="alone">
+                        <div class="barrier-checkbox"></div>
+                        <span>Ich möchte nicht alleine anfangen</span>
+                    </div>
+                    <div class="barrier-item" data-barrier="impact">
+                        <div class="barrier-checkbox"></div>
+                        <span>Ich glaube nicht, dass ich etwas bewirken kann</span>
+                    </div>
+                    <div class="barrier-item" data-barrier="shy">
+                        <div class="barrier-checkbox"></div>
+                        <span>Ich bin zu schüchtern</span>
+                    </div>
+                    <div class="barrier-item" data-barrier="support">
+                        <div class="barrier-checkbox"></div>
+                        <span>Mein Umfeld unterstützt mich nicht</span>
+                    </div>
+                </div>
+
+                <div class="solution-input">
+                    <label>Wie könntest du diese Hindernisse überwinden?</label>
+                    <textarea id="barrierSolution" placeholder="Mögliche Lösungen..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Mein Engagement-Projekt planen</h2>
+            <div class="project-planner">
+                <h3>Plane dein eigenes kleines Projekt</h3>
+
+                <div class="project-steps">
+                    <div class="project-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <label>Was möchte ich erreichen?</label>
+                            <input type="text" id="project_goal" placeholder="Mein Ziel ist...">
+                        </div>
+                    </div>
+
+                    <div class="project-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <label>Wem oder was hilft das?</label>
+                            <input type="text" id="project_who" placeholder="Das hilft...">
+                        </div>
+                    </div>
+
+                    <div class="project-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <label>Was brauche ich dafür?</label>
+                            <textarea id="project_resources" placeholder="Zeit, Materialien, Helfer..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="project-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <label>Wer könnte mir helfen?</label>
+                            <input type="text" id="project_helpers" placeholder="Freunde, Familie, Lehrer, Vereine...">
+                        </div>
+                    </div>
+
+                    <div class="project-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <label>Erster konkreter Schritt:</label>
+                            <input type="text" id="project_first" placeholder="Als erstes werde ich...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📈 Wie groß soll mein Einfluss sein?</h2>
+            <div class="impact-meter">
+                <h3>Wo möchtest du anfangen?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Jeder Beitrag zählt - egal wie klein:</p>
+
+                <div class="impact-scale" id="impactScale">
+                    <div class="impact-option" data-impact="personal">
+                        <div class="impact-icon">👤</div>
+                        <div class="impact-label">Persönlich<br><small>Eigenes Verhalten ändern</small></div>
+                    </div>
+                    <div class="impact-option" data-impact="friends">
+                        <div class="impact-icon">👥</div>
+                        <div class="impact-label">Freunde<br><small>Im Freundeskreis</small></div>
+                    </div>
+                    <div class="impact-option" data-impact="school">
+                        <div class="impact-icon">🏫</div>
+                        <div class="impact-label">Schule<br><small>In der Schulgemeinschaft</small></div>
+                    </div>
+                    <div class="impact-option" data-impact="local">
+                        <div class="impact-icon">🏘️</div>
+                        <div class="impact-label">Lokal<br><small>Im Stadtteil/Ort</small></div>
+                    </div>
+                    <div class="impact-option" data-impact="global">
+                        <div class="impact-icon">🌍</div>
+                        <div class="impact-label">Global<br><small>Weltweite Themen</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Was bedeutet es für mich, ein "guter Bürger" / eine "gute Bürgerin" zu sein?</label>
+                    <textarea id="reflection1" placeholder="Für mich bedeutet das..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Wie würde die Welt aussehen, wenn alle sich ein bisschen mehr engagieren würden?</label>
+                    <textarea id="reflection2" placeholder="Ich stelle mir vor..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Ideen, Kontakte..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedCauses = [];
+        let selectedLevels = [];
+        let selectedIdeas = [];
+        let selectedBarriers = [];
+        let selectedImpact = null;
+
+        // Cause selection
+        document.querySelectorAll('.cause-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const cause = this.dataset.cause;
+                if (this.classList.contains('selected')) {
+                    if (!selectedCauses.includes(cause)) selectedCauses.push(cause);
+                } else {
+                    selectedCauses = selectedCauses.filter(c => c !== cause);
+                }
+            });
+        });
+
+        // Level selection
+        document.querySelectorAll('.level-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const check = this.querySelector('.level-check');
+                check.classList.toggle('checked');
+                const level = this.dataset.level;
+                if (check.classList.contains('checked')) {
+                    if (!selectedLevels.includes(level)) selectedLevels.push(level);
+                } else {
+                    selectedLevels = selectedLevels.filter(l => l !== level);
+                }
+            });
+        });
+
+        // Idea selection
+        document.querySelectorAll('.idea-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const idea = this.dataset.idea;
+                if (this.classList.contains('selected')) {
+                    if (!selectedIdeas.includes(idea)) selectedIdeas.push(idea);
+                } else {
+                    selectedIdeas = selectedIdeas.filter(i => i !== idea);
+                }
+            });
+        });
+
+        // Barrier selection
+        document.querySelectorAll('.barrier-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const barrier = this.dataset.barrier;
+                if (this.classList.contains('selected')) {
+                    if (!selectedBarriers.includes(barrier)) selectedBarriers.push(barrier);
+                } else {
+                    selectedBarriers = selectedBarriers.filter(b => b !== barrier);
+                }
+            });
+        });
+
+        // Impact selection
+        document.querySelectorAll('.impact-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.impact-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedImpact = this.dataset.impact;
+            });
+        });
+
+        function saveData() {
+            const data = {
+                causes: selectedCauses,
+                whyCare: document.getElementById('whyCare').value,
+                levels: selectedLevels,
+                ideas: selectedIdeas,
+                roleModels: {
+                    name: document.getElementById('roleModel1').value,
+                    admire: document.getElementById('roleModel2').value,
+                    learn: document.getElementById('roleModel3').value
+                },
+                barriers: selectedBarriers,
+                barrierSolution: document.getElementById('barrierSolution').value,
+                project: {
+                    goal: document.getElementById('project_goal').value,
+                    who: document.getElementById('project_who').value,
+                    resources: document.getElementById('project_resources').value,
+                    helpers: document.getElementById('project_helpers').value,
+                    first: document.getElementById('project_first').value
+                },
+                impact: selectedImpact,
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_engagement', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_engagement');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                selectedCauses = data.causes || [];
+                selectedCauses.forEach(c => {
+                    const card = document.querySelector(`[data-cause="${c}"]`);
+                    if (card) card.classList.add('selected');
+                });
+
+                document.getElementById('whyCare').value = data.whyCare || '';
+
+                selectedLevels = data.levels || [];
+                selectedLevels.forEach(l => {
+                    const card = document.querySelector(`[data-level="${l}"]`);
+                    if (card) card.querySelector('.level-check').classList.add('checked');
+                });
+
+                selectedIdeas = data.ideas || [];
+                selectedIdeas.forEach(i => {
+                    const card = document.querySelector(`[data-idea="${i}"]`);
+                    if (card) card.classList.add('selected');
+                });
+
+                if (data.roleModels) {
+                    document.getElementById('roleModel1').value = data.roleModels.name || '';
+                    document.getElementById('roleModel2').value = data.roleModels.admire || '';
+                    document.getElementById('roleModel3').value = data.roleModels.learn || '';
+                }
+
+                selectedBarriers = data.barriers || [];
+                selectedBarriers.forEach(b => {
+                    const item = document.querySelector(`[data-barrier="${b}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                document.getElementById('barrierSolution').value = data.barrierSolution || '';
+
+                if (data.project) {
+                    document.getElementById('project_goal').value = data.project.goal || '';
+                    document.getElementById('project_who').value = data.project.who || '';
+                    document.getElementById('project_resources').value = data.project.resources || '';
+                    document.getElementById('project_helpers').value = data.project.helpers || '';
+                    document.getElementById('project_first').value = data.project.first || '';
+                }
+
+                selectedImpact = data.impact;
+                if (selectedImpact) {
+                    const option = document.querySelector(`[data-impact="${selectedImpact}"]`);
+                    if (option) option.classList.add('selected');
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_engagement');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_engagement');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'engagement-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

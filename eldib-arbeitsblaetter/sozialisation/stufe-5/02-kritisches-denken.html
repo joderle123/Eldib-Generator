@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kritisches Denken über Normen - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #00d9ff;
+        }
+        .meta {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00d9ff;
+        }
+        h2 {
+            color: #00d9ff;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .intro-text {
+            background: rgba(0,217,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .norm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .norm-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .norm-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        .norm-card.analyzed {
+            border-color: #00d9ff;
+            background: rgba(0,217,255,0.1);
+        }
+        .norm-title {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .norm-desc {
+            color: #bbb;
+            font-size: 0.9em;
+        }
+        .analysis-panel {
+            display: none;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .analysis-panel.active {
+            display: block;
+        }
+        .analysis-question {
+            margin-bottom: 15px;
+        }
+        .analysis-question label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d9ff;
+            font-weight: 500;
+        }
+        .analysis-question textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .analysis-question textarea::placeholder {
+            color: #888;
+        }
+        .thinking-tool {
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,193,7,0.3);
+        }
+        .thinking-tool h3 {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        .tool-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tool-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: #ffc107;
+            color: #1a1a2e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .fallacy-section {
+            margin: 20px 0;
+        }
+        .fallacy-card {
+            background: rgba(244,67,54,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 3px solid #f44336;
+        }
+        .fallacy-name {
+            color: #f44336;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .fallacy-example {
+            color: #bbb;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .fallacy-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .debate-scenario {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(156,39,176,0.3);
+        }
+        .debate-title {
+            color: #ce93d8;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .debate-positions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .position-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .position-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .position-pro {
+            background: rgba(76,175,80,0.3);
+            color: #81c784;
+        }
+        .position-contra {
+            background: rgba(244,67,54,0.3);
+            color: #e57373;
+        }
+        .position-textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .own-conclusion {
+            margin-top: 15px;
+        }
+        .own-conclusion label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 8px;
+        }
+        .source-checker {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .source-checker h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .source-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .criteria-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .criteria-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .criteria-item.checked {
+            background: rgba(33,150,243,0.2);
+        }
+        .criteria-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #64b5f6;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .criteria-item.checked .criteria-checkbox {
+            background: #64b5f6;
+        }
+        .criteria-item.checked .criteria-checkbox::after {
+            content: "✓";
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00d9ff, #0099cc);
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0,217,255,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00d9ff, #0099cc);
+            color: #1a1a2e;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .debate-positions { grid-template-columns: 1fr; }
+            .source-criteria { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Kritisches Denken über Normen</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-73, S-74</p>
+        </header>
+
+        <section class="section">
+            <h2>💡 Hinterfragen lernen</h2>
+            <div class="intro-text">
+                <p>Gesellschaftliche Normen, Regeln und Überzeugungen sind nicht in Stein gemeißelt. Sie wurden von Menschen geschaffen und können hinterfragt werden. Kritisches Denken bedeutet nicht, alles abzulehnen, sondern Dinge sorgfältig zu prüfen, bevor man sie annimmt oder verwirft. Es geht darum, eigene begründete Meinungen zu entwickeln.</p>
+            </div>
+
+            <div class="thinking-tool">
+                <h3>🔧 Das PROVE-Werkzeug für kritisches Denken</h3>
+                <div class="tool-steps">
+                    <div class="tool-step">
+                        <div class="step-number">P</div>
+                        <div><strong>Prüfe</strong> - Woher kommt die Information? Ist die Quelle vertrauenswürdig?</div>
+                    </div>
+                    <div class="tool-step">
+                        <div class="step-number">R</div>
+                        <div><strong>Recherchiere</strong> - Gibt es andere Perspektiven? Was sagen andere Quellen?</div>
+                    </div>
+                    <div class="tool-step">
+                        <div class="step-number">O</div>
+                        <div><strong>Ordne</strong> - Unterscheide Fakten von Meinungen und Gefühlen</div>
+                    </div>
+                    <div class="tool-step">
+                        <div class="step-number">V</div>
+                        <div><strong>Verstehe</strong> - Wer profitiert von dieser Aussage? Was sind die Interessen?</div>
+                    </div>
+                    <div class="tool-step">
+                        <div class="step-number">E</div>
+                        <div><strong>Entscheide</strong> - Bilde dir deine eigene begründete Meinung</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Normen analysieren</h2>
+            <p style="margin-bottom: 20px; color: #bbb;">Klicke auf eine Norm, um sie kritisch zu analysieren:</p>
+
+            <div class="norm-grid" id="normGrid">
+                <div class="norm-card" data-norm="geschlechterrollen">
+                    <div class="norm-title">Geschlechterrollen</div>
+                    <div class="norm-desc">"Jungs weinen nicht" / "Mädchen spielen mit Puppen"</div>
+                </div>
+                <div class="norm-card" data-norm="erfolg">
+                    <div class="norm-title">Erfolgsdefinition</div>
+                    <div class="norm-desc">"Erfolgreich ist, wer viel Geld verdient"</div>
+                </div>
+                <div class="norm-card" data-norm="aussehen">
+                    <div class="norm-title">Schönheitsideale</div>
+                    <div class="norm-desc">"Man muss bestimmten Körperidealen entsprechen"</div>
+                </div>
+                <div class="norm-card" data-norm="bildung">
+                    <div class="norm-title">Bildungsweg</div>
+                    <div class="norm-desc">"Nur mit Abitur kann man etwas werden"</div>
+                </div>
+                <div class="norm-card" data-norm="alter">
+                    <div class="norm-title">Alterserwartungen</div>
+                    <div class="norm-desc">"Mit 30 sollte man verheiratet sein"</div>
+                </div>
+                <div class="norm-card" data-norm="social-media">
+                    <div class="norm-title">Social Media Präsenz</div>
+                    <div class="norm-desc">"Man muss überall präsent und erreichbar sein"</div>
+                </div>
+            </div>
+
+            <div class="analysis-panel" id="analysisPanel">
+                <h3 style="color: #00d9ff; margin-bottom: 15px;" id="analysisTitle">Analyse</h3>
+                <div class="analysis-question">
+                    <label>Woher kommt diese Norm? (Geschichte, Kultur, Medien...)</label>
+                    <textarea id="norm_origin" placeholder="Diese Norm stammt wahrscheinlich von..."></textarea>
+                </div>
+                <div class="analysis-question">
+                    <label>Wem nützt diese Norm? Wer könnte davon profitieren?</label>
+                    <textarea id="norm_benefit" placeholder="Diese Norm nützt vor allem..."></textarea>
+                </div>
+                <div class="analysis-question">
+                    <label>Welche negativen Auswirkungen kann diese Norm haben?</label>
+                    <textarea id="norm_negative" placeholder="Negative Folgen könnten sein..."></textarea>
+                </div>
+                <div class="analysis-question">
+                    <label>Deine begründete Meinung zu dieser Norm:</label>
+                    <textarea id="norm_opinion" placeholder="Ich denke, dass diese Norm... weil..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Denkfallen erkennen</h2>
+            <p style="margin-bottom: 20px; color: #bbb;">Lerne häufige Argumentationsfehler zu erkennen und finde eigene Beispiele:</p>
+
+            <div class="fallacy-section">
+                <div class="fallacy-card">
+                    <div class="fallacy-name">Autoritätsargument</div>
+                    <div class="fallacy-example">"Das stimmt, weil mein Vater das sagt" - Die Wahrheit einer Aussage hängt nicht davon ab, wer sie sagt.</div>
+                    <input type="text" class="fallacy-input" id="fallacy1" placeholder="Kennst du ein Beispiel aus deinem Alltag?">
+                </div>
+
+                <div class="fallacy-card">
+                    <div class="fallacy-name">Mehrheitsargument</div>
+                    <div class="fallacy-example">"Alle machen das so" - Nur weil viele etwas tun, ist es nicht automatisch richtig.</div>
+                    <input type="text" class="fallacy-input" id="fallacy2" placeholder="Kennst du ein Beispiel aus deinem Alltag?">
+                </div>
+
+                <div class="fallacy-card">
+                    <div class="fallacy-name">Traditionsargument</div>
+                    <div class="fallacy-example">"Das war schon immer so" - Tradition allein macht etwas nicht gut oder richtig.</div>
+                    <input type="text" class="fallacy-input" id="fallacy3" placeholder="Kennst du ein Beispiel aus deinem Alltag?">
+                </div>
+
+                <div class="fallacy-card">
+                    <div class="fallacy-name">Schwarz-Weiß-Denken</div>
+                    <div class="fallacy-example">"Entweder bist du für uns oder gegen uns" - Die Realität hat meist mehr als zwei Optionen.</div>
+                    <input type="text" class="fallacy-input" id="fallacy4" placeholder="Kennst du ein Beispiel aus deinem Alltag?">
+                </div>
+
+                <div class="fallacy-card">
+                    <div class="fallacy-name">Persönlicher Angriff</div>
+                    <div class="fallacy-example">"Du bist noch zu jung, um das zu verstehen" - Die Person wird angegriffen statt das Argument.</div>
+                    <input type="text" class="fallacy-input" id="fallacy5" placeholder="Kennst du ein Beispiel aus deinem Alltag?">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Debatte: Verschiedene Seiten betrachten</h2>
+            <p style="margin-bottom: 20px; color: #bbb;">Übe, beide Seiten eines Themas zu verstehen:</p>
+
+            <div class="debate-scenario">
+                <div class="debate-title">Thema: Sollte das Wahlrecht ab 16 Jahren gelten?</div>
+                <div class="debate-positions">
+                    <div class="position-box">
+                        <span class="position-label position-pro">PRO</span>
+                        <textarea class="position-textarea" id="debate1_pro" placeholder="Argumente dafür..."></textarea>
+                    </div>
+                    <div class="position-box">
+                        <span class="position-label position-contra">CONTRA</span>
+                        <textarea class="position-textarea" id="debate1_contra" placeholder="Argumente dagegen..."></textarea>
+                    </div>
+                </div>
+                <div class="own-conclusion">
+                    <label>Deine begründete Position:</label>
+                    <textarea class="position-textarea" id="debate1_conclusion" placeholder="Nach Abwägung beider Seiten denke ich..."></textarea>
+                </div>
+            </div>
+
+            <div class="debate-scenario">
+                <div class="debate-title">Thema: Sollten Handys in der Schule verboten werden?</div>
+                <div class="debate-positions">
+                    <div class="position-box">
+                        <span class="position-label position-pro">PRO</span>
+                        <textarea class="position-textarea" id="debate2_pro" placeholder="Argumente dafür..."></textarea>
+                    </div>
+                    <div class="position-box">
+                        <span class="position-label position-contra">CONTRA</span>
+                        <textarea class="position-textarea" id="debate2_contra" placeholder="Argumente dagegen..."></textarea>
+                    </div>
+                </div>
+                <div class="own-conclusion">
+                    <label>Deine begründete Position:</label>
+                    <textarea class="position-textarea" id="debate2_conclusion" placeholder="Nach Abwägung beider Seiten denke ich..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📱 Quellen-Check</h2>
+            <div class="source-checker">
+                <h3>Woran erkenne ich vertrauenswürdige Informationen?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Klicke auf die Kriterien, die du bei der Informationssuche beachtest:</p>
+
+                <div class="source-criteria" id="sourceCriteria">
+                    <div class="criteria-item" data-criteria="author">
+                        <div class="criteria-checkbox"></div>
+                        <span>Autor/Quelle ist angegeben</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="date">
+                        <div class="criteria-checkbox"></div>
+                        <span>Datum der Veröffentlichung</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="sources">
+                        <div class="criteria-checkbox"></div>
+                        <span>Quellenangaben vorhanden</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="multiple">
+                        <div class="criteria-checkbox"></div>
+                        <span>Mehrere Quellen vergleichen</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="expertise">
+                        <div class="criteria-checkbox"></div>
+                        <span>Expertise des Autors prüfen</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="bias">
+                        <div class="criteria-checkbox"></div>
+                        <span>Mögliche Interessen bedenken</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="emotional">
+                        <div class="criteria-checkbox"></div>
+                        <span>Emotionale Sprache erkennen</span>
+                    </div>
+                    <div class="criteria-item" data-criteria="facts">
+                        <div class="criteria-checkbox"></div>
+                        <span>Fakten von Meinungen trennen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Selbstreflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Eine Überzeugung, die ich früher hatte und heute anders sehe:</label>
+                    <textarea id="reflection1" placeholder="Früher dachte ich... heute denke ich... weil..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Wie gehst du damit um, wenn deine Meinung von der Mehrheit abweicht?</label>
+                    <textarea id="reflection2" placeholder="Wenn ich anderer Meinung bin als die meisten..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was hilft dir, bei kontroversen Themen einen klaren Kopf zu behalten?</label>
+                    <textarea id="reflection3" placeholder="Mir hilft es, wenn ich..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Fragen, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedNorm = null;
+        let analyzedNorms = {};
+        let sourceCriteria = [];
+
+        // Norm analysis
+        document.querySelectorAll('.norm-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const normId = this.dataset.norm;
+
+                // Save current analysis if exists
+                if (selectedNorm) {
+                    saveNormAnalysis();
+                }
+
+                // Update selection
+                document.querySelectorAll('.norm-card').forEach(c => c.classList.remove('analyzed'));
+                this.classList.add('analyzed');
+
+                selectedNorm = normId;
+                document.getElementById('analysisTitle').textContent = 'Analyse: ' + this.querySelector('.norm-title').textContent;
+                document.getElementById('analysisPanel').classList.add('active');
+
+                // Load previous analysis if exists
+                if (analyzedNorms[normId]) {
+                    document.getElementById('norm_origin').value = analyzedNorms[normId].origin || '';
+                    document.getElementById('norm_benefit').value = analyzedNorms[normId].benefit || '';
+                    document.getElementById('norm_negative').value = analyzedNorms[normId].negative || '';
+                    document.getElementById('norm_opinion').value = analyzedNorms[normId].opinion || '';
+                } else {
+                    document.getElementById('norm_origin').value = '';
+                    document.getElementById('norm_benefit').value = '';
+                    document.getElementById('norm_negative').value = '';
+                    document.getElementById('norm_opinion').value = '';
+                }
+            });
+        });
+
+        function saveNormAnalysis() {
+            if (selectedNorm) {
+                analyzedNorms[selectedNorm] = {
+                    origin: document.getElementById('norm_origin').value,
+                    benefit: document.getElementById('norm_benefit').value,
+                    negative: document.getElementById('norm_negative').value,
+                    opinion: document.getElementById('norm_opinion').value
+                };
+            }
+        }
+
+        // Source criteria
+        document.querySelectorAll('.criteria-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                const criteria = this.dataset.criteria;
+                if (this.classList.contains('checked')) {
+                    if (!sourceCriteria.includes(criteria)) sourceCriteria.push(criteria);
+                } else {
+                    sourceCriteria = sourceCriteria.filter(c => c !== criteria);
+                }
+            });
+        });
+
+        function saveData() {
+            saveNormAnalysis();
+
+            const data = {
+                analyzedNorms,
+                fallacies: {
+                    f1: document.getElementById('fallacy1').value,
+                    f2: document.getElementById('fallacy2').value,
+                    f3: document.getElementById('fallacy3').value,
+                    f4: document.getElementById('fallacy4').value,
+                    f5: document.getElementById('fallacy5').value
+                },
+                debates: {
+                    debate1: {
+                        pro: document.getElementById('debate1_pro').value,
+                        contra: document.getElementById('debate1_contra').value,
+                        conclusion: document.getElementById('debate1_conclusion').value
+                    },
+                    debate2: {
+                        pro: document.getElementById('debate2_pro').value,
+                        contra: document.getElementById('debate2_contra').value,
+                        conclusion: document.getElementById('debate2_conclusion').value
+                    }
+                },
+                sourceCriteria,
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value,
+                    r3: document.getElementById('reflection3').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_kritisches_denken', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_kritisches_denken');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                analyzedNorms = data.analyzedNorms || {};
+
+                // Mark analyzed norms
+                Object.keys(analyzedNorms).forEach(norm => {
+                    const card = document.querySelector(`[data-norm="${norm}"]`);
+                    if (card && (analyzedNorms[norm].origin || analyzedNorms[norm].opinion)) {
+                        card.classList.add('analyzed');
+                    }
+                });
+
+                if (data.fallacies) {
+                    document.getElementById('fallacy1').value = data.fallacies.f1 || '';
+                    document.getElementById('fallacy2').value = data.fallacies.f2 || '';
+                    document.getElementById('fallacy3').value = data.fallacies.f3 || '';
+                    document.getElementById('fallacy4').value = data.fallacies.f4 || '';
+                    document.getElementById('fallacy5').value = data.fallacies.f5 || '';
+                }
+
+                if (data.debates) {
+                    if (data.debates.debate1) {
+                        document.getElementById('debate1_pro').value = data.debates.debate1.pro || '';
+                        document.getElementById('debate1_contra').value = data.debates.debate1.contra || '';
+                        document.getElementById('debate1_conclusion').value = data.debates.debate1.conclusion || '';
+                    }
+                    if (data.debates.debate2) {
+                        document.getElementById('debate2_pro').value = data.debates.debate2.pro || '';
+                        document.getElementById('debate2_contra').value = data.debates.debate2.contra || '';
+                        document.getElementById('debate2_conclusion').value = data.debates.debate2.conclusion || '';
+                    }
+                }
+
+                sourceCriteria = data.sourceCriteria || [];
+                sourceCriteria.forEach(criteria => {
+                    const item = document.querySelector(`[data-criteria="${criteria}"]`);
+                    if (item) item.classList.add('checked');
+                });
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                    document.getElementById('reflection3').value = data.reflection.r3 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_kritisches_denken');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_kritisches_denken');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kritisches-denken-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        // Load on start
+        loadData();
+    </script>
+</body>
+</html>

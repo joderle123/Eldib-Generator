@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intimität und Grenzen - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 50%, #7b1fa2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #ea80fc;
+        }
+        .meta {
+            color: #ce93d8;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ea80fc;
+        }
+        h2 {
+            color: #ea80fc;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(234,128,252,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .important-note {
+            background: rgba(255,193,7,0.15);
+            border: 1px solid rgba(255,193,7,0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .important-note h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .intimacy-layers {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+        }
+        .layer {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: absolute;
+        }
+        .layer:hover {
+            transform: scale(1.05);
+        }
+        .layer-outer {
+            width: 280px;
+            height: 280px;
+            background: rgba(186,104,200,0.2);
+            border: 2px solid rgba(186,104,200,0.5);
+        }
+        .layer-middle {
+            width: 200px;
+            height: 200px;
+            background: rgba(206,147,216,0.3);
+            border: 2px solid rgba(206,147,216,0.6);
+        }
+        .layer-inner {
+            width: 120px;
+            height: 120px;
+            background: rgba(234,128,252,0.4);
+            border: 2px solid rgba(234,128,252,0.7);
+        }
+        .layer-core {
+            width: 60px;
+            height: 60px;
+            background: #ea80fc;
+            border: none;
+            font-size: 1.5em;
+        }
+        .layer-labels {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 160px;
+        }
+        .layer-label {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .layer-label-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ea80fc;
+        }
+        .layer-label-desc {
+            font-size: 0.85em;
+            color: #bbb;
+        }
+        .boundary-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .boundary-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .boundary-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .boundary-name {
+            font-weight: bold;
+            color: #ea80fc;
+            margin-bottom: 8px;
+        }
+        .boundary-desc {
+            color: #bbb;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+        .boundary-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.9em;
+        }
+        .consent-section {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .consent-section h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .consent-principles {
+            display: grid;
+            gap: 12px;
+        }
+        .consent-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            align-items: flex-start;
+        }
+        .consent-letter {
+            width: 40px;
+            height: 40px;
+            background: rgba(76,175,80,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #81c784;
+            flex-shrink: 0;
+        }
+        .consent-text h4 {
+            color: #81c784;
+            margin-bottom: 5px;
+        }
+        .consent-text p {
+            color: #bbb;
+            font-size: 0.9em;
+        }
+        .scenario-section {
+            background: rgba(255,152,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .scenario-section h3 {
+            color: #ffb74d;
+            margin-bottom: 15px;
+        }
+        .scenario-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .scenario-title {
+            color: #ffb74d;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .scenario-text {
+            color: #ccc;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .scenario-options {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .scenario-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .scenario-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .scenario-option.selected {
+            background: rgba(255,152,0,0.2);
+            border: 1px solid #ffb74d;
+        }
+        .option-radio {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ffb74d;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .scenario-option.selected .option-radio {
+            background: #ffb74d;
+        }
+        .scenario-reflect {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 60px;
+            resize: vertical;
+        }
+        .red-flags {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .red-flags h3 {
+            color: #ef5350;
+            margin-bottom: 15px;
+        }
+        .flag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .flag-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .flag-icon {
+            font-size: 1.2em;
+        }
+        .communication-tips {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .communication-tips h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .tip-examples {
+            display: grid;
+            gap: 12px;
+        }
+        .tip-example {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .tip-label {
+            color: #64b5f6;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .tip-text {
+            color: #bbb;
+            font-style: italic;
+        }
+        .practice-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .practice-section h3 {
+            color: #ea80fc;
+            margin-bottom: 15px;
+        }
+        .practice-item {
+            margin-bottom: 15px;
+        }
+        .practice-item label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 8px;
+        }
+        .practice-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .support-box {
+            background: rgba(0,150,136,0.15);
+            border: 1px solid rgba(0,150,136,0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .support-box h3 {
+            color: #80cbc4;
+            margin-bottom: 15px;
+        }
+        .support-list {
+            display: grid;
+            gap: 10px;
+        }
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+        .support-icon {
+            font-size: 1.3em;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #ea80fc;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ea80fc, #ce93d8);
+            color: #4a148c;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(234,128,252,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ea80fc, #ce93d8);
+            color: #4a148c;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .boundary-types { grid-template-columns: 1fr; }
+            .layer-outer { width: 220px; height: 220px; }
+            .layer-middle { width: 160px; height: 160px; }
+            .layer-inner { width: 100px; height: 100px; }
+            .layer-core { width: 50px; height: 50px; }
+            .layer-labels { margin-top: 130px; grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💜 Intimität und Grenzen</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-83, S-84</p>
+        </header>
+
+        <section class="section">
+            <h2>🔒 Nähe und Grenzen verstehen</h2>
+            <div class="intro-text">
+                <p>Intimität bedeutet Nähe und Vertrautheit - nicht nur körperlich, sondern auch emotional. Jeder Mensch hat unterschiedliche Grenzen, was Nähe betrifft. Diese Grenzen zu kennen, zu kommunizieren und bei anderen zu respektieren, ist ein wichtiger Teil von gesunden Beziehungen.</p>
+            </div>
+
+            <div class="important-note">
+                <h4>⚠️ Wichtig zu wissen</h4>
+                <p>Du allein bestimmst über deinen Körper und deine Grenzen. Niemand hat das Recht, diese zu überschreiten - egal in welcher Beziehung. Wenn sich etwas falsch anfühlt, ist es okay "Nein" zu sagen und Hilfe zu holen.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Nähe-Kreise</h2>
+            <p style="margin-bottom: 15px; color: #ce93d8;">Verschiedene Menschen haben unterschiedlich viel Zugang zu deiner Nähe:</p>
+
+            <div class="intimacy-layers">
+                <div class="layer layer-outer">Bekannte</div>
+                <div class="layer layer-middle">Freunde</div>
+                <div class="layer layer-inner">Enge Vertraute</div>
+                <div class="layer layer-core">❤️</div>
+            </div>
+
+            <div class="layer-labels">
+                <div class="layer-label">
+                    <div class="layer-label-title">Bekannte</div>
+                    <div class="layer-label-desc">Höflicher Umgang, Small Talk, wenig persönliche Infos</div>
+                </div>
+                <div class="layer-label">
+                    <div class="layer-label-title">Freunde</div>
+                    <div class="layer-label-desc">Vertrauen, gemeinsame Aktivitäten, persönliche Gespräche</div>
+                </div>
+                <div class="layer-label">
+                    <div class="layer-label-title">Enge Vertraute</div>
+                    <div class="layer-label-desc">Tiefe Gespräche, emotionale Unterstützung, Geheimnisse</div>
+                </div>
+                <div class="layer-label">
+                    <div class="layer-label-title">Innerster Kreis</div>
+                    <div class="layer-label-desc">Größte Verletzlichkeit, tiefste Verbindung</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🛡️ Arten von Grenzen</h2>
+            <div class="boundary-types">
+                <div class="boundary-card">
+                    <div class="boundary-icon">🤚</div>
+                    <div class="boundary-name">Körperliche Grenzen</div>
+                    <div class="boundary-desc">Wer darf mich wie berühren?</div>
+                    <input type="text" class="boundary-input" id="boundary_physical" placeholder="Meine körperlichen Grenzen sind...">
+                </div>
+
+                <div class="boundary-card">
+                    <div class="boundary-icon">💭</div>
+                    <div class="boundary-name">Emotionale Grenzen</div>
+                    <div class="boundary-desc">Was möchte ich teilen, was nicht?</div>
+                    <input type="text" class="boundary-input" id="boundary_emotional" placeholder="Meine emotionalen Grenzen sind...">
+                </div>
+
+                <div class="boundary-card">
+                    <div class="boundary-icon">📱</div>
+                    <div class="boundary-name">Digitale Grenzen</div>
+                    <div class="boundary-desc">Was teile ich online, was bleibt privat?</div>
+                    <input type="text" class="boundary-input" id="boundary_digital" placeholder="Meine digitalen Grenzen sind...">
+                </div>
+
+                <div class="boundary-card">
+                    <div class="boundary-icon">⏰</div>
+                    <div class="boundary-name">Zeit-Grenzen</div>
+                    <div class="boundary-desc">Wann brauche ich Zeit für mich?</div>
+                    <input type="text" class="boundary-input" id="boundary_time" placeholder="Meine Zeit-Grenzen sind...">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Einverständnis (Consent)</h2>
+            <div class="consent-section">
+                <h3>Was bedeutet echtes Einverständnis?</h3>
+
+                <div class="consent-principles">
+                    <div class="consent-item">
+                        <div class="consent-letter">F</div>
+                        <div class="consent-text">
+                            <h4>Freiwillig</h4>
+                            <p>Ohne Druck, Zwang oder Manipulation. Ein "Ja" unter Druck ist kein echtes "Ja".</p>
+                        </div>
+                    </div>
+
+                    <div class="consent-item">
+                        <div class="consent-letter">R</div>
+                        <div class="consent-text">
+                            <h4>Rücknehmbar</h4>
+                            <p>Man kann seine Meinung jederzeit ändern. Ein früheres "Ja" bedeutet nicht für immer "Ja".</p>
+                        </div>
+                    </div>
+
+                    <div class="consent-item">
+                        <div class="consent-letter">I</div>
+                        <div class="consent-text">
+                            <h4>Informiert</h4>
+                            <p>Man weiß genau, wozu man "Ja" sagt. Keine versteckten Absichten.</p>
+                        </div>
+                    </div>
+
+                    <div class="consent-item">
+                        <div class="consent-letter">E</div>
+                        <div class="consent-text">
+                            <h4>Enthusiastisch</h4>
+                            <p>Ein echtes "Ja" ist begeistert, nicht nur ein "Na gut" oder "Wenn du meinst".</p>
+                        </div>
+                    </div>
+
+                    <div class="consent-item">
+                        <div class="consent-letter">S</div>
+                        <div class="consent-text">
+                            <h4>Spezifisch</h4>
+                            <p>"Ja" zu einer Sache bedeutet nicht "Ja" zu allem anderen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Situationen einschätzen</h2>
+            <div class="scenario-section">
+                <h3>Wie würdest du reagieren?</h3>
+
+                <div class="scenario-card" data-scenario="1">
+                    <div class="scenario-title">Situation 1</div>
+                    <div class="scenario-text">Jemand, den du magst, möchte Fotos von dir, die du lieber nicht teilen möchtest. Die Person sagt: "Wenn du mich wirklich mögen würdest..."</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="give_in">
+                            <div class="option-radio"></div>
+                            <span>Ich gebe nach, um die Person nicht zu verlieren</span>
+                        </div>
+                        <div class="scenario-option" data-response="boundary">
+                            <div class="option-radio"></div>
+                            <span>Ich bleibe bei meiner Grenze und erkläre warum</span>
+                        </div>
+                        <div class="scenario-option" data-response="distance">
+                            <div class="option-radio"></div>
+                            <span>Ich überdenke diese Beziehung</span>
+                        </div>
+                    </div>
+                    <textarea class="scenario-reflect" id="scenario1_reflect" placeholder="Warum hast du so gewählt?"></textarea>
+                </div>
+
+                <div class="scenario-card" data-scenario="2">
+                    <div class="scenario-title">Situation 2</div>
+                    <div class="scenario-text">Ein Freund erzählt anderen Details über dein Privatleben, die du ihm im Vertrauen gesagt hast.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="ignore">
+                            <div class="option-radio"></div>
+                            <span>Ich tue so, als wäre nichts passiert</span>
+                        </div>
+                        <div class="scenario-option" data-response="confront">
+                            <div class="option-radio"></div>
+                            <span>Ich spreche ihn direkt darauf an</span>
+                        </div>
+                        <div class="scenario-option" data-response="limit">
+                            <div class="option-radio"></div>
+                            <span>Ich teile künftig weniger mit dieser Person</span>
+                        </div>
+                    </div>
+                    <textarea class="scenario-reflect" id="scenario2_reflect" placeholder="Warum hast du so gewählt?"></textarea>
+                </div>
+
+                <div class="scenario-card" data-scenario="3">
+                    <div class="scenario-title">Situation 3</div>
+                    <div class="scenario-text">Bei einem Treffen versucht jemand, körperlich näher zu kommen, als dir lieb ist.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="allow">
+                            <div class="option-radio"></div>
+                            <span>Ich lasse es zu, um nicht unhöflich zu wirken</span>
+                        </div>
+                        <div class="scenario-option" data-response="signal">
+                            <div class="option-radio"></div>
+                            <span>Ich rücke weg oder sage klar "Stopp"</span>
+                        </div>
+                        <div class="scenario-option" data-response="leave">
+                            <div class="option-radio"></div>
+                            <span>Ich verlasse die Situation</span>
+                        </div>
+                    </div>
+                    <textarea class="scenario-reflect" id="scenario3_reflect" placeholder="Warum hast du so gewählt?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚩 Warnsignale erkennen</h2>
+            <div class="red-flags">
+                <h3>Diese Verhaltensweisen sind nicht okay:</h3>
+
+                <div class="flag-grid">
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Druck ausüben ("Wenn du mich liebst...")</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Grenzen ignorieren trotz "Nein"</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Geheimnisse fordern ("Sag das niemandem")</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Isolieren von Freunden/Familie</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Kontrollieren (Handy checken, Aufenthaltsort)</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Schuldzuweisungen ("Du bist schuld, dass...")</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Drohungen (auch indirekt)</span>
+                    </div>
+                    <div class="flag-item">
+                        <span class="flag-icon">🚩</span>
+                        <span>Unerwünschte Geschenke/Aufmerksamkeit</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💬 Grenzen kommunizieren</h2>
+            <div class="communication-tips">
+                <h3>So kannst du deine Grenzen klar machen:</h3>
+
+                <div class="tip-examples">
+                    <div class="tip-example">
+                        <div class="tip-label">Direkt und klar:</div>
+                        <div class="tip-text">"Ich möchte das nicht." / "Stopp, das ist mir unangenehm."</div>
+                    </div>
+                    <div class="tip-example">
+                        <div class="tip-label">Mit Ich-Botschaft:</div>
+                        <div class="tip-text">"Ich fühle mich unwohl, wenn... Ich brauche..."</div>
+                    </div>
+                    <div class="tip-example">
+                        <div class="tip-label">Grenze setzen ohne Rechtfertigung:</div>
+                        <div class="tip-text">"Nein." (Du musst dich nicht erklären!)</div>
+                    </div>
+                    <div class="tip-example">
+                        <div class="tip-label">Alternative anbieten:</div>
+                        <div class="tip-text">"Das möchte ich nicht, aber wir könnten stattdessen..."</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-section">
+                <h3>Übe deine Formulierungen:</h3>
+                <div class="practice-item">
+                    <label>Wie würdest du "Nein" sagen, wenn jemand dein Handy durchsehen will?</label>
+                    <textarea id="practice1" placeholder="Ich würde sagen..."></textarea>
+                </div>
+                <div class="practice-item">
+                    <label>Wie würdest du reagieren, wenn jemand zu viele persönliche Fragen stellt?</label>
+                    <textarea id="practice2" placeholder="Ich würde sagen..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🆘 Hilfe holen</h2>
+            <div class="support-box">
+                <h3>Wo kannst du dir Unterstützung holen?</h3>
+                <div class="support-list">
+                    <div class="support-item">
+                        <span class="support-icon">👨‍👩‍👧</span>
+                        <span>Vertrauenspersonen: Eltern, Verwandte, Lehrer</span>
+                    </div>
+                    <div class="support-item">
+                        <span class="support-icon">🏫</span>
+                        <span>Schulsozialarbeit oder Vertrauenslehrer</span>
+                    </div>
+                    <div class="support-item">
+                        <span class="support-icon">📞</span>
+                        <span>Kinder- und Jugendtelefon: 116 111 (kostenlos, anonym)</span>
+                    </div>
+                    <div class="support-item">
+                        <span class="support-icon">💻</span>
+                        <span>Online-Beratung: jugendnotmail.de</span>
+                    </div>
+                    <div class="support-item">
+                        <span class="support-icon">🚨</span>
+                        <span>Bei Gefahr: Polizei 110</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Wie gut gelingt es mir, meine Grenzen zu erkennen und zu kommunizieren?</label>
+                    <textarea id="reflection1" placeholder="Ich bin gut/weniger gut darin..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was hilft mir, die Grenzen anderer zu respektieren?</label>
+                    <textarea id="reflection2" placeholder="Mir hilft es, wenn ich..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>In welchen Situationen fällt es mir schwer, "Nein" zu sagen?</label>
+                    <textarea id="reflection3" placeholder="Schwierig ist es für mich, wenn..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let scenarioResponses = {};
+
+        // Scenario options
+        document.querySelectorAll('.scenario-card').forEach(card => {
+            const scenarioId = card.dataset.scenario;
+            card.querySelectorAll('.scenario-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    card.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    scenarioResponses[scenarioId] = this.dataset.response;
+                });
+            });
+        });
+
+        function saveData() {
+            const data = {
+                boundaries: {
+                    physical: document.getElementById('boundary_physical').value,
+                    emotional: document.getElementById('boundary_emotional').value,
+                    digital: document.getElementById('boundary_digital').value,
+                    time: document.getElementById('boundary_time').value
+                },
+                scenarios: {
+                    responses: scenarioResponses,
+                    reflections: {
+                        s1: document.getElementById('scenario1_reflect').value,
+                        s2: document.getElementById('scenario2_reflect').value,
+                        s3: document.getElementById('scenario3_reflect').value
+                    }
+                },
+                practice: {
+                    p1: document.getElementById('practice1').value,
+                    p2: document.getElementById('practice2').value
+                },
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value,
+                    r3: document.getElementById('reflection3').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_intimitaet_grenzen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_intimitaet_grenzen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.boundaries) {
+                    document.getElementById('boundary_physical').value = data.boundaries.physical || '';
+                    document.getElementById('boundary_emotional').value = data.boundaries.emotional || '';
+                    document.getElementById('boundary_digital').value = data.boundaries.digital || '';
+                    document.getElementById('boundary_time').value = data.boundaries.time || '';
+                }
+
+                if (data.scenarios) {
+                    scenarioResponses = data.scenarios.responses || {};
+                    Object.keys(scenarioResponses).forEach(key => {
+                        const card = document.querySelector(`[data-scenario="${key}"]`);
+                        if (card) {
+                            const option = card.querySelector(`[data-response="${scenarioResponses[key]}"]`);
+                            if (option) option.classList.add('selected');
+                        }
+                    });
+
+                    if (data.scenarios.reflections) {
+                        document.getElementById('scenario1_reflect').value = data.scenarios.reflections.s1 || '';
+                        document.getElementById('scenario2_reflect').value = data.scenarios.reflections.s2 || '';
+                        document.getElementById('scenario3_reflect').value = data.scenarios.reflections.s3 || '';
+                    }
+                }
+
+                if (data.practice) {
+                    document.getElementById('practice1').value = data.practice.p1 || '';
+                    document.getElementById('practice2').value = data.practice.p2 || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                    document.getElementById('reflection3').value = data.reflection.r3 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_intimitaet_grenzen');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_intimitaet_grenzen');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'intimitaet-grenzen-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

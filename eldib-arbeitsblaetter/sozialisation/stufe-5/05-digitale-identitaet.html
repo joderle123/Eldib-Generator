@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitale Identität - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,255,136,0.3);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+        .meta {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00ff88;
+        }
+        h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(0,255,136,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .profile-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .profile-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+        .profile-real .profile-icon {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+        .profile-digital .profile-icon {
+            background: linear-gradient(135deg, #2196f3, #1565c0);
+        }
+        .profile-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .profile-subtitle {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .profile-fields {
+            display: grid;
+            gap: 12px;
+        }
+        .profile-field input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .profile-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85em;
+        }
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .platform-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .platform-card:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .platform-card.active {
+            border-color: #00ff88;
+            background: rgba(0,255,136,0.1);
+        }
+        .platform-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .platform-name {
+            font-size: 0.85em;
+        }
+        .privacy-checker {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .privacy-checker h3 {
+            color: #ef5350;
+            margin-bottom: 15px;
+        }
+        .privacy-items {
+            display: grid;
+            gap: 10px;
+        }
+        .privacy-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .privacy-label {
+            flex: 1;
+        }
+        .privacy-toggle {
+            display: flex;
+            gap: 8px;
+        }
+        .toggle-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .toggle-btn.yes.active {
+            background: #4caf50;
+        }
+        .toggle-btn.no.active {
+            background: #f44336;
+        }
+        .footprint-section {
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,193,7,0.3);
+        }
+        .footprint-section h3 {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        .footprint-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .footprint-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,193,7,0.3);
+        }
+        .footprint-item {
+            position: relative;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .footprint-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffc107;
+        }
+        .footprint-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            margin-top: 8px;
+        }
+        .scenario-section {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .scenario-section h3 {
+            color: #ce93d8;
+            margin-bottom: 15px;
+        }
+        .scenario-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .scenario-title {
+            color: #ce93d8;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .scenario-text {
+            color: #bbb;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .scenario-response {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .balance-meter {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .meter-track {
+            height: 12px;
+            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
+            border-radius: 6px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .meter-slider {
+            width: 100%;
+            height: 12px;
+            -webkit-appearance: none;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .meter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tip-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .tip-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .tip-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #00ff88;
+        }
+        .tip-text {
+            color: #bbb;
+            font-size: 0.85em;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #00ff88;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #0d0d0d;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0,255,136,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #0d0d0d;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .profile-comparison { grid-template-columns: 1fr; }
+            .platform-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 Digitale Identität</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-79, S-80</p>
+        </header>
+
+        <section class="section">
+            <h2>👤 Wer bin ich online vs. offline?</h2>
+            <div class="intro-text">
+                <p>Im digitalen Zeitalter haben wir oft mehrere Identitäten: unser "echtes" Ich und verschiedene Online-Versionen. Manchmal zeigen wir online nur bestimmte Seiten von uns. Das ist normal - aber es lohnt sich, darüber nachzudenken, wie authentisch wir im Netz sind und welches Bild wir von uns vermitteln wollen.</p>
+            </div>
+
+            <div class="profile-comparison">
+                <div class="profile-card profile-real">
+                    <div class="profile-header">
+                        <div class="profile-icon">🧑</div>
+                        <div>
+                            <div class="profile-title">Mein echtes Ich</div>
+                            <div class="profile-subtitle">Wie ich wirklich bin</div>
+                        </div>
+                    </div>
+                    <div class="profile-fields">
+                        <div class="profile-field">
+                            <label>Meine echten Interessen:</label>
+                            <input type="text" id="real_interests" placeholder="Was mache ich wirklich gern?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Meine echte Stimmung meist:</label>
+                            <input type="text" id="real_mood" placeholder="Wie fühle ich mich meistens?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Meine echten Stärken:</label>
+                            <input type="text" id="real_strengths" placeholder="Worin bin ich gut?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Meine echten Schwächen:</label>
+                            <input type="text" id="real_weaknesses" placeholder="Was fällt mir schwer?">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card profile-digital">
+                    <div class="profile-header">
+                        <div class="profile-icon">💻</div>
+                        <div>
+                            <div class="profile-title">Mein Online-Ich</div>
+                            <div class="profile-subtitle">Was ich online zeige</div>
+                        </div>
+                    </div>
+                    <div class="profile-fields">
+                        <div class="profile-field">
+                            <label>Was ich online teile:</label>
+                            <input type="text" id="online_interests" placeholder="Welche Seiten zeige ich?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Welchen Eindruck ich erwecke:</label>
+                            <input type="text" id="online_mood" placeholder="Wie wirke ich online?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Was ich betone:</label>
+                            <input type="text" id="online_strengths" placeholder="Was stelle ich heraus?">
+                        </div>
+                        <div class="profile-field">
+                            <label>Was ich verberge:</label>
+                            <input type="text" id="online_weaknesses" placeholder="Was zeige ich nicht?">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🌐 Meine Plattformen</h2>
+            <p style="margin-bottom: 15px; color: #bbb;">Auf welchen Plattformen bist du aktiv? (Klicke zum Markieren)</p>
+
+            <div class="platform-grid" id="platformGrid">
+                <div class="platform-card" data-platform="instagram">
+                    <div class="platform-icon">📷</div>
+                    <div class="platform-name">Instagram</div>
+                </div>
+                <div class="platform-card" data-platform="tiktok">
+                    <div class="platform-icon">🎵</div>
+                    <div class="platform-name">TikTok</div>
+                </div>
+                <div class="platform-card" data-platform="snapchat">
+                    <div class="platform-icon">👻</div>
+                    <div class="platform-name">Snapchat</div>
+                </div>
+                <div class="platform-card" data-platform="youtube">
+                    <div class="platform-icon">▶️</div>
+                    <div class="platform-name">YouTube</div>
+                </div>
+                <div class="platform-card" data-platform="whatsapp">
+                    <div class="platform-icon">💬</div>
+                    <div class="platform-name">WhatsApp</div>
+                </div>
+                <div class="platform-card" data-platform="discord">
+                    <div class="platform-icon">🎮</div>
+                    <div class="platform-name">Discord</div>
+                </div>
+                <div class="platform-card" data-platform="twitch">
+                    <div class="platform-icon">📺</div>
+                    <div class="platform-name">Twitch</div>
+                </div>
+                <div class="platform-card" data-platform="twitter">
+                    <div class="platform-icon">🐦</div>
+                    <div class="platform-name">X/Twitter</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔒 Privatsphäre-Check</h2>
+            <div class="privacy-checker">
+                <h3>Was teilst du online?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Überprüfe, welche Informationen du preisgibst:</p>
+
+                <div class="privacy-items">
+                    <div class="privacy-item">
+                        <span class="privacy-label">Vollständiger Name</span>
+                        <div class="privacy-toggle" data-privacy="name">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Geburtsdatum</span>
+                        <div class="privacy-toggle" data-privacy="birthday">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Schule/Arbeitsplatz</span>
+                        <div class="privacy-toggle" data-privacy="school">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Wohnort/Adresse</span>
+                        <div class="privacy-toggle" data-privacy="location">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Telefonnummer</span>
+                        <div class="privacy-toggle" data-privacy="phone">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Beziehungsstatus</span>
+                        <div class="privacy-toggle" data-privacy="relationship">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                    <div class="privacy-item">
+                        <span class="privacy-label">Aktueller Standort (Live)</span>
+                        <div class="privacy-toggle" data-privacy="live_location">
+                            <button class="toggle-btn yes">Ja</button>
+                            <button class="toggle-btn no">Nein</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👣 Dein digitaler Fußabdruck</h2>
+            <div class="footprint-section">
+                <h3>Was bleibt für immer im Netz?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Alles, was du online postest, kann theoretisch für immer existieren - auch wenn du es löschst.</p>
+
+                <div class="footprint-timeline">
+                    <div class="footprint-item">
+                        <strong>Vor 5 Jahren</strong>
+                        <input type="text" class="footprint-input" id="footprint_5y" placeholder="Was hast du damals gepostet? Würdest du es heute noch so machen?">
+                    </div>
+                    <div class="footprint-item">
+                        <strong>Vor 1 Jahr</strong>
+                        <input type="text" class="footprint-input" id="footprint_1y" placeholder="Posts, Fotos, Kommentare von damals...">
+                    </div>
+                    <div class="footprint-item">
+                        <strong>Letzte Woche</strong>
+                        <input type="text" class="footprint-input" id="footprint_week" placeholder="Aktuelle Online-Aktivitäten...">
+                    </div>
+                    <div class="footprint-item">
+                        <strong>In 10 Jahren</strong>
+                        <input type="text" class="footprint-input" id="footprint_future" placeholder="Was soll dann noch von dir im Netz sein?">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Kritische Situationen</h2>
+            <div class="scenario-section">
+                <h3>Wie würdest du reagieren?</h3>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 1: Das peinliche Foto</div>
+                    <div class="scenario-text">Jemand postet ein unvorteilhaftes Foto von dir auf einer Party, ohne zu fragen. Es gefällt dir nicht und du möchtest nicht, dass es online ist.</div>
+                    <textarea class="scenario-response" id="scenario1" placeholder="Was würdest du tun?"></textarea>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 2: Der anonyme Account</div>
+                    <div class="scenario-text">Du überlegst, einen anonymen Account zu erstellen, um Dinge zu posten, die du unter deinem echten Namen nicht sagen würdest.</div>
+                    <textarea class="scenario-response" id="scenario2" placeholder="Was denkst du darüber? Was sind Vor- und Nachteile?"></textarea>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 3: Die Fake-Anfrage</div>
+                    <div class="scenario-text">Du bekommst eine Freundschaftsanfrage von jemandem, der behauptet, dich zu kennen, aber du erkennst die Person nicht. Das Profil sieht echt aus.</div>
+                    <textarea class="scenario-response" id="scenario3" placeholder="Wie gehst du damit um?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Online-Zeit-Balance</h2>
+            <div class="balance-meter">
+                <p style="margin-bottom: 15px; color: #bbb;">Wie viel Zeit verbringst du online? Schiebe den Regler:</p>
+                <div class="meter-label">
+                    <span>Wenig (< 1h/Tag)</span>
+                    <span>Mittel (2-4h/Tag)</span>
+                    <span>Viel (> 5h/Tag)</span>
+                </div>
+                <div class="meter-track">
+                    <input type="range" class="meter-slider" id="timeBalance" min="1" max="10" value="5">
+                </div>
+
+                <p style="margin-bottom: 15px; color: #bbb;">Wie fühlst du dich nach längerer Online-Zeit?</p>
+                <div class="meter-label">
+                    <span>😊 Gut, verbunden</span>
+                    <span>😐 Neutral</span>
+                    <span>😔 Erschöpft, vergleichend</span>
+                </div>
+                <div class="meter-track">
+                    <input type="range" class="meter-slider" id="feelingBalance" min="1" max="10" value="5">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tipps für eine gesunde digitale Identität</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🔐</div>
+                    <div class="tip-title">Starke Passwörter</div>
+                    <div class="tip-text">Verschiedene, sichere Passwörter für jeden Account</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">⏸️</div>
+                    <div class="tip-title">Vor dem Posten pausieren</div>
+                    <div class="tip-text">Würdest du das auch in 5 Jahren noch gut finden?</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">👥</div>
+                    <div class="tip-title">Einstellungen prüfen</div>
+                    <div class="tip-text">Regelmäßig Privatsphäre-Einstellungen checken</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🧘</div>
+                    <div class="tip-title">Digital Detox</div>
+                    <div class="tip-text">Bewusste Offline-Zeiten einplanen</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎭</div>
+                    <div class="tip-title">Authentisch bleiben</div>
+                    <div class="tip-text">Nicht ständig mit anderen vergleichen</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🤔</div>
+                    <div class="tip-title">Kritisch hinterfragen</div>
+                    <div class="tip-text">Nicht alles glauben, was online steht</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Wie authentisch bin ich online? Was zeige ich, was verberge ich - und warum?</label>
+                    <textarea id="reflection1" placeholder="Ich zeige online... weil..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was würde passieren, wenn ein zukünftiger Arbeitgeber meine Profile findet?</label>
+                    <textarea id="reflection2" placeholder="Er/Sie würde sehen... Das finde ich..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was möchte ich an meiner digitalen Identität ändern?</label>
+                    <textarea id="reflection3" placeholder="Ich möchte..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Vorsätze, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let platforms = [];
+        let privacySettings = {};
+
+        // Platform selection
+        document.querySelectorAll('.platform-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const platform = this.dataset.platform;
+                if (this.classList.contains('active')) {
+                    if (!platforms.includes(platform)) platforms.push(platform);
+                } else {
+                    platforms = platforms.filter(p => p !== platform);
+                }
+            });
+        });
+
+        // Privacy toggles
+        document.querySelectorAll('.privacy-toggle').forEach(toggle => {
+            const privacyKey = toggle.dataset.privacy;
+            toggle.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    toggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    privacySettings[privacyKey] = this.classList.contains('yes') ? 'yes' : 'no';
+                });
+            });
+        });
+
+        function saveData() {
+            const data = {
+                profiles: {
+                    real: {
+                        interests: document.getElementById('real_interests').value,
+                        mood: document.getElementById('real_mood').value,
+                        strengths: document.getElementById('real_strengths').value,
+                        weaknesses: document.getElementById('real_weaknesses').value
+                    },
+                    online: {
+                        interests: document.getElementById('online_interests').value,
+                        mood: document.getElementById('online_mood').value,
+                        strengths: document.getElementById('online_strengths').value,
+                        weaknesses: document.getElementById('online_weaknesses').value
+                    }
+                },
+                platforms,
+                privacySettings,
+                footprint: {
+                    y5: document.getElementById('footprint_5y').value,
+                    y1: document.getElementById('footprint_1y').value,
+                    week: document.getElementById('footprint_week').value,
+                    future: document.getElementById('footprint_future').value
+                },
+                scenarios: {
+                    s1: document.getElementById('scenario1').value,
+                    s2: document.getElementById('scenario2').value,
+                    s3: document.getElementById('scenario3').value
+                },
+                balance: {
+                    time: document.getElementById('timeBalance').value,
+                    feeling: document.getElementById('feelingBalance').value
+                },
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value,
+                    r3: document.getElementById('reflection3').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_digitale_identitaet', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_digitale_identitaet');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.profiles) {
+                    if (data.profiles.real) {
+                        document.getElementById('real_interests').value = data.profiles.real.interests || '';
+                        document.getElementById('real_mood').value = data.profiles.real.mood || '';
+                        document.getElementById('real_strengths').value = data.profiles.real.strengths || '';
+                        document.getElementById('real_weaknesses').value = data.profiles.real.weaknesses || '';
+                    }
+                    if (data.profiles.online) {
+                        document.getElementById('online_interests').value = data.profiles.online.interests || '';
+                        document.getElementById('online_mood').value = data.profiles.online.mood || '';
+                        document.getElementById('online_strengths').value = data.profiles.online.strengths || '';
+                        document.getElementById('online_weaknesses').value = data.profiles.online.weaknesses || '';
+                    }
+                }
+
+                platforms = data.platforms || [];
+                platforms.forEach(p => {
+                    const card = document.querySelector(`[data-platform="${p}"]`);
+                    if (card) card.classList.add('active');
+                });
+
+                privacySettings = data.privacySettings || {};
+                Object.keys(privacySettings).forEach(key => {
+                    const toggle = document.querySelector(`[data-privacy="${key}"]`);
+                    if (toggle) {
+                        const btn = toggle.querySelector(`.toggle-btn.${privacySettings[key]}`);
+                        if (btn) btn.classList.add('active');
+                    }
+                });
+
+                if (data.footprint) {
+                    document.getElementById('footprint_5y').value = data.footprint.y5 || '';
+                    document.getElementById('footprint_1y').value = data.footprint.y1 || '';
+                    document.getElementById('footprint_week').value = data.footprint.week || '';
+                    document.getElementById('footprint_future').value = data.footprint.future || '';
+                }
+
+                if (data.scenarios) {
+                    document.getElementById('scenario1').value = data.scenarios.s1 || '';
+                    document.getElementById('scenario2').value = data.scenarios.s2 || '';
+                    document.getElementById('scenario3').value = data.scenarios.s3 || '';
+                }
+
+                if (data.balance) {
+                    document.getElementById('timeBalance').value = data.balance.time || 5;
+                    document.getElementById('feelingBalance').value = data.balance.feeling || 5;
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                    document.getElementById('reflection3').value = data.reflection.r3 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_digitale_identitaet');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_digitale_identitaet');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'digitale-identitaet-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

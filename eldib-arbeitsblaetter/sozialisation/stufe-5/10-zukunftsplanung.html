@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zukunftsplanung - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #303f9f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #7986cb;
+        }
+        .meta {
+            color: #9fa8da;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #7986cb;
+        }
+        h2 {
+            color: #7986cb;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(121,134,203,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .vision-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .vision-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 150px;
+        }
+        .vision-card h4 {
+            color: #7986cb;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vision-card textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .timeline-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #7986cb, #3f51b5);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 20px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #7986cb;
+            border: 3px solid #1a237e;
+        }
+        .timeline-label {
+            color: #7986cb;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .timeline-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .value-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .value-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .value-item.selected {
+            border-color: #7986cb;
+            background: rgba(121,134,203,0.3);
+        }
+        .value-icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+        .value-name {
+            font-size: 0.85em;
+        }
+        .strengths-section {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .strengths-section h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .strength-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .strength-box h4 {
+            color: #81c784;
+            margin-bottom: 10px;
+        }
+        .strength-box textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .career-explorer {
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,193,7,0.3);
+        }
+        .career-explorer h3 {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        .career-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .career-option {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .career-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .career-option.selected {
+            background: rgba(255,193,7,0.2);
+            border: 1px solid #ffc107;
+        }
+        .career-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .career-detail {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .career-detail label {
+            display: block;
+            color: #ffc107;
+            margin-bottom: 8px;
+        }
+        .career-detail textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 60px;
+            resize: vertical;
+        }
+        .obstacles-section {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .obstacles-section h3 {
+            color: #ef5350;
+            margin-bottom: 15px;
+        }
+        .obstacle-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .obstacle-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .obstacle-box.problem {
+            border-left: 3px solid #ef5350;
+        }
+        .obstacle-box.solution {
+            border-left: 3px solid #81c784;
+        }
+        .obstacle-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .obstacle-box.problem label {
+            color: #ef5350;
+        }
+        .obstacle-box.solution label {
+            color: #81c784;
+        }
+        .obstacle-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .support-network {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .support-network h3 {
+            color: #ce93d8;
+            margin-bottom: 15px;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .support-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .support-item label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .support-item input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .action-plan {
+            background: rgba(0,150,136,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .action-plan h3 {
+            color: #80cbc4;
+            margin-bottom: 15px;
+        }
+        .action-steps {
+            display: grid;
+            gap: 12px;
+        }
+        .action-step {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            align-items: flex-start;
+        }
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: rgba(0,150,136,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            color: #80cbc4;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-content input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .letter-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .letter-section h3 {
+            color: #7986cb;
+            margin-bottom: 15px;
+        }
+        .letter-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 200px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #7986cb;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7986cb, #5c6bc0);
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(121,134,203,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #7986cb, #5c6bc0);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .vision-board { grid-template-columns: 1fr; }
+            .strengths-grid { grid-template-columns: 1fr; }
+            .obstacle-pair { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Zukunftsplanung</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-89, S-90</p>
+        </header>
+
+        <section class="section">
+            <h2>🔮 Meine Zukunftsvision</h2>
+            <div class="intro-text">
+                <p>Die Zukunft ist nicht etwas, das einfach passiert - du kannst sie aktiv gestalten! Träume und Ziele zu haben gibt dir Richtung und Motivation. Auch wenn sich Pläne ändern können, hilft es, eine Vision zu haben, auf die du hinarbeiten kannst.</p>
+            </div>
+
+            <div class="vision-board">
+                <div class="vision-card">
+                    <h4>🏠 Wie möchte ich leben?</h4>
+                    <textarea id="vision_living" placeholder="Wo, wie, mit wem..."></textarea>
+                </div>
+                <div class="vision-card">
+                    <h4>💼 Was möchte ich arbeiten?</h4>
+                    <textarea id="vision_work" placeholder="Beruf, Tätigkeiten, Umfeld..."></textarea>
+                </div>
+                <div class="vision-card">
+                    <h4>❤️ Welche Beziehungen?</h4>
+                    <textarea id="vision_relationships" placeholder="Familie, Freunde, Partner..."></textarea>
+                </div>
+                <div class="vision-card">
+                    <h4>🌟 Was möchte ich erreichen?</h4>
+                    <textarea id="vision_achieve" placeholder="Ziele, Erfolge, Beiträge..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Meine Zeitlinie</h2>
+            <div class="timeline-section">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-label">In 1 Jahr</div>
+                        <input type="text" class="timeline-input" id="timeline_1y" placeholder="Was möchte ich erreicht haben?">
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-label">In 3 Jahren</div>
+                        <input type="text" class="timeline-input" id="timeline_3y" placeholder="Wo stehe ich dann?">
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-label">In 5 Jahren</div>
+                        <input type="text" class="timeline-input" id="timeline_5y" placeholder="Was habe ich geschafft?">
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-label">In 10 Jahren</div>
+                        <input type="text" class="timeline-input" id="timeline_10y" placeholder="Wie sieht mein Leben aus?">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💎 Meine Werte</h2>
+            <p style="margin-bottom: 15px; color: #9fa8da;">Was ist mir im Leben wirklich wichtig? (Wähle max. 5)</p>
+
+            <div class="values-grid" id="valuesGrid">
+                <div class="value-item" data-value="family">
+                    <div class="value-icon">👨‍👩‍👧</div>
+                    <div class="value-name">Familie</div>
+                </div>
+                <div class="value-item" data-value="freedom">
+                    <div class="value-icon">🦅</div>
+                    <div class="value-name">Freiheit</div>
+                </div>
+                <div class="value-item" data-value="success">
+                    <div class="value-icon">🏆</div>
+                    <div class="value-name">Erfolg</div>
+                </div>
+                <div class="value-item" data-value="creativity">
+                    <div class="value-icon">🎨</div>
+                    <div class="value-name">Kreativität</div>
+                </div>
+                <div class="value-item" data-value="health">
+                    <div class="value-icon">💪</div>
+                    <div class="value-name">Gesundheit</div>
+                </div>
+                <div class="value-item" data-value="adventure">
+                    <div class="value-icon">🌍</div>
+                    <div class="value-name">Abenteuer</div>
+                </div>
+                <div class="value-item" data-value="security">
+                    <div class="value-icon">🛡️</div>
+                    <div class="value-name">Sicherheit</div>
+                </div>
+                <div class="value-item" data-value="knowledge">
+                    <div class="value-icon">📚</div>
+                    <div class="value-name">Wissen</div>
+                </div>
+                <div class="value-item" data-value="helping">
+                    <div class="value-icon">🤝</div>
+                    <div class="value-name">Anderen helfen</div>
+                </div>
+                <div class="value-item" data-value="love">
+                    <div class="value-icon">💕</div>
+                    <div class="value-name">Liebe</div>
+                </div>
+                <div class="value-item" data-value="money">
+                    <div class="value-icon">💰</div>
+                    <div class="value-name">Wohlstand</div>
+                </div>
+                <div class="value-item" data-value="recognition">
+                    <div class="value-icon">⭐</div>
+                    <div class="value-name">Anerkennung</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💪 Meine Stärken & Entwicklungsfelder</h2>
+            <div class="strengths-section">
+                <h3>Was bringe ich mit?</h3>
+
+                <div class="strengths-grid">
+                    <div class="strength-box">
+                        <h4>✨ Meine Stärken</h4>
+                        <textarea id="my_strengths" placeholder="Was kann ich gut? Was macht mich aus?"></textarea>
+                    </div>
+                    <div class="strength-box">
+                        <h4>🌱 Was ich entwickeln möchte</h4>
+                        <textarea id="my_growth" placeholder="Wo möchte ich besser werden?"></textarea>
+                    </div>
+                    <div class="strength-box">
+                        <h4>❤️ Was ich gerne mache</h4>
+                        <textarea id="my_passions" placeholder="Was begeistert mich? Was macht mir Spaß?"></textarea>
+                    </div>
+                    <div class="strength-box">
+                        <h4>🎯 Was andere an mir schätzen</h4>
+                        <textarea id="others_see" placeholder="Feedback, das ich bekommen habe..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💼 Berufliche Richtungen erkunden</h2>
+            <div class="career-explorer">
+                <h3>Welche Bereiche interessieren dich?</h3>
+
+                <div class="career-options" id="careerOptions">
+                    <div class="career-option" data-career="tech">
+                        <div class="career-icon">💻</div>
+                        <div>Technik/IT</div>
+                    </div>
+                    <div class="career-option" data-career="creative">
+                        <div class="career-icon">🎨</div>
+                        <div>Kreativ/Design</div>
+                    </div>
+                    <div class="career-option" data-career="social">
+                        <div class="career-icon">🤝</div>
+                        <div>Soziales</div>
+                    </div>
+                    <div class="career-option" data-career="health">
+                        <div class="career-icon">⚕️</div>
+                        <div>Gesundheit</div>
+                    </div>
+                    <div class="career-option" data-career="business">
+                        <div class="career-icon">📊</div>
+                        <div>Wirtschaft</div>
+                    </div>
+                    <div class="career-option" data-career="science">
+                        <div class="career-icon">🔬</div>
+                        <div>Wissenschaft</div>
+                    </div>
+                    <div class="career-option" data-career="education">
+                        <div class="career-icon">📚</div>
+                        <div>Bildung</div>
+                    </div>
+                    <div class="career-option" data-career="craft">
+                        <div class="career-icon">🔧</div>
+                        <div>Handwerk</div>
+                    </div>
+                </div>
+
+                <div class="career-detail">
+                    <label>Konkrete Berufe, die mich interessieren:</label>
+                    <textarea id="career_specific" placeholder="z.B. Softwareentwickler, Arzt, Designer, Lehrer..."></textarea>
+                </div>
+
+                <div class="career-detail">
+                    <label>Was muss ich dafür tun? (Ausbildung, Studium, Praktika...)</label>
+                    <textarea id="career_path" placeholder="Um diesen Beruf zu erreichen, brauche ich..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚧 Hindernisse & Lösungen</h2>
+            <div class="obstacles-section">
+                <h3>Was könnte im Weg stehen - und wie überwinde ich es?</h3>
+
+                <div class="obstacle-pair">
+                    <div class="obstacle-box problem">
+                        <label>🚫 Hindernis 1:</label>
+                        <input type="text" id="obstacle1" placeholder="Was könnte schwierig werden?">
+                    </div>
+                    <div class="obstacle-box solution">
+                        <label>✅ Mögliche Lösung:</label>
+                        <input type="text" id="solution1" placeholder="Wie kann ich das überwinden?">
+                    </div>
+                </div>
+
+                <div class="obstacle-pair">
+                    <div class="obstacle-box problem">
+                        <label>🚫 Hindernis 2:</label>
+                        <input type="text" id="obstacle2" placeholder="Was könnte schwierig werden?">
+                    </div>
+                    <div class="obstacle-box solution">
+                        <label>✅ Mögliche Lösung:</label>
+                        <input type="text" id="solution2" placeholder="Wie kann ich das überwinden?">
+                    </div>
+                </div>
+
+                <div class="obstacle-pair">
+                    <div class="obstacle-box problem">
+                        <label>🚫 Hindernis 3:</label>
+                        <input type="text" id="obstacle3" placeholder="Was könnte schwierig werden?">
+                    </div>
+                    <div class="obstacle-box solution">
+                        <label>✅ Mögliche Lösung:</label>
+                        <input type="text" id="solution3" placeholder="Wie kann ich das überwinden?">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👥 Mein Unterstützungsnetzwerk</h2>
+            <div class="support-network">
+                <h3>Wer kann mir auf meinem Weg helfen?</h3>
+
+                <div class="support-grid">
+                    <div class="support-item">
+                        <label>👨‍👩‍👧 Familie:</label>
+                        <input type="text" id="support_family" placeholder="Wer kann wie helfen?">
+                    </div>
+                    <div class="support-item">
+                        <label>👥 Freunde:</label>
+                        <input type="text" id="support_friends" placeholder="Wer unterstützt mich?">
+                    </div>
+                    <div class="support-item">
+                        <label>👨‍🏫 Lehrer/Mentoren:</label>
+                        <input type="text" id="support_mentors" placeholder="Wer kann mich beraten?">
+                    </div>
+                    <div class="support-item">
+                        <label>🏢 Institutionen:</label>
+                        <input type="text" id="support_institutions" placeholder="Beratungsstellen, Vereine...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Mein Aktionsplan</h2>
+            <div class="action-plan">
+                <h3>Konkrete nächste Schritte</h3>
+
+                <div class="action-steps">
+                    <div class="action-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <input type="text" id="action1" placeholder="Was kann ich diese Woche tun?">
+                        </div>
+                    </div>
+                    <div class="action-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <input type="text" id="action2" placeholder="Was nehme ich mir für diesen Monat vor?">
+                        </div>
+                    </div>
+                    <div class="action-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <input type="text" id="action3" placeholder="Was möchte ich dieses Jahr erreichen?">
+                        </div>
+                    </div>
+                    <div class="action-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <input type="text" id="action4" placeholder="Welche Information muss ich mir besorgen?">
+                        </div>
+                    </div>
+                    <div class="action-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <input type="text" id="action5" placeholder="Mit wem muss ich sprechen?">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✉️ Brief an mein zukünftiges Ich</h2>
+            <div class="letter-section">
+                <h3>Schreibe einen Brief an dich selbst in 5 Jahren</h3>
+                <textarea class="letter-area" id="future_letter" placeholder="Liebes zukünftiges Ich,
+
+heute bin ich ... Jahre alt und ich schreibe dir diesen Brief, weil...
+
+Meine größten Träume sind gerade...
+
+Ich hoffe, dass du...
+
+Was ich dir mitgeben möchte...
+
+Dein jüngeres Ich"></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Was hat mir diese Übung gezeigt?</label>
+                    <textarea id="reflection1" placeholder="Ich habe erkannt, dass..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was motiviert mich, an meinen Zielen zu arbeiten?</label>
+                    <textarea id="reflection2" placeholder="Mich motiviert..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken, Ideen, Träume..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedValues = [];
+        let selectedCareers = [];
+        const MAX_VALUES = 5;
+
+        // Value selection
+        document.querySelectorAll('.value-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.dataset.value;
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedValues = selectedValues.filter(v => v !== value);
+                } else if (selectedValues.length < MAX_VALUES) {
+                    this.classList.add('selected');
+                    selectedValues.push(value);
+                }
+            });
+        });
+
+        // Career selection
+        document.querySelectorAll('.career-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const career = this.dataset.career;
+                if (this.classList.contains('selected')) {
+                    if (!selectedCareers.includes(career)) selectedCareers.push(career);
+                } else {
+                    selectedCareers = selectedCareers.filter(c => c !== career);
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                vision: {
+                    living: document.getElementById('vision_living').value,
+                    work: document.getElementById('vision_work').value,
+                    relationships: document.getElementById('vision_relationships').value,
+                    achieve: document.getElementById('vision_achieve').value
+                },
+                timeline: {
+                    y1: document.getElementById('timeline_1y').value,
+                    y3: document.getElementById('timeline_3y').value,
+                    y5: document.getElementById('timeline_5y').value,
+                    y10: document.getElementById('timeline_10y').value
+                },
+                values: selectedValues,
+                strengths: {
+                    mine: document.getElementById('my_strengths').value,
+                    growth: document.getElementById('my_growth').value,
+                    passions: document.getElementById('my_passions').value,
+                    others: document.getElementById('others_see').value
+                },
+                careers: selectedCareers,
+                careerDetails: {
+                    specific: document.getElementById('career_specific').value,
+                    path: document.getElementById('career_path').value
+                },
+                obstacles: {
+                    o1: document.getElementById('obstacle1').value,
+                    s1: document.getElementById('solution1').value,
+                    o2: document.getElementById('obstacle2').value,
+                    s2: document.getElementById('solution2').value,
+                    o3: document.getElementById('obstacle3').value,
+                    s3: document.getElementById('solution3').value
+                },
+                support: {
+                    family: document.getElementById('support_family').value,
+                    friends: document.getElementById('support_friends').value,
+                    mentors: document.getElementById('support_mentors').value,
+                    institutions: document.getElementById('support_institutions').value
+                },
+                actions: {
+                    a1: document.getElementById('action1').value,
+                    a2: document.getElementById('action2').value,
+                    a3: document.getElementById('action3').value,
+                    a4: document.getElementById('action4').value,
+                    a5: document.getElementById('action5').value
+                },
+                letter: document.getElementById('future_letter').value,
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_zukunftsplanung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_zukunftsplanung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                if (data.vision) {
+                    document.getElementById('vision_living').value = data.vision.living || '';
+                    document.getElementById('vision_work').value = data.vision.work || '';
+                    document.getElementById('vision_relationships').value = data.vision.relationships || '';
+                    document.getElementById('vision_achieve').value = data.vision.achieve || '';
+                }
+
+                if (data.timeline) {
+                    document.getElementById('timeline_1y').value = data.timeline.y1 || '';
+                    document.getElementById('timeline_3y').value = data.timeline.y3 || '';
+                    document.getElementById('timeline_5y').value = data.timeline.y5 || '';
+                    document.getElementById('timeline_10y').value = data.timeline.y10 || '';
+                }
+
+                selectedValues = data.values || [];
+                selectedValues.forEach(v => {
+                    const item = document.querySelector(`[data-value="${v}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                if (data.strengths) {
+                    document.getElementById('my_strengths').value = data.strengths.mine || '';
+                    document.getElementById('my_growth').value = data.strengths.growth || '';
+                    document.getElementById('my_passions').value = data.strengths.passions || '';
+                    document.getElementById('others_see').value = data.strengths.others || '';
+                }
+
+                selectedCareers = data.careers || [];
+                selectedCareers.forEach(c => {
+                    const option = document.querySelector(`[data-career="${c}"]`);
+                    if (option) option.classList.add('selected');
+                });
+
+                if (data.careerDetails) {
+                    document.getElementById('career_specific').value = data.careerDetails.specific || '';
+                    document.getElementById('career_path').value = data.careerDetails.path || '';
+                }
+
+                if (data.obstacles) {
+                    document.getElementById('obstacle1').value = data.obstacles.o1 || '';
+                    document.getElementById('solution1').value = data.obstacles.s1 || '';
+                    document.getElementById('obstacle2').value = data.obstacles.o2 || '';
+                    document.getElementById('solution2').value = data.obstacles.s2 || '';
+                    document.getElementById('obstacle3').value = data.obstacles.o3 || '';
+                    document.getElementById('solution3').value = data.obstacles.s3 || '';
+                }
+
+                if (data.support) {
+                    document.getElementById('support_family').value = data.support.family || '';
+                    document.getElementById('support_friends').value = data.support.friends || '';
+                    document.getElementById('support_mentors').value = data.support.mentors || '';
+                    document.getElementById('support_institutions').value = data.support.institutions || '';
+                }
+
+                if (data.actions) {
+                    document.getElementById('action1').value = data.actions.a1 || '';
+                    document.getElementById('action2').value = data.actions.a2 || '';
+                    document.getElementById('action3').value = data.actions.a3 || '';
+                    document.getElementById('action4').value = data.actions.a4 || '';
+                    document.getElementById('action5').value = data.actions.a5 || '';
+                }
+
+                document.getElementById('future_letter').value = data.letter || '';
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_zukunftsplanung');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_zukunftsplanung');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'zukunftsplanung-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

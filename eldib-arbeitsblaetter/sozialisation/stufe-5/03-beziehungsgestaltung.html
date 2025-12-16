@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beziehungsgestaltung - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #e040fb;
+        }
+        .meta {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #e040fb;
+        }
+        h2 {
+            color: #e040fb;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(224,64,251,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .relationship-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .rel-type-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .rel-type-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+        .rel-type-card.selected {
+            background: rgba(224,64,251,0.2);
+            border: 2px solid #e040fb;
+        }
+        .rel-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .rel-name {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .rel-desc {
+            color: #bbb;
+            font-size: 0.9em;
+        }
+        .rel-detail-panel {
+            display: none;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .rel-detail-panel.active {
+            display: block;
+        }
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        .detail-section h4 {
+            color: #e040fb;
+            margin-bottom: 10px;
+        }
+        .detail-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .health-check {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .health-check h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .health-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .health-label {
+            flex: 1;
+        }
+        .health-scale {
+            display: flex;
+            gap: 8px;
+        }
+        .health-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        .health-btn:hover {
+            border-color: #81c784;
+        }
+        .health-btn.selected {
+            background: #81c784;
+            border-color: #81c784;
+            color: #1a1a2e;
+        }
+        .boundary-section {
+            background: rgba(255,152,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,152,0,0.3);
+        }
+        .boundary-section h3 {
+            color: #ffb74d;
+            margin-bottom: 15px;
+        }
+        .boundary-examples {
+            display: grid;
+            gap: 12px;
+        }
+        .boundary-example {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .boundary-type {
+            color: #ffb74d;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .boundary-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .communication-styles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .style-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .style-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .style-name {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .style-desc {
+            color: #bbb;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .style-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.2);
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        .style-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e040fb;
+            cursor: pointer;
+        }
+        .conflict-scenario {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .scenario-title {
+            color: #ef5350;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .scenario-text {
+            color: #ccc;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .response-options {
+            display: grid;
+            gap: 10px;
+        }
+        .response-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .response-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .response-option.selected {
+            background: rgba(224,64,251,0.2);
+            border: 1px solid #e040fb;
+        }
+        .response-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e040fb;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .response-option.selected .response-radio {
+            background: #e040fb;
+        }
+        .ich-botschaft {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(33,150,243,0.3);
+        }
+        .ich-botschaft h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .ich-formula {
+            display: grid;
+            gap: 15px;
+        }
+        .formula-step {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .formula-label {
+            color: #64b5f6;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .formula-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+        }
+        .relationship-map {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .map-center {
+            width: 80px;
+            height: 80px;
+            background: #e040fb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2em;
+        }
+        .map-rings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .map-ring {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .ring-label {
+            color: #e040fb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .ring-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #e040fb;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #e040fb, #9c27b0);
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(224,64,251,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #e040fb, #9c27b0);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .relationship-types { grid-template-columns: 1fr; }
+            .communication-styles { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💝 Beziehungsgestaltung</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-75, S-76</p>
+        </header>
+
+        <section class="section">
+            <h2>🌟 Arten von Beziehungen</h2>
+            <div class="intro-text">
+                <p>Beziehungen sind wie Gärten - sie brauchen Pflege, Aufmerksamkeit und manchmal auch klare Grenzen. In der Jugend verändern sich Beziehungen stark: Freundschaften werden tiefer, erste romantische Gefühle entstehen, und das Verhältnis zur Familie wandelt sich. Jede Beziehungsart hat ihre eigenen Regeln und Bedürfnisse.</p>
+            </div>
+
+            <p style="margin-bottom: 15px; color: #bbb;">Klicke auf eine Beziehungsart, um mehr darüber nachzudenken:</p>
+
+            <div class="relationship-types" id="relTypes">
+                <div class="rel-type-card" data-rel="friendship">
+                    <div class="rel-icon">👥</div>
+                    <div class="rel-name">Freundschaft</div>
+                    <div class="rel-desc">Vertrauen, gemeinsame Interessen, Unterstützung</div>
+                </div>
+                <div class="rel-type-card" data-rel="family">
+                    <div class="rel-icon">👨‍👩‍👧</div>
+                    <div class="rel-name">Familie</div>
+                    <div class="rel-desc">Verbundenheit, Loyalität, manchmal kompliziert</div>
+                </div>
+                <div class="rel-type-card" data-rel="romantic">
+                    <div class="rel-icon">💕</div>
+                    <div class="rel-name">Romantische Beziehung</div>
+                    <div class="rel-desc">Zuneigung, Intimität, Verletzlichkeit</div>
+                </div>
+                <div class="rel-type-card" data-rel="acquaintance">
+                    <div class="rel-icon">🤝</div>
+                    <div class="rel-name">Bekanntschaften</div>
+                    <div class="rel-desc">Oberflächlicher Kontakt, Netzwerk</div>
+                </div>
+            </div>
+
+            <div class="rel-detail-panel" id="relDetailPanel">
+                <h3 style="color: #e040fb; margin-bottom: 15px;" id="relDetailTitle">Details</h3>
+                <div class="detail-section">
+                    <h4>Was macht diese Beziehung für dich wertvoll?</h4>
+                    <textarea id="rel_value" placeholder="Diese Beziehungsart ist mir wichtig, weil..."></textarea>
+                </div>
+                <div class="detail-section">
+                    <h4>Was brauchst du in dieser Art von Beziehung?</h4>
+                    <textarea id="rel_needs" placeholder="Ich brauche..."></textarea>
+                </div>
+                <div class="detail-section">
+                    <h4>Was kannst du in diese Beziehung einbringen?</h4>
+                    <textarea id="rel_give" placeholder="Ich kann bieten..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🩺 Beziehungs-Gesundheitscheck</h2>
+            <div class="health-check">
+                <h3>Wie gesund sind deine wichtigsten Beziehungen?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Bewerte von 1 (trifft nicht zu) bis 5 (trifft voll zu):</p>
+
+                <div class="health-item">
+                    <span class="health-label">Ich kann in dieser Beziehung ich selbst sein</span>
+                    <div class="health-scale" data-health="authentic">
+                        <button class="health-btn">1</button>
+                        <button class="health-btn">2</button>
+                        <button class="health-btn">3</button>
+                        <button class="health-btn">4</button>
+                        <button class="health-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="health-item">
+                    <span class="health-label">Wir respektieren gegenseitig unsere Grenzen</span>
+                    <div class="health-scale" data-health="boundaries">
+                        <button class="health-btn">1</button>
+                        <button class="health-btn">2</button>
+                        <button class="health-btn">3</button>
+                        <button class="health-btn">4</button>
+                        <button class="health-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="health-item">
+                    <span class="health-label">Es gibt ein Gleichgewicht zwischen Geben und Nehmen</span>
+                    <div class="health-scale" data-health="balance">
+                        <button class="health-btn">1</button>
+                        <button class="health-btn">2</button>
+                        <button class="health-btn">3</button>
+                        <button class="health-btn">4</button>
+                        <button class="health-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="health-item">
+                    <span class="health-label">Wir können offen über Probleme sprechen</span>
+                    <div class="health-scale" data-health="communication">
+                        <button class="health-btn">1</button>
+                        <button class="health-btn">2</button>
+                        <button class="health-btn">3</button>
+                        <button class="health-btn">4</button>
+                        <button class="health-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="health-item">
+                    <span class="health-label">Ich fühle mich nach dem Kontakt meist gut</span>
+                    <div class="health-scale" data-health="energy">
+                        <button class="health-btn">1</button>
+                        <button class="health-btn">2</button>
+                        <button class="health-btn">3</button>
+                        <button class="health-btn">4</button>
+                        <button class="health-btn">5</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚧 Grenzen setzen</h2>
+            <div class="boundary-section">
+                <h3>Welche Grenzen sind dir in Beziehungen wichtig?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Beschreibe deine persönlichen Grenzen:</p>
+
+                <div class="boundary-examples">
+                    <div class="boundary-example">
+                        <div class="boundary-type">🕐 Zeitliche Grenzen</div>
+                        <input type="text" class="boundary-input" id="boundary_time" placeholder="z.B. Ich brauche auch Zeit für mich allein...">
+                    </div>
+                    <div class="boundary-example">
+                        <div class="boundary-type">📱 Digitale Grenzen</div>
+                        <input type="text" class="boundary-input" id="boundary_digital" placeholder="z.B. Ich muss nicht immer sofort antworten...">
+                    </div>
+                    <div class="boundary-example">
+                        <div class="boundary-type">🗣️ Emotionale Grenzen</div>
+                        <input type="text" class="boundary-input" id="boundary_emotional" placeholder="z.B. Ich möchte nicht, dass man über mich lacht...">
+                    </div>
+                    <div class="boundary-example">
+                        <div class="boundary-type">🤚 Körperliche Grenzen</div>
+                        <input type="text" class="boundary-input" id="boundary_physical" placeholder="z.B. Ich bestimme selbst, wer mich umarmen darf...">
+                    </div>
+                    <div class="boundary-example">
+                        <div class="boundary-type">🔒 Privatsphäre</div>
+                        <input type="text" class="boundary-input" id="boundary_privacy" placeholder="z.B. Manche Dinge möchte ich für mich behalten...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💬 Kommunikationsstile</h2>
+            <p style="margin-bottom: 15px; color: #bbb;">Wie kommunizierst du in verschiedenen Situationen? Schiebe den Regler:</p>
+
+            <div class="communication-styles">
+                <div class="style-card">
+                    <div class="style-icon">😶</div>
+                    <div class="style-name">Passiv ↔ Selbstbewusst</div>
+                    <div class="style-desc">Sagst du was du denkst?</div>
+                    <input type="range" class="style-slider" id="style_assertive" min="1" max="10" value="5">
+                </div>
+                <div class="style-card">
+                    <div class="style-icon">🎭</div>
+                    <div class="style-name">Vermeider ↔ Konfrontierer</div>
+                    <div class="style-desc">Wie gehst du mit Konflikten um?</div>
+                    <input type="range" class="style-slider" id="style_conflict" min="1" max="10" value="5">
+                </div>
+                <div class="style-card">
+                    <div class="style-icon">👂</div>
+                    <div class="style-name">Reden ↔ Zuhören</div>
+                    <div class="style-desc">Was machst du mehr?</div>
+                    <input type="range" class="style-slider" id="style_listen" min="1" max="10" value="5">
+                </div>
+                <div class="style-card">
+                    <div class="style-icon">❤️</div>
+                    <div class="style-name">Sachlich ↔ Emotional</div>
+                    <div class="style-desc">Wie drückst du dich aus?</div>
+                    <input type="range" class="style-slider" id="style_emotional" min="1" max="10" value="5">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚡ Konfliktsituationen</h2>
+            <p style="margin-bottom: 15px; color: #bbb;">Wie würdest du reagieren?</p>
+
+            <div class="conflict-scenario" data-scenario="1">
+                <div class="scenario-title">Situation 1: Der übergangene Freund</div>
+                <div class="scenario-text">Dein bester Freund / deine beste Freundin hat dich nicht zu einer Party eingeladen, zu der alle anderen gehen. Du erfährst es zufällig.</div>
+                <div class="response-options">
+                    <div class="response-option" data-response="ignore">
+                        <div class="response-radio"></div>
+                        <span>Ich tue so, als wüsste ich nichts davon</span>
+                    </div>
+                    <div class="response-option" data-response="angry">
+                        <div class="response-radio"></div>
+                        <span>Ich konfrontiere ihn/sie wütend</span>
+                    </div>
+                    <div class="response-option" data-response="talk">
+                        <div class="response-radio"></div>
+                        <span>Ich spreche ruhig darüber, wie ich mich fühle</span>
+                    </div>
+                    <div class="response-option" data-response="distance">
+                        <div class="response-radio"></div>
+                        <span>Ich ziehe mich erst mal zurück</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conflict-scenario" data-scenario="2">
+                <div class="scenario-title">Situation 2: Der ständige Kritiker</div>
+                <div class="scenario-text">Ein Familienmitglied kritisiert ständig dein Aussehen, deine Kleidung oder deine Entscheidungen. Es nervt dich zunehmend.</div>
+                <div class="response-options">
+                    <div class="response-option" data-response="accept">
+                        <div class="response-radio"></div>
+                        <span>Ich nehme es hin, um Streit zu vermeiden</span>
+                    </div>
+                    <div class="response-option" data-response="boundary">
+                        <div class="response-radio"></div>
+                        <span>Ich setze klar eine Grenze</span>
+                    </div>
+                    <div class="response-option" data-response="understand">
+                        <div class="response-radio"></div>
+                        <span>Ich versuche zu verstehen, warum die Person das tut</span>
+                    </div>
+                    <div class="response-option" data-response="help">
+                        <div class="response-radio"></div>
+                        <span>Ich hole mir Hilfe von anderen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💭 Ich-Botschaften formulieren</h2>
+            <div class="ich-botschaft">
+                <h3>Übe, deine Gefühle klar auszudrücken ohne anzugreifen</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Statt "Du machst immer..." sag lieber:</p>
+
+                <div class="ich-formula">
+                    <div class="formula-step">
+                        <div class="formula-label">1. Situation beschreiben (ohne Bewertung)</div>
+                        <input type="text" class="formula-input" id="ich_situation" placeholder="Wenn... (z.B. wenn du zu spät kommst)">
+                    </div>
+                    <div class="formula-step">
+                        <div class="formula-label">2. Gefühl benennen</div>
+                        <input type="text" class="formula-input" id="ich_feeling" placeholder="...fühle ich mich... (z.B. unwichtig)">
+                    </div>
+                    <div class="formula-step">
+                        <div class="formula-label">3. Bedürfnis ausdrücken</div>
+                        <input type="text" class="formula-input" id="ich_need" placeholder="...weil mir wichtig ist, dass... (z.B. unsere Zeit respektiert wird)">
+                    </div>
+                    <div class="formula-step">
+                        <div class="formula-label">4. Wunsch/Bitte formulieren</div>
+                        <input type="text" class="formula-input" id="ich_wish" placeholder="Ich wünsche mir, dass... (z.B. du mir Bescheid gibst)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Meine Beziehungslandkarte</h2>
+            <div class="relationship-map">
+                <div class="map-center">👤</div>
+                <p style="text-align: center; margin-bottom: 20px; color: #bbb;">Du bist in der Mitte. Wer steht dir wie nah?</p>
+
+                <div class="map-rings">
+                    <div class="map-ring">
+                        <div class="ring-label">💜 Engster Kreis (Menschen, denen ich alles anvertrauen kann)</div>
+                        <input type="text" class="ring-input" id="ring_closest" placeholder="Namen oder Beschreibungen...">
+                    </div>
+                    <div class="map-ring">
+                        <div class="ring-label">💙 Enge Freunde/Familie (wichtige Bezugspersonen)</div>
+                        <input type="text" class="ring-input" id="ring_close" placeholder="Namen oder Beschreibungen...">
+                    </div>
+                    <div class="map-ring">
+                        <div class="ring-label">💚 Freunde (Menschen, mit denen ich gern Zeit verbringe)</div>
+                        <input type="text" class="ring-input" id="ring_friends" placeholder="Namen oder Beschreibungen...">
+                    </div>
+                    <div class="map-ring">
+                        <div class="ring-label">💛 Bekannte (nette Menschen, die ich kenne)</div>
+                        <input type="text" class="ring-input" id="ring_acquaintances" placeholder="Namen oder Beschreibungen...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Was habe ich aus vergangenen Beziehungen gelernt?</label>
+                    <textarea id="reflection1" placeholder="Ich habe gelernt, dass..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Welche Beziehung möchte ich verbessern und wie?</label>
+                    <textarea id="reflection2" placeholder="Ich möchte... verbessern, indem ich..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was macht mich zu einem guten Freund / einer guten Freundin?</label>
+                    <textarea id="reflection3" placeholder="Meine Stärken in Beziehungen sind..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Erkenntnisse, Vorsätze..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedRelType = null;
+        let relTypeData = {};
+        let healthScales = {};
+        let conflictResponses = {};
+
+        // Relationship type selection
+        document.querySelectorAll('.rel-type-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const relType = this.dataset.rel;
+
+                if (selectedRelType) {
+                    saveRelTypeData();
+                }
+
+                document.querySelectorAll('.rel-type-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+
+                selectedRelType = relType;
+                document.getElementById('relDetailTitle').textContent = this.querySelector('.rel-name').textContent;
+                document.getElementById('relDetailPanel').classList.add('active');
+
+                if (relTypeData[relType]) {
+                    document.getElementById('rel_value').value = relTypeData[relType].value || '';
+                    document.getElementById('rel_needs').value = relTypeData[relType].needs || '';
+                    document.getElementById('rel_give').value = relTypeData[relType].give || '';
+                } else {
+                    document.getElementById('rel_value').value = '';
+                    document.getElementById('rel_needs').value = '';
+                    document.getElementById('rel_give').value = '';
+                }
+            });
+        });
+
+        function saveRelTypeData() {
+            if (selectedRelType) {
+                relTypeData[selectedRelType] = {
+                    value: document.getElementById('rel_value').value,
+                    needs: document.getElementById('rel_needs').value,
+                    give: document.getElementById('rel_give').value
+                };
+            }
+        }
+
+        // Health scale
+        document.querySelectorAll('.health-scale').forEach(scale => {
+            const healthKey = scale.dataset.health;
+            scale.querySelectorAll('.health-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    scale.querySelectorAll('.health-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    healthScales[healthKey] = this.textContent;
+                });
+            });
+        });
+
+        // Conflict responses
+        document.querySelectorAll('.conflict-scenario').forEach(scenario => {
+            const scenarioId = scenario.dataset.scenario;
+            scenario.querySelectorAll('.response-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    scenario.querySelectorAll('.response-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    conflictResponses[scenarioId] = this.dataset.response;
+                });
+            });
+        });
+
+        function saveData() {
+            saveRelTypeData();
+
+            const data = {
+                relTypeData,
+                healthScales,
+                boundaries: {
+                    time: document.getElementById('boundary_time').value,
+                    digital: document.getElementById('boundary_digital').value,
+                    emotional: document.getElementById('boundary_emotional').value,
+                    physical: document.getElementById('boundary_physical').value,
+                    privacy: document.getElementById('boundary_privacy').value
+                },
+                styles: {
+                    assertive: document.getElementById('style_assertive').value,
+                    conflict: document.getElementById('style_conflict').value,
+                    listen: document.getElementById('style_listen').value,
+                    emotional: document.getElementById('style_emotional').value
+                },
+                conflictResponses,
+                ichBotschaft: {
+                    situation: document.getElementById('ich_situation').value,
+                    feeling: document.getElementById('ich_feeling').value,
+                    need: document.getElementById('ich_need').value,
+                    wish: document.getElementById('ich_wish').value
+                },
+                map: {
+                    closest: document.getElementById('ring_closest').value,
+                    close: document.getElementById('ring_close').value,
+                    friends: document.getElementById('ring_friends').value,
+                    acquaintances: document.getElementById('ring_acquaintances').value
+                },
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value,
+                    r3: document.getElementById('reflection3').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_beziehungsgestaltung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_beziehungsgestaltung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                relTypeData = data.relTypeData || {};
+                healthScales = data.healthScales || {};
+                conflictResponses = data.conflictResponses || {};
+
+                // Restore health scales
+                Object.keys(healthScales).forEach(key => {
+                    const scale = document.querySelector(`[data-health="${key}"]`);
+                    if (scale) {
+                        scale.querySelectorAll('.health-btn').forEach(btn => {
+                            if (btn.textContent === healthScales[key]) {
+                                btn.classList.add('selected');
+                            }
+                        });
+                    }
+                });
+
+                // Restore conflict responses
+                Object.keys(conflictResponses).forEach(key => {
+                    const scenario = document.querySelector(`[data-scenario="${key}"]`);
+                    if (scenario) {
+                        const option = scenario.querySelector(`[data-response="${conflictResponses[key]}"]`);
+                        if (option) option.classList.add('selected');
+                    }
+                });
+
+                if (data.boundaries) {
+                    document.getElementById('boundary_time').value = data.boundaries.time || '';
+                    document.getElementById('boundary_digital').value = data.boundaries.digital || '';
+                    document.getElementById('boundary_emotional').value = data.boundaries.emotional || '';
+                    document.getElementById('boundary_physical').value = data.boundaries.physical || '';
+                    document.getElementById('boundary_privacy').value = data.boundaries.privacy || '';
+                }
+
+                if (data.styles) {
+                    document.getElementById('style_assertive').value = data.styles.assertive || 5;
+                    document.getElementById('style_conflict').value = data.styles.conflict || 5;
+                    document.getElementById('style_listen').value = data.styles.listen || 5;
+                    document.getElementById('style_emotional').value = data.styles.emotional || 5;
+                }
+
+                if (data.ichBotschaft) {
+                    document.getElementById('ich_situation').value = data.ichBotschaft.situation || '';
+                    document.getElementById('ich_feeling').value = data.ichBotschaft.feeling || '';
+                    document.getElementById('ich_need').value = data.ichBotschaft.need || '';
+                    document.getElementById('ich_wish').value = data.ichBotschaft.wish || '';
+                }
+
+                if (data.map) {
+                    document.getElementById('ring_closest').value = data.map.closest || '';
+                    document.getElementById('ring_close').value = data.map.close || '';
+                    document.getElementById('ring_friends').value = data.map.friends || '';
+                    document.getElementById('ring_acquaintances').value = data.map.acquaintances || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                    document.getElementById('reflection3').value = data.reflection.r3 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_beziehungsgestaltung');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_beziehungsgestaltung');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'beziehungsgestaltung-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interkulturelle Kompetenz - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #7c4dff;
+        }
+        .meta {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #7c4dff;
+        }
+        h2 {
+            color: #7c4dff;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(124,77,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .culture-iceberg {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .iceberg-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 20px;
+        }
+        .iceberg-top {
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            border-radius: 50% 50% 0 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .iceberg-top h4 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .iceberg-bottom {
+            background: linear-gradient(135deg, #1e88e5, #1565c0);
+            border-radius: 0 0 20px 20px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .iceberg-bottom h4 {
+            color: #bbdefb;
+            margin-bottom: 10px;
+        }
+        .iceberg-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .iceberg-item {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .country-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .country-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        .country-card.selected {
+            border-color: #7c4dff;
+            background: rgba(124,77,255,0.2);
+        }
+        .country-flag {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+        .country-name {
+            font-size: 0.9em;
+        }
+        .culture-detail {
+            display: none;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .culture-detail.active {
+            display: block;
+        }
+        .culture-aspect {
+            margin-bottom: 15px;
+        }
+        .culture-aspect label {
+            display: block;
+            color: #7c4dff;
+            margin-bottom: 8px;
+        }
+        .culture-aspect textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 60px;
+            resize: vertical;
+        }
+        .stereotype-section {
+            background: rgba(255,152,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,152,0,0.3);
+        }
+        .stereotype-section h3 {
+            color: #ffb74d;
+            margin-bottom: 15px;
+        }
+        .stereotype-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .stereotype-text {
+            font-style: italic;
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+        .stereotype-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .perspective-exercise {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .perspective-exercise h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .perspective-scenario {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .scenario-desc {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .perspective-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .perspective-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .perspective-label {
+            color: #81c784;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .perspective-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .communication-styles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .comm-style {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .comm-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .comm-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #7c4dff;
+        }
+        .comm-desc {
+            color: #bbb;
+            font-size: 0.85em;
+            text-align: center;
+        }
+        .experience-section {
+            background: rgba(233,30,99,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .experience-section h3 {
+            color: #f48fb1;
+            margin-bottom: 15px;
+        }
+        .experience-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .experience-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .experience-item label {
+            display: block;
+            color: #f48fb1;
+            margin-bottom: 8px;
+        }
+        .experience-item textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .value-comparison {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .value-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .value-label {
+            text-align: center;
+            padding: 8px;
+            background: rgba(124,77,255,0.2);
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .value-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.2);
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        .value-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #7c4dff;
+            cursor: pointer;
+        }
+        .value-extreme {
+            font-size: 0.85em;
+            color: #bbb;
+            text-align: center;
+        }
+        .action-plan {
+            background: rgba(0,150,136,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .action-plan h3 {
+            color: #80cbc4;
+            margin-bottom: 15px;
+        }
+        .action-items {
+            display: grid;
+            gap: 12px;
+        }
+        .action-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .action-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #80cbc4;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-checkbox.checked {
+            background: #80cbc4;
+        }
+        .action-checkbox.checked::after {
+            content: "✓";
+            color: #1a237e;
+            font-weight: bold;
+        }
+        .action-text {
+            flex: 1;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #7c4dff;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7c4dff, #651fff);
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(124,77,255,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #7c4dff, #651fff);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .country-grid { grid-template-columns: repeat(3, 1fr); }
+            .perspective-grid { grid-template-columns: 1fr; }
+            .value-row { grid-template-columns: 1fr; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Interkulturelle Kompetenz</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-77, S-78</p>
+        </header>
+
+        <section class="section">
+            <h2>🧊 Das Kultur-Eisberg-Modell</h2>
+            <div class="intro-text">
+                <p>Kultur ist wie ein Eisberg: Nur ein kleiner Teil ist sichtbar - Sprache, Kleidung, Essen, Musik. Der viel größere Teil liegt unter der Oberfläche - Werte, Überzeugungen, Denkweisen, ungeschriebene Regeln. Um andere Kulturen wirklich zu verstehen, müssen wir unter die Oberfläche schauen.</p>
+            </div>
+
+            <div class="culture-iceberg">
+                <div class="iceberg-visual">
+                    <div class="iceberg-top">
+                        <h4>👁️ Sichtbar (über der Oberfläche)</h4>
+                        <div class="iceberg-items">
+                            <span class="iceberg-item">Sprache</span>
+                            <span class="iceberg-item">Kleidung</span>
+                            <span class="iceberg-item">Essen</span>
+                            <span class="iceberg-item">Musik</span>
+                            <span class="iceberg-item">Kunst</span>
+                            <span class="iceberg-item">Feste</span>
+                        </div>
+                    </div>
+                    <div class="iceberg-bottom">
+                        <h4>👁️‍🗨️ Unsichtbar (unter der Oberfläche)</h4>
+                        <div class="iceberg-items">
+                            <span class="iceberg-item">Werte</span>
+                            <span class="iceberg-item">Überzeugungen</span>
+                            <span class="iceberg-item">Höflichkeitsregeln</span>
+                            <span class="iceberg-item">Familienrollen</span>
+                            <span class="iceberg-item">Zeitverständnis</span>
+                            <span class="iceberg-item">Körpersprache</span>
+                            <span class="iceberg-item">Humor</span>
+                            <span class="iceberg-item">Respektformen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🗺️ Kulturen erkunden</h2>
+            <p style="margin-bottom: 15px; color: #bbb;">Wähle eine Kultur, die dich interessiert oder mit der du Kontakt hast:</p>
+
+            <div class="country-grid" id="countryGrid">
+                <div class="country-card" data-country="turkey">
+                    <div class="country-flag">🇹🇷</div>
+                    <div class="country-name">Türkei</div>
+                </div>
+                <div class="country-card" data-country="syria">
+                    <div class="country-flag">🇸🇾</div>
+                    <div class="country-name">Syrien</div>
+                </div>
+                <div class="country-card" data-country="poland">
+                    <div class="country-flag">🇵🇱</div>
+                    <div class="country-name">Polen</div>
+                </div>
+                <div class="country-card" data-country="russia">
+                    <div class="country-flag">🇷🇺</div>
+                    <div class="country-name">Russland</div>
+                </div>
+                <div class="country-card" data-country="italy">
+                    <div class="country-flag">🇮🇹</div>
+                    <div class="country-name">Italien</div>
+                </div>
+                <div class="country-card" data-country="usa">
+                    <div class="country-flag">🇺🇸</div>
+                    <div class="country-name">USA</div>
+                </div>
+                <div class="country-card" data-country="india">
+                    <div class="country-flag">🇮🇳</div>
+                    <div class="country-name">Indien</div>
+                </div>
+                <div class="country-card" data-country="japan">
+                    <div class="country-flag">🇯🇵</div>
+                    <div class="country-name">Japan</div>
+                </div>
+                <div class="country-card" data-country="other">
+                    <div class="country-flag">🌐</div>
+                    <div class="country-name">Andere</div>
+                </div>
+            </div>
+
+            <div class="culture-detail" id="cultureDetail">
+                <h3 style="color: #7c4dff; margin-bottom: 15px;" id="cultureTitle">Kultur erkunden</h3>
+                <div class="culture-aspect">
+                    <label>Was weißt du über diese Kultur? (Sichtbares)</label>
+                    <textarea id="culture_visible" placeholder="Sprache, Essen, Traditionen..."></textarea>
+                </div>
+                <div class="culture-aspect">
+                    <label>Was vermutest du über Werte und Überzeugungen? (Unsichtbares)</label>
+                    <textarea id="culture_values" placeholder="Wichtige Werte, Familienstruktur, Umgang miteinander..."></textarea>
+                </div>
+                <div class="culture-aspect">
+                    <label>Was möchtest du noch darüber lernen?</label>
+                    <textarea id="culture_learn" placeholder="Fragen, die du hast..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚫 Stereotype hinterfragen</h2>
+            <div class="stereotype-section">
+                <h3>Vorurteile erkennen und überwinden</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Stereotype sind vereinfachte Bilder über Gruppen. Warum sind sie problematisch?</p>
+
+                <div class="stereotype-card">
+                    <div class="stereotype-text">"Alle [Nationalität] sind..."</div>
+                    <input type="text" class="stereotype-input" id="stereo1" placeholder="Warum ist diese Verallgemeinerung problematisch?">
+                </div>
+
+                <div class="stereotype-card">
+                    <div class="stereotype-text">"Die können doch alle gut..."</div>
+                    <input type="text" class="stereotype-input" id="stereo2" placeholder="Auch positive Stereotype sind schädlich, weil...">
+                </div>
+
+                <div class="stereotype-card">
+                    <div class="stereotype-text">"Bei denen ist das halt so Tradition..."</div>
+                    <input type="text" class="stereotype-input" id="stereo3" placeholder="Warum sollte man nicht verallgemeinern?">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👓 Perspektivenwechsel üben</h2>
+            <div class="perspective-exercise">
+                <h3>In anderen Schuhen gehen</h3>
+
+                <div class="perspective-scenario">
+                    <div class="scenario-desc">
+                        <strong>Situation:</strong> Ein neuer Schüler aus einem anderen Land kommt in deine Klasse. Er spricht noch nicht gut Deutsch und sitzt oft alleine in den Pausen.
+                    </div>
+                    <div class="perspective-grid">
+                        <div class="perspective-box">
+                            <div class="perspective-label">Deine Perspektive</div>
+                            <textarea class="perspective-input" id="persp1_own" placeholder="Was denkst/fühlst du?"></textarea>
+                        </div>
+                        <div class="perspective-box">
+                            <div class="perspective-label">Seine Perspektive</div>
+                            <textarea class="perspective-input" id="persp1_other" placeholder="Was könnte er denken/fühlen?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="perspective-scenario">
+                    <div class="scenario-desc">
+                        <strong>Situation:</strong> Eine Mitschülerin trägt aus religiösen Gründen ein Kopftuch. Manche machen Bemerkungen darüber.
+                    </div>
+                    <div class="perspective-grid">
+                        <div class="perspective-box">
+                            <div class="perspective-label">Perspektive der Mitschülerin</div>
+                            <textarea class="perspective-input" id="persp2_other" placeholder="Was könnte sie denken/fühlen?"></textarea>
+                        </div>
+                        <div class="perspective-box">
+                            <div class="perspective-label">Was könntest du tun?</div>
+                            <textarea class="perspective-input" id="persp2_action" placeholder="Wie könntest du reagieren?"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💬 Kulturelle Unterschiede in der Kommunikation</h2>
+            <div class="communication-styles">
+                <div class="comm-style">
+                    <div class="comm-icon">🎯</div>
+                    <div class="comm-title">Direkt vs. Indirekt</div>
+                    <div class="comm-desc">Manche Kulturen sagen direkt, was sie meinen. Andere nutzen Umschreibungen und erwarten, dass man "zwischen den Zeilen" liest.</div>
+                </div>
+                <div class="comm-style">
+                    <div class="comm-icon">⏰</div>
+                    <div class="comm-title">Zeitverständnis</div>
+                    <div class="comm-desc">Pünktlichkeit bedeutet in verschiedenen Kulturen unterschiedliches. Für manche ist 5 Min. Verspätung normal, für andere unhöflich.</div>
+                </div>
+                <div class="comm-style">
+                    <div class="comm-icon">👀</div>
+                    <div class="comm-title">Blickkontakt</div>
+                    <div class="comm-desc">In manchen Kulturen zeigt direkter Blickkontakt Respekt, in anderen gilt es als unhöflich oder herausfordernd.</div>
+                </div>
+                <div class="comm-style">
+                    <div class="comm-icon">📏</div>
+                    <div class="comm-title">Körperlicher Abstand</div>
+                    <div class="comm-desc">Die "normale" Distanz beim Gespräch variiert kulturell stark - von fast berührend bis armlang.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Kulturelle Werteskalen</h2>
+            <p style="margin-bottom: 15px; color: #bbb;">Wo siehst du dich und deine kulturelle Prägung auf diesen Skalen?</p>
+
+            <div class="value-comparison">
+                <div class="value-row">
+                    <div class="value-extreme">Individualismus<br><small>(Das Ich ist wichtig)</small></div>
+                    <input type="range" class="value-slider" id="scale1" min="1" max="10" value="5">
+                    <div class="value-extreme">Kollektivismus<br><small>(Die Gruppe ist wichtig)</small></div>
+                </div>
+
+                <div class="value-row">
+                    <div class="value-extreme">Direkte Kommunikation<br><small>(Sag was du meinst)</small></div>
+                    <input type="range" class="value-slider" id="scale2" min="1" max="10" value="5">
+                    <div class="value-extreme">Indirekte Kommunikation<br><small>(Lies zwischen den Zeilen)</small></div>
+                </div>
+
+                <div class="value-row">
+                    <div class="value-extreme">Monochron<br><small>(Eine Sache nach der anderen)</small></div>
+                    <input type="range" class="value-slider" id="scale3" min="1" max="10" value="5">
+                    <div class="value-extreme">Polychron<br><small>(Mehreres gleichzeitig)</small></div>
+                </div>
+
+                <div class="value-row">
+                    <div class="value-extreme">Niedrige Machtdistanz<br><small>(Alle sind gleichberechtigt)</small></div>
+                    <input type="range" class="value-slider" id="scale4" min="1" max="10" value="5">
+                    <div class="value-extreme">Hohe Machtdistanz<br><small>(Hierarchie ist wichtig)</small></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💭 Meine interkulturellen Erfahrungen</h2>
+            <div class="experience-section">
+                <h3>Begegnungen reflektieren</h3>
+                <div class="experience-grid">
+                    <div class="experience-item">
+                        <label>Eine positive interkulturelle Begegnung, die ich hatte:</label>
+                        <textarea id="exp_positive" placeholder="Was ist passiert? Was habe ich gelernt?"></textarea>
+                    </div>
+                    <div class="experience-item">
+                        <label>Ein Moment, in dem kulturelle Unterschiede zu Missverständnissen führten:</label>
+                        <textarea id="exp_challenge" placeholder="Was ist passiert? Was hätte helfen können?"></textarea>
+                    </div>
+                    <div class="experience-item">
+                        <label>Was ich aus meiner eigenen Kultur als wertvoll empfinde:</label>
+                        <textarea id="exp_own" placeholder="Traditionen, Werte, Gewohnheiten..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Mein interkultureller Aktionsplan</h2>
+            <div class="action-plan">
+                <h3>Was möchte ich tun, um interkulturell kompetenter zu werden?</h3>
+
+                <div class="action-items" id="actionItems">
+                    <div class="action-item" data-action="learn">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Eine neue Sprache oder Grundbegriffe lernen</span>
+                    </div>
+                    <div class="action-item" data-action="food">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Gerichte aus anderen Kulturen ausprobieren</span>
+                    </div>
+                    <div class="action-item" data-action="media">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Filme/Serien/Musik aus anderen Ländern entdecken</span>
+                    </div>
+                    <div class="action-item" data-action="talk">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Mit Menschen aus anderen Kulturen ins Gespräch kommen</span>
+                    </div>
+                    <div class="action-item" data-action="event">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">An einem interkulturellen Event teilnehmen</span>
+                    </div>
+                    <div class="action-item" data-action="read">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Bücher von Autoren aus anderen Kulturen lesen</span>
+                    </div>
+                    <div class="action-item" data-action="prejudice">
+                        <div class="action-checkbox"></div>
+                        <span class="action-text">Eigene Vorurteile aktiv hinterfragen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Was bedeutet "Heimat" für mich und wie hat meine kulturelle Prägung mich geformt?</label>
+                    <textarea id="reflection1" placeholder="Meine Identität ist geprägt durch..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Wie kann ich Brücken bauen zwischen verschiedenen Kulturen?</label>
+                    <textarea id="reflection2" placeholder="Ich kann beitragen, indem..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Fragen, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedCountry = null;
+        let countryData = {};
+        let actionPlan = [];
+
+        // Country selection
+        document.querySelectorAll('.country-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const country = this.dataset.country;
+
+                if (selectedCountry) {
+                    saveCountryData();
+                }
+
+                document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+
+                selectedCountry = country;
+                document.getElementById('cultureTitle').textContent = 'Erkunde: ' + this.querySelector('.country-name').textContent;
+                document.getElementById('cultureDetail').classList.add('active');
+
+                if (countryData[country]) {
+                    document.getElementById('culture_visible').value = countryData[country].visible || '';
+                    document.getElementById('culture_values').value = countryData[country].values || '';
+                    document.getElementById('culture_learn').value = countryData[country].learn || '';
+                } else {
+                    document.getElementById('culture_visible').value = '';
+                    document.getElementById('culture_values').value = '';
+                    document.getElementById('culture_learn').value = '';
+                }
+            });
+        });
+
+        function saveCountryData() {
+            if (selectedCountry) {
+                countryData[selectedCountry] = {
+                    visible: document.getElementById('culture_visible').value,
+                    values: document.getElementById('culture_values').value,
+                    learn: document.getElementById('culture_learn').value
+                };
+            }
+        }
+
+        // Action plan checkboxes
+        document.querySelectorAll('.action-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('.action-checkbox');
+                checkbox.classList.toggle('checked');
+                const action = this.dataset.action;
+                if (checkbox.classList.contains('checked')) {
+                    if (!actionPlan.includes(action)) actionPlan.push(action);
+                } else {
+                    actionPlan = actionPlan.filter(a => a !== action);
+                }
+            });
+        });
+
+        function saveData() {
+            saveCountryData();
+
+            const data = {
+                countryData,
+                stereotypes: {
+                    s1: document.getElementById('stereo1').value,
+                    s2: document.getElementById('stereo2').value,
+                    s3: document.getElementById('stereo3').value
+                },
+                perspectives: {
+                    p1_own: document.getElementById('persp1_own').value,
+                    p1_other: document.getElementById('persp1_other').value,
+                    p2_other: document.getElementById('persp2_other').value,
+                    p2_action: document.getElementById('persp2_action').value
+                },
+                scales: {
+                    s1: document.getElementById('scale1').value,
+                    s2: document.getElementById('scale2').value,
+                    s3: document.getElementById('scale3').value,
+                    s4: document.getElementById('scale4').value
+                },
+                experiences: {
+                    positive: document.getElementById('exp_positive').value,
+                    challenge: document.getElementById('exp_challenge').value,
+                    own: document.getElementById('exp_own').value
+                },
+                actionPlan,
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_interkulturell', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_interkulturell');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                countryData = data.countryData || {};
+                actionPlan = data.actionPlan || [];
+
+                // Restore action plan
+                actionPlan.forEach(action => {
+                    const item = document.querySelector(`[data-action="${action}"]`);
+                    if (item) item.querySelector('.action-checkbox').classList.add('checked');
+                });
+
+                if (data.stereotypes) {
+                    document.getElementById('stereo1').value = data.stereotypes.s1 || '';
+                    document.getElementById('stereo2').value = data.stereotypes.s2 || '';
+                    document.getElementById('stereo3').value = data.stereotypes.s3 || '';
+                }
+
+                if (data.perspectives) {
+                    document.getElementById('persp1_own').value = data.perspectives.p1_own || '';
+                    document.getElementById('persp1_other').value = data.perspectives.p1_other || '';
+                    document.getElementById('persp2_other').value = data.perspectives.p2_other || '';
+                    document.getElementById('persp2_action').value = data.perspectives.p2_action || '';
+                }
+
+                if (data.scales) {
+                    document.getElementById('scale1').value = data.scales.s1 || 5;
+                    document.getElementById('scale2').value = data.scales.s2 || 5;
+                    document.getElementById('scale3').value = data.scales.s3 || 5;
+                    document.getElementById('scale4').value = data.scales.s4 || 5;
+                }
+
+                if (data.experiences) {
+                    document.getElementById('exp_positive').value = data.experiences.positive || '';
+                    document.getElementById('exp_challenge').value = data.experiences.challenge || '';
+                    document.getElementById('exp_own').value = data.experiences.own || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_interkulturell');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_interkulturell');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'interkulturell-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

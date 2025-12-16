@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soziale Verantwortung - Sozialisation Stufe V - ELDiB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center;
+        }
+        .domain-badge {
+            display: inline-block; background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 10px;
+        }
+        h1 { color: #333; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1rem; }
+        .card {
+            background: white; border-radius: 20px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card h2 { color: #1a237e; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card h2 .icon { font-size: 1.5rem; }
+        .intro-text {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; line-height: 1.7;
+        }
+        .areas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .area-card {
+            background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s; border: 3px solid transparent;
+        }
+        .area-card:hover { transform: translateY(-3px); }
+        .area-card.important { border-color: #1a237e; background: linear-gradient(135deg, #e8eaf6, #c5cae9); }
+        .area-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+        .area-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .area-desc { font-size: 0.85rem; color: #666; }
+        .dilemma-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px; padding: 20px; margin-bottom: 15px;
+        }
+        .dilemma-title { font-weight: bold; color: #333; margin-bottom: 10px; font-size: 1.1rem; }
+        .dilemma-text { color: #555; line-height: 1.7; margin-bottom: 15px; padding: 15px; background: white; border-radius: 10px; }
+        .dilemma-input {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+        .dilemma-input:focus { outline: none; border-color: #1a237e; }
+        .action-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .action-item {
+            display: flex; align-items: flex-start; gap: 15px;
+            padding: 15px; background: white; border-radius: 12px;
+            margin-bottom: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .action-item:hover { transform: translateX(5px); }
+        .action-item.done { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4caf50; }
+        .action-emoji { font-size: 1.5rem; }
+        .action-text { flex: 1; }
+        .action-title { font-weight: bold; color: #333; }
+        .action-desc { font-size: 0.85rem; color: #666; }
+        .scale-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .scale-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .scale-container { display: flex; align-items: center; gap: 15px; }
+        .scale-slider {
+            flex: 1; -webkit-appearance: none; height: 10px; border-radius: 5px;
+            background: linear-gradient(to right, #e0e0e0, #1a237e);
+        }
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 24px; height: 24px;
+            border-radius: 50%; background: white; border: 3px solid #1a237e; cursor: pointer;
+        }
+        .scale-value { width: 40px; text-align: center; font-weight: bold; color: #1a237e; }
+        .reflection-section { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .reflection-label { font-weight: 500; color: #333; margin-bottom: 10px; display: block; }
+        .reflection-input {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+        .reflection-input:focus { outline: none; border-color: #1a237e; }
+        .notes-area {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 12px; font-size: 1rem; resize: vertical; min-height: 100px;
+        }
+        .notes-area:focus { outline: none; border-color: #1a237e; }
+        .save-notice {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #4caf50; color: white; padding: 15px 25px;
+            border-radius: 30px; display: none; z-index: 1000;
+        }
+        .save-notice.show { display: block; animation: fadeInOut 2s ease; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        .eldib-reference { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; color: #666; }
+        .print-btn {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white; border: none; padding: 12px 25px;
+            border-radius: 25px; cursor: pointer; font-size: 1rem; margin-top: 15px;
+        }
+        @media print { body { background: white; } .print-btn, .save-notice { display: none !important; } }
+        @media (max-width: 600px) { .areas-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="domain-badge">Sozialisation - Stufe V (12-16+ Jahre)</div>
+            <h1>🌍 Soziale Verantwortung</h1>
+            <p class="subtitle">Verantwortung für sich selbst und die Gesellschaft</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="icon">💡</span> Was bedeutet soziale Verantwortung?</h2>
+            <div class="intro-text">
+                <p><strong>Soziale Verantwortung</strong> bedeutet, dass wir als Mitglieder der Gesellschaft
+                nicht nur an uns selbst denken, sondern auch an das Wohl anderer und der Gemeinschaft.</p>
+                <p style="margin-top: 10px;">Als Jugendliche/r stehst du vor der Frage: Welche Rolle willst
+                du in der Gesellschaft spielen? Wie kannst du zu einer besseren Welt beitragen?</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🎯</span> Bereiche sozialer Verantwortung</h2>
+            <p style="margin-bottom: 15px; color: #666;">Welche Bereiche sind dir wichtig?</p>
+            <div class="areas-grid">
+                <div class="area-card" data-area="environment"><div class="area-emoji">🌱</div><div class="area-title">Umweltschutz</div><div class="area-desc">Nachhaltigkeit, Klimaschutz</div></div>
+                <div class="area-card" data-area="social"><div class="area-emoji">🤝</div><div class="area-title">Soziale Gerechtigkeit</div><div class="area-desc">Chancengleichheit, Armut bekämpfen</div></div>
+                <div class="area-card" data-area="human_rights"><div class="area-emoji">✊</div><div class="area-title">Menschenrechte</div><div class="area-desc">Gleichberechtigung, Würde</div></div>
+                <div class="area-card" data-area="local"><div class="area-emoji">🏘️</div><div class="area-title">Lokales Engagement</div><div class="area-desc">Nachbarschaft, Gemeinde</div></div>
+                <div class="area-card" data-area="education"><div class="area-emoji">📚</div><div class="area-title">Bildung</div><div class="area-desc">Wissen teilen, fördern</div></div>
+                <div class="area-card" data-area="health"><div class="area-emoji">❤️</div><div class="area-title">Gesundheit</div><div class="area-desc">Für alle zugänglich</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">⚖️</span> Ethische Dilemmata</h2>
+            <p style="margin-bottom: 15px; color: #666;">Denke über diese komplexen Situationen nach:</p>
+
+            <div class="dilemma-section">
+                <div class="dilemma-title">Dilemma 1: Umwelt vs. Bequemlichkeit</div>
+                <div class="dilemma-text">Du weißt, dass Flugreisen der Umwelt schaden. Deine Klasse plant aber eine Flugreise für die Abschlussfahrt. Fliegst du mit?</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Deine Überlegungen:</label>
+                <textarea class="dilemma-input" id="dilemma1" placeholder="Was spricht dafür, was dagegen?"></textarea>
+            </div>
+
+            <div class="dilemma-section">
+                <div class="dilemma-title">Dilemma 2: Konsumethik</div>
+                <div class="dilemma-text">Du möchtest neue Sneaker. Die günstigen werden unter fragwürdigen Arbeitsbedingungen produziert. Die fairen kosten das Dreifache.</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Wie entscheidest du?</label>
+                <textarea class="dilemma-input" id="dilemma2" placeholder="Deine Gedanken..."></textarea>
+            </div>
+
+            <div class="dilemma-section">
+                <div class="dilemma-title">Dilemma 3: Zivilcourage</div>
+                <div class="dilemma-text">Du siehst, wie jemand in der Bahn rassistisch beleidigt wird. Die anderen Fahrgäste schauen weg.</div>
+                <label style="font-weight: 500; color: #555; display: block; margin-bottom: 8px;">Was würdest du tun?</label>
+                <textarea class="dilemma-input" id="dilemma3" placeholder="Dein Handeln..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">✅</span> Konkrete Handlungsmöglichkeiten</h2>
+            <p style="margin-bottom: 15px; color: #666;">Klicke auf Dinge, die du tust oder tun könntest:</p>
+            <div class="action-section">
+                <div class="action-item" data-action="inform"><div class="action-emoji">📰</div><div class="action-text"><div class="action-title">Mich informieren</div><div class="action-desc">Nachrichten verfolgen, kritisch hinterfragen</div></div></div>
+                <div class="action-item" data-action="vote"><div class="action-emoji">🗳️</div><div class="action-text"><div class="action-title">Politisch beteiligen</div><div class="action-desc">Wählen gehen (wenn möglich), Petitionen unterstützen</div></div></div>
+                <div class="action-item" data-action="volunteer"><div class="action-emoji">🤲</div><div class="action-text"><div class="action-title">Ehrenamtlich engagieren</div><div class="action-desc">In Vereinen, Organisationen mitarbeiten</div></div></div>
+                <div class="action-item" data-action="consume"><div class="action-emoji">🛒</div><div class="action-text"><div class="action-title">Bewusst konsumieren</div><div class="action-desc">Fair, nachhaltig, regional einkaufen</div></div></div>
+                <div class="action-item" data-action="speak"><div class="action-emoji">🗣️</div><div class="action-text"><div class="action-title">Stimme erheben</div><div class="action-desc">Bei Ungerechtigkeit nicht schweigen</div></div></div>
+                <div class="action-item" data-action="educate"><div class="action-emoji">💡</div><div class="action-text"><div class="action-title">Andere aufklären</div><div class="action-desc">Wissen teilen, Bewusstsein schaffen</div></div></div>
+                <div class="action-item" data-action="reduce"><div class="action-emoji">♻️</div><div class="action-text"><div class="action-title">Ressourcen schonen</div><div class="action-desc">Weniger verbrauchen, wiederverwenden</div></div></div>
+                <div class="action-item" data-action="donate"><div class="action-emoji">💰</div><div class="action-text"><div class="action-title">Spenden</div><div class="action-desc">Geld oder Zeit für gute Zwecke</div></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Selbsteinschätzung</h2>
+            <div class="scale-section">
+                <label class="scale-label">Wie stark fühle ich mich verantwortlich für gesellschaftliche Probleme?</label>
+                <div class="scale-container">
+                    <span>Wenig</span>
+                    <input type="range" class="scale-slider" id="scale_responsible" min="1" max="5" value="3">
+                    <span>Sehr</span>
+                    <span class="scale-value" id="val_responsible">3</span>
+                </div>
+            </div>
+            <div class="scale-section">
+                <label class="scale-label">Wie oft setze ich mich aktiv für andere ein?</label>
+                <div class="scale-container">
+                    <span>Selten</span>
+                    <input type="range" class="scale-slider" id="scale_active" min="1" max="5" value="3">
+                    <span>Oft</span>
+                    <span class="scale-value" id="val_active">3</span>
+                </div>
+            </div>
+            <div class="scale-section">
+                <label class="scale-label">Glaube ich, dass ich etwas verändern kann?</label>
+                <div class="scale-container">
+                    <span>Kaum</span>
+                    <input type="range" class="scale-slider" id="scale_impact" min="1" max="5" value="3">
+                    <span>Ja!</span>
+                    <span class="scale-value" id="val_impact">3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📝</span> Meine Reflexion</h2>
+            <div class="reflection-section">
+                <label class="reflection-label">Was bedeutet "ein guter Mensch sein" für dich?</label>
+                <textarea class="reflection-input" id="good_person" placeholder="Deine Definition..."></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Welches gesellschaftliche Thema liegt dir besonders am Herzen?</label>
+                <textarea class="reflection-input" id="heart_topic" placeholder="Und warum?"></textarea>
+            </div>
+            <div class="reflection-section">
+                <label class="reflection-label">Was möchtest du in den nächsten Jahren konkret tun?</label>
+                <textarea class="reflection-input" id="future_action" placeholder="Deine Pläne..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📒</span> Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Gedanken zu sozialer Verantwortung..."></textarea>
+            <div class="eldib-reference"><strong>ELDiB-Bezug:</strong> S-71, S-72 - Soziale Verantwortung, gesellschaftliches Bewusstsein</div>
+            <button class="print-btn" onclick="window.print()">🖨️ Arbeitsblatt drucken</button>
+        </div>
+    </div>
+    <div class="save-notice" id="saveNotice">✓ Automatisch gespeichert</div>
+
+    <script>
+        let areas = [];
+        let actions = [];
+        let scales = {};
+
+        document.addEventListener('DOMContentLoaded', function() { loadData(); setupEventListeners(); });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.area-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('important');
+                    const area = this.dataset.area;
+                    if (this.classList.contains('important')) { if (!areas.includes(area)) areas.push(area); }
+                    else { areas = areas.filter(a => a !== area); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.action-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('done');
+                    const action = this.dataset.action;
+                    if (this.classList.contains('done')) { if (!actions.includes(action)) actions.push(action); }
+                    else { actions = actions.filter(a => a !== action); }
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.scale-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const id = this.id.replace('scale_', '');
+                    document.getElementById('val_' + id).textContent = this.value;
+                    scales[id] = parseInt(this.value);
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('textarea').forEach(el => { el.addEventListener('input', saveData); });
+        }
+
+        function saveData() {
+            const data = {
+                areas, actions, scales,
+                dilemmas: {
+                    d1: document.getElementById('dilemma1').value,
+                    d2: document.getElementById('dilemma2').value,
+                    d3: document.getElementById('dilemma3').value
+                },
+                reflection: {
+                    good_person: document.getElementById('good_person').value,
+                    heart_topic: document.getElementById('heart_topic').value,
+                    future_action: document.getElementById('future_action').value
+                },
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem('eldib_s5_soziale_verantwortung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_soziale_verantwortung');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.areas) { areas = data.areas; areas.forEach(a => { const el = document.querySelector(`.area-card[data-area="${a}"]`); if (el) el.classList.add('important'); }); }
+                if (data.actions) { actions = data.actions; actions.forEach(a => { const el = document.querySelector(`.action-item[data-action="${a}"]`); if (el) el.classList.add('done'); }); }
+                if (data.scales) { scales = data.scales; Object.entries(scales).forEach(([id, val]) => { const s = document.getElementById('scale_' + id); const v = document.getElementById('val_' + id); if (s) s.value = val; if (v) v.textContent = val; }); }
+                if (data.dilemmas) {
+                    document.getElementById('dilemma1').value = data.dilemmas.d1 || '';
+                    document.getElementById('dilemma2').value = data.dilemmas.d2 || '';
+                    document.getElementById('dilemma3').value = data.dilemmas.d3 || '';
+                }
+                if (data.reflection) {
+                    document.getElementById('good_person').value = data.reflection.good_person || '';
+                    document.getElementById('heart_topic').value = data.reflection.heart_topic || '';
+                    document.getElementById('future_action').value = data.reflection.future_action || '';
+                }
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function showSaveNotice() { const notice = document.getElementById('saveNotice'); notice.classList.remove('show'); void notice.offsetWidth; notice.classList.add('show'); }
+    </script>
+</body>
+</html>

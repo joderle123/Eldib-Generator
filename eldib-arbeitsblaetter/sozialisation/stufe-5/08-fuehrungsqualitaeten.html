@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Führungsqualitäten - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #bf360c 0%, #d84315 50%, #e64a19 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #ffab91;
+        }
+        .meta {
+            color: #ffccbc;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffab91;
+        }
+        h2 {
+            color: #ffab91;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(255,171,145,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .leadership-styles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .style-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .style-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+        .style-card.selected {
+            border-color: #ffab91;
+            background: rgba(255,171,145,0.2);
+        }
+        .style-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .style-name {
+            font-weight: bold;
+            color: #ffab91;
+            margin-bottom: 8px;
+        }
+        .style-desc {
+            color: #bbb;
+            font-size: 0.85em;
+        }
+        .qualities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .quality-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .quality-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .quality-item.selected {
+            background: rgba(255,171,145,0.3);
+            border: 1px solid #ffab91;
+        }
+        .quality-icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+        .quality-name {
+            font-size: 0.9em;
+        }
+        .self-assessment {
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,193,7,0.3);
+        }
+        .self-assessment h3 {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        .assessment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .assessment-label {
+            flex: 1;
+        }
+        .assessment-scale {
+            display: flex;
+            gap: 8px;
+        }
+        .scale-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        .scale-btn:hover {
+            border-color: #ffc107;
+        }
+        .scale-btn.selected {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: #bf360c;
+        }
+        .scenario-section {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .scenario-section h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .scenario-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .scenario-title {
+            color: #64b5f6;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .scenario-text {
+            color: #ccc;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .scenario-response {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .role-model-section {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .role-model-section h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .role-model-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .role-model-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .role-model-item label {
+            display: block;
+            color: #81c784;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .role-model-item input, .role-model-item textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .role-model-item textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .challenges-section {
+            background: rgba(244,67,54,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(244,67,54,0.3);
+        }
+        .challenges-section h3 {
+            color: #ef5350;
+            margin-bottom: 15px;
+        }
+        .challenge-list {
+            display: grid;
+            gap: 10px;
+        }
+        .challenge-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .challenge-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .challenge-item.selected {
+            background: rgba(244,67,54,0.2);
+        }
+        .challenge-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ef5350;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .challenge-item.selected .challenge-checkbox {
+            background: #ef5350;
+        }
+        .challenge-item.selected .challenge-checkbox::after {
+            content: "✓";
+            color: #fff;
+            font-size: 0.8em;
+        }
+        .growth-plan {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .growth-plan h3 {
+            color: #ce93d8;
+            margin-bottom: 15px;
+        }
+        .growth-steps {
+            display: grid;
+            gap: 15px;
+        }
+        .growth-step {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: rgba(156,39,176,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            color: #ce93d8;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-content label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .step-content input, .step-content textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #ffab91;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffab91, #ff8a65);
+            color: #bf360c;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,171,145,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffab91, #ff8a65);
+            color: #bf360c;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .leadership-styles { grid-template-columns: 1fr; }
+            .qualities-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👑 Führungsqualitäten</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-85, S-86</p>
+        </header>
+
+        <section class="section">
+            <h2>🌟 Was bedeutet Führung?</h2>
+            <div class="intro-text">
+                <p>Führung bedeutet nicht, anderen zu sagen, was sie tun sollen. Echte Führung heißt, Verantwortung zu übernehmen, andere zu inspirieren und gemeinsam Ziele zu erreichen. Jeder kann Führungsqualitäten entwickeln - ob als Klassensprecher, in einer Gruppe, im Sport oder später im Beruf.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Führungsstile</h2>
+            <p style="margin-bottom: 15px; color: #ffccbc;">Welcher Stil passt zu dir? (Wähle einen oder mehrere)</p>
+
+            <div class="leadership-styles" id="styleGrid">
+                <div class="style-card" data-style="democratic">
+                    <div class="style-icon">🤝</div>
+                    <div class="style-name">Demokratisch</div>
+                    <div class="style-desc">Entscheidungen gemeinsam treffen, alle einbeziehen</div>
+                </div>
+                <div class="style-card" data-style="coaching">
+                    <div class="style-icon">🎯</div>
+                    <div class="style-name">Coach</div>
+                    <div class="style-desc">Andere fördern und entwickeln, Stärken stärken</div>
+                </div>
+                <div class="style-card" data-style="visionary">
+                    <div class="style-icon">🔮</div>
+                    <div class="style-name">Visionär</div>
+                    <div class="style-desc">Begeisterung wecken, große Ziele setzen</div>
+                </div>
+                <div class="style-card" data-style="servant">
+                    <div class="style-icon">🙏</div>
+                    <div class="style-name">Dienend</div>
+                    <div class="style-desc">Anderen helfen erfolgreich zu sein, Team zuerst</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💎 Wichtige Führungsqualitäten</h2>
+            <p style="margin-bottom: 15px; color: #ffccbc;">Welche Qualitäten hast du bereits? (Klicke zum Markieren)</p>
+
+            <div class="qualities-grid" id="qualitiesGrid">
+                <div class="quality-item" data-quality="empathy">
+                    <div class="quality-icon">💗</div>
+                    <div class="quality-name">Empathie</div>
+                </div>
+                <div class="quality-item" data-quality="integrity">
+                    <div class="quality-icon">⚖️</div>
+                    <div class="quality-name">Integrität</div>
+                </div>
+                <div class="quality-item" data-quality="communication">
+                    <div class="quality-icon">🗣️</div>
+                    <div class="quality-name">Kommunikation</div>
+                </div>
+                <div class="quality-item" data-quality="decision">
+                    <div class="quality-icon">🎲</div>
+                    <div class="quality-name">Entscheidungskraft</div>
+                </div>
+                <div class="quality-item" data-quality="resilience">
+                    <div class="quality-icon">💪</div>
+                    <div class="quality-name">Resilienz</div>
+                </div>
+                <div class="quality-item" data-quality="creativity">
+                    <div class="quality-icon">💡</div>
+                    <div class="quality-name">Kreativität</div>
+                </div>
+                <div class="quality-item" data-quality="responsibility">
+                    <div class="quality-icon">🎖️</div>
+                    <div class="quality-name">Verantwortung</div>
+                </div>
+                <div class="quality-item" data-quality="motivation">
+                    <div class="quality-icon">🔥</div>
+                    <div class="quality-name">Motivation</div>
+                </div>
+                <div class="quality-item" data-quality="listening">
+                    <div class="quality-icon">👂</div>
+                    <div class="quality-name">Zuhören</div>
+                </div>
+                <div class="quality-item" data-quality="fairness">
+                    <div class="quality-icon">🤲</div>
+                    <div class="quality-name">Fairness</div>
+                </div>
+                <div class="quality-item" data-quality="adaptability">
+                    <div class="quality-icon">🌊</div>
+                    <div class="quality-name">Anpassungsfähigkeit</div>
+                </div>
+                <div class="quality-item" data-quality="confidence">
+                    <div class="quality-icon">🦁</div>
+                    <div class="quality-name">Selbstvertrauen</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Selbsteinschätzung</h2>
+            <div class="self-assessment">
+                <h3>Wie gut kannst du...? (1 = noch nicht so gut, 5 = sehr gut)</h3>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">Andere für eine Idee begeistern</span>
+                    <div class="assessment-scale" data-skill="inspire">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">In Konflikten vermitteln</span>
+                    <div class="assessment-scale" data-skill="mediate">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">Verantwortung übernehmen</span>
+                    <div class="assessment-scale" data-skill="responsibility">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">Kritik annehmen und geben</span>
+                    <div class="assessment-scale" data-skill="feedback">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">Entscheidungen treffen</span>
+                    <div class="assessment-scale" data-skill="decide">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <span class="assessment-label">Andere unterstützen und fördern</span>
+                    <div class="assessment-scale" data-skill="support">
+                        <button class="scale-btn">1</button>
+                        <button class="scale-btn">2</button>
+                        <button class="scale-btn">3</button>
+                        <button class="scale-btn">4</button>
+                        <button class="scale-btn">5</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎬 Führungssituationen</h2>
+            <div class="scenario-section">
+                <h3>Wie würdest du handeln?</h3>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 1: Das Gruppenprojekt</div>
+                    <div class="scenario-text">Bei einem Gruppenprojekt macht ein Teammitglied kaum etwas. Die anderen beschweren sich bei dir als Gruppenleiter.</div>
+                    <textarea class="scenario-response" id="scenario1" placeholder="Ich würde..."></textarea>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 2: Die schwierige Entscheidung</div>
+                    <div class="scenario-text">Als Klassensprecher musst du entscheiden, ob das Klassenfest an einem Termin stattfindet, an dem einige nicht können.</div>
+                    <textarea class="scenario-response" id="scenario2" placeholder="Ich würde..."></textarea>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">Situation 3: Der Fehler</div>
+                    <div class="scenario-text">Du hast als Verantwortlicher einen Fehler gemacht, der das ganze Team betrifft. Wie gehst du damit um?</div>
+                    <textarea class="scenario-response" id="scenario3" placeholder="Ich würde..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⭐ Vorbilder</h2>
+            <div class="role-model-section">
+                <h3>Von wem kannst du lernen?</h3>
+
+                <div class="role-model-grid">
+                    <div class="role-model-item">
+                        <label>Eine Person, die ich als guten Leader sehe:</label>
+                        <input type="text" id="roleModel1" placeholder="Name (berühmt oder aus deinem Leben)...">
+                    </div>
+                    <div class="role-model-item">
+                        <label>Was macht diese Person zu einem guten Leader?</label>
+                        <textarea id="roleModel2" placeholder="Diese Person ist gut, weil..."></textarea>
+                    </div>
+                    <div class="role-model-item">
+                        <label>Was möchte ich mir von ihr/ihm abschauen?</label>
+                        <textarea id="roleModel3" placeholder="Ich möchte lernen..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚧 Herausforderungen der Führung</h2>
+            <div class="challenges-section">
+                <h3>Was findest du schwierig an Führung? (Markiere zutreffende)</h3>
+
+                <div class="challenge-list" id="challengeList">
+                    <div class="challenge-item" data-challenge="criticism">
+                        <div class="challenge-checkbox"></div>
+                        <span>Kritik an anderen üben, ohne zu verletzen</span>
+                    </div>
+                    <div class="challenge-item" data-challenge="decisions">
+                        <div class="challenge-checkbox"></div>
+                        <span>Entscheidungen treffen, die nicht alle glücklich machen</span>
+                    </div>
+                    <div class="challenge-item" data-challenge="delegate">
+                        <div class="challenge-checkbox"></div>
+                        <span>Aufgaben abgeben und anderen vertrauen</span>
+                    </div>
+                    <div class="challenge-item" data-challenge="pressure">
+                        <div class="challenge-checkbox"></div>
+                        <span>Mit Druck und Erwartungen umgehen</span>
+                    </div>
+                    <div class="challenge-item" data-challenge="mistakes">
+                        <div class="challenge-checkbox"></div>
+                        <span>Eigene Fehler zugeben</span>
+                    </div>
+                    <div class="challenge-item" data-challenge="balance">
+                        <div class="challenge-checkbox"></div>
+                        <span>Freundlich sein UND durchsetzen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📈 Mein Entwicklungsplan</h2>
+            <div class="growth-plan">
+                <h3>Wie möchte ich meine Führungsqualitäten entwickeln?</h3>
+
+                <div class="growth-steps">
+                    <div class="growth-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <label>Eine Führungsqualität, die ich verbessern möchte:</label>
+                            <input type="text" id="growth_quality" placeholder="z.B. Entscheidungskraft, Zuhören...">
+                        </div>
+                    </div>
+
+                    <div class="growth-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <label>Warum ist mir das wichtig?</label>
+                            <input type="text" id="growth_why" placeholder="Das ist mir wichtig, weil...">
+                        </div>
+                    </div>
+
+                    <div class="growth-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <label>Konkrete Schritte, die ich unternehmen kann:</label>
+                            <textarea id="growth_steps" placeholder="Ich kann..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="growth-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <label>Eine Situation, in der ich das üben kann:</label>
+                            <input type="text" id="growth_practice" placeholder="z.B. bei einem Projekt, im Verein...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>In welchen Situationen übernehme ich bereits Führung - auch wenn ich das vielleicht nicht so nenne?</label>
+                    <textarea id="reflection1" placeholder="Ich übernehme Führung, wenn..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was für ein Leader möchte ich sein? Was sollen andere über mich als Führungsperson sagen?</label>
+                    <textarea id="reflection2" placeholder="Ich möchte, dass andere sagen..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Ziele, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedStyles = [];
+        let selectedQualities = [];
+        let assessmentScores = {};
+        let selectedChallenges = [];
+
+        // Style selection
+        document.querySelectorAll('.style-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const style = this.dataset.style;
+                if (this.classList.contains('selected')) {
+                    if (!selectedStyles.includes(style)) selectedStyles.push(style);
+                } else {
+                    selectedStyles = selectedStyles.filter(s => s !== style);
+                }
+            });
+        });
+
+        // Quality selection
+        document.querySelectorAll('.quality-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const quality = this.dataset.quality;
+                if (this.classList.contains('selected')) {
+                    if (!selectedQualities.includes(quality)) selectedQualities.push(quality);
+                } else {
+                    selectedQualities = selectedQualities.filter(q => q !== quality);
+                }
+            });
+        });
+
+        // Assessment scales
+        document.querySelectorAll('.assessment-scale').forEach(scale => {
+            const skillKey = scale.dataset.skill;
+            scale.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    scale.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    assessmentScores[skillKey] = this.textContent;
+                });
+            });
+        });
+
+        // Challenge selection
+        document.querySelectorAll('.challenge-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const challenge = this.dataset.challenge;
+                if (this.classList.contains('selected')) {
+                    if (!selectedChallenges.includes(challenge)) selectedChallenges.push(challenge);
+                } else {
+                    selectedChallenges = selectedChallenges.filter(c => c !== challenge);
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                styles: selectedStyles,
+                qualities: selectedQualities,
+                assessment: assessmentScores,
+                scenarios: {
+                    s1: document.getElementById('scenario1').value,
+                    s2: document.getElementById('scenario2').value,
+                    s3: document.getElementById('scenario3').value
+                },
+                roleModels: {
+                    name: document.getElementById('roleModel1').value,
+                    why: document.getElementById('roleModel2').value,
+                    learn: document.getElementById('roleModel3').value
+                },
+                challenges: selectedChallenges,
+                growth: {
+                    quality: document.getElementById('growth_quality').value,
+                    why: document.getElementById('growth_why').value,
+                    steps: document.getElementById('growth_steps').value,
+                    practice: document.getElementById('growth_practice').value
+                },
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_fuehrung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_fuehrung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                selectedStyles = data.styles || [];
+                selectedStyles.forEach(s => {
+                    const card = document.querySelector(`[data-style="${s}"]`);
+                    if (card) card.classList.add('selected');
+                });
+
+                selectedQualities = data.qualities || [];
+                selectedQualities.forEach(q => {
+                    const item = document.querySelector(`[data-quality="${q}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                assessmentScores = data.assessment || {};
+                Object.keys(assessmentScores).forEach(key => {
+                    const scale = document.querySelector(`[data-skill="${key}"]`);
+                    if (scale) {
+                        scale.querySelectorAll('.scale-btn').forEach(btn => {
+                            if (btn.textContent === assessmentScores[key]) {
+                                btn.classList.add('selected');
+                            }
+                        });
+                    }
+                });
+
+                if (data.scenarios) {
+                    document.getElementById('scenario1').value = data.scenarios.s1 || '';
+                    document.getElementById('scenario2').value = data.scenarios.s2 || '';
+                    document.getElementById('scenario3').value = data.scenarios.s3 || '';
+                }
+
+                if (data.roleModels) {
+                    document.getElementById('roleModel1').value = data.roleModels.name || '';
+                    document.getElementById('roleModel2').value = data.roleModels.why || '';
+                    document.getElementById('roleModel3').value = data.roleModels.learn || '';
+                }
+
+                selectedChallenges = data.challenges || [];
+                selectedChallenges.forEach(c => {
+                    const item = document.querySelector(`[data-challenge="${c}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                if (data.growth) {
+                    document.getElementById('growth_quality').value = data.growth.quality || '';
+                    document.getElementById('growth_why').value = data.growth.why || '';
+                    document.getElementById('growth_steps').value = data.growth.steps || '';
+                    document.getElementById('growth_practice').value = data.growth.practice || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_fuehrung');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_fuehrung');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fuehrungsqualitaeten-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

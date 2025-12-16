@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umgang mit Vielfalt - Sozialisation Stufe V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #006064 0%, #00838f 50%, #0097a7 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .meta {
+            color: #b2ebf2;
+            font-size: 0.95em;
+        }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4dd0e1;
+        }
+        h2 {
+            color: #4dd0e1;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .intro-text {
+            background: rgba(77,208,225,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .diversity-wheel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .diversity-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .diversity-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        .diversity-item.selected {
+            border-color: #4dd0e1;
+            background: rgba(77,208,225,0.3);
+        }
+        .spectrum-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .spectrum-item {
+            margin-bottom: 20px;
+        }
+        .spectrum-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #b2ebf2;
+            font-size: 0.9em;
+        }
+        .spectrum-track {
+            height: 8px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(77,208,225,0.5));
+            border-radius: 4px;
+            position: relative;
+        }
+        .spectrum-slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .spectrum-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4dd0e1;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        .privilege-check {
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,193,7,0.3);
+        }
+        .privilege-check h3 {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        .privilege-items {
+            display: grid;
+            gap: 10px;
+        }
+        .privilege-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .privilege-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .privilege-item.checked {
+            background: rgba(255,193,7,0.2);
+        }
+        .privilege-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ffc107;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .privilege-item.checked .privilege-checkbox {
+            background: #ffc107;
+        }
+        .privilege-item.checked .privilege-checkbox::after {
+            content: "✓";
+            color: #006064;
+            font-weight: bold;
+        }
+        .scenario-section {
+            background: rgba(233,30,99,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .scenario-section h3 {
+            color: #f48fb1;
+            margin-bottom: 15px;
+        }
+        .scenario-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .scenario-title {
+            color: #f48fb1;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .scenario-text {
+            color: #ccc;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .scenario-options {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .scenario-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .scenario-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .scenario-option.selected {
+            background: rgba(233,30,99,0.2);
+            border: 1px solid #f48fb1;
+        }
+        .option-radio {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f48fb1;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .scenario-option.selected .option-radio {
+            background: #f48fb1;
+        }
+        .ally-section {
+            background: rgba(76,175,80,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .ally-section h3 {
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+        .ally-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .ally-action {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .ally-action:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .ally-action.selected {
+            background: rgba(76,175,80,0.3);
+            border: 1px solid #81c784;
+        }
+        .ally-icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+        .ally-text {
+            font-size: 0.9em;
+        }
+        .language-section {
+            background: rgba(33,150,243,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .language-section h3 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+        }
+        .language-examples {
+            display: grid;
+            gap: 12px;
+        }
+        .language-item {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .language-bad {
+            color: #ef5350;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .language-arrow {
+            color: #64b5f6;
+            font-size: 1.5em;
+        }
+        .language-good {
+            color: #81c784;
+        }
+        .empathy-exercise {
+            background: rgba(156,39,176,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .empathy-exercise h3 {
+            color: #ce93d8;
+            margin-bottom: 15px;
+        }
+        .empathy-prompt {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .empathy-prompt label {
+            display: block;
+            color: #ce93d8;
+            margin-bottom: 10px;
+        }
+        .empathy-prompt textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.95em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .learning-resources {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .learning-resources h3 {
+            color: #4dd0e1;
+            margin-bottom: 15px;
+        }
+        .resource-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+        .resource-category {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .resource-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .resource-label {
+            font-size: 0.9em;
+            color: #b2ebf2;
+        }
+        .resource-input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-item label {
+            display: block;
+            color: #4dd0e1;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .notes-area {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4dd0e1, #26c6da);
+            color: #006064;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(77,208,225,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4dd0e1, #26c6da);
+            color: #006064;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .language-item { grid-template-columns: 1fr; text-align: center; }
+            .language-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌈 Umgang mit Vielfalt</h1>
+            <p class="meta">Sozialisation Stufe V (12-16+ Jahre) | ELDiB-Referenz: S-87, S-88</p>
+        </header>
+
+        <section class="section">
+            <h2>🎨 Was ist Vielfalt?</h2>
+            <div class="intro-text">
+                <p>Vielfalt (Diversität) bedeutet, dass Menschen in vielen Aspekten unterschiedlich sind - und das ist eine Bereicherung! Menschen unterscheiden sich in Herkunft, Religion, Geschlecht, sexueller Orientierung, Fähigkeiten, Aussehen und vielem mehr. Respektvoller Umgang mit Vielfalt bedeutet, diese Unterschiede zu sehen, zu verstehen und wertzuschätzen.</p>
+            </div>
+
+            <p style="margin-bottom: 15px; color: #b2ebf2;">Dimensionen der Vielfalt - was macht Menschen unterschiedlich?</p>
+
+            <div class="diversity-wheel" id="diversityWheel">
+                <div class="diversity-item" data-dim="culture">🌍 Kulturelle Herkunft</div>
+                <div class="diversity-item" data-dim="religion">🕊️ Religion/Weltanschauung</div>
+                <div class="diversity-item" data-dim="gender">⚧️ Geschlecht</div>
+                <div class="diversity-item" data-dim="orientation">🏳️‍🌈 Sexuelle Orientierung</div>
+                <div class="diversity-item" data-dim="ability">♿ Fähigkeiten</div>
+                <div class="diversity-item" data-dim="age">👶👴 Alter</div>
+                <div class="diversity-item" data-dim="appearance">👤 Aussehen</div>
+                <div class="diversity-item" data-dim="social">💰 Sozialer Hintergrund</div>
+                <div class="diversity-item" data-dim="neurodiversity">🧠 Neurodiversität</div>
+                <div class="diversity-item" data-dim="family">👨‍👩‍👧 Familienform</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Selbsteinschätzung: Meine Offenheit</h2>
+            <div class="spectrum-section">
+                <p style="margin-bottom: 20px; color: #b2ebf2;">Wie offen bist du in verschiedenen Bereichen? Schiebe die Regler:</p>
+
+                <div class="spectrum-item">
+                    <div class="spectrum-label">
+                        <span>Unsicher/Fremd</span>
+                        <span>Offen/Interessiert</span>
+                    </div>
+                    <div class="spectrum-track">
+                        <input type="range" class="spectrum-slider" id="openness_culture" min="1" max="10" value="5">
+                    </div>
+                    <small style="color: #b2ebf2;">Begegnungen mit anderen Kulturen</small>
+                </div>
+
+                <div class="spectrum-item">
+                    <div class="spectrum-label">
+                        <span>Unsicher/Fremd</span>
+                        <span>Offen/Interessiert</span>
+                    </div>
+                    <div class="spectrum-track">
+                        <input type="range" class="spectrum-slider" id="openness_religion" min="1" max="10" value="5">
+                    </div>
+                    <small style="color: #b2ebf2;">Andere Religionen/Weltanschauungen</small>
+                </div>
+
+                <div class="spectrum-item">
+                    <div class="spectrum-label">
+                        <span>Unsicher/Fremd</span>
+                        <span>Offen/Interessiert</span>
+                    </div>
+                    <div class="spectrum-track">
+                        <input type="range" class="spectrum-slider" id="openness_lgbtq" min="1" max="10" value="5">
+                    </div>
+                    <small style="color: #b2ebf2;">LGBTQ+ Personen</small>
+                </div>
+
+                <div class="spectrum-item">
+                    <div class="spectrum-label">
+                        <span>Unsicher/Fremd</span>
+                        <span>Offen/Interessiert</span>
+                    </div>
+                    <div class="spectrum-track">
+                        <input type="range" class="spectrum-slider" id="openness_disability" min="1" max="10" value="5">
+                    </div>
+                    <small style="color: #b2ebf2;">Menschen mit Behinderungen</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Privilegien reflektieren</h2>
+            <div class="privilege-check">
+                <h3>Was trifft auf dich zu?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Privilegien sind Vorteile, die man hat, ohne etwas dafür getan zu haben. Sie zu erkennen hilft, andere besser zu verstehen.</p>
+
+                <div class="privilege-items" id="privilegeList">
+                    <div class="privilege-item" data-priv="language">
+                        <div class="privilege-checkbox"></div>
+                        <span>Deutsch ist meine Muttersprache</span>
+                    </div>
+                    <div class="privilege-item" data-priv="health">
+                        <div class="privilege-checkbox"></div>
+                        <span>Ich habe keine körperliche Einschränkung</span>
+                    </div>
+                    <div class="privilege-item" data-priv="housing">
+                        <div class="privilege-checkbox"></div>
+                        <span>Ich habe ein stabiles Zuhause</span>
+                    </div>
+                    <div class="privilege-item" data-priv="food">
+                        <div class="privilege-checkbox"></div>
+                        <span>Ich muss mir keine Sorgen um Essen machen</span>
+                    </div>
+                    <div class="privilege-item" data-priv="education">
+                        <div class="privilege-checkbox"></div>
+                        <span>Ich kann die Schule besuchen, die ich möchte</span>
+                    </div>
+                    <div class="privilege-item" data-priv="safety">
+                        <div class="privilege-checkbox"></div>
+                        <span>Ich fühle mich in meiner Umgebung sicher</span>
+                    </div>
+                    <div class="privilege-item" data-priv="name">
+                        <div class="privilege-checkbox"></div>
+                        <span>Mein Name wird meist richtig ausgesprochen</span>
+                    </div>
+                    <div class="privilege-item" data-priv="represent">
+                        <div class="privilege-checkbox"></div>
+                        <span>In Medien sehe ich Menschen, die mir ähnlich sehen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Situationen</h2>
+            <div class="scenario-section">
+                <h3>Wie würdest du reagieren?</h3>
+
+                <div class="scenario-card" data-scenario="1">
+                    <div class="scenario-title">Situation 1: Der "Witz"</div>
+                    <div class="scenario-text">Jemand macht einen abwertenden Witz über eine bestimmte Gruppe. Einige lachen, andere schauen weg.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="laugh">
+                            <div class="option-radio"></div>
+                            <span>Ich lache mit, um nicht aufzufallen</span>
+                        </div>
+                        <div class="scenario-option" data-response="ignore">
+                            <div class="option-radio"></div>
+                            <span>Ich ignoriere es</span>
+                        </div>
+                        <div class="scenario-option" data-response="speak">
+                            <div class="option-radio"></div>
+                            <span>Ich sage, dass ich das nicht lustig finde</span>
+                        </div>
+                        <div class="scenario-option" data-response="later">
+                            <div class="option-radio"></div>
+                            <span>Ich spreche die Person später unter vier Augen an</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scenario-card" data-scenario="2">
+                    <div class="scenario-title">Situation 2: Die Ausgrenzung</div>
+                    <div class="scenario-text">Ein neuer Mitschüler mit sichtbarer Behinderung wird von anderen ignoriert oder ausgeschlossen.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="nothing">
+                            <div class="option-radio"></div>
+                            <span>Ich halte mich raus</span>
+                        </div>
+                        <div class="scenario-option" data-response="include">
+                            <div class="option-radio"></div>
+                            <span>Ich setze mich aktiv zu ihm/ihr</span>
+                        </div>
+                        <div class="scenario-option" data-response="talk">
+                            <div class="option-radio"></div>
+                            <span>Ich spreche mit den anderen über ihr Verhalten</span>
+                        </div>
+                        <div class="scenario-option" data-response="teacher">
+                            <div class="option-radio"></div>
+                            <span>Ich informiere eine Lehrkraft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scenario-card" data-scenario="3">
+                    <div class="scenario-title">Situation 3: Die Frage</div>
+                    <div class="scenario-text">Du merkst, dass du Vorurteile über eine bestimmte Gruppe hast, die du eigentlich nicht haben möchtest.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="deny">
+                            <div class="option-radio"></div>
+                            <span>Ich verdränge den Gedanken</span>
+                        </div>
+                        <div class="scenario-option" data-response="accept">
+                            <div class="option-radio"></div>
+                            <span>Ich akzeptiere, dass ich das Vorurteil habe</span>
+                        </div>
+                        <div class="scenario-option" data-response="learn">
+                            <div class="option-radio"></div>
+                            <span>Ich versuche, mehr über diese Gruppe zu lernen</span>
+                        </div>
+                        <div class="scenario-option" data-response="contact">
+                            <div class="option-radio"></div>
+                            <span>Ich suche Kontakt zu Menschen aus dieser Gruppe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🤝 Ally sein - Unterstützung zeigen</h2>
+            <div class="ally-section">
+                <h3>Wie kannst du ein guter Verbündeter (Ally) sein?</h3>
+                <p style="margin-bottom: 15px; color: #bbb;">Wähle Aktionen, die du dir vornehmen möchtest:</p>
+
+                <div class="ally-actions" id="allyActions">
+                    <div class="ally-action" data-action="listen">
+                        <div class="ally-icon">👂</div>
+                        <div class="ally-text">Zuhören und lernen</div>
+                    </div>
+                    <div class="ally-action" data-action="speak">
+                        <div class="ally-icon">🗣️</div>
+                        <div class="ally-text">Gegen Diskriminierung sprechen</div>
+                    </div>
+                    <div class="ally-action" data-action="amplify">
+                        <div class="ally-icon">📢</div>
+                        <div class="ally-text">Stimmen verstärken</div>
+                    </div>
+                    <div class="ally-action" data-action="educate">
+                        <div class="ally-icon">📚</div>
+                        <div class="ally-text">Mich selbst bilden</div>
+                    </div>
+                    <div class="ally-action" data-action="include">
+                        <div class="ally-icon">🤗</div>
+                        <div class="ally-text">Aktiv einbeziehen</div>
+                    </div>
+                    <div class="ally-action" data-action="reflect">
+                        <div class="ally-icon">🪞</div>
+                        <div class="ally-text">Eigene Vorurteile hinterfragen</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💬 Sprache bewusst nutzen</h2>
+            <div class="language-section">
+                <h3>Respektvolle Sprache wählen</h3>
+
+                <div class="language-examples">
+                    <div class="language-item">
+                        <div class="language-bad">"Das ist voll behindert"</div>
+                        <div class="language-arrow">→</div>
+                        <div class="language-good">"Das ist blöd/nervig"</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-bad">"Das ist so schwul"</div>
+                        <div class="language-arrow">→</div>
+                        <div class="language-good">"Das gefällt mir nicht"</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-bad">"Woher kommst du wirklich?"</div>
+                        <div class="language-arrow">→</div>
+                        <div class="language-good">"Erzähl mir von dir"</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-bad">"Du sprichst aber gut Deutsch"</div>
+                        <div class="language-arrow">→</div>
+                        <div class="language-good">(Einfach normal behandeln)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💭 Perspektivenwechsel</h2>
+            <div class="empathy-exercise">
+                <h3>In anderen Schuhen gehen</h3>
+
+                <div class="empathy-prompt">
+                    <label>Stell dir vor, du wärst in einer Minderheit - wie würdest du dich fühlen, wenn...</label>
+                    <textarea id="empathy1" placeholder="...andere ständig Witze über Menschen wie mich machen würden? Ich würde mich fühlen..."></textarea>
+                </div>
+
+                <div class="empathy-prompt">
+                    <label>Was würdest du dir von anderen wünschen, wenn du "anders" wärst?</label>
+                    <textarea id="empathy2" placeholder="Ich würde mir wünschen, dass..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📖 Mehr lernen</h2>
+            <div class="learning-resources">
+                <h3>Wie kann ich mehr über Vielfalt lernen?</h3>
+
+                <div class="resource-categories">
+                    <div class="resource-category">
+                        <div class="resource-icon">📚</div>
+                        <div class="resource-label">Bücher/Artikel</div>
+                        <input type="text" class="resource-input" id="resource_books" placeholder="Was möchte ich lesen?">
+                    </div>
+                    <div class="resource-category">
+                        <div class="resource-icon">🎬</div>
+                        <div class="resource-label">Filme/Serien</div>
+                        <input type="text" class="resource-input" id="resource_media" placeholder="Was möchte ich schauen?">
+                    </div>
+                    <div class="resource-category">
+                        <div class="resource-icon">🎧</div>
+                        <div class="resource-label">Podcasts</div>
+                        <input type="text" class="resource-input" id="resource_podcasts" placeholder="Was möchte ich hören?">
+                    </div>
+                    <div class="resource-category">
+                        <div class="resource-icon">👥</div>
+                        <div class="resource-label">Begegnungen</div>
+                        <input type="text" class="resource-input" id="resource_people" placeholder="Wen möchte ich kennenlernen?">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🪞 Reflexion</h2>
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <label>Was habe ich über mich selbst und meine Einstellungen gelernt?</label>
+                    <textarea id="reflection1" placeholder="Ich habe erkannt, dass..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Wie kann Vielfalt mein Leben und meine Umgebung bereichern?</label>
+                    <textarea id="reflection2" placeholder="Vielfalt bereichert, weil..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>Was möchte ich in Zukunft anders machen?</label>
+                    <textarea id="reflection3" placeholder="Ich nehme mir vor..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Persönliche Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Eigene Gedanken, Fragen, Erkenntnisse..."></textarea>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let selectedDimensions = [];
+        let selectedPrivileges = [];
+        let scenarioResponses = {};
+        let selectedAllyActions = [];
+
+        // Diversity wheel
+        document.querySelectorAll('.diversity-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const dim = this.dataset.dim;
+                if (this.classList.contains('selected')) {
+                    if (!selectedDimensions.includes(dim)) selectedDimensions.push(dim);
+                } else {
+                    selectedDimensions = selectedDimensions.filter(d => d !== dim);
+                }
+            });
+        });
+
+        // Privilege check
+        document.querySelectorAll('.privilege-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                const priv = this.dataset.priv;
+                if (this.classList.contains('checked')) {
+                    if (!selectedPrivileges.includes(priv)) selectedPrivileges.push(priv);
+                } else {
+                    selectedPrivileges = selectedPrivileges.filter(p => p !== priv);
+                }
+            });
+        });
+
+        // Scenario responses
+        document.querySelectorAll('.scenario-card').forEach(card => {
+            const scenarioId = card.dataset.scenario;
+            card.querySelectorAll('.scenario-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    card.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    scenarioResponses[scenarioId] = this.dataset.response;
+                });
+            });
+        });
+
+        // Ally actions
+        document.querySelectorAll('.ally-action').forEach(action => {
+            action.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const act = this.dataset.action;
+                if (this.classList.contains('selected')) {
+                    if (!selectedAllyActions.includes(act)) selectedAllyActions.push(act);
+                } else {
+                    selectedAllyActions = selectedAllyActions.filter(a => a !== act);
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                dimensions: selectedDimensions,
+                openness: {
+                    culture: document.getElementById('openness_culture').value,
+                    religion: document.getElementById('openness_religion').value,
+                    lgbtq: document.getElementById('openness_lgbtq').value,
+                    disability: document.getElementById('openness_disability').value
+                },
+                privileges: selectedPrivileges,
+                scenarios: scenarioResponses,
+                allyActions: selectedAllyActions,
+                empathy: {
+                    e1: document.getElementById('empathy1').value,
+                    e2: document.getElementById('empathy2').value
+                },
+                resources: {
+                    books: document.getElementById('resource_books').value,
+                    media: document.getElementById('resource_media').value,
+                    podcasts: document.getElementById('resource_podcasts').value,
+                    people: document.getElementById('resource_people').value
+                },
+                reflection: {
+                    r1: document.getElementById('reflection1').value,
+                    r2: document.getElementById('reflection2').value,
+                    r3: document.getElementById('reflection3').value
+                },
+                notes: document.getElementById('notes').value
+            };
+
+            localStorage.setItem('eldib_s5_vielfalt', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_s5_vielfalt');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                selectedDimensions = data.dimensions || [];
+                selectedDimensions.forEach(d => {
+                    const item = document.querySelector(`[data-dim="${d}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                if (data.openness) {
+                    document.getElementById('openness_culture').value = data.openness.culture || 5;
+                    document.getElementById('openness_religion').value = data.openness.religion || 5;
+                    document.getElementById('openness_lgbtq').value = data.openness.lgbtq || 5;
+                    document.getElementById('openness_disability').value = data.openness.disability || 5;
+                }
+
+                selectedPrivileges = data.privileges || [];
+                selectedPrivileges.forEach(p => {
+                    const item = document.querySelector(`[data-priv="${p}"]`);
+                    if (item) item.classList.add('checked');
+                });
+
+                scenarioResponses = data.scenarios || {};
+                Object.keys(scenarioResponses).forEach(key => {
+                    const card = document.querySelector(`[data-scenario="${key}"]`);
+                    if (card) {
+                        const option = card.querySelector(`[data-response="${scenarioResponses[key]}"]`);
+                        if (option) option.classList.add('selected');
+                    }
+                });
+
+                selectedAllyActions = data.allyActions || [];
+                selectedAllyActions.forEach(a => {
+                    const action = document.querySelector(`[data-action="${a}"]`);
+                    if (action) action.classList.add('selected');
+                });
+
+                if (data.empathy) {
+                    document.getElementById('empathy1').value = data.empathy.e1 || '';
+                    document.getElementById('empathy2').value = data.empathy.e2 || '';
+                }
+
+                if (data.resources) {
+                    document.getElementById('resource_books').value = data.resources.books || '';
+                    document.getElementById('resource_media').value = data.resources.media || '';
+                    document.getElementById('resource_podcasts').value = data.resources.podcasts || '';
+                    document.getElementById('resource_people').value = data.resources.people || '';
+                }
+
+                if (data.reflection) {
+                    document.getElementById('reflection1').value = data.reflection.r1 || '';
+                    document.getElementById('reflection2').value = data.reflection.r2 || '';
+                    document.getElementById('reflection3').value = data.reflection.r3 || '';
+                }
+
+                document.getElementById('notes').value = data.notes || '';
+            }
+        }
+
+        function clearData() {
+            if (confirm('Möchtest du wirklich alle Eingaben löschen?')) {
+                localStorage.removeItem('eldib_s5_vielfalt');
+                location.reload();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_s5_vielfalt');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vielfalt-stufe5.json';
+            a.click();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
