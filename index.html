@@ -1219,11 +1219,19 @@
             <div class="form-section">
                 <h3>Daten speichern/laden</h3>
                 <p style="margin-bottom: 15px; color: #666;">
-                    Speichern Sie Ihre Eingaben als JSON-Datei, um sie spater fortzusetzen.
+                    Speichern Sie Ihre Eingaben als JSON-Datei, um sie später fortzusetzen.
                 </p>
                 <button class="btn btn-primary" onclick="saveData()">Daten speichern</button>
                 <button class="btn btn-primary" onclick="document.getElementById('loadFile').click()">Daten laden</button>
                 <input type="file" id="loadFile" style="display: none;" accept=".json" onchange="loadData(event)">
+            </div>
+
+            <div class="form-section" style="border-color: #dc3545;">
+                <h3 style="color: #dc3545;">Neuen Schüler anlegen</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    Alle Eingaben löschen und mit einem neuen Schüler beginnen. Diese Aktion kann nicht rückgängig gemacht werden!
+                </p>
+                <button class="btn btn-secondary" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);" onclick="resetAllData()">Alle Daten zurücksetzen</button>
             </div>
         </div>
     </div>
@@ -1932,6 +1940,30 @@ function loadData(event) {
         } catch (err) { alert('Fehler: ' + err.message); }
     };
     reader.readAsText(file);
+}
+
+function resetAllData() {
+    if (!confirm('Sind Sie sicher, dass Sie alle Daten löschen möchten?\n\nAlle Schülerdaten und Auswahlen werden unwiderruflich gelöscht!')) {
+        return;
+    }
+
+    // Clear localStorage
+    localStorage.removeItem('eldib-data');
+
+    // Reset state
+    state.selections = {};
+    state.zusaetzlicheZiele = {
+        demarches_mentales: {},
+        manieres_apprendre: {},
+        attitudes_relationnelles: {},
+        attitudes_affectives: {},
+        competences_essentielles: {},
+        culture_loisirs: {}
+    };
+
+    // Show toast and reload
+    showToast('Alle Daten wurden gelöscht');
+    setTimeout(() => location.reload(), 500);
 }
 
 function getStammdaten() {
@@ -2914,7 +2946,12 @@ async function generateComplement() {
             const bereich = findBereichByCode(code);
             const item = findItemByCode(code);
             if (bereich && item) {
-                erreichte[bereich].push({ code, keyword: item.keyword, nr: parseInt(code.split('-').pop()) });
+                erreichte[bereich].push({
+                    code,
+                    keyword: item.keyword,
+                    description: item.description,
+                    nr: parseInt(code.split('-').pop())
+                });
             }
         }
     }
@@ -2926,15 +2963,26 @@ async function generateComplement() {
     const nameParts = (stammdaten.schueler_name || '').split(' ');
     const nom = nameParts[0] || '';
     const prenom = nameParts.slice(1).join(' ') || '';
+    const vorname = prenom || nom || 'Der Schüler'; // Vorname für die Formulierungen
 
     const cellBorders = { top: {style: BorderStyle.SINGLE, size: 1}, bottom: {style: BorderStyle.SINGLE, size: 1}, left: {style: BorderStyle.SINGLE, size: 1}, right: {style: BorderStyle.SINGLE, size: 1} };
     const noBorders = { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE} };
 
     // Helper: Create a row with domain and evaluation
     function createDomainRow(domainName, items, isEldib = false) {
-        const itemsText = items && items.length > 0
-            ? items.map(i => `${i.code}: ${i.keyword}`).join('\n')
-            : '';
+        // Build paragraphs with code, keyword, and description for each item
+        const itemParagraphs = items && items.length > 0
+            ? items.flatMap(i => [
+                new Paragraph({
+                    children: [new TextRun({text: `${i.code} - ${i.keyword}`, bold: true, size: 22})],
+                    spacing: { before: 120, after: 40 }
+                }),
+                new Paragraph({
+                    children: [new TextRun({text: i.description || '', size: 20})],
+                    spacing: { after: 160 }
+                })
+            ])
+            : [new Paragraph('')];
 
         return new TableRow({
             children: [
@@ -2947,7 +2995,7 @@ async function generateComplement() {
                     width: {size: 35, type: WidthType.PERCENTAGE}
                 }),
                 new TableCell({
-                    children: [new Paragraph({children: [new TextRun({text: itemsText, size: 22})]})],
+                    children: itemParagraphs,
                     borders: cellBorders,
                     width: {size: 65, type: WidthType.PERCENTAGE}
                 })
@@ -3042,50 +3090,44 @@ async function generateComplement() {
 
     children.push(new Paragraph({ spacing: { after: 300 } }));
 
-    // Helper: Create row with selected goals for Complément - VOLLSTÄNDIGER TEXT
-    function createZusatzRowComplement(categoryName, categoryKey) {
-        const erreichtGoals = getZusatzErreicht(categoryKey);
-        const zielGoals = getZusatzZiele(categoryKey);
+    // Helper: Replace "Ich" with vorname in text
+    function replaceIchWithVorname(text) {
+        return text
+            .replace(/^Ich kann/i, `${vorname} kann`)
+            .replace(/^Ich habe/i, `${vorname} hat`)
+            .replace(/^Ich bin/i, `${vorname} ist`)
+            .replace(/^Ich zeige/i, `${vorname} zeigt`)
+            .replace(/^Ich achte/i, `${vorname} achtet`)
+            .replace(/^Ich ernähre/i, `${vorname} ernährt`)
+            .replace(/^Ich vertraue/i, `${vorname} vertraut`)
+            .replace(/^Ich akzeptiere/i, `${vorname} akzeptiert`)
+            .replace(/^Ich wiederhole/i, `${vorname} wiederholt`)
+            .replace(/^Ich /i, `${vorname} `);
+    }
 
-        const hasGoals = erreichtGoals.length > 0 || zielGoals.length > 0;
+    // Helper: Create row with selected goals for Complément - NUR ERREICHT, mit Vornamen
+    function createZusatzRowComplement(categoryName, categoryKey) {
+        // Nur erreichte Ziele anzeigen, KEINE Ziele
+        const erreichtGoals = getZusatzErreicht(categoryKey);
+
+        const hasGoals = erreichtGoals.length > 0;
         const checkbox = hasGoals ? '☑' : '☐';
 
-        // Build evaluation text with erreicht (Ressourcen) and ziel sections
+        // Build evaluation text with erreicht items only
         const evaluationParagraphs = [];
 
         if (erreichtGoals.length > 0) {
-            evaluationParagraphs.push(new Paragraph({
-                children: [new TextRun({text: 'Ressourcen (erreicht):', bold: true, size: 20})],
-                spacing: { after: 80 }
-            }));
             erreichtGoals.forEach(g => {
+                // Title (bold)
                 evaluationParagraphs.push(new Paragraph({
-                    children: [new TextRun({text: '• ' + g.title, bold: true, size: 18})],
-                    spacing: { after: 20 }
+                    children: [new TextRun({text: '• ' + g.title, bold: true, size: 22})],
+                    spacing: { before: 80, after: 40 }
                 }));
+                // Ziel text with vorname instead of "Ich" - normal font, not italic
+                const zielMitVorname = replaceIchWithVorname(g.ziel);
                 evaluationParagraphs.push(new Paragraph({
-                    children: [new TextRun({text: '  ' + g.ziel, size: 18, italics: true})],
-                    spacing: { after: 80 }
-                }));
-            });
-        }
-
-        if (zielGoals.length > 0) {
-            if (erreichtGoals.length > 0) {
-                evaluationParagraphs.push(new Paragraph({ spacing: { before: 120 } }));
-            }
-            evaluationParagraphs.push(new Paragraph({
-                children: [new TextRun({text: 'Ziele:', bold: true, size: 20})],
-                spacing: { after: 80 }
-            }));
-            zielGoals.forEach(g => {
-                evaluationParagraphs.push(new Paragraph({
-                    children: [new TextRun({text: '• ' + g.title, bold: true, size: 18})],
-                    spacing: { after: 20 }
-                }));
-                evaluationParagraphs.push(new Paragraph({
-                    children: [new TextRun({text: '  ' + g.ziel, size: 18, italics: true})],
-                    spacing: { after: 80 }
+                    children: [new TextRun({text: '  ' + zielMitVorname, size: 22})],
+                    spacing: { after: 120 }
                 }));
             });
         }
