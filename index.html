@@ -2750,142 +2750,128 @@ async function generatePEI() {
     const kognitionErreicht = lastErreicht.kognition || [];
     children.push(createCompetenceTable('Cognition', null, kognitionGoals, kognitionErreicht));
 
-    // Helper: Create table ROWS for zusätzliche Ziele category (one row per item, vertical layout)
-    function createZusatzZieleRows(categoryName, categoryKey) {
+    // Helper: Create vertical table for zusätzliche Ziele category (single column, header-value rows)
+    function createZusatzZieleTable(categoryName, categoryKey) {
         const erreichtGoals = getZusatzErreicht(categoryKey);
         const zielGoals = getZusatzZiele(categoryKey);
         const rows = [];
 
-        // If no goals, return one empty row with category name
-        if (erreichtGoals.length === 0 && zielGoals.length === 0) {
-            return [new TableRow({ children: [
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: categoryName, bold: true, size: 20})]})], borders: cellBorders }),
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
-            ]})];
-        }
+        // Header row: Domaine(s)
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})],
+                borders: cellBorders,
+                shading: {fill: 'F0F0F0'}
+            })
+        ]}));
 
-        // Create rows for erreicht items (in Compétences actuelles column)
-        erreichtGoals.forEach((g, index) => {
-            rows.push(new TableRow({ children: [
-                // Domaine: only show category name in first row
-                new TableCell({
-                    children: [new Paragraph({children: index === 0 && zielGoals.length === 0
-                        ? [new TextRun({text: categoryName, bold: true, size: 20})]
-                        : (index === 0 ? [new TextRun({text: categoryName, bold: true, size: 20})] : [])
-                    })],
-                    borders: cellBorders
-                }),
-                // Compétences actuelles: erreicht item
-                new TableCell({
-                    children: [
-                        new Paragraph({children: [new TextRun({text: g.title, bold: true, size: 18})]}),
-                        new Paragraph({children: [new TextRun({text: g.ziel, size: 18, italics: true})]})
-                    ],
-                    borders: cellBorders
-                }),
-                // Objectifs: empty for erreicht
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                // Méthodes: empty for erreicht
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                // Observations: empty
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
-            ]}));
-        });
+        // Value row: Category name
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: categoryName, bold: true, size: 20})]})],
+                borders: cellBorders
+            })
+        ]}));
 
-        // Create rows for ziel items (in Objectifs column)
-        zielGoals.forEach((g, index) => {
-            const isFirstRow = erreichtGoals.length === 0 && index === 0;
-            rows.push(new TableRow({ children: [
-                // Domaine: only show category name if this is the very first row
-                new TableCell({
-                    children: [new Paragraph({children: isFirstRow
-                        ? [new TextRun({text: categoryName, bold: true, size: 20})]
-                        : []
-                    })],
-                    borders: cellBorders
-                }),
-                // Compétences actuelles: empty for ziel
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders }),
-                // Objectifs: ziel item
-                new TableCell({
-                    children: [
-                        new Paragraph({children: [new TextRun({text: g.title, bold: true, size: 18})]}),
-                        new Paragraph({children: [new TextRun({text: g.ziel, size: 18, italics: true})]})
-                    ],
-                    borders: cellBorders
-                }),
-                // Méthodes: interventions
-                new TableCell({
-                    children: g.intervention.map(i => new Paragraph({
-                        children: [new TextRun({text: '• ' + i, size: 16})]
-                    })),
-                    borders: cellBorders
-                }),
-                // Observations: empty
-                new TableCell({ children: [new Paragraph('')], borders: cellBorders })
-            ]}));
-        });
+        // Header row: Compétences actuelles
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})],
+                borders: cellBorders,
+                shading: {fill: 'F0F0F0'}
+            })
+        ]}));
 
-        return rows;
+        // Value row: erreicht items
+        const erreichtContent = erreichtGoals.length > 0
+            ? erreichtGoals.flatMap(g => [
+                new Paragraph({children: [new TextRun({text: g.title, bold: true, size: 18})], spacing: {before: 60}}),
+                new Paragraph({children: [new TextRun({text: g.ziel, size: 18, italics: true})], spacing: {after: 100}})
+            ])
+            : [new Paragraph('')];
+        rows.push(new TableRow({ children: [
+            new TableCell({ children: erreichtContent, borders: cellBorders })
+        ]}));
+
+        // Header row: Objectif(s)
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})],
+                borders: cellBorders,
+                shading: {fill: 'F0F0F0'}
+            })
+        ]}));
+
+        // Value row: ziel items
+        const zielContent = zielGoals.length > 0
+            ? zielGoals.flatMap(g => [
+                new Paragraph({children: [new TextRun({text: g.title, bold: true, size: 18})], spacing: {before: 60}}),
+                new Paragraph({children: [new TextRun({text: g.ziel, size: 18, italics: true})], spacing: {after: 100}})
+            ])
+            : [new Paragraph('')];
+        rows.push(new TableRow({ children: [
+            new TableCell({ children: zielContent, borders: cellBorders })
+        ]}));
+
+        // Header row: Méthode(s) et stratégie(s)
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})],
+                borders: cellBorders,
+                shading: {fill: 'F0F0F0'}
+            })
+        ]}));
+
+        // Value row: interventions from ziel items
+        const methodContent = zielGoals.length > 0
+            ? zielGoals.flatMap(g => g.intervention.map(i =>
+                new Paragraph({children: [new TextRun({text: '• ' + i, size: 18})]})
+            ))
+            : [new Paragraph('')];
+        rows.push(new TableRow({ children: [
+            new TableCell({ children: methodContent, borders: cellBorders })
+        ]}));
+
+        // Header row: Observation(s) et adaptation(s)
+        rows.push(new TableRow({ children: [
+            new TableCell({
+                children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})],
+                borders: cellBorders,
+                shading: {fill: 'F0F0F0'}
+            })
+        ]}));
+
+        // Value row: empty for observations
+        rows.push(new TableRow({ children: [
+            new TableCell({ children: [new Paragraph('')], borders: cellBorders })
+        ]}));
+
+        return new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } });
     }
 
     // Page break - Démarches mentales etc. - Page 9
     children.push(new Paragraph({ children: [new PageBreak()] }));
-    children.push(new Table({
-        rows: [
-            new TableRow({ children: [
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
-            ]}),
-            ...createZusatzZieleRows('Démarches mentales', 'demarches_mentales'),
-            ...createZusatzZieleRows('Manières d\'apprendre', 'manieres_apprendre'),
-            ...createZusatzZieleRows('Attitudes relationnelles', 'attitudes_relationnelles'),
-            ...createZusatzZieleRows('Attitudes affectives', 'attitudes_affectives')
-        ],
-        width: { size: 100, type: WidthType.PERCENTAGE }
-    }));
+
+    // Add vertical tables for each category
+    children.push(createZusatzZieleTable('Démarches mentales', 'demarches_mentales'));
+    children.push(new Paragraph({ spacing: { after: 200 } }));
+    children.push(createZusatzZieleTable('Manières d\'apprendre', 'manieres_apprendre'));
+    children.push(new Paragraph({ spacing: { after: 200 } }));
+    children.push(createZusatzZieleTable('Attitudes relationnelles', 'attitudes_relationnelles'));
+    children.push(new Paragraph({ spacing: { after: 200 } }));
+    children.push(createZusatzZieleTable('Attitudes affectives', 'attitudes_affectives'));
 
     // Page break - Compétences essentielles - Page 10
     children.push(new Paragraph({ children: [new PageBreak()] }));
     children.push(new Paragraph({ children: [new TextRun({ text: '☐ Compétences essentielles à la vie autonome et la participation maximale', bold: true, size: 22 })], spacing: { after: 300 } }));
 
-    // Compétences essentielles table with selected goals
-    children.push(new Table({
-        rows: [
-            new TableRow({ children: [
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
-            ]}),
-            ...createZusatzZieleRows('Compétences essentielles', 'competences_essentielles')
-        ],
-        width: { size: 100, type: WidthType.PERCENTAGE }
-    }));
+    // Compétences essentielles table with selected goals (vertical layout)
+    children.push(createZusatzZieleTable('Compétences essentielles', 'competences_essentielles'));
 
     children.push(new Paragraph({ spacing: { after: 300 } }));
 
-    // Culture et loisirs table with selected goals
-    children.push(new Table({
-        rows: [
-            new TableRow({ children: [
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Domaine(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 15, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Compétences actuelles', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Objectif(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 25, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Méthode(s) et stratégie(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} }),
-                new TableCell({ children: [new Paragraph({children: [new TextRun({text: 'Observation(s) et adaptation(s)', bold: true, size: 22})]})], borders: cellBorders, shading: {fill: 'F0F0F0'}, width: {size: 20, type: WidthType.PERCENTAGE} })
-            ]}),
-            ...createZusatzZieleRows('Culture et loisirs', 'culture_loisirs')
-        ],
-        width: { size: 100, type: WidthType.PERCENTAGE }
-    }));
+    // Culture et loisirs table with selected goals (vertical layout)
+    children.push(createZusatzZieleTable('Culture et loisirs', 'culture_loisirs'));
 
     // Page break for Signatures - Page 11
     children.push(new Paragraph({ children: [new PageBreak()] }));
