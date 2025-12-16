@@ -2614,6 +2614,9 @@ async function generatePEI() {
         alignment: AlignmentType.CENTER
     }));
 
+    // Page break - Description section on new page
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+
     // Description section
     children.push(new Paragraph({ children: [new TextRun({ text: 'Description du/des besoin(s) éducatif(s) spécifique(s)', bold: true, size: 20 })], spacing: { before: 200, after: 100 } }));
     children.push(new Table({
