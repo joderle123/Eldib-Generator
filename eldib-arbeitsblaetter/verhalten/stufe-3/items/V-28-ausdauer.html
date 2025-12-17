@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-28: Ausdauer zeigen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #f12711; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #f12711; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #f5af19; }
+        .endurance-meter { text-align: center; margin: 20px 0; }
+        .meter-visual { display: flex; justify-content: center; gap: 5px; margin: 20px 0; }
+        .meter-bar { width: 30px; height: 100px; background: #e0e0e0; border-radius: 5px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .meter-bar .fill { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #f12711, #f5af19); transition: height 0.3s; }
+        .meter-bar.active .fill { height: 100%; }
+        .meter-labels { display: flex; justify-content: center; gap: 5px; font-size: 0.7em; color: #888; }
+        .meter-labels span { width: 30px; text-align: center; }
+        .current-level { font-size: 1.5em; font-weight: bold; color: #f12711; margin-top: 10px; }
+        .task-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .task-type { background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .task-type:hover { transform: translateY(-3px); }
+        .task-type.tracked { border-color: #f5af19; }
+        .task-type .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .task-type .name { font-weight: 600; color: #333; }
+        .task-type .duration { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .task-type .duration-input { width: 60px; padding: 5px; border: 1px solid #e0e0e0; border-radius: 5px; text-align: center; margin-top: 5px; }
+        .challenges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .challenge { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .challenge h4 { color: #f12711; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .challenge-desc { color: #666; margin-bottom: 15px; font-size: 0.9em; }
+        .challenge-status { display: flex; gap: 10px; }
+        .challenge-btn { flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .challenge-btn:hover { border-color: #f5af19; }
+        .challenge-btn.success { background: #e8f5e9; border-color: #4caf50; }
+        .challenge-btn.struggle { background: #fff3e0; border-color: #ff9800; }
+        .challenge-btn.fail { background: #ffebee; border-color: #f44336; }
+        .strategies-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+        .strategy { background: #f8f9fa; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .strategy:hover { border-color: #f5af19; }
+        .strategy.used { border-color: #4caf50; background: #e8f5e9; }
+        .strategy .icon { font-size: 1.5em; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #f12711, #f5af19); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(241,39,17,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .log-entry-content { flex: 1; }
+        .log-entry-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #f12711, #f5af19); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #f12711; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-28 | Verhalten Stufe III</span>
+            <h1>Ausdauer zeigen</h1>
+            <p>Das Kind lernt, bei Aufgaben und Aktivitäten dranzubleiben, auch wenn es schwierig wird. Es entwickelt Durchhaltevermögen und Frustrationstoleranz.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) entwickeln Kinder die Fähigkeit, bei einer Aufgabe zu bleiben, bis sie abgeschlossen ist. Sie lernen, Hindernisse zu überwinden, nicht beim ersten Schwierigkeitsgrad aufzugeben und Stolz auf das Durchhalten zu empfinden. Diese Ausdauer ist grundlegend für schulischen und späteren beruflichen Erfolg.</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 Ausdauer-Level</h2>
+            <p style="margin-bottom: 15px;">Wie lange kann das Kind durchschnittlich bei einer Aufgabe dranbleiben?</p>
+            <div class="endurance-meter">
+                <div class="meter-visual" id="meterVisual">
+                    <div class="meter-bar" data-level="1"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="2"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="3"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="4"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="5"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="6"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="7"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="8"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="9"><div class="fill"></div></div>
+                    <div class="meter-bar" data-level="10"><div class="fill"></div></div>
+                </div>
+                <div class="meter-labels">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                    <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+                <div class="current-level">Level: <span id="currentLevel">0</span>/10</div>
+                <p style="font-size: 0.85em; color: #888; margin-top: 5px;">1-3: Wenige Minuten | 4-6: 10-20 Min | 7-10: 30+ Min</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Aufgaben-Typen</h2>
+            <p style="margin-bottom: 15px;">Trage die typische Ausdauer bei verschiedenen Aktivitäten ein:</p>
+            <div class="task-types">
+                <div class="task-type" data-task="puzzle">
+                    <div class="icon">🧩</div>
+                    <div class="name">Puzzles/Konstruktion</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+                <div class="task-type" data-task="reading">
+                    <div class="icon">📖</div>
+                    <div class="name">Lesen/Vorlesen</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+                <div class="task-type" data-task="homework">
+                    <div class="icon">📝</div>
+                    <div class="name">Hausaufgaben</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+                <div class="task-type" data-task="craft">
+                    <div class="icon">✂️</div>
+                    <div class="name">Basteln/Malen</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+                <div class="task-type" data-task="game">
+                    <div class="icon">🎲</div>
+                    <div class="name">Brettspiele</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+                <div class="task-type" data-task="sport">
+                    <div class="icon">⚽</div>
+                    <div class="name">Sport/Bewegung</div>
+                    <div class="duration">
+                        <input type="number" class="duration-input" placeholder="Min" min="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💪 Herausforderungs-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Wie reagiert das Kind bei diesen Herausforderungen?</p>
+            <div class="challenges-grid">
+                <div class="challenge" data-challenge="difficult">
+                    <h4>🏔️ Schwierige Aufgabe</h4>
+                    <div class="challenge-desc">Wenn eine Aufgabe schwieriger ist als erwartet...</div>
+                    <div class="challenge-status">
+                        <div class="challenge-btn" data-status="success">✅ Bleibt dran</div>
+                        <div class="challenge-btn" data-status="struggle">🔄 Kämpft</div>
+                        <div class="challenge-btn" data-status="fail">❌ Gibt auf</div>
+                    </div>
+                </div>
+                <div class="challenge" data-challenge="boring">
+                    <h4>😴 Langweilige Aufgabe</h4>
+                    <div class="challenge-desc">Wenn eine Aufgabe langweilig erscheint...</div>
+                    <div class="challenge-status">
+                        <div class="challenge-btn" data-status="success">✅ Macht fertig</div>
+                        <div class="challenge-btn" data-status="struggle">🔄 Braucht Motivation</div>
+                        <div class="challenge-btn" data-status="fail">❌ Bricht ab</div>
+                    </div>
+                </div>
+                <div class="challenge" data-challenge="mistake">
+                    <h4>🔴 Fehler gemacht</h4>
+                    <div class="challenge-desc">Wenn etwas nicht beim ersten Mal klappt...</div>
+                    <div class="challenge-status">
+                        <div class="challenge-btn" data-status="success">✅ Versucht nochmal</div>
+                        <div class="challenge-btn" data-status="struggle">🔄 Frustriert, macht weiter</div>
+                        <div class="challenge-btn" data-status="fail">❌ Gibt auf</div>
+                    </div>
+                </div>
+                <div class="challenge" data-challenge="distraction">
+                    <h4>🦋 Ablenkung</h4>
+                    <div class="challenge-desc">Wenn etwas Interessanteres lockt...</div>
+                    <div class="challenge-status">
+                        <div class="challenge-btn" data-status="success">✅ Fokussiert bleiben</div>
+                        <div class="challenge-btn" data-status="struggle">🔄 Kurz abgelenkt</div>
+                        <div class="challenge-btn" data-status="fail">❌ Wechselt Aktivität</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧰 Durchhalte-Strategien</h2>
+            <p style="margin-bottom: 15px;">Welche Strategien nutzt das Kind? Klicke auf verwendete Strategien:</p>
+            <div class="strategies-list">
+                <div class="strategy" data-strategy="breaks">
+                    <span class="icon">⏸️</span>
+                    <span>Kurze Pausen einlegen</span>
+                </div>
+                <div class="strategy" data-strategy="split">
+                    <span class="icon">📋</span>
+                    <span>Aufgabe in Teile aufteilen</span>
+                </div>
+                <div class="strategy" data-strategy="reward">
+                    <span class="icon">🎁</span>
+                    <span>Belohnung in Aussicht</span>
+                </div>
+                <div class="strategy" data-strategy="help">
+                    <span class="icon">🙋</span>
+                    <span>Um Hilfe bitten</span>
+                </div>
+                <div class="strategy" data-strategy="selftalk">
+                    <span class="icon">💬</span>
+                    <span>"Ich schaffe das!"</span>
+                </div>
+                <div class="strategy" data-strategy="timer">
+                    <span class="icon">⏱️</span>
+                    <span>Timer nutzen</span>
+                </div>
+                <div class="strategy" data-strategy="environment">
+                    <span class="icon">🏠</span>
+                    <span>Ruhigen Ort suchen</span>
+                </div>
+                <div class="strategy" data-strategy="goal">
+                    <span class="icon">🎯</span>
+                    <span>Ziel visualisieren</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Ausdauer-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere Situationen mit Ausdauer:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Aufgabe/Aktivität</label>
+                        <input type="text" id="logTask" placeholder="z.B. Puzzle, Hausaufgaben">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Dauer (Minuten)</label>
+                        <input type="number" id="logDuration" placeholder="z.B. 15" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Schwierigkeitsgrad</label>
+                        <select id="logDifficulty">
+                            <option value="">-- Wählen --</option>
+                            <option value="leicht">Leicht</option>
+                            <option value="mittel">Mittel</option>
+                            <option value="schwer">Schwer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Wie ist es gelaufen?</label>
+                    <textarea id="logNotes" placeholder="Hat das Kind durchgehalten? Gab es Schwierigkeiten?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ergebnis</label>
+                    <select id="logResult">
+                        <option value="">-- Wählen --</option>
+                        <option value="fertig">✅ Aufgabe beendet</option>
+                        <option value="hilfe">🤝 Mit Hilfe beendet</option>
+                        <option value="teil">📊 Teilweise geschafft</option>
+                        <option value="abbruch">❌ Abgebrochen</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Ausdauer-Entwicklung:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="successChallenges">0/4</div>
+                        <div class="stat-label">Herausford. gemeistert</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="strategiesCount">0/8</div>
+                        <div class="stat-label">Strategien genutzt</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="completedTasks">0</div>
+                        <div class="stat-label">Beendete Aufgaben</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Erfolge feiern:</strong> Durchhalten würdigen, nicht nur das Ergebnis</li>
+                <li><strong>Realistische Ziele:</strong> Aufgaben an Entwicklungsstand anpassen</li>
+                <li><strong>Modellieren:</strong> Eigene Ausdauer verbalisieren</li>
+                <li><strong>Strukturieren:</strong> Große Aufgaben in kleine Schritte teilen</li>
+                <li><strong>Pausen ermöglichen:</strong> Kurze Erholungsphasen einplanen</li>
+                <li><strong>Ermutigen:</strong> "Du hast schon so viel geschafft!"</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            level: 0,
+            taskDurations: {},
+            challenges: {},
+            strategies: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V28_arbeit';
+
+        function init() {
+            loadData();
+
+            // Meter
+            document.querySelectorAll('.meter-bar').forEach(bar => {
+                bar.addEventListener('click', function() {
+                    const level = parseInt(this.dataset.level);
+                    data.level = level;
+                    updateMeter();
+                    saveData();
+                });
+            });
+            updateMeter();
+
+            // Task durations
+            document.querySelectorAll('.task-type').forEach(type => {
+                const task = type.dataset.task;
+                const input = type.querySelector('.duration-input');
+                if (data.taskDurations[task]) {
+                    input.value = data.taskDurations[task];
+                    type.classList.add('tracked');
+                }
+                input.addEventListener('change', function() {
+                    data.taskDurations[task] = this.value ? parseInt(this.value) : null;
+                    type.classList.toggle('tracked', !!this.value);
+                    saveData();
+                });
+            });
+
+            // Challenges
+            document.querySelectorAll('.challenge-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const challenge = this.closest('.challenge').dataset.challenge;
+                    const status = this.dataset.status;
+                    this.closest('.challenge-status').querySelectorAll('.challenge-btn').forEach(b => {
+                        b.classList.remove('success', 'struggle', 'fail');
+                    });
+                    this.classList.add(status);
+                    data.challenges[challenge] = status;
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Restore challenges
+            Object.entries(data.challenges).forEach(([challenge, status]) => {
+                const ch = document.querySelector(`.challenge[data-challenge="${challenge}"]`);
+                if (ch) {
+                    const btn = ch.querySelector(`.challenge-btn[data-status="${status}"]`);
+                    if (btn) btn.classList.add(status);
+                }
+            });
+
+            // Strategies
+            document.querySelectorAll('.strategy').forEach(s => {
+                s.addEventListener('click', function() {
+                    this.classList.toggle('used');
+                    data.strategies[this.dataset.strategy] = this.classList.contains('used');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.strategies[s.dataset.strategy]) {
+                    s.classList.add('used');
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function updateMeter() {
+            document.querySelectorAll('.meter-bar').forEach(bar => {
+                const level = parseInt(bar.dataset.level);
+                bar.classList.toggle('active', level <= data.level);
+            });
+            document.getElementById('currentLevel').textContent = data.level;
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const task = document.getElementById('logTask').value;
+            const duration = document.getElementById('logDuration').value;
+            const difficulty = document.getElementById('logDifficulty').value;
+            const notes = document.getElementById('logNotes').value;
+            const result = document.getElementById('logResult').value;
+
+            if (!date || !task) {
+                alert('Bitte mindestens Datum und Aufgabe ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, task, duration, difficulty, notes, result, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logTask').value = '';
+            document.getElementById('logDuration').value = '';
+            document.getElementById('logNotes').value = '';
+            document.getElementById('logResult').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            const resultIcons = { 'fertig': '✅', 'hilfe': '🤝', 'teil': '📊', 'abbruch': '❌' };
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-content">
+                        <strong>${log.task}</strong> ${log.duration ? `(${log.duration} Min)` : ''}
+                        ${log.notes ? `<p style="margin:5px 0;font-size:0.9em;">${log.notes}</p>` : ''}
+                        <div class="log-entry-meta">
+                            ${log.date} | ${log.difficulty || ''} | ${resultIcons[log.result] || ''} ${log.result || ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const successChallenges = Object.values(data.challenges).filter(v => v === 'success').length;
+            const strategiesCount = Object.values(data.strategies).filter(v => v).length;
+            const completedTasks = data.logs.filter(l => l.result === 'fertig' || l.result === 'hilfe').length;
+
+            document.getElementById('successChallenges').textContent = successChallenges + '/4';
+            document.getElementById('strategiesCount').textContent = strategiesCount + '/8';
+            document.getElementById('completedTasks').textContent = completedTasks;
+
+            const progress = Math.round((data.level / 10 * 30) + (successChallenges / 4 * 25) + (strategiesCount / 8 * 25) + Math.min(completedTasks / 10, 1) * 20);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-28',
+                title: 'Ausdauer zeigen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-28_Ausdauer_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

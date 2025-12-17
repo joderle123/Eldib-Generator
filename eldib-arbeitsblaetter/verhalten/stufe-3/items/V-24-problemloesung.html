@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-24: Problemlösung beginnen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #26a69a; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #26a69a; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #26a69a; }
+        .steps-visual { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 20px 0; }
+        .step-card { background: linear-gradient(135deg, #e0f7fa, #b2dfdb); border-radius: 15px; padding: 20px; text-align: center; width: 180px; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
+        .step-card:hover { transform: translateY(-5px); }
+        .step-card.mastered { border-color: #4caf50; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .step-card .step-number { width: 40px; height: 40px; border-radius: 50%; background: #26a69a; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: bold; font-size: 1.2em; }
+        .step-card .step-title { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .step-card .step-desc { font-size: 0.85em; color: #666; }
+        .step-card .status { font-size: 0.8em; margin-top: 10px; color: #888; }
+        .problem-scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .problem-card { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .problem-card h4 { color: #26a69a; margin-bottom: 10px; }
+        .problem-card .scenario { background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-style: italic; }
+        .solution-input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px; resize: vertical; min-height: 60px; }
+        .solution-rating { display: flex; gap: 5px; margin-top: 10px; }
+        .rating-star { font-size: 1.5em; cursor: pointer; color: #e0e0e0; transition: color 0.2s; }
+        .rating-star.active { color: #ffc107; }
+        .strategies-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .strategy { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+        .strategy:hover { border-color: #26a69a; }
+        .strategy.used { background: #e8f5e9; border-color: #4caf50; }
+        .strategy .icon { font-size: 2em; margin-bottom: 10px; }
+        .strategy .name { font-weight: 600; color: #333; }
+        .strategy .desc { font-size: 0.85em; color: #666; margin-top: 5px; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #26a69a, #80cbc4); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(38,166,154,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        .log-entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .log-entry-meta { font-size: 0.85em; color: #888; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .checklist { list-style: none; }
+        .checklist li { display: flex; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .checklist li:hover { background: #f8f9fa; }
+        .check-box { width: 24px; height: 24px; border: 2px solid #e0e0e0; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .check-box.checked { background: #26a69a; border-color: #26a69a; color: white; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #26a69a, #80cbc4); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #26a69a; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .step-card { width: 140px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-24 | Verhalten Stufe III</span>
+            <h1>Problemlösung beginnen</h1>
+            <p>Das Kind lernt, systematisch an Probleme heranzugehen und eigenständig Lösungsstrategien zu entwickeln. Diese Fähigkeit ist zentral für Selbstwirksamkeit und Unabhängigkeit.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) beginnen Kinder, Probleme nicht mehr als unüberwindbare Hindernisse zu sehen, sondern als Herausforderungen, die gelöst werden können. Sie lernen einen strukturierten Ansatz: das Problem erkennen, mögliche Lösungen überlegen, eine auswählen und ausprobieren. Dieser Prozess stärkt ihre Selbstwirksamkeit und Frustrationstoleranz.</p>
+        </div>
+
+        <div class="card">
+            <h2>🔄 Problemlösungs-Schritte</h2>
+            <p style="margin-bottom: 15px;">Welche Schritte beherrscht das Kind? Klicke auf gemeisterte Schritte:</p>
+            <div class="steps-visual">
+                <div class="step-card" data-step="identify">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Problem erkennen</div>
+                    <div class="step-desc">"Was ist das Problem?"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="step-card" data-step="brainstorm">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Ideen sammeln</div>
+                    <div class="step-desc">"Was könnte ich tun?"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="step-card" data-step="evaluate">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Ideen bewerten</div>
+                    <div class="step-desc">"Was ist die beste Idee?"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="step-card" data-step="try">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Ausprobieren</div>
+                    <div class="step-desc">"Ich versuche es!"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="step-card" data-step="reflect">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Überprüfen</div>
+                    <div class="step-desc">"Hat es geklappt?"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧰 Lösungsstrategien</h2>
+            <p style="margin-bottom: 15px;">Welche Strategien kennt und nutzt das Kind? Klicke auf verwendete Strategien:</p>
+            <div class="strategies-grid">
+                <div class="strategy" data-strategy="ask">
+                    <div class="icon">🙋</div>
+                    <div class="name">Um Hilfe bitten</div>
+                    <div class="desc">Einen Erwachsenen oder Freund fragen</div>
+                </div>
+                <div class="strategy" data-strategy="try-again">
+                    <div class="icon">🔄</div>
+                    <div class="name">Nochmal versuchen</div>
+                    <div class="desc">Nicht gleich aufgeben, es anders probieren</div>
+                </div>
+                <div class="strategy" data-strategy="break-down">
+                    <div class="icon">📋</div>
+                    <div class="name">Aufteilen</div>
+                    <div class="desc">Das Problem in kleine Schritte zerlegen</div>
+                </div>
+                <div class="strategy" data-strategy="calm">
+                    <div class="icon">🧘</div>
+                    <div class="name">Erst beruhigen</div>
+                    <div class="desc">Tief atmen, dann nachdenken</div>
+                </div>
+                <div class="strategy" data-strategy="alternatives">
+                    <div class="icon">🔀</div>
+                    <div class="name">Alternativen suchen</div>
+                    <div class="desc">Einen anderen Weg finden</div>
+                </div>
+                <div class="strategy" data-strategy="wait">
+                    <div class="icon">⏰</div>
+                    <div class="name">Warten</div>
+                    <div class="desc">Später nochmal probieren</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Übungs-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere, wie das Kind auf diese Problemsituationen reagiert:</p>
+            <div class="problem-scenarios">
+                <div class="problem-card" data-scenario="puzzle">
+                    <h4>Szenario 1: Puzzleteil passt nicht</h4>
+                    <div class="scenario">"Du baust ein Puzzle, aber ein Teil scheint nirgendwo zu passen."</div>
+                    <textarea class="solution-input" placeholder="Wie löst das Kind das Problem?"></textarea>
+                    <div>Bewertung der Lösung:</div>
+                    <div class="solution-rating">
+                        <span class="rating-star" data-rating="1">⭐</span>
+                        <span class="rating-star" data-rating="2">⭐</span>
+                        <span class="rating-star" data-rating="3">⭐</span>
+                        <span class="rating-star" data-rating="4">⭐</span>
+                        <span class="rating-star" data-rating="5">⭐</span>
+                    </div>
+                </div>
+                <div class="problem-card" data-scenario="conflict">
+                    <h4>Szenario 2: Spielzeugkonflikt</h4>
+                    <div class="scenario">"Zwei Kinder wollen das gleiche Spielzeug zur gleichen Zeit."</div>
+                    <textarea class="solution-input" placeholder="Wie löst das Kind das Problem?"></textarea>
+                    <div>Bewertung der Lösung:</div>
+                    <div class="solution-rating">
+                        <span class="rating-star" data-rating="1">⭐</span>
+                        <span class="rating-star" data-rating="2">⭐</span>
+                        <span class="rating-star" data-rating="3">⭐</span>
+                        <span class="rating-star" data-rating="4">⭐</span>
+                        <span class="rating-star" data-rating="5">⭐</span>
+                    </div>
+                </div>
+                <div class="problem-card" data-scenario="task">
+                    <h4>Szenario 3: Schwierige Aufgabe</h4>
+                    <div class="scenario">"Eine Aufgabe ist zu schwer und du weißt nicht weiter."</div>
+                    <textarea class="solution-input" placeholder="Wie löst das Kind das Problem?"></textarea>
+                    <div>Bewertung der Lösung:</div>
+                    <div class="solution-rating">
+                        <span class="rating-star" data-rating="1">⭐</span>
+                        <span class="rating-star" data-rating="2">⭐</span>
+                        <span class="rating-star" data-rating="3">⭐</span>
+                        <span class="rating-star" data-rating="4">⭐</span>
+                        <span class="rating-star" data-rating="5">⭐</span>
+                    </div>
+                </div>
+                <div class="problem-card" data-scenario="lost">
+                    <h4>Szenario 4: Etwas verloren</h4>
+                    <div class="scenario">"Du kannst deine Lieblingssache nicht finden."</div>
+                    <textarea class="solution-input" placeholder="Wie löst das Kind das Problem?"></textarea>
+                    <div>Bewertung der Lösung:</div>
+                    <div class="solution-rating">
+                        <span class="rating-star" data-rating="1">⭐</span>
+                        <span class="rating-star" data-rating="2">⭐</span>
+                        <span class="rating-star" data-rating="3">⭐</span>
+                        <span class="rating-star" data-rating="4">⭐</span>
+                        <span class="rating-star" data-rating="5">⭐</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Problemlösungs-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere echte Problemsituationen:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Kontext</label>
+                        <select id="logContext">
+                            <option value="">-- Wählen --</option>
+                            <option value="spielen">Beim Spielen</option>
+                            <option value="lernen">Beim Lernen</option>
+                            <option value="sozial">Mit anderen Kindern</option>
+                            <option value="alltag">Im Alltag</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Das Problem war...</label>
+                    <textarea id="logProblem" placeholder="Beschreibe das Problem"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Die Lösung war...</label>
+                    <textarea id="logSolution" placeholder="Wie hat das Kind das Problem gelöst?"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Selbstständigkeit</label>
+                        <select id="logIndependence">
+                            <option value="">-- Wählen --</option>
+                            <option value="allein">Ganz allein gelöst</option>
+                            <option value="wenig">Mit wenig Hilfe</option>
+                            <option value="viel">Mit viel Unterstützung</option>
+                            <option value="nicht">Nicht gelöst</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Erfolg</label>
+                        <select id="logSuccess">
+                            <option value="">-- Wählen --</option>
+                            <option value="ja">Erfolgreich gelöst</option>
+                            <option value="teilweise">Teilweise gelöst</option>
+                            <option value="nein">Nicht gelöst, aber versucht</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Kompetenz-Checkliste</h2>
+            <ul class="checklist" id="checklist">
+                <li data-item="recognize">
+                    <div class="check-box"></div>
+                    <span>Erkennt, wenn es ein Problem gibt</span>
+                </li>
+                <li data-item="stay-calm">
+                    <div class="check-box"></div>
+                    <span>Bleibt bei Problemen relativ ruhig</span>
+                </li>
+                <li data-item="ideas">
+                    <div class="check-box"></div>
+                    <span>Kann mindestens 2 Lösungsideen nennen</span>
+                </li>
+                <li data-item="ask-help">
+                    <div class="check-box"></div>
+                    <span>Bittet angemessen um Hilfe</span>
+                </li>
+                <li data-item="try">
+                    <div class="check-box"></div>
+                    <span>Probiert Lösungen aus, statt aufzugeben</span>
+                </li>
+                <li data-item="adapt">
+                    <div class="check-box"></div>
+                    <span>Passt Strategie an, wenn etwas nicht klappt</span>
+                </li>
+                <li data-item="reflect">
+                    <div class="check-box"></div>
+                    <span>Kann beschreiben, wie ein Problem gelöst wurde</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Problemlösungs-Kompetenz:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="stepsCount">0/5</div>
+                        <div class="stat-label">Schritte beherrscht</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="strategiesCount">0/6</div>
+                        <div class="stat-label">Strategien genutzt</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="logsCount">0</div>
+                        <div class="stat-label">Gelöste Probleme</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Modellieren:</strong> Eigene Problemlösung laut verbalisieren</li>
+                <li><strong>Nicht sofort helfen:</strong> "Was könntest du probieren?"</li>
+                <li><strong>Brainstorming üben:</strong> Alle Ideen sammeln ohne Bewertung</li>
+                <li><strong>Fehler normalisieren:</strong> "Probieren ist gut, auch wenn es nicht klappt"</li>
+                <li><strong>Erfolge feiern:</strong> Jede gelöste Herausforderung würdigen</li>
+                <li><strong>Schritte visualisieren:</strong> Problemlösungs-Poster nutzen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            steps: {},
+            strategies: {},
+            scenarios: {},
+            checklist: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V24_arbeit';
+
+        function init() {
+            loadData();
+
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const step = this.dataset.step;
+                    this.classList.toggle('mastered');
+                    data.steps[step] = this.classList.contains('mastered');
+                    this.querySelector('.status').textContent = this.classList.contains('mastered') ? '✅ Beherrscht' : 'Nicht geprüft';
+                    updateProgress();
+                    saveData();
+                });
+                if (data.steps[card.dataset.step]) {
+                    card.classList.add('mastered');
+                    card.querySelector('.status').textContent = '✅ Beherrscht';
+                }
+            });
+
+            document.querySelectorAll('.strategy').forEach(s => {
+                s.addEventListener('click', function() {
+                    const strategy = this.dataset.strategy;
+                    this.classList.toggle('used');
+                    data.strategies[strategy] = this.classList.contains('used');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.strategies[s.dataset.strategy]) {
+                    s.classList.add('used');
+                }
+            });
+
+            document.querySelectorAll('.problem-card').forEach(card => {
+                const scenario = card.dataset.scenario;
+                const textarea = card.querySelector('.solution-input');
+                const stars = card.querySelectorAll('.rating-star');
+
+                if (data.scenarios[scenario]) {
+                    textarea.value = data.scenarios[scenario].solution || '';
+                    const rating = data.scenarios[scenario].rating || 0;
+                    stars.forEach((star, i) => {
+                        if (i < rating) star.classList.add('active');
+                    });
+                }
+
+                textarea.addEventListener('input', function() {
+                    if (!data.scenarios[scenario]) data.scenarios[scenario] = {};
+                    data.scenarios[scenario].solution = this.value;
+                    saveData();
+                });
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = parseInt(this.dataset.rating);
+                        if (!data.scenarios[scenario]) data.scenarios[scenario] = {};
+                        data.scenarios[scenario].rating = rating;
+                        stars.forEach((s, i) => {
+                            s.classList.toggle('active', i < rating);
+                        });
+                        saveData();
+                    });
+                });
+            });
+
+            document.querySelectorAll('.checklist li').forEach(li => {
+                li.addEventListener('click', function() {
+                    const item = this.dataset.item;
+                    const box = this.querySelector('.check-box');
+                    box.classList.toggle('checked');
+                    box.textContent = box.classList.contains('checked') ? '✓' : '';
+                    data.checklist[item] = box.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.checklist[li.dataset.item]) {
+                    const box = li.querySelector('.check-box');
+                    box.classList.add('checked');
+                    box.textContent = '✓';
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const context = document.getElementById('logContext').value;
+            const problem = document.getElementById('logProblem').value;
+            const solution = document.getElementById('logSolution').value;
+            const independence = document.getElementById('logIndependence').value;
+            const success = document.getElementById('logSuccess').value;
+
+            if (!date || !problem) {
+                alert('Bitte mindestens Datum und Problem ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, context, problem, solution, independence, success, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logProblem').value = '';
+            document.getElementById('logSolution').value = '';
+            document.getElementById('logIndependence').value = '';
+            document.getElementById('logSuccess').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            const successIcons = { 'ja': '✅', 'teilweise': '🔄', 'nein': '💪' };
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-header">
+                        <strong>Problem: ${log.problem.substring(0, 50)}${log.problem.length > 50 ? '...' : ''}</strong>
+                        <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                    </div>
+                    ${log.solution ? `<p><strong>Lösung:</strong> ${log.solution}</p>` : ''}
+                    <div class="log-entry-meta">
+                        ${log.date} | ${log.context || ''} | ${log.independence || ''} | ${successIcons[log.success] || ''} ${log.success || ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const stepsCount = Object.values(data.steps).filter(v => v).length;
+            const strategiesCount = Object.values(data.strategies).filter(v => v).length;
+            const checklistCount = Object.values(data.checklist).filter(v => v).length;
+            const successLogs = data.logs.filter(l => l.success === 'ja' || l.success === 'teilweise').length;
+
+            document.getElementById('stepsCount').textContent = stepsCount + '/5';
+            document.getElementById('strategiesCount').textContent = strategiesCount + '/6';
+            document.getElementById('logsCount').textContent = successLogs;
+
+            const progress = Math.round((stepsCount / 5 * 30) + (strategiesCount / 6 * 25) + (checklistCount / 7 * 25) + Math.min(successLogs / 5, 1) * 20);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-24',
+                title: 'Problemlösung beginnen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-24_Problemloesung_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

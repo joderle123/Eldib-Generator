@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-26: Verantwortung übernehmen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #667eea; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #667eea; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #667eea; }
+        .responsibility-areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .area-card { background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .area-card:hover { transform: translateY(-3px); }
+        .area-card.active { border-color: #667eea; background: linear-gradient(135deg, #e8eaf6, #c5cae9); }
+        .area-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .area-card .title { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .area-card .level { font-size: 0.8em; color: #888; margin-top: 10px; }
+        .area-card .level-indicator { display: flex; gap: 3px; justify-content: center; margin-top: 5px; }
+        .area-card .level-dot { width: 10px; height: 10px; border-radius: 50%; background: #e0e0e0; }
+        .area-card .level-dot.filled { background: #667eea; }
+        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .task-card { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.2s; border-left: 4px solid #e0e0e0; }
+        .task-card:hover { border-left-color: #667eea; }
+        .task-card.mastered { border-left-color: #4caf50; background: #e8f5e9; }
+        .task-card.learning { border-left-color: #ff9800; background: #fff3e0; }
+        .task-card .task-title { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .task-card .task-desc { font-size: 0.85em; color: #666; }
+        .task-card .task-status { font-size: 0.8em; margin-top: 10px; color: #888; }
+        .scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .scenario { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .scenario h4 { color: #667eea; margin-bottom: 10px; }
+        .scenario-situation { background: #e8eaf6; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-style: italic; }
+        .scenario-responses { display: flex; flex-direction: column; gap: 8px; }
+        .scenario-response { padding: 10px 15px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .scenario-response:hover { border-color: #667eea; }
+        .scenario-response.selected { border-color: #667eea; background: #e8eaf6; }
+        .scenario-response.responsible { border-color: #4caf50; background: #e8f5e9; }
+        .scenario-response.avoidant { border-color: #f44336; background: #ffebee; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .log-entry-content { flex: 1; }
+        .log-entry-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .checklist { list-style: none; }
+        .checklist li { display: flex; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .checklist li:hover { background: #f8f9fa; }
+        .check-box { width: 24px; height: 24px; border: 2px solid #e0e0e0; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .check-box.checked { background: #667eea; border-color: #667eea; color: white; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-26 | Verhalten Stufe III</span>
+            <h1>Verantwortung übernehmen</h1>
+            <p>Das Kind lernt, für sein eigenes Handeln Verantwortung zu übernehmen. Es akzeptiert Konsequenzen und entwickelt ein Verständnis dafür, dass eigene Entscheidungen Auswirkungen haben.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) beginnen Kinder zu verstehen, dass sie für ihre Handlungen verantwortlich sind. Sie lernen, Fehler einzugestehen, sich zu entschuldigen und Wiedergutmachung anzubieten. Diese Fähigkeit ist grundlegend für moralische Entwicklung und soziale Beziehungen.</p>
+        </div>
+
+        <div class="card">
+            <h2>🏠 Verantwortungsbereiche</h2>
+            <p style="margin-bottom: 15px;">In welchen Bereichen übernimmt das Kind bereits Verantwortung? Klicke zum Festlegen des Levels:</p>
+            <div class="responsibility-areas">
+                <div class="area-card" data-area="self-care">
+                    <div class="icon">🪥</div>
+                    <div class="title">Selbstfürsorge</div>
+                    <div class="level">Körperpflege, Anziehen</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+                <div class="area-card" data-area="belongings">
+                    <div class="icon">🎒</div>
+                    <div class="title">Eigene Sachen</div>
+                    <div class="level">Aufräumen, Pflegen</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+                <div class="area-card" data-area="homework">
+                    <div class="icon">📚</div>
+                    <div class="title">Schulaufgaben</div>
+                    <div class="level">Hausaufgaben, Material</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+                <div class="area-card" data-area="chores">
+                    <div class="icon">🧹</div>
+                    <div class="title">Haushaltsaufgaben</div>
+                    <div class="level">Kleine Pflichten</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+                <div class="area-card" data-area="actions">
+                    <div class="icon">✋</div>
+                    <div class="title">Eigenes Verhalten</div>
+                    <div class="level">Fehler eingestehen</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+                <div class="area-card" data-area="pet">
+                    <div class="icon">🐾</div>
+                    <div class="title">Tierpflege</div>
+                    <div class="level">Füttern, Versorgen</div>
+                    <div class="level-indicator">
+                        <div class="level-dot" data-level="1"></div>
+                        <div class="level-dot" data-level="2"></div>
+                        <div class="level-dot" data-level="3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Verantwortungsaufgaben</h2>
+            <p style="margin-bottom: 15px;">Welche Aufgaben erfüllt das Kind? Klicke zum Ändern des Status:</p>
+            <div class="tasks-grid">
+                <div class="task-card" data-task="admit">
+                    <div class="task-title">Fehler zugeben</div>
+                    <div class="task-desc">Kann eigene Fehler eingestehen</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+                <div class="task-card" data-task="apologize">
+                    <div class="task-title">Sich entschuldigen</div>
+                    <div class="task-desc">Sagt aufrichtig "Es tut mir leid"</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+                <div class="task-card" data-task="repair">
+                    <div class="task-title">Wiedergutmachung</div>
+                    <div class="task-desc">Versucht, Fehler zu korrigieren</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+                <div class="task-card" data-task="consequences">
+                    <div class="task-title">Konsequenzen akzeptieren</div>
+                    <div class="task-desc">Akzeptiert Folgen des Handelns</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+                <div class="task-card" data-task="no-blame">
+                    <div class="task-title">Nicht beschuldigen</div>
+                    <div class="task-desc">Gibt nicht anderen die Schuld</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+                <div class="task-card" data-task="promise">
+                    <div class="task-title">Versprechen halten</div>
+                    <div class="task-desc">Hält Vereinbarungen ein</div>
+                    <div class="task-status">Nicht geprüft</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Verantwortungs-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Wie reagiert das Kind in diesen Situationen?</p>
+            <div class="scenarios">
+                <div class="scenario" data-scenario="broken">
+                    <h4>Etwas kaputt gemacht</h4>
+                    <div class="scenario-situation">"Du hast aus Versehen die Vase umgeworfen und sie ist kaputt."</div>
+                    <div class="scenario-responses">
+                        <div class="scenario-response" data-response="responsible" data-correct="true">🙋 "Ich war's. Es tut mir leid."</div>
+                        <div class="scenario-response" data-response="partial">😕 Schweigt und hofft, dass es keiner merkt</div>
+                        <div class="scenario-response" data-response="avoidant">🙅 "Ich war das nicht!" oder beschuldigt andere</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="forgot">
+                    <h4>Hausaufgaben vergessen</h4>
+                    <div class="scenario-situation">"Du hast deine Hausaufgaben nicht gemacht und der Lehrer fragt danach."</div>
+                    <div class="scenario-responses">
+                        <div class="scenario-response" data-response="responsible" data-correct="true">🙋 "Ich habe sie vergessen. Ich mache sie nach."</div>
+                        <div class="scenario-response" data-response="partial">😕 Sucht nach Ausreden</div>
+                        <div class="scenario-response" data-response="avoidant">🙅 "Meine Eltern haben sie weggeworfen"</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="hurt">
+                    <h4>Jemanden verletzt</h4>
+                    <div class="scenario-situation">"Du hast beim Spielen ein anderes Kind gestoßen und es weint."</div>
+                    <div class="scenario-responses">
+                        <div class="scenario-response" data-response="responsible" data-correct="true">🙋 Entschuldigt sich und fragt, ob es helfen kann</div>
+                        <div class="scenario-response" data-response="partial">😕 "War keine Absicht" (ohne Entschuldigung)</div>
+                        <div class="scenario-response" data-response="avoidant">🙅 Läuft weg oder sagt "Selbst schuld"</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="mess">
+                    <h4>Unordnung verursacht</h4>
+                    <div class="scenario-situation">"Du hast beim Spielen ein großes Durcheinander gemacht."</div>
+                    <div class="scenario-responses">
+                        <div class="scenario-response" data-response="responsible" data-correct="true">🙋 Räumt selbstständig auf</div>
+                        <div class="scenario-response" data-response="partial">😕 Räumt nur mit Aufforderung auf</div>
+                        <div class="scenario-response" data-response="avoidant">🙅 "Das war nicht alles ich" oder weigert sich</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Verantwortungs-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere Situationen, in denen das Kind Verantwortung übernommen hat:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Bereich</label>
+                        <select id="logArea">
+                            <option value="">-- Wählen --</option>
+                            <option value="fehler">Fehler zugeben</option>
+                            <option value="entschuldigung">Entschuldigung</option>
+                            <option value="aufgabe">Pflichterfüllung</option>
+                            <option value="wiedergutmachung">Wiedergutmachung</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Situation beschreiben</label>
+                    <textarea id="logSituation" placeholder="Was ist passiert?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Reaktion des Kindes</label>
+                    <textarea id="logReaction" placeholder="Wie hat das Kind Verantwortung übernommen?"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Selbstständigkeit</label>
+                        <select id="logIndependence">
+                            <option value="">-- Wählen --</option>
+                            <option value="spontan">Spontan/Eigeninitiativ</option>
+                            <option value="erinnerung">Mit Erinnerung</option>
+                            <option value="aufforderung">Erst nach Aufforderung</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Aufrichtigkeit</label>
+                        <select id="logSincerity">
+                            <option value="">-- Wählen --</option>
+                            <option value="aufrichtig">Aufrichtig</option>
+                            <option value="halbherzig">Halbherzig</option>
+                            <option value="widerwillig">Widerwillig</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Kompetenz-Checkliste</h2>
+            <ul class="checklist" id="checklist">
+                <li data-item="admit-mistake">
+                    <div class="check-box"></div>
+                    <span>Gibt eigene Fehler zu, auch ohne Nachfrage</span>
+                </li>
+                <li data-item="sincere-apology">
+                    <div class="check-box"></div>
+                    <span>Entschuldigt sich aufrichtig</span>
+                </li>
+                <li data-item="no-excuses">
+                    <div class="check-box"></div>
+                    <span>Sucht keine Ausreden oder Schuldzuweisungen</span>
+                </li>
+                <li data-item="accept-consequences">
+                    <div class="check-box"></div>
+                    <span>Akzeptiert Konsequenzen ohne Protest</span>
+                </li>
+                <li data-item="make-amends">
+                    <div class="check-box"></div>
+                    <span>Bietet Wiedergutmachung an</span>
+                </li>
+                <li data-item="keep-promises">
+                    <div class="check-box"></div>
+                    <span>Hält Versprechen zuverlässig ein</span>
+                </li>
+                <li data-item="independent-tasks">
+                    <div class="check-box"></div>
+                    <span>Erledigt zugewiesene Aufgaben selbstständig</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Verantwortungsbewusstsein:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="tasksCount">0/6</div>
+                        <div class="stat-label">Aufgaben beherrscht</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="scenariosCount">0/4</div>
+                        <div class="stat-label">Szenarien verantwortungsvoll</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="logsCount">0</div>
+                        <div class="stat-label">Dokumentierte Situationen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Vorbild sein:</strong> Eigene Fehler eingestehen und sich entschuldigen</li>
+                <li><strong>Sicherheit geben:</strong> "Fehler sind okay, wichtig ist, was wir daraus lernen"</li>
+                <li><strong>Nicht beschämen:</strong> Fehler korrigieren, ohne das Kind bloßzustellen</li>
+                <li><strong>Wiedergutmachung anbieten:</strong> "Was könntest du tun, damit es wieder gut wird?"</li>
+                <li><strong>Eigeninitiative loben:</strong> Selbstständiges Verantwortungübernehmen würdigen</li>
+                <li><strong>Altersgerechte Aufgaben:</strong> Überschaubare Verantwortungsbereiche zuweisen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            areas: {},
+            tasks: {},
+            scenarios: {},
+            checklist: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V26_arbeit';
+
+        function init() {
+            loadData();
+
+            document.querySelectorAll('.area-card').forEach(card => {
+                const area = card.dataset.area;
+                const dots = card.querySelectorAll('.level-dot');
+
+                if (data.areas[area]) {
+                    card.classList.add('active');
+                    dots.forEach((dot, i) => {
+                        if (i < data.areas[area]) dot.classList.add('filled');
+                    });
+                }
+
+                card.addEventListener('click', function() {
+                    const currentLevel = data.areas[area] || 0;
+                    const newLevel = (currentLevel % 3) + 1;
+                    data.areas[area] = newLevel === data.areas[area] ? 0 : newLevel;
+
+                    this.classList.toggle('active', data.areas[area] > 0);
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('filled', i < data.areas[area]);
+                    });
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            document.querySelectorAll('.task-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const task = this.dataset.task;
+                    const states = ['', 'learning', 'mastered'];
+                    const current = data.tasks[task] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+
+                    this.classList.remove('learning', 'mastered');
+                    if (next) this.classList.add(next);
+
+                    const statusText = { '': 'Nicht geprüft', 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    this.querySelector('.task-status').textContent = statusText[next];
+
+                    data.tasks[task] = next;
+                    updateProgress();
+                    saveData();
+                });
+
+                if (data.tasks[card.dataset.task]) {
+                    card.classList.add(data.tasks[card.dataset.task]);
+                    const statusText = { 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    card.querySelector('.task-status').textContent = statusText[data.tasks[card.dataset.task]] || 'Nicht geprüft';
+                }
+            });
+
+            document.querySelectorAll('.scenario-response').forEach(resp => {
+                resp.addEventListener('click', function() {
+                    const scenario = this.closest('.scenario').dataset.scenario;
+                    this.closest('.scenario-responses').querySelectorAll('.scenario-response').forEach(r => {
+                        r.classList.remove('selected', 'responsible', 'avoidant');
+                    });
+                    this.classList.add('selected');
+                    if (this.dataset.response === 'responsible') this.classList.add('responsible');
+                    else if (this.dataset.response === 'avoidant') this.classList.add('avoidant');
+                    data.scenarios[scenario] = this.dataset.response;
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Restore scenarios
+            Object.entries(data.scenarios).forEach(([scenario, response]) => {
+                const sc = document.querySelector(`.scenario[data-scenario="${scenario}"]`);
+                if (sc) {
+                    const resp = sc.querySelector(`.scenario-response[data-response="${response}"]`);
+                    if (resp) {
+                        resp.classList.add('selected');
+                        if (response === 'responsible') resp.classList.add('responsible');
+                        else if (response === 'avoidant') resp.classList.add('avoidant');
+                    }
+                }
+            });
+
+            document.querySelectorAll('.checklist li').forEach(li => {
+                li.addEventListener('click', function() {
+                    const item = this.dataset.item;
+                    const box = this.querySelector('.check-box');
+                    box.classList.toggle('checked');
+                    box.textContent = box.classList.contains('checked') ? '✓' : '';
+                    data.checklist[item] = box.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.checklist[li.dataset.item]) {
+                    const box = li.querySelector('.check-box');
+                    box.classList.add('checked');
+                    box.textContent = '✓';
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const area = document.getElementById('logArea').value;
+            const situation = document.getElementById('logSituation').value;
+            const reaction = document.getElementById('logReaction').value;
+            const independence = document.getElementById('logIndependence').value;
+            const sincerity = document.getElementById('logSincerity').value;
+
+            if (!date || !situation) {
+                alert('Bitte mindestens Datum und Situation ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, area, situation, reaction, independence, sincerity, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logSituation').value = '';
+            document.getElementById('logReaction').value = '';
+            document.getElementById('logIndependence').value = '';
+            document.getElementById('logSincerity').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-content">
+                        <strong>${log.situation.substring(0, 60)}${log.situation.length > 60 ? '...' : ''}</strong>
+                        ${log.reaction ? `<p style="margin:5px 0;font-size:0.9em;">${log.reaction}</p>` : ''}
+                        <div class="log-entry-meta">
+                            ${log.date} | ${log.area || ''} | ${log.independence || ''} | ${log.sincerity || ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const masteredTasks = Object.values(data.tasks).filter(v => v === 'mastered').length;
+            const responsibleScenarios = Object.values(data.scenarios).filter(v => v === 'responsible').length;
+            const checklistCount = Object.values(data.checklist).filter(v => v).length;
+
+            document.getElementById('tasksCount').textContent = masteredTasks + '/6';
+            document.getElementById('scenariosCount').textContent = responsibleScenarios + '/4';
+            document.getElementById('logsCount').textContent = data.logs.length;
+
+            const progress = Math.round((masteredTasks / 6 * 30) + (responsibleScenarios / 4 * 25) + (checklistCount / 7 * 25) + Math.min(data.logs.length / 5, 1) * 20);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-26',
+                title: 'Verantwortung übernehmen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-26_Verantwortung_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

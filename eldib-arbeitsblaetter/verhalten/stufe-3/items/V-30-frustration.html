@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-30: Mit Frustration umgehen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #e91e63; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #e91e63; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #e91e63; }
+        .frustration-meter { text-align: center; margin: 20px 0; }
+        .volcano { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+        .volcano-base { width: 200px; height: 100px; background: linear-gradient(135deg, #795548, #5d4037); border-radius: 0 0 100px 100px; position: absolute; bottom: 0; }
+        .volcano-top { width: 80px; height: 80px; background: linear-gradient(135deg, #d32f2f, #f44336); border-radius: 50% 50% 0 0; position: absolute; top: 40px; left: 60px; transition: all 0.5s; }
+        .volcano-top.level-1 { background: linear-gradient(135deg, #4caf50, #8bc34a); }
+        .volcano-top.level-2 { background: linear-gradient(135deg, #ffeb3b, #ffc107); }
+        .volcano-top.level-3 { background: linear-gradient(135deg, #ff9800, #ff5722); }
+        .volcano-top.level-4 { background: linear-gradient(135deg, #f44336, #d32f2f); }
+        .volcano-top.level-5 { background: linear-gradient(135deg, #d32f2f, #b71c1c); animation: eruption 0.5s infinite; }
+        @keyframes eruption { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .level-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .level-btn { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #e0e0e0; cursor: pointer; font-size: 1.5em; transition: all 0.2s; }
+        .level-btn:hover { transform: scale(1.1); }
+        .level-btn.active { border-color: #e91e63; box-shadow: 0 0 10px rgba(233,30,99,0.5); }
+        .triggers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .trigger { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; text-align: center; }
+        .trigger:hover { border-color: #e91e63; }
+        .trigger.identified { border-color: #e91e63; background: #fce4ec; }
+        .trigger .icon { font-size: 2em; margin-bottom: 10px; }
+        .trigger .name { font-weight: 600; color: #333; }
+        .coping-strategies { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .coping-card { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .coping-card:hover { transform: translateY(-3px); }
+        .coping-card.mastered { border-color: #4caf50; background: #e8f5e9; }
+        .coping-card.learning { border-color: #ff9800; background: #fff3e0; }
+        .coping-card .strategy-icon { font-size: 2em; margin-bottom: 10px; text-align: center; }
+        .coping-card .strategy-name { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .coping-card .strategy-desc { font-size: 0.85em; color: #666; }
+        .coping-card .status { font-size: 0.8em; margin-top: 10px; color: #888; text-align: center; }
+        .scenarios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .scenario { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .scenario h4 { color: #e91e63; margin-bottom: 10px; }
+        .scenario-situation { background: #fce4ec; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-style: italic; }
+        .scenario-options { display: flex; flex-direction: column; gap: 8px; }
+        .scenario-option { padding: 10px 15px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; font-size: 0.9em; }
+        .scenario-option:hover { border-color: #e91e63; }
+        .scenario-option.selected { border-color: #e91e63; background: #fce4ec; }
+        .scenario-option.healthy { border-color: #4caf50; background: #e8f5e9; }
+        .scenario-option.unhealthy { border-color: #f44336; background: #ffebee; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(233,30,99,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .log-entry-content { flex: 1; }
+        .log-entry-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .log-entry-level { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; margin-right: 10px; }
+        .log-entry-level.low { background: #e8f5e9; color: #4caf50; }
+        .log-entry-level.medium { background: #fff3e0; color: #ff9800; }
+        .log-entry-level.high { background: #ffebee; color: #f44336; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #e91e63, #9c27b0); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #e91e63; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-30 | Verhalten Stufe III</span>
+            <h1>Mit Frustration umgehen</h1>
+            <p>Das Kind lernt, Frustration auszuhalten und konstruktiv damit umzugehen. Es entwickelt Strategien, um mit Enttäuschungen und Misserfolgen fertig zu werden, ohne destruktives Verhalten zu zeigen.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) ist die Entwicklung von Frustrationstoleranz ein wichtiger Meilenstein. Kinder lernen, dass nicht alles sofort gelingt und dass Hindernisse zum Leben gehören. Sie entwickeln konstruktive Bewältigungsstrategien und können zunehmend besser mit Enttäuschungen umgehen, ohne auszurasten oder aufzugeben.</p>
+        </div>
+
+        <div class="card">
+            <h2>🌋 Frustrations-Level</h2>
+            <p style="margin-bottom: 15px;">Wie hoch ist das typische Frustrationslevel bei Herausforderungen?</p>
+            <div class="frustration-meter">
+                <div class="volcano">
+                    <div class="volcano-top" id="volcanoTop"></div>
+                    <div class="volcano-base"></div>
+                </div>
+                <div class="level-buttons">
+                    <button class="level-btn" data-level="1">😌</button>
+                    <button class="level-btn" data-level="2">😐</button>
+                    <button class="level-btn" data-level="3">😣</button>
+                    <button class="level-btn" data-level="4">😤</button>
+                    <button class="level-btn" data-level="5">🤯</button>
+                </div>
+                <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
+                    1: Sehr ruhig | 2: Leicht frustriert | 3: Deutlich frustriert | 4: Stark frustriert | 5: Überwältigt
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚡ Frustrations-Auslöser</h2>
+            <p style="margin-bottom: 15px;">Was löst bei dem Kind typischerweise Frustration aus? Klicke auf zutreffende Auslöser:</p>
+            <div class="triggers-grid">
+                <div class="trigger" data-trigger="losing">
+                    <div class="icon">🎮</div>
+                    <div class="name">Beim Spiel verlieren</div>
+                </div>
+                <div class="trigger" data-trigger="waiting">
+                    <div class="icon">⏰</div>
+                    <div class="name">Warten müssen</div>
+                </div>
+                <div class="trigger" data-trigger="mistakes">
+                    <div class="icon">❌</div>
+                    <div class="name">Fehler machen</div>
+                </div>
+                <div class="trigger" data-trigger="difficult">
+                    <div class="icon">🏔️</div>
+                    <div class="name">Schwierige Aufgaben</div>
+                </div>
+                <div class="trigger" data-trigger="unfair">
+                    <div class="icon">⚖️</div>
+                    <div class="name">Ungerechtigkeit</div>
+                </div>
+                <div class="trigger" data-trigger="change">
+                    <div class="icon">🔄</div>
+                    <div class="name">Unerwartete Änderungen</div>
+                </div>
+                <div class="trigger" data-trigger="denied">
+                    <div class="icon">🚫</div>
+                    <div class="name">"Nein" hören</div>
+                </div>
+                <div class="trigger" data-trigger="notwork">
+                    <div class="icon">🔧</div>
+                    <div class="name">Dinge funktionieren nicht</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧰 Bewältigungs-Strategien</h2>
+            <p style="margin-bottom: 15px;">Welche gesunden Strategien kennt/nutzt das Kind? Klicke zum Ändern des Status:</p>
+            <div class="coping-strategies">
+                <div class="coping-card" data-strategy="breathe">
+                    <div class="strategy-icon">🌬️</div>
+                    <div class="strategy-name">Tief durchatmen</div>
+                    <div class="strategy-desc">Langsam ein- und ausatmen, um sich zu beruhigen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="walk-away">
+                    <div class="strategy-icon">🚶</div>
+                    <div class="strategy-name">Kurz weggehen</div>
+                    <div class="strategy-desc">Sich kurz zurückziehen, dann wiederkommen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="talk">
+                    <div class="strategy-icon">💬</div>
+                    <div class="strategy-name">Darüber sprechen</div>
+                    <div class="strategy-desc">Gefühle mitteilen: "Ich bin frustriert, weil..."</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="try-again">
+                    <div class="strategy-icon">🔄</div>
+                    <div class="strategy-name">Nochmal probieren</div>
+                    <div class="strategy-desc">Nach kurzer Pause einen neuen Versuch wagen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="help">
+                    <div class="strategy-icon">🙋</div>
+                    <div class="strategy-name">Um Hilfe bitten</div>
+                    <div class="strategy-desc">Jemanden um Unterstützung fragen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="alternative">
+                    <div class="strategy-icon">🔀</div>
+                    <div class="strategy-name">Alternative suchen</div>
+                    <div class="strategy-desc">Einen anderen Weg oder eine andere Aktivität wählen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="self-talk">
+                    <div class="strategy-icon">🗣️</div>
+                    <div class="strategy-name">Positives Selbstgespräch</div>
+                    <div class="strategy-desc">"Ich kann das schaffen" oder "Das ist okay"</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="coping-card" data-strategy="physical">
+                    <div class="strategy-icon">💪</div>
+                    <div class="strategy-name">Körperliche Aktivität</div>
+                    <div class="strategy-desc">Hüpfen, Ball werfen, sich bewegen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Frustrations-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Wie reagiert das Kind typischerweise in diesen Situationen?</p>
+            <div class="scenarios-grid">
+                <div class="scenario" data-scenario="tower">
+                    <h4>Der Turm fällt um</h4>
+                    <div class="scenario-situation">"Du baust einen hohen Turm und er fällt kurz vor Fertigstellung um."</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="healthy" data-correct="true">🔄 Kurz enttäuscht, dann neu anfangen</div>
+                        <div class="scenario-option" data-response="moderate">😤 Sehr frustriert, aber macht weiter</div>
+                        <div class="scenario-option" data-response="unhealthy">😡 Wirft alles um, gibt auf</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="game">
+                    <h4>Spielverlust</h4>
+                    <div class="scenario-situation">"Du verlierst ein Spiel gegen einen Freund."</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="healthy" data-correct="true">🤝 Gratuliert, will nochmal spielen</div>
+                        <div class="scenario-option" data-response="moderate">😕 Enttäuscht, aber akzeptiert es</div>
+                        <div class="scenario-option" data-response="unhealthy">😤 Wird wütend, beschuldigt andere</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="homework">
+                    <h4>Schwierige Aufgabe</h4>
+                    <div class="scenario-situation">"Eine Hausaufgabe ist sehr schwer und klappt nicht."</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="healthy" data-correct="true">🙋 Fragt um Hilfe, probiert weiter</div>
+                        <div class="scenario-option" data-response="moderate">😣 Frustriert, macht Pause</div>
+                        <div class="scenario-option" data-response="unhealthy">📝 Zerreißt das Blatt, weint</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="cancel">
+                    <h4>Ausflug fällt aus</h4>
+                    <div class="scenario-situation">"Ein geplanter Ausflug muss wegen Regen abgesagt werden."</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="healthy" data-correct="true">🌧️ Enttäuscht, sucht Alternative</div>
+                        <div class="scenario-option" data-response="moderate">😢 Sehr traurig, braucht Trost</div>
+                        <div class="scenario-option" data-response="unhealthy">😤 Ausraster, stundenlange Wut</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Frustrations-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere frustrierende Situationen und den Umgang damit:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Frustrations-Level (1-5)</label>
+                        <select id="logLevel">
+                            <option value="">-- Wählen --</option>
+                            <option value="1">1 - Leicht</option>
+                            <option value="2">2 - Mäßig</option>
+                            <option value="3">3 - Deutlich</option>
+                            <option value="4">4 - Stark</option>
+                            <option value="5">5 - Überwältigend</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Was hat die Frustration ausgelöst?</label>
+                    <textarea id="logTrigger" placeholder="Beschreibe die Situation"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Wie hat das Kind reagiert?</label>
+                    <textarea id="logReaction" placeholder="Verhalten beschreiben"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Verwendete Strategie</label>
+                        <input type="text" id="logStrategy" placeholder="z.B. Tief atmen, Pause machen">
+                    </div>
+                    <div class="form-group">
+                        <label>Bewältigung</label>
+                        <select id="logCoping">
+                            <option value="">-- Wählen --</option>
+                            <option value="gut">Gut bewältigt</option>
+                            <option value="hilfe">Mit Hilfe bewältigt</option>
+                            <option value="schwer">Schwer gefallen</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Frustrationstoleranz:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="triggersCount">0/8</div>
+                        <div class="stat-label">Auslöser identifiziert</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="strategiesCount">0/8</div>
+                        <div class="stat-label">Strategien beherrscht</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="healthyScenarios">0/4</div>
+                        <div class="stat-label">Gesunde Reaktionen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Gefühle validieren:</strong> "Ich sehe, dass du frustriert bist. Das ist okay."</li>
+                <li><strong>Strategien üben:</strong> Im ruhigen Zustand Bewältigungsstrategien einüben</li>
+                <li><strong>Vorbild sein:</strong> Eigene Frustration konstruktiv bewältigen</li>
+                <li><strong>Kleine Erfolge:</strong> Frustrationstoleranz schrittweise aufbauen</li>
+                <li><strong>Vorhersehbare Situationen:</strong> Vorher besprechen und vorbereiten</li>
+                <li><strong>Nachbesprechung:</strong> Was hat geholfen? Was können wir nächstes Mal tun?</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            frustrationLevel: 0,
+            triggers: {},
+            strategies: {},
+            scenarios: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V30_arbeit';
+
+        function init() {
+            loadData();
+
+            // Frustration level
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const level = parseInt(this.dataset.level);
+                    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    data.frustrationLevel = level;
+                    updateVolcano();
+                    saveData();
+                });
+                if (parseInt(btn.dataset.level) === data.frustrationLevel) {
+                    btn.classList.add('active');
+                }
+            });
+            updateVolcano();
+
+            // Triggers
+            document.querySelectorAll('.trigger').forEach(t => {
+                t.addEventListener('click', function() {
+                    this.classList.toggle('identified');
+                    data.triggers[this.dataset.trigger] = this.classList.contains('identified');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.triggers[t.dataset.trigger]) {
+                    t.classList.add('identified');
+                }
+            });
+
+            // Strategies
+            document.querySelectorAll('.coping-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const strategy = this.dataset.strategy;
+                    const states = ['', 'learning', 'mastered'];
+                    const current = data.strategies[strategy] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+
+                    this.classList.remove('learning', 'mastered');
+                    if (next) this.classList.add(next);
+
+                    const statusText = { '': 'Nicht geprüft', 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    this.querySelector('.status').textContent = statusText[next];
+
+                    data.strategies[strategy] = next;
+                    updateProgress();
+                    saveData();
+                });
+
+                if (data.strategies[card.dataset.strategy]) {
+                    card.classList.add(data.strategies[card.dataset.strategy]);
+                    const statusText = { 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    card.querySelector('.status').textContent = statusText[data.strategies[card.dataset.strategy]] || 'Nicht geprüft';
+                }
+            });
+
+            // Scenarios
+            document.querySelectorAll('.scenario-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const scenario = this.closest('.scenario').dataset.scenario;
+                    const response = this.dataset.response;
+                    this.closest('.scenario-options').querySelectorAll('.scenario-option').forEach(o => {
+                        o.classList.remove('selected', 'healthy', 'unhealthy');
+                    });
+                    this.classList.add('selected');
+                    if (response === 'healthy') this.classList.add('healthy');
+                    else if (response === 'unhealthy') this.classList.add('unhealthy');
+                    data.scenarios[scenario] = { response, healthy: response === 'healthy' };
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Restore scenarios
+            Object.entries(data.scenarios).forEach(([scenario, { response }]) => {
+                const sc = document.querySelector(`.scenario[data-scenario="${scenario}"]`);
+                if (sc) {
+                    const opt = sc.querySelector(`.scenario-option[data-response="${response}"]`);
+                    if (opt) {
+                        opt.classList.add('selected');
+                        if (response === 'healthy') opt.classList.add('healthy');
+                        else if (response === 'unhealthy') opt.classList.add('unhealthy');
+                    }
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function updateVolcano() {
+            const volcano = document.getElementById('volcanoTop');
+            volcano.className = 'volcano-top';
+            if (data.frustrationLevel > 0) {
+                volcano.classList.add('level-' + data.frustrationLevel);
+            }
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const level = document.getElementById('logLevel').value;
+            const trigger = document.getElementById('logTrigger').value;
+            const reaction = document.getElementById('logReaction').value;
+            const strategy = document.getElementById('logStrategy').value;
+            const coping = document.getElementById('logCoping').value;
+
+            if (!date || !trigger) {
+                alert('Bitte mindestens Datum und Auslöser ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, level, trigger, reaction, strategy, coping, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logTrigger').value = '';
+            document.getElementById('logReaction').value = '';
+            document.getElementById('logStrategy').value = '';
+            document.getElementById('logCoping').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            const levelClass = l => l <= 2 ? 'low' : (l <= 3 ? 'medium' : 'high');
+            const copingIcons = { 'gut': '✅', 'hilfe': '🤝', 'schwer': '💪' };
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-content">
+                        <span class="log-entry-level ${levelClass(log.level)}">Level ${log.level}</span>
+                        <strong>${log.trigger}</strong>
+                        ${log.reaction ? `<p style="margin:5px 0;font-size:0.9em;">${log.reaction}</p>` : ''}
+                        <div class="log-entry-meta">
+                            ${log.date} | Strategie: ${log.strategy || '-'} | ${copingIcons[log.coping] || ''} ${log.coping || ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const triggersCount = Object.values(data.triggers).filter(v => v).length;
+            const masteredStrategies = Object.values(data.strategies).filter(v => v === 'mastered').length;
+            const healthyScenarios = Object.values(data.scenarios).filter(s => s.healthy).length;
+
+            document.getElementById('triggersCount').textContent = triggersCount + '/8';
+            document.getElementById('strategiesCount').textContent = masteredStrategies + '/8';
+            document.getElementById('healthyScenarios').textContent = healthyScenarios + '/4';
+
+            const progress = Math.round((triggersCount / 8 * 20) + (masteredStrategies / 8 * 40) + (healthyScenarios / 4 * 40));
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-30',
+                title: 'Mit Frustration umgehen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-30_Frustration_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

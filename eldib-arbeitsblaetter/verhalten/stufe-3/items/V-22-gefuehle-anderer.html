@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-22: Gefühle anderer erkennen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #f5576c; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #f5576c; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #f5576c; }
+        .face-reading { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .face-card { background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
+        .face-card:hover { transform: translateY(-5px); }
+        .face-card.mastered { border-color: #4caf50; background: #e8f5e9; }
+        .face-card.learning { border-color: #ff9800; background: #fff3e0; }
+        .face-card .face-emoji { font-size: 3em; margin-bottom: 10px; }
+        .face-card .face-label { font-weight: 600; color: #333; }
+        .face-card .face-status { font-size: 0.8em; margin-top: 5px; color: #888; }
+        .cues-section { margin: 20px 0; }
+        .cue-category { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .cue-category h4 { color: #f5576c; margin-bottom: 15px; }
+        .cue-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .cue-item { background: white; padding: 10px 15px; border-radius: 20px; cursor: pointer; border: 2px solid #e0e0e0; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .cue-item:hover { border-color: #f5576c; }
+        .cue-item.recognized { background: #f5576c; color: white; border-color: #f5576c; }
+        .scenario-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }
+        .scenario { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .scenario-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .scenario-title { font-weight: 600; color: #333; }
+        .scenario-text { color: #666; line-height: 1.6; margin-bottom: 15px; font-style: italic; }
+        .scenario-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .scenario-option { padding: 8px 15px; border-radius: 20px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; font-size: 0.9em; }
+        .scenario-option:hover { border-color: #f5576c; }
+        .scenario-option.selected { background: #f5576c; color: white; border-color: #f5576c; }
+        .scenario-option.correct { background: #4caf50; color: white; border-color: #4caf50; }
+        .empathy-tracker { margin: 20px 0; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(245,87,108,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .observation-list { margin-top: 20px; }
+        .observation { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .observation-content { flex: 1; }
+        .observation-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .skill-item { background: #f8f9fa; border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+        .skill-check { width: 30px; height: 30px; border: 3px solid #e0e0e0; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .skill-check.checked { background: #f5576c; border-color: #f5576c; color: white; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #f093fb, #f5576c); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #f5576c; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-22 | Verhalten Stufe III</span>
+            <h1>Gefühle anderer erkennen</h1>
+            <p>Das Kind lernt, emotionale Zustände bei anderen Menschen zu erkennen und angemessen darauf zu reagieren. Diese Fähigkeit ist grundlegend für Empathie und soziale Interaktion.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III entwickeln Kinder die Fähigkeit, Gefühle bei anderen zu erkennen – durch Mimik, Gestik, Tonfall und Körperhaltung. Sie lernen, diese Signale zu interpretieren und ihr eigenes Verhalten entsprechend anzupassen. Diese soziale Wahrnehmung bildet die Basis für empathisches Handeln.</p>
+        </div>
+
+        <div class="card">
+            <h2>😊 Gesichter lesen</h2>
+            <p style="margin-bottom: 15px;">Welche Gefühle kann das Kind in Gesichtern erkennen? Klicke zum Ändern des Status:</p>
+            <div class="face-reading">
+                <div class="face-card" data-face="happy">
+                    <div class="face-emoji">😊</div>
+                    <div class="face-label">Freude</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+                <div class="face-card" data-face="sad">
+                    <div class="face-emoji">😢</div>
+                    <div class="face-label">Trauer</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+                <div class="face-card" data-face="angry">
+                    <div class="face-emoji">😠</div>
+                    <div class="face-label">Wut</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+                <div class="face-card" data-face="scared">
+                    <div class="face-emoji">😨</div>
+                    <div class="face-label">Angst</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+                <div class="face-card" data-face="surprised">
+                    <div class="face-emoji">😲</div>
+                    <div class="face-label">Überraschung</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+                <div class="face-card" data-face="worried">
+                    <div class="face-emoji">😟</div>
+                    <div class="face-label">Sorge</div>
+                    <div class="face-status">Nicht geprüft</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👀 Erkennungsmerkmale</h2>
+            <p style="margin-bottom: 15px;">Welche Hinweise kann das Kind nutzen, um Gefühle zu erkennen?</p>
+            <div class="cues-section">
+                <div class="cue-category">
+                    <h4>Mimik (Gesichtsausdruck)</h4>
+                    <div class="cue-items">
+                        <div class="cue-item" data-cue="smile">😊 Lächeln</div>
+                        <div class="cue-item" data-cue="tears">😢 Tränen</div>
+                        <div class="cue-item" data-cue="frown">☹️ Stirnrunzeln</div>
+                        <div class="cue-item" data-cue="eyes-wide">👀 Große Augen</div>
+                        <div class="cue-item" data-cue="mouth-open">😮 Offener Mund</div>
+                    </div>
+                </div>
+                <div class="cue-category">
+                    <h4>Körpersprache</h4>
+                    <div class="cue-items">
+                        <div class="cue-item" data-cue="shoulders-down">😔 Hängende Schultern</div>
+                        <div class="cue-item" data-cue="arms-crossed">🙅 Verschränkte Arme</div>
+                        <div class="cue-item" data-cue="jumping">🤸 Hüpfen vor Freude</div>
+                        <div class="cue-item" data-cue="hiding">🙈 Verstecken</div>
+                        <div class="cue-item" data-cue="fists">✊ Geballte Fäuste</div>
+                    </div>
+                </div>
+                <div class="cue-category">
+                    <h4>Stimme und Tonfall</h4>
+                    <div class="cue-items">
+                        <div class="cue-item" data-cue="loud">📢 Laute Stimme</div>
+                        <div class="cue-item" data-cue="quiet">🤫 Leise Stimme</div>
+                        <div class="cue-item" data-cue="shaky">〰️ Zitternde Stimme</div>
+                        <div class="cue-item" data-cue="fast">⚡ Schnelles Sprechen</div>
+                        <div class="cue-item" data-cue="crying">😭 Weinen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Situations-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Wie reagiert das Kind auf folgende Situationen? Wähle die erkannte Emotion:</p>
+            <div class="scenario-cards">
+                <div class="scenario" data-scenario="1">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Szenario 1</span>
+                    </div>
+                    <p class="scenario-text">"Lisa hat rote Augen und ihre Stimme zittert. Sie sagt, ihr Hamster ist gestorben."</p>
+                    <div class="scenario-options">
+                        <span class="scenario-option" data-answer="happy">Freude</span>
+                        <span class="scenario-option" data-answer="sad" data-correct="true">Trauer</span>
+                        <span class="scenario-option" data-answer="angry">Wut</span>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="2">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Szenario 2</span>
+                    </div>
+                    <p class="scenario-text">"Tom stampft mit dem Fuß und ruft: 'Das ist gemein!' Sein Gesicht ist rot."</p>
+                    <div class="scenario-options">
+                        <span class="scenario-option" data-answer="sad">Trauer</span>
+                        <span class="scenario-option" data-answer="angry" data-correct="true">Wut</span>
+                        <span class="scenario-option" data-answer="scared">Angst</span>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="3">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Szenario 3</span>
+                    </div>
+                    <p class="scenario-text">"Maria springt auf und ab, klatscht in die Hände und lacht laut: 'Ich habe gewonnen!'"</p>
+                    <div class="scenario-options">
+                        <span class="scenario-option" data-answer="happy" data-correct="true">Freude</span>
+                        <span class="scenario-option" data-answer="surprised">Überraschung</span>
+                        <span class="scenario-option" data-answer="angry">Wut</span>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="4">
+                    <div class="scenario-header">
+                        <span class="scenario-title">Szenario 4</span>
+                    </div>
+                    <p class="scenario-text">"Paul versteckt sich hinter seiner Mama und flüstert: 'Der Hund ist so groß...'"</p>
+                    <div class="scenario-options">
+                        <span class="scenario-option" data-answer="sad">Trauer</span>
+                        <span class="scenario-option" data-answer="happy">Freude</span>
+                        <span class="scenario-option" data-answer="scared" data-correct="true">Angst</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Beobachtungs-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere Situationen, in denen das Kind Gefühle bei anderen erkannt hat:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="obsDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Erkanntes Gefühl</label>
+                        <select id="obsEmotion">
+                            <option value="">-- Gefühl wählen --</option>
+                            <option value="Freude">😊 Freude</option>
+                            <option value="Trauer">😢 Trauer</option>
+                            <option value="Wut">😠 Wut</option>
+                            <option value="Angst">😨 Angst</option>
+                            <option value="Überraschung">😲 Überraschung</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Bei wem wurde das Gefühl erkannt?</label>
+                    <input type="text" id="obsPerson" placeholder="z.B. Mitschüler, Geschwister, Erwachsener">
+                </div>
+                <div class="form-group">
+                    <label>Situation beschreiben</label>
+                    <textarea id="obsSituation" placeholder="Was ist passiert? Wie hat das Kind reagiert?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Reaktion des Kindes</label>
+                    <select id="obsReaction">
+                        <option value="">-- Reaktion wählen --</option>
+                        <option value="angemessen">Angemessen reagiert</option>
+                        <option value="empathisch">Empathisch/tröstend</option>
+                        <option value="unsicher">Unsicher/überfordert</option>
+                        <option value="ignoriert">Nicht beachtet</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addObservation()">Beobachtung hinzufügen</button>
+            </div>
+            <div class="observation-list" id="observationList"></div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Kompetenzen</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="recognize-face" onclick="toggleSkill(this)"></div>
+                    <span>Erkennt Gefühle in Gesichtern</span>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="recognize-body" onclick="toggleSkill(this)"></div>
+                    <span>Liest Körpersprache</span>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="recognize-voice" onclick="toggleSkill(this)"></div>
+                    <span>Hört Gefühle in der Stimme</span>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="respond-appropriate" onclick="toggleSkill(this)"></div>
+                    <span>Reagiert angemessen</span>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="comfort" onclick="toggleSkill(this)"></div>
+                    <span>Kann trösten</span>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-check" data-skill="ask-feelings" onclick="toggleSkill(this)"></div>
+                    <span>Fragt nach Gefühlen</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Empathie-Entwicklung:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="facesCount">0/6</div>
+                        <div class="stat-label">Erkannte Gesichter</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="scenarioCount">0/4</div>
+                        <div class="stat-label">Szenarien gelöst</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="obsCount">0</div>
+                        <div class="stat-label">Beobachtungen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Gefühle verbalisieren:</strong> "Schau mal, Lisa weint. Wie fühlt sie sich wohl?"</li>
+                <li><strong>Bilderbücher nutzen:</strong> Gefühle von Figuren besprechen</li>
+                <li><strong>Rollenspiele:</strong> Verschiedene Emotionen darstellen</li>
+                <li><strong>Fotos und Videos:</strong> Gesichtsausdrücke analysieren</li>
+                <li><strong>Im Alltag üben:</strong> Auf Gefühle anderer hinweisen</li>
+                <li><strong>Empathie modellieren:</strong> Eigene empathische Reaktionen zeigen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            faces: {},
+            cues: {},
+            scenarios: {},
+            skills: {},
+            observations: []
+        };
+        const STORAGE_KEY = 'eldib_V22_arbeit';
+
+        function init() {
+            loadData();
+
+            document.querySelectorAll('.face-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const face = this.dataset.face;
+                    const states = ['', 'learning', 'mastered'];
+                    const current = data.faces[face] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+
+                    this.classList.remove('learning', 'mastered');
+                    if (next) this.classList.add(next);
+
+                    const statusText = { '': 'Nicht geprüft', 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    this.querySelector('.face-status').textContent = statusText[next];
+
+                    data.faces[face] = next;
+                    updateProgress();
+                    saveData();
+                });
+
+                if (data.faces[card.dataset.face]) {
+                    card.classList.add(data.faces[card.dataset.face]);
+                    const statusText = { 'learning': '🔄 Wird geübt', 'mastered': '✅ Beherrscht' };
+                    card.querySelector('.face-status').textContent = statusText[data.faces[card.dataset.face]] || 'Nicht geprüft';
+                }
+            });
+
+            document.querySelectorAll('.cue-item').forEach(cue => {
+                cue.addEventListener('click', function() {
+                    this.classList.toggle('recognized');
+                    data.cues[this.dataset.cue] = this.classList.contains('recognized');
+                    saveData();
+                });
+                if (data.cues[cue.dataset.cue]) {
+                    cue.classList.add('recognized');
+                }
+            });
+
+            document.querySelectorAll('.scenario-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const scenario = this.closest('.scenario').dataset.scenario;
+                    this.closest('.scenario-options').querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected', 'correct'));
+                    this.classList.add('selected');
+                    if (this.dataset.correct) this.classList.add('correct');
+                    data.scenarios[scenario] = this.dataset.answer;
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Restore scenario selections
+            Object.entries(data.scenarios).forEach(([scenario, answer]) => {
+                const scenarioEl = document.querySelector(`.scenario[data-scenario="${scenario}"]`);
+                if (scenarioEl) {
+                    const opt = scenarioEl.querySelector(`.scenario-option[data-answer="${answer}"]`);
+                    if (opt) {
+                        opt.classList.add('selected');
+                        if (opt.dataset.correct) opt.classList.add('correct');
+                    }
+                }
+            });
+
+            // Restore skills
+            document.querySelectorAll('.skill-check').forEach(check => {
+                if (data.skills[check.dataset.skill]) {
+                    check.classList.add('checked');
+                    check.textContent = '✓';
+                }
+            });
+
+            document.getElementById('obsDate').value = new Date().toISOString().split('T')[0];
+            renderObservations();
+            updateProgress();
+        }
+
+        function toggleSkill(el) {
+            el.classList.toggle('checked');
+            el.textContent = el.classList.contains('checked') ? '✓' : '';
+            data.skills[el.dataset.skill] = el.classList.contains('checked');
+            updateProgress();
+            saveData();
+        }
+
+        function addObservation() {
+            const date = document.getElementById('obsDate').value;
+            const emotion = document.getElementById('obsEmotion').value;
+            const person = document.getElementById('obsPerson').value;
+            const situation = document.getElementById('obsSituation').value;
+            const reaction = document.getElementById('obsReaction').value;
+
+            if (!date || !emotion || !situation) {
+                alert('Bitte Datum, Gefühl und Situation ausfüllen.');
+                return;
+            }
+
+            data.observations.push({ date, emotion, person, situation, reaction, id: Date.now() });
+            saveData();
+            renderObservations();
+            updateProgress();
+
+            document.getElementById('obsPerson').value = '';
+            document.getElementById('obsSituation').value = '';
+            document.getElementById('obsReaction').value = '';
+        }
+
+        function deleteObservation(id) {
+            data.observations = data.observations.filter(o => o.id !== id);
+            saveData();
+            renderObservations();
+            updateProgress();
+        }
+
+        function renderObservations() {
+            const container = document.getElementById('observationList');
+            if (data.observations.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Beobachtungen.</p>';
+                return;
+            }
+            container.innerHTML = data.observations.slice().reverse().map(obs => `
+                <div class="observation">
+                    <div class="observation-content">
+                        <strong>${obs.emotion} bei ${obs.person || 'jemand'}</strong>
+                        <p style="margin: 5px 0;">${obs.situation}</p>
+                        <div class="observation-meta">
+                            ${obs.date} | Reaktion: ${obs.reaction || 'nicht angegeben'}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteObservation(${obs.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const mastered = Object.values(data.faces).filter(v => v === 'mastered').length;
+            const correctScenarios = document.querySelectorAll('.scenario-option.correct.selected').length;
+            const skillsChecked = Object.values(data.skills).filter(v => v).length;
+
+            document.getElementById('facesCount').textContent = mastered + '/6';
+            document.getElementById('scenarioCount').textContent = correctScenarios + '/4';
+            document.getElementById('obsCount').textContent = data.observations.length;
+
+            const progress = Math.round((mastered / 6 * 30) + (correctScenarios / 4 * 30) + (skillsChecked / 6 * 20) + Math.min(data.observations.length / 5, 1) * 20);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-22',
+                title: 'Gefühle anderer erkennen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-22_Gefuehle-anderer_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

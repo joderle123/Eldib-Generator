@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-23: Ursache-Wirkung verstehen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #4facfe; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #4facfe; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #4facfe; }
+        .chain-builder { margin: 20px 0; }
+        .chain-example { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; padding: 15px; background: #f0f8ff; border-radius: 15px; }
+        .chain-box { background: white; padding: 15px; border-radius: 10px; text-align: center; min-width: 120px; border: 2px solid #e0e0e0; }
+        .chain-box.cause { border-color: #ff9800; background: #fff3e0; }
+        .chain-box.effect { border-color: #4caf50; background: #e8f5e9; }
+        .chain-box .label { font-size: 0.75em; color: #888; margin-bottom: 5px; }
+        .chain-arrow { font-size: 1.5em; color: #4facfe; }
+        .scenarios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .scenario-card { background: #f8f9fa; border-radius: 15px; padding: 20px; border-left: 4px solid #4facfe; }
+        .scenario-card h4 { color: #333; margin-bottom: 10px; }
+        .scenario-situation { color: #666; margin-bottom: 15px; font-style: italic; }
+        .scenario-question { font-weight: 600; margin-bottom: 10px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 8px; }
+        .scenario-option { padding: 10px 15px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .scenario-option:hover { border-color: #4facfe; }
+        .scenario-option.selected { border-color: #4facfe; background: #e3f2fd; }
+        .scenario-option.correct { border-color: #4caf50; background: #e8f5e9; }
+        .scenario-option.incorrect { border-color: #f44336; background: #ffebee; }
+        .if-then-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .if-then-card { background: #f8f9fa; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .if-then-card:hover { transform: translateY(-3px); }
+        .if-then-card.understood { border-color: #4caf50; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .if-then-card .if-part { color: #ff9800; font-weight: 600; margin-bottom: 10px; }
+        .if-then-card .then-part { color: #4caf50; }
+        .consequence-tracker { margin: 20px 0; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(79,172,254,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .log-entry-content { flex: 1; }
+        .log-entry-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .thinking-steps { background: #f8f9fa; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .step { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; }
+        .step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .step-number { width: 35px; height: 35px; border-radius: 50%; background: #4facfe; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .step-content h4 { color: #333; margin-bottom: 5px; }
+        .step-content p { color: #666; font-size: 0.95em; }
+        .checklist { list-style: none; }
+        .checklist li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .checklist li:hover { background: #f8f9fa; }
+        .check-box { width: 24px; height: 24px; border: 2px solid #e0e0e0; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+        .check-box.checked { background: #4facfe; border-color: #4facfe; color: white; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #4facfe, #00f2fe); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #4facfe; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .chain-example { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-23 | Verhalten Stufe III</span>
+            <h1>Ursache-Wirkung verstehen</h1>
+            <p>Das Kind lernt, Zusammenhänge zwischen Handlungen und deren Konsequenzen zu erkennen. Dieses Verständnis ist grundlegend für vorausschauendes Denken und verantwortungsvolles Handeln.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) entwickeln Kinder das Verständnis für kausale Zusammenhänge. Sie lernen zu verstehen, dass bestimmte Handlungen zu bestimmten Ergebnissen führen – sowohl positive als auch negative. Diese Fähigkeit ermöglicht es ihnen, Konsequenzen vorherzusehen und ihr Verhalten entsprechend zu steuern.</p>
+        </div>
+
+        <div class="card">
+            <h2>🔗 Ursache-Wirkung-Ketten</h2>
+            <p style="margin-bottom: 15px;">Beispiele für Ursache-Wirkung-Zusammenhänge:</p>
+            <div class="chain-builder">
+                <div class="chain-example">
+                    <div class="chain-box cause">
+                        <div class="label">URSACHE</div>
+                        <div>Ich teile mein Spielzeug</div>
+                    </div>
+                    <span class="chain-arrow">→</span>
+                    <div class="chain-box effect">
+                        <div class="label">WIRKUNG</div>
+                        <div>Andere spielen gerne mit mir</div>
+                    </div>
+                </div>
+                <div class="chain-example">
+                    <div class="chain-box cause">
+                        <div class="label">URSACHE</div>
+                        <div>Ich schubse jemanden</div>
+                    </div>
+                    <span class="chain-arrow">→</span>
+                    <div class="chain-box effect">
+                        <div class="label">WIRKUNG</div>
+                        <div>Die Person ist traurig/wütend</div>
+                    </div>
+                </div>
+                <div class="chain-example">
+                    <div class="chain-box cause">
+                        <div class="label">URSACHE</div>
+                        <div>Ich übe jeden Tag</div>
+                    </div>
+                    <span class="chain-arrow">→</span>
+                    <div class="chain-box effect">
+                        <div class="label">WIRKUNG</div>
+                        <div>Ich werde besser</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧩 Wenn-Dann-Verständnis</h2>
+            <p style="margin-bottom: 15px;">Welche Wenn-Dann-Zusammenhänge versteht das Kind? Klicke auf verstandene Karten:</p>
+            <div class="if-then-cards">
+                <div class="if-then-card" data-card="rules">
+                    <div class="if-part">WENN ich die Regeln befolge...</div>
+                    <div class="then-part">DANN läuft alles gut und es gibt keinen Ärger.</div>
+                </div>
+                <div class="if-then-card" data-card="help">
+                    <div class="if-part">WENN ich anderen helfe...</div>
+                    <div class="then-part">DANN helfen sie mir auch, wenn ich Hilfe brauche.</div>
+                </div>
+                <div class="if-then-card" data-card="homework">
+                    <div class="if-part">WENN ich meine Hausaufgaben mache...</div>
+                    <div class="then-part">DANN habe ich danach frei zum Spielen.</div>
+                </div>
+                <div class="if-then-card" data-card="lie">
+                    <div class="if-part">WENN ich lüge...</div>
+                    <div class="then-part">DANN vertrauen mir andere nicht mehr.</div>
+                </div>
+                <div class="if-then-card" data-card="practice">
+                    <div class="if-part">WENN ich regelmäßig übe...</div>
+                    <div class="then-part">DANN werde ich immer besser.</div>
+                </div>
+                <div class="if-then-card" data-card="anger">
+                    <div class="if-part">WENN ich schreie und schlage...</div>
+                    <div class="then-part">DANN will niemand mit mir spielen.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>❓ Szenarien-Quiz</h2>
+            <p style="margin-bottom: 15px;">Was wird wahrscheinlich passieren?</p>
+            <div class="scenarios-grid">
+                <div class="scenario-card" data-scenario="1">
+                    <h4>Szenario 1</h4>
+                    <p class="scenario-situation">"Tim nimmt ohne zu fragen das Spielzeug von Anna weg."</p>
+                    <p class="scenario-question">Was wird wahrscheinlich passieren?</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-answer="a">Anna freut sich</div>
+                        <div class="scenario-option" data-answer="b" data-correct="true">Anna ist traurig oder wütend</div>
+                        <div class="scenario-option" data-answer="c">Nichts passiert</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="2">
+                    <h4>Szenario 2</h4>
+                    <p class="scenario-situation">"Lisa hilft einem neuen Kind, den Weg zur Klasse zu finden."</p>
+                    <p class="scenario-question">Was wird wahrscheinlich passieren?</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-answer="a" data-correct="true">Das neue Kind ist dankbar und möchte Lisas Freund sein</div>
+                        <div class="scenario-option" data-answer="b">Das neue Kind ignoriert Lisa</div>
+                        <div class="scenario-option" data-answer="c">Lisa bekommt Ärger</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="3">
+                    <h4>Szenario 3</h4>
+                    <p class="scenario-situation">"Max macht seine Hausaufgaben nicht, obwohl er Zeit hatte."</p>
+                    <p class="scenario-question">Was wird wahrscheinlich passieren?</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-answer="a">Der Lehrer lobt Max</div>
+                        <div class="scenario-option" data-answer="b" data-correct="true">Max bekommt Ärger und muss es nachholen</div>
+                        <div class="scenario-option" data-answer="c">Niemand merkt es</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="4">
+                    <h4>Szenario 4</h4>
+                    <p class="scenario-situation">"Emma sagt die Wahrheit, obwohl sie Angst vor Ärger hat."</p>
+                    <p class="scenario-question">Was wird wahrscheinlich passieren?</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-answer="a" data-correct="true">Die Erwachsenen vertrauen Emma und sind weniger böse</div>
+                        <div class="scenario-option" data-answer="b">Emma bekommt mehr Ärger als wenn sie gelogen hätte</div>
+                        <div class="scenario-option" data-answer="c">Niemand glaubt Emma</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧠 Denkschritte lernen</h2>
+            <div class="thinking-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Was ist passiert?</h4>
+                        <p>Die Situation beschreiben: "Ich habe... getan"</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Was ist dann passiert?</h4>
+                        <p>Die Folge erkennen: "Dann ist... passiert"</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Gibt es einen Zusammenhang?</h4>
+                        <p>Verbindung herstellen: "Weil ich... getan habe, ist... passiert"</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Was kann ich lernen?</h4>
+                        <p>Für die Zukunft merken: "Nächstes Mal werde ich..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Erfahrungs-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere Situationen, in denen das Kind Ursache-Wirkung verstanden hat:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Kontext</label>
+                        <select id="logContext">
+                            <option value="">-- Wählen --</option>
+                            <option value="schule">Schule/Kita</option>
+                            <option value="zuhause">Zuhause</option>
+                            <option value="spielplatz">Spielplatz/Draußen</option>
+                            <option value="freunde">Mit Freunden</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Handlung (Ursache)</label>
+                    <textarea id="logCause" placeholder="Was hat das Kind getan?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Konsequenz (Wirkung)</label>
+                    <textarea id="logEffect" placeholder="Was ist daraufhin passiert?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Hat das Kind den Zusammenhang erkannt?</label>
+                    <select id="logUnderstanding">
+                        <option value="">-- Wählen --</option>
+                        <option value="selbst">Ja, selbstständig erkannt</option>
+                        <option value="hilfe">Mit Hilfe erkannt</option>
+                        <option value="nicht">Noch nicht erkannt</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Kompetenz-Checkliste</h2>
+            <ul class="checklist" id="checklist">
+                <li data-item="immediate">
+                    <div class="check-box"></div>
+                    <span>Versteht unmittelbare Konsequenzen (wenn ich X tue, passiert sofort Y)</span>
+                </li>
+                <li data-item="delayed">
+                    <div class="check-box"></div>
+                    <span>Versteht zeitversetzte Konsequenzen (wenn ich jetzt X tue, passiert später Y)</span>
+                </li>
+                <li data-item="positive">
+                    <div class="check-box"></div>
+                    <span>Erkennt positive Konsequenzen von positivem Verhalten</span>
+                </li>
+                <li data-item="negative">
+                    <div class="check-box"></div>
+                    <span>Erkennt negative Konsequenzen von negativem Verhalten</span>
+                </li>
+                <li data-item="predict">
+                    <div class="check-box"></div>
+                    <span>Kann Konsequenzen vor einer Handlung vorhersagen</span>
+                </li>
+                <li data-item="adjust">
+                    <div class="check-box"></div>
+                    <span>Passt Verhalten aufgrund erwarteter Konsequenzen an</span>
+                </li>
+                <li data-item="explain">
+                    <div class="check-box"></div>
+                    <span>Kann Ursache-Wirkung-Zusammenhänge erklären</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Verständnis für Ursache-Wirkung:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="ifThenCount">0/6</div>
+                        <div class="stat-label">Wenn-Dann verstanden</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="scenarioCount">0/4</div>
+                        <div class="stat-label">Szenarien richtig</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="logCount">0</div>
+                        <div class="stat-label">Dokumentierte Erfahrungen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Konsequenzen verbalisieren:</strong> "Weil du geteilt hast, freut sich Lisa"</li>
+                <li><strong>Vorhersagen üben:</strong> "Was denkst du, passiert wenn...?"</li>
+                <li><strong>Natürliche Konsequenzen:</strong> Erleben lassen statt nur erklären</li>
+                <li><strong>Geschichten analysieren:</strong> Ursache-Wirkung in Büchern besprechen</li>
+                <li><strong>Rückblick üben:</strong> "Was ist passiert? Warum?"</li>
+                <li><strong>Positive Verstärkung:</strong> Richtiges Verständnis loben</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            ifThen: {},
+            scenarios: {},
+            checklist: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V23_arbeit';
+
+        function init() {
+            loadData();
+
+            document.querySelectorAll('.if-then-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const id = this.dataset.card;
+                    this.classList.toggle('understood');
+                    data.ifThen[id] = this.classList.contains('understood');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.ifThen[card.dataset.card]) {
+                    card.classList.add('understood');
+                }
+            });
+
+            document.querySelectorAll('.scenario-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const scenario = this.closest('.scenario-card').dataset.scenario;
+                    this.closest('.scenario-options').querySelectorAll('.scenario-option').forEach(o => {
+                        o.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    this.classList.add('selected');
+                    if (this.dataset.correct) {
+                        this.classList.add('correct');
+                    } else {
+                        this.classList.add('incorrect');
+                    }
+                    data.scenarios[scenario] = { answer: this.dataset.answer, correct: !!this.dataset.correct };
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Restore scenarios
+            Object.entries(data.scenarios).forEach(([scenario, { answer }]) => {
+                const card = document.querySelector(`.scenario-card[data-scenario="${scenario}"]`);
+                if (card) {
+                    const opt = card.querySelector(`.scenario-option[data-answer="${answer}"]`);
+                    if (opt) {
+                        opt.classList.add('selected');
+                        if (opt.dataset.correct) opt.classList.add('correct');
+                        else opt.classList.add('incorrect');
+                    }
+                }
+            });
+
+            document.querySelectorAll('.checklist li').forEach(li => {
+                li.addEventListener('click', function() {
+                    const item = this.dataset.item;
+                    const box = this.querySelector('.check-box');
+                    box.classList.toggle('checked');
+                    box.textContent = box.classList.contains('checked') ? '✓' : '';
+                    data.checklist[item] = box.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.checklist[li.dataset.item]) {
+                    const box = li.querySelector('.check-box');
+                    box.classList.add('checked');
+                    box.textContent = '✓';
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const context = document.getElementById('logContext').value;
+            const cause = document.getElementById('logCause').value;
+            const effect = document.getElementById('logEffect').value;
+            const understanding = document.getElementById('logUnderstanding').value;
+
+            if (!date || !cause || !effect) {
+                alert('Bitte Datum, Handlung und Konsequenz ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, context, cause, effect, understanding, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logCause').value = '';
+            document.getElementById('logEffect').value = '';
+            document.getElementById('logUnderstanding').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            const understandingLabels = {
+                'selbst': '✅ Selbstständig erkannt',
+                'hilfe': '🔄 Mit Hilfe erkannt',
+                'nicht': '❌ Noch nicht erkannt'
+            };
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-content">
+                        <strong>Ursache:</strong> ${log.cause}<br>
+                        <strong>Wirkung:</strong> ${log.effect}
+                        <div class="log-entry-meta">
+                            ${log.date} | ${log.context || ''} | ${understandingLabels[log.understanding] || ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const ifThenCount = Object.values(data.ifThen).filter(v => v).length;
+            const correctScenarios = Object.values(data.scenarios).filter(s => s.correct).length;
+            const checklistCount = Object.values(data.checklist).filter(v => v).length;
+
+            document.getElementById('ifThenCount').textContent = ifThenCount + '/6';
+            document.getElementById('scenarioCount').textContent = correctScenarios + '/4';
+            document.getElementById('logCount').textContent = data.logs.length;
+
+            const progress = Math.round((ifThenCount / 6 * 30) + (correctScenarios / 4 * 30) + (checklistCount / 7 * 25) + Math.min(data.logs.length / 5, 1) * 15);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-23',
+                title: 'Ursache-Wirkung verstehen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-23_Ursache-Wirkung_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

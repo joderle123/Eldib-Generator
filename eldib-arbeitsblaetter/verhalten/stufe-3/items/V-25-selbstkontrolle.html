@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-25: Selbstkontrolle entwickeln - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #fa709a; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #fa709a; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .header p { color: #666; line-height: 1.6; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #fa709a; }
+        .zones-visual { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .zone { border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .zone.green { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 3px solid #4caf50; }
+        .zone.yellow { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 3px solid #ffc107; }
+        .zone.red { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 3px solid #f44336; }
+        .zone .emoji { font-size: 3em; margin-bottom: 10px; }
+        .zone .label { font-weight: 600; font-size: 1.1em; margin-bottom: 5px; }
+        .zone .desc { font-size: 0.85em; color: #666; }
+        .zone-tracker { margin-top: 10px; }
+        .zone-count { font-size: 1.5em; font-weight: bold; }
+        .strategies-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .strategy-card { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; text-align: center; }
+        .strategy-card:hover { transform: translateY(-3px); }
+        .strategy-card.learned { border-color: #4caf50; background: #e8f5e9; }
+        .strategy-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .strategy-card .name { font-weight: 600; color: #333; }
+        .strategy-card .desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .impulse-scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .impulse-card { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .impulse-card h4 { color: #fa709a; margin-bottom: 10px; }
+        .impulse-situation { background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .impulse-options { display: flex; flex-direction: column; gap: 8px; }
+        .impulse-option { padding: 10px 15px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+        .impulse-option:hover { border-color: #fa709a; }
+        .impulse-option.selected { border-color: #fa709a; background: #fce4ec; }
+        .impulse-option.good { border-color: #4caf50; background: #e8f5e9; }
+        .impulse-option.bad { border-color: #f44336; background: #ffebee; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #fa709a, #fee140); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(250,112,154,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .log-entry-content { flex: 1; }
+        .log-entry-meta { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .log-entry-zone { width: 15px; height: 15px; border-radius: 50%; margin-right: 10px; }
+        .log-entry-zone.green { background: #4caf50; }
+        .log-entry-zone.yellow { background: #ffc107; }
+        .log-entry-zone.red { background: #f44336; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .calm-down-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .calm-tool { background: #f8f9fa; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+        .calm-tool:hover { border-color: #fa709a; }
+        .calm-tool.effective { border-color: #4caf50; background: #e8f5e9; }
+        .calm-tool .tool-icon { font-size: 2em; margin-bottom: 5px; }
+        .calm-tool .tool-name { font-size: 0.9em; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #fa709a, #fee140); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #fa709a; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .zones-visual { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-25 | Verhalten Stufe III</span>
+            <h1>Selbstkontrolle entwickeln</h1>
+            <p>Das Kind lernt, seine Impulse zu erkennen und zu regulieren. Es entwickelt Strategien, um in herausfordernden Situationen angemessen zu reagieren statt impulsiv zu handeln.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe III (5-9 Jahre) beginnen Kinder, zwischen Impuls und Handlung einen "Stopp-Moment" einzubauen. Sie lernen, starke Gefühle zu erkennen, bevor sie handeln, und entwickeln Strategien, um sich zu beruhigen. Diese Selbstregulation ist fundamental für schulischen Erfolg und soziale Beziehungen.</p>
+        </div>
+
+        <div class="card">
+            <h2>🚦 Zonen der Regulation</h2>
+            <p style="margin-bottom: 15px;">In welcher Zone ist das Kind? Klicke zum Zählen von Situationen:</p>
+            <div class="zones-visual">
+                <div class="zone green" data-zone="green">
+                    <div class="emoji">😊</div>
+                    <div class="label">Grüne Zone</div>
+                    <div class="desc">Ruhig, konzentriert, bereit zum Lernen</div>
+                    <div class="zone-tracker">
+                        <div class="zone-count" id="greenCount">0</div>
+                        <small>Beobachtungen</small>
+                    </div>
+                </div>
+                <div class="zone yellow" data-zone="yellow">
+                    <div class="emoji">😬</div>
+                    <div class="label">Gelbe Zone</div>
+                    <div class="desc">Aufgeregt, unruhig, albern, nervös</div>
+                    <div class="zone-tracker">
+                        <div class="zone-count" id="yellowCount">0</div>
+                        <small>Beobachtungen</small>
+                    </div>
+                </div>
+                <div class="zone red" data-zone="red">
+                    <div class="emoji">😤</div>
+                    <div class="label">Rote Zone</div>
+                    <div class="desc">Wütend, außer Kontrolle, panisch</div>
+                    <div class="zone-tracker">
+                        <div class="zone-count" id="redCount">0</div>
+                        <small>Beobachtungen</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧘 Beruhigungsstrategien</h2>
+            <p style="margin-bottom: 15px;">Welche Strategien hat das Kind gelernt? Klicke auf gelernte Strategien:</p>
+            <div class="strategies-grid">
+                <div class="strategy-card" data-strategy="breathing">
+                    <div class="icon">🌬️</div>
+                    <div class="name">Tief atmen</div>
+                    <div class="desc">4 Sekunden ein, 4 Sekunden aus</div>
+                </div>
+                <div class="strategy-card" data-strategy="counting">
+                    <div class="icon">🔢</div>
+                    <div class="name">Zählen</div>
+                    <div class="desc">Langsam bis 10 zählen</div>
+                </div>
+                <div class="strategy-card" data-strategy="movement">
+                    <div class="icon">🏃</div>
+                    <div class="name">Bewegung</div>
+                    <div class="desc">Hüpfen, Schütteln, Dehnen</div>
+                </div>
+                <div class="strategy-card" data-strategy="safe-place">
+                    <div class="icon">🏠</div>
+                    <div class="name">Rückzugsort</div>
+                    <div class="desc">An einen ruhigen Ort gehen</div>
+                </div>
+                <div class="strategy-card" data-strategy="squeeze">
+                    <div class="icon">🤜</div>
+                    <div class="name">Anspannen-Loslassen</div>
+                    <div class="desc">Muskeln fest anspannen, dann lockern</div>
+                </div>
+                <div class="strategy-card" data-strategy="talk">
+                    <div class="icon">💬</div>
+                    <div class="name">Darüber sprechen</div>
+                    <div class="desc">Gefühle in Worte fassen</div>
+                </div>
+                <div class="strategy-card" data-strategy="distraction">
+                    <div class="icon">🎨</div>
+                    <div class="name">Ablenkung</div>
+                    <div class="desc">Etwas anderes tun</div>
+                </div>
+                <div class="strategy-card" data-strategy="self-talk">
+                    <div class="icon">🗣️</div>
+                    <div class="name">Selbstgespräch</div>
+                    <div class="desc">"Ich kann das schaffen"</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🛠️ Hilfreiche Werkzeuge</h2>
+            <p style="margin-bottom: 15px;">Welche Hilfsmittel sind für das Kind effektiv?</p>
+            <div class="calm-down-tools">
+                <div class="calm-tool" data-tool="stress-ball">
+                    <div class="tool-icon">⚾</div>
+                    <div class="tool-name">Stressball</div>
+                </div>
+                <div class="calm-tool" data-tool="fidget">
+                    <div class="tool-icon">🔄</div>
+                    <div class="tool-name">Fidget-Spielzeug</div>
+                </div>
+                <div class="calm-tool" data-tool="headphones">
+                    <div class="tool-icon">🎧</div>
+                    <div class="tool-name">Kopfhörer</div>
+                </div>
+                <div class="calm-tool" data-tool="weighted">
+                    <div class="tool-icon">🧸</div>
+                    <div class="tool-name">Gewichtsdecke</div>
+                </div>
+                <div class="calm-tool" data-tool="timer">
+                    <div class="tool-icon">⏱️</div>
+                    <div class="tool-name">Timer/Sanduhr</div>
+                </div>
+                <div class="calm-tool" data-tool="cards">
+                    <div class="tool-icon">🃏</div>
+                    <div class="tool-name">Gefühlskarten</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Impulskontroll-Szenarien</h2>
+            <p style="margin-bottom: 15px;">Wie reagiert das Kind in diesen Situationen?</p>
+            <div class="impulse-scenarios">
+                <div class="impulse-card" data-scenario="waiting">
+                    <h4>Warten müssen</h4>
+                    <div class="impulse-situation">"Du möchtest dran kommen, aber andere sind vor dir."</div>
+                    <div class="impulse-options">
+                        <div class="impulse-option" data-response="good" data-correct="true">😊 Geduldig warten</div>
+                        <div class="impulse-option" data-response="medium">😐 Unruhig werden, aber warten</div>
+                        <div class="impulse-option" data-response="bad">😠 Vordrängeln oder meckern</div>
+                    </div>
+                </div>
+                <div class="impulse-card" data-scenario="losing">
+                    <h4>Beim Spiel verlieren</h4>
+                    <div class="impulse-situation">"Du hast ein Spiel verloren und bist enttäuscht."</div>
+                    <div class="impulse-options">
+                        <div class="impulse-option" data-response="good" data-correct="true">😊 Gut verlieren können</div>
+                        <div class="impulse-option" data-response="medium">😐 Frustriert sein, aber weitermachen</div>
+                        <div class="impulse-option" data-response="bad">😠 Wütend werden oder aufhören</div>
+                    </div>
+                </div>
+                <div class="impulse-card" data-scenario="interrupt">
+                    <h4>Nicht unterbrechen</h4>
+                    <div class="impulse-situation">"Du willst etwas sagen, aber jemand spricht gerade."</div>
+                    <div class="impulse-options">
+                        <div class="impulse-option" data-response="good" data-correct="true">😊 Warten bis fertig</div>
+                        <div class="impulse-option" data-response="medium">😐 Unruhig werden, aber warten</div>
+                        <div class="impulse-option" data-response="bad">😠 Dazwischenrufen</div>
+                    </div>
+                </div>
+                <div class="impulse-card" data-scenario="frustration">
+                    <h4>Etwas klappt nicht</h4>
+                    <div class="impulse-situation">"Eine Aufgabe ist schwer und gelingt nicht."</div>
+                    <div class="impulse-options">
+                        <div class="impulse-option" data-response="good" data-correct="true">😊 Ruhig bleiben, nochmal versuchen</div>
+                        <div class="impulse-option" data-response="medium">😐 Frustriert sein, um Hilfe bitten</div>
+                        <div class="impulse-option" data-response="bad">😠 Aufgeben oder wütend werden</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Selbstkontroll-Tagebuch</h2>
+            <p style="margin-bottom: 15px;">Dokumentiere Situationen mit Impulskontrolle:</p>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Ausgangszone</label>
+                        <select id="logZone">
+                            <option value="">-- Wählen --</option>
+                            <option value="green">🟢 Grün</option>
+                            <option value="yellow">🟡 Gelb</option>
+                            <option value="red">🔴 Rot</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Auslöser/Situation</label>
+                    <textarea id="logTrigger" placeholder="Was hat die starke Reaktion ausgelöst?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Verwendete Strategie</label>
+                    <input type="text" id="logStrategy" placeholder="z.B. Tief atmen, Zählen...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Hat es geholfen?</label>
+                        <select id="logSuccess">
+                            <option value="">-- Wählen --</option>
+                            <option value="ja">Ja, sehr</option>
+                            <option value="etwas">Etwas</option>
+                            <option value="nein">Nein</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Selbstständigkeit</label>
+                        <select id="logIndependence">
+                            <option value="">-- Wählen --</option>
+                            <option value="allein">Allein geschafft</option>
+                            <option value="erinnerung">Mit Erinnerung</option>
+                            <option value="hilfe">Mit Hilfe</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <p><strong>Selbstkontroll-Entwicklung:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="strategiesCount">0/8</div>
+                        <div class="stat-label">Strategien gelernt</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="toolsCount">0/6</div>
+                        <div class="stat-label">Effektive Werkzeuge</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="successCount">0</div>
+                        <div class="stat-label">Erfolgreiche Regulationen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Zonen benennen:</strong> "Du bist gerade in der gelben Zone"</li>
+                <li><strong>Vorher üben:</strong> Strategien im ruhigen Zustand einüben</li>
+                <li><strong>Signale vereinbaren:</strong> Geheime Zeichen für "Stopp, beruhige dich"</li>
+                <li><strong>Vorhersehbare Auslöser:</strong> Vorher vorbereiten auf schwierige Situationen</li>
+                <li><strong>Erfolge feiern:</strong> Jede gelungene Selbstkontrolle würdigen</li>
+                <li><strong>Vorbild sein:</strong> Eigene Selbstregulation verbalisieren</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            zones: { green: 0, yellow: 0, red: 0 },
+            strategies: {},
+            tools: {},
+            scenarios: {},
+            logs: []
+        };
+        const STORAGE_KEY = 'eldib_V25_arbeit';
+
+        function init() {
+            loadData();
+
+            document.querySelectorAll('.zone').forEach(zone => {
+                zone.addEventListener('click', function() {
+                    const z = this.dataset.zone;
+                    data.zones[z] = (data.zones[z] || 0) + 1;
+                    document.getElementById(z + 'Count').textContent = data.zones[z];
+                    saveData();
+                });
+            });
+            document.getElementById('greenCount').textContent = data.zones.green || 0;
+            document.getElementById('yellowCount').textContent = data.zones.yellow || 0;
+            document.getElementById('redCount').textContent = data.zones.red || 0;
+
+            document.querySelectorAll('.strategy-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('learned');
+                    data.strategies[this.dataset.strategy] = this.classList.contains('learned');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.strategies[card.dataset.strategy]) {
+                    card.classList.add('learned');
+                }
+            });
+
+            document.querySelectorAll('.calm-tool').forEach(tool => {
+                tool.addEventListener('click', function() {
+                    this.classList.toggle('effective');
+                    data.tools[this.dataset.tool] = this.classList.contains('effective');
+                    updateProgress();
+                    saveData();
+                });
+                if (data.tools[tool.dataset.tool]) {
+                    tool.classList.add('effective');
+                }
+            });
+
+            document.querySelectorAll('.impulse-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const scenario = this.closest('.impulse-card').dataset.scenario;
+                    this.closest('.impulse-options').querySelectorAll('.impulse-option').forEach(o => {
+                        o.classList.remove('selected', 'good', 'bad');
+                    });
+                    this.classList.add('selected');
+                    if (this.dataset.response === 'good') this.classList.add('good');
+                    else if (this.dataset.response === 'bad') this.classList.add('bad');
+                    data.scenarios[scenario] = this.dataset.response;
+                    saveData();
+                });
+            });
+
+            // Restore scenarios
+            Object.entries(data.scenarios).forEach(([scenario, response]) => {
+                const card = document.querySelector(`.impulse-card[data-scenario="${scenario}"]`);
+                if (card) {
+                    const opt = card.querySelector(`.impulse-option[data-response="${response}"]`);
+                    if (opt) {
+                        opt.classList.add('selected');
+                        if (response === 'good') opt.classList.add('good');
+                        else if (response === 'bad') opt.classList.add('bad');
+                    }
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs();
+            updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const zone = document.getElementById('logZone').value;
+            const trigger = document.getElementById('logTrigger').value;
+            const strategy = document.getElementById('logStrategy').value;
+            const success = document.getElementById('logSuccess').value;
+            const independence = document.getElementById('logIndependence').value;
+
+            if (!date || !trigger) {
+                alert('Bitte mindestens Datum und Auslöser ausfüllen.');
+                return;
+            }
+
+            data.logs.push({ date, zone, trigger, strategy, success, independence, id: Date.now() });
+            saveData();
+            renderLogs();
+            updateProgress();
+
+            document.getElementById('logTrigger').value = '';
+            document.getElementById('logStrategy').value = '';
+            document.getElementById('logSuccess').value = '';
+            document.getElementById('logIndependence').value = '';
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(l => l.id !== id);
+            saveData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            if (data.logs.length === 0) {
+                container.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>';
+                return;
+            }
+            const successIcons = { 'ja': '✅', 'etwas': '🔄', 'nein': '❌' };
+            container.innerHTML = data.logs.slice().reverse().map(log => `
+                <div class="log-entry">
+                    <div class="log-entry-content">
+                        <div style="display:flex;align-items:center;">
+                            <span class="log-entry-zone ${log.zone}"></span>
+                            <strong>${log.trigger}</strong>
+                        </div>
+                        ${log.strategy ? `<p style="margin:5px 0;"><em>Strategie: ${log.strategy}</em></p>` : ''}
+                        <div class="log-entry-meta">
+                            ${log.date} | ${successIcons[log.success] || ''} ${log.independence || ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLog(${log.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const strategiesCount = Object.values(data.strategies).filter(v => v).length;
+            const toolsCount = Object.values(data.tools).filter(v => v).length;
+            const successCount = data.logs.filter(l => l.success === 'ja' || l.success === 'etwas').length;
+
+            document.getElementById('strategiesCount').textContent = strategiesCount + '/8';
+            document.getElementById('toolsCount').textContent = toolsCount + '/6';
+            document.getElementById('successCount').textContent = successCount;
+
+            const progress = Math.round((strategiesCount / 8 * 40) + (toolsCount / 6 * 20) + Math.min(successCount / 10, 1) * 40);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+                if (!data.zones) data.zones = { green: 0, yellow: 0, red: 0 };
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-25',
+                title: 'Selbstkontrolle entwickeln',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `V-25_Selbstkontrolle_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>
