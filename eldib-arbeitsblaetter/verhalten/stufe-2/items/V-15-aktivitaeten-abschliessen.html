@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-15: Schließt Aktivitäten ab - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 1.3em; color: #7b1fa2; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e1bee7; display: flex; align-items: center; gap: 10px; }
+        .info-box { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 20px; border-radius: 15px; }
+        .info-box p { line-height: 1.7; color: #4a148c; }
+        .completion-scale { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
+        .scale-level { flex: 1; text-align: center; padding: 15px 10px; background: #f5f5f5; border-radius: 10px; cursor: pointer; }
+        .scale-level:hover { background: #f3e5f5; }
+        .scale-level.active { background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%); color: white; }
+        .scale-level .level-icon { font-size: 2em; }
+        .scale-level .level-label { font-size: 0.75em; margin-top: 5px; }
+        .activity-tracker { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; }
+        .activity-card { background: #f5f5f5; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .activity-card.complete { background: #c8e6c9; border-color: #4caf50; }
+        .activity-card.partial { background: #fff9c4; border-color: #ffc107; }
+        .activity-card.rarely { background: #ffcdd2; border-color: #f44336; }
+        .activity-card .activity-icon { font-size: 2em; margin-bottom: 8px; }
+        .activity-card .activity-name { font-weight: 600; font-size: 0.9em; }
+        .exercise-card { background: #fff; border: 2px solid #e1bee7; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .exercise-card h4 { color: #7b1fa2; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .exercise-number { background: #9c27b0; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .steps { background: #f5f5f5; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .steps ol { margin-left: 20px; }
+        .steps li { margin-bottom: 8px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px 15px; background: #f8f9fa; margin-bottom: 8px; border-radius: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .checklist li:hover { background: #f3e5f5; }
+        .checklist li.checked { background: #c8e6c9; }
+        .checklist li .checkbox { width: 24px; height: 24px; border: 2px solid #9c27b0; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .checklist li.checked .checkbox { background: #9c27b0; color: white; }
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #9c27b0 0%, #7b1fa2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8em; }
+        .log-entry { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; }
+        .log-form { display: grid; gap: 15px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: 600; color: #555; font-size: 0.9em; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%); color: white; }
+        .btn-secondary { background: #f5f5f5; color: #555; }
+        .log-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .log-item { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        .tips-list { list-style: none; }
+        .tips-list li { padding: 12px 15px 12px 45px; background: #fff8e1; margin-bottom: 8px; border-radius: 10px; position: relative; }
+        .tips-list li::before { content: "💡"; position: absolute; left: 15px; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-15</div>
+            <h1>Schließt Aktivitäten ab</h1>
+            <div class="domain">Verhalten • Stufe II • Ausdauer & Abschluss</div>
+        </div>
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind kann begonnene Aktivitäten zu Ende führen, bevor es zu einer neuen wechselt.
+                    Es zeigt Ausdauer und versteht das Konzept von "fertig machen".</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Die Fähigkeit, Aufgaben abzuschließen,
+                    ist grundlegend für schulisches Lernen und spätere Arbeitsfähigkeit. Sie erfordert Ausdauer,
+                    Frustrationstoleranz und Impulskontrolle.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Abschluss-Fähigkeit</h3>
+                <p style="margin-bottom: 15px; color: #666;">Wie gut schließt das Kind Aktivitäten ab?</p>
+                <div class="completion-scale" id="completionScale">
+                    <div class="scale-level" data-level="1"><div class="level-icon">😓</div><div class="level-label">Selten/<br>nie</div></div>
+                    <div class="scale-level" data-level="2"><div class="level-icon">😐</div><div class="level-label">Mit viel<br>Hilfe</div></div>
+                    <div class="scale-level" data-level="3"><div class="level-icon">🙂</div><div class="level-label">Mit etwas<br>Hilfe</div></div>
+                    <div class="scale-level" data-level="4"><div class="level-icon">😊</div><div class="level-label">Meist<br>selbst</div></div>
+                    <div class="scale-level" data-level="5"><div class="level-icon">🌟</div><div class="level-label">Immer<br>selbst</div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎯</span> Aktivitäten-Übersicht</h3>
+                <div class="activity-tracker" id="activities">
+                    <div class="activity-card" data-activity="puzzle"><div class="activity-icon">🧩</div><div class="activity-name">Puzzle fertig machen</div></div>
+                    <div class="activity-card" data-activity="malen"><div class="activity-icon">🎨</div><div class="activity-name">Bild fertig malen</div></div>
+                    <div class="activity-card" data-activity="bauen"><div class="activity-icon">🏗️</div><div class="activity-name">Bauwerk vollenden</div></div>
+                    <div class="activity-card" data-activity="essen"><div class="activity-icon">🍽️</div><div class="activity-name">Mahlzeit beenden</div></div>
+                    <div class="activity-card" data-activity="anziehen"><div class="activity-icon">👕</div><div class="activity-name">Anziehen komplett</div></div>
+                    <div class="activity-card" data-activity="aufraeumen"><div class="activity-icon">🧹</div><div class="activity-name">Aufräumen beenden</div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Kurze, machbare Aufgaben</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Beginnen Sie mit sehr kurzen Aktivitäten (2-3 Minuten)</li>
+                            <li>Wählen Sie motivierende, interessante Aufgaben</li>
+                            <li>Definieren Sie klar, was "fertig" bedeutet</li>
+                            <li>Feiern Sie jeden Abschluss!</li>
+                            <li>Steigern Sie langsam die Dauer</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Visuelle Unterstützung</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Zeigen Sie das Endergebnis (Foto, Beispiel)</li>
+                            <li>"Fertig"-Box: Erledigtes wird dort hingelegt</li>
+                            <li>Abhak-Listen für mehrteilige Aufgaben</li>
+                            <li>Timer für zeitbegrenzte Aktivitäten</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> "Erst... dann..."</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>"Erst machen wir das Puzzle fertig, dann..."</li>
+                            <li>Belohnung/nächste Aktivität in Aussicht stellen</li>
+                            <li>Visuell darstellen (Erst-Dann-Tafel)</li>
+                            <li>Konsequent durchhalten</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="checklist">
+                    <li data-item="1"><span class="checkbox">✓</span><span>Versteht das Konzept "fertig"</span></li>
+                    <li data-item="2"><span class="checkbox">✓</span><span>Bleibt bei kurzen Aufgaben (2-3 Min)</span></li>
+                    <li data-item="3"><span class="checkbox">✓</span><span>Beendet begonnene Spiele</span></li>
+                    <li data-item="4"><span class="checkbox">✓</span><span>Isst Mahlzeit zu Ende</span></li>
+                    <li data-item="5"><span class="checkbox">✓</span><span>Räumt nach Aufforderung auf</span></li>
+                    <li data-item="6"><span class="checkbox">✓</span><span>Zeigt Stolz bei Fertigstellung</span></li>
+                    <li data-item="7"><span class="checkbox">✓</span><span>Wechselt nicht ständig zwischen Aktivitäten</span></li>
+                    <li data-item="8"><span class="checkbox">✓</span><span>Akzeptiert "erst fertig, dann..."</span></li>
+                </ul>
+                <div class="progress-container"><div class="progress-bar" id="checklistProgress">0%</div></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                            <div class="form-group"><label>Aktivität</label><input type="text" id="logActivity" placeholder="z.B. Puzzle"></div>
+                            <div class="form-group"><label>Abgeschlossen</label><select id="logCompleted">
+                                <option value="ja">Ja, komplett</option>
+                                <option value="hilfe">Mit Hilfe</option>
+                                <option value="teils">Teilweise</option>
+                                <option value="nein">Nicht beendet</option>
+                            </select></div>
+                        </div>
+                        <div class="form-group"><label>Notizen</label><textarea id="logNotes" rows="2"></textarea></div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">➕ Hinzufügen</button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps</h3>
+                <ul class="tips-list">
+                    <li>Wählen Sie Aufgaben, die dem Entwicklungsstand entsprechen</li>
+                    <li>Beginnen Sie mit sehr kurzen, garantiert schaffbaren Aufgaben</li>
+                    <li>Definieren Sie klar, was "fertig" bedeutet</li>
+                    <li>Loben Sie den Abschluss, nicht nur das Ergebnis</li>
+                    <li>Helfen Sie beim Abschluss, wenn nötig - Erfolg ist wichtiger</li>
+                    <li>Vermeiden Sie Ablenkungen während der Aktivität</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = { completionLevel: 0, activities: {}, checklist: {}, logs: [] };
+        const STORAGE_KEY = 'eldib_V15_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.scale-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.scale-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.completionLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const id = this.dataset.activity;
+                    const states = ['', 'complete', 'partial', 'rarely'];
+                    const current = data.activities[id] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+                    this.classList.remove('complete', 'partial', 'rarely');
+                    if (next) this.classList.add(next);
+                    data.activities[id] = next;
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    data.checklist[this.dataset.item] = this.classList.contains('checked');
+                    updateProgress(); saveData();
+                });
+            });
+            document.getElementById('logDate').valueAsDate = new Date();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            if (data.completionLevel) document.querySelector(`.scale-level[data-level="${data.completionLevel}"]`)?.classList.add('active');
+            Object.entries(data.activities).forEach(([id, state]) => {
+                const el = document.querySelector(`.activity-card[data-activity="${id}"]`);
+                if (el && state) el.classList.add(state);
+            });
+            Object.entries(data.checklist).forEach(([id, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${id}"]`);
+                if (li && checked) li.classList.add('checked');
+            });
+            updateProgress(); renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const bar = document.getElementById('checklistProgress');
+            bar.style.width = Math.round((checked/total)*100) + '%';
+            bar.textContent = Math.round((checked/total)*100) + '%';
+        }
+
+        function addLogEntry() {
+            const entry = { id: Date.now(), date: document.getElementById('logDate').value, activity: document.getElementById('logActivity').value, completed: document.getElementById('logCompleted').value, notes: document.getElementById('logNotes').value };
+            if (!entry.date) return alert('Bitte Datum ausfüllen');
+            data.logs.unshift(entry); saveData(); renderLogs();
+            document.getElementById('logActivity').value = ''; document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const icons = { ja: '✅', hilfe: '🤝', teils: '🟡', nein: '❌' };
+            document.getElementById('logList').innerHTML = data.logs.map(l => `<div class="log-item"><strong>${new Date(l.date).toLocaleDateString('de-DE')}</strong> ${icons[l.completed] || ''}<br>${l.activity || '-'}${l.notes ? `<br><small>${l.notes}</small>` : ''}</div>`).join('');
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() { const blob = new Blob([JSON.stringify({ item: 'V-15', ...data }, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-15_Aktivitaeten_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+
+        init();
+    </script>
+</body>
+</html>

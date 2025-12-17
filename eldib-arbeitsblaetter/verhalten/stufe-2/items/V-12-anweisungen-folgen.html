@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-12: Folgt einfachen Anweisungen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title {
+            font-size: 1.3em; color: #388e3c; margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 2px solid #c8e6c9; display: flex; align-items: center; gap: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 20px; border-radius: 15px;
+        }
+        .info-box p { line-height: 1.7; color: #1b5e20; }
+        .instruction-levels {
+            display: grid; gap: 15px; margin: 20px 0;
+        }
+        .level-card {
+            background: #f5f5f5; border-radius: 15px; padding: 20px;
+            display: flex; align-items: center; gap: 15px;
+            cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;
+        }
+        .level-card:hover { transform: translateX(5px); }
+        .level-card.mastered { background: #c8e6c9; border-color: #43a047; }
+        .level-card.learning { background: #fff9c4; border-color: #ffc107; }
+        .level-card .level-num {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #43a047; color: white; display: flex;
+            align-items: center; justify-content: center; font-weight: bold;
+        }
+        .level-card .level-text { flex: 1; }
+        .level-card .level-title { font-weight: 600; }
+        .level-card .level-example { font-size: 0.85em; color: #666; }
+        .exercise-card {
+            background: #fff; border: 2px solid #c8e6c9; border-radius: 15px;
+            padding: 20px; margin-bottom: 15px;
+        }
+        .exercise-card h4 { color: #388e3c; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .exercise-number {
+            background: #43a047; color: white; width: 30px; height: 30px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .steps { background: #f5f5f5; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .steps ol { margin-left: 20px; }
+        .steps li { margin-bottom: 8px; }
+        .checklist { list-style: none; }
+        .checklist li {
+            padding: 12px 15px; background: #f8f9fa; margin-bottom: 8px;
+            border-radius: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+        }
+        .checklist li:hover { background: #e8f5e9; }
+        .checklist li.checked { background: #c8e6c9; }
+        .checklist li .checkbox {
+            width: 24px; height: 24px; border: 2px solid #43a047;
+            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+        }
+        .checklist li.checked .checkbox { background: #43a047; color: white; }
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 15px 0; }
+        .progress-bar {
+            height: 100%; background: linear-gradient(90deg, #43a047 0%, #388e3c 100%);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 0.8em;
+        }
+        .log-entry { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; }
+        .log-form { display: grid; gap: 15px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: 600; color: #555; font-size: 0.9em; }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;
+        }
+        .btn {
+            padding: 12px 25px; border: none; border-radius: 10px;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: linear-gradient(135deg, #43a047 0%, #388e3c 100%); color: white; }
+        .btn-secondary { background: #f5f5f5; color: #555; }
+        .log-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .log-item { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        .tips-list { list-style: none; }
+        .tips-list li { padding: 12px 15px 12px 45px; background: #fff8e1; margin-bottom: 8px; border-radius: 10px; position: relative; }
+        .tips-list li::before { content: "💡"; position: absolute; left: 15px; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-12</div>
+            <h1>Folgt einfachen Anweisungen</h1>
+            <div class="domain">Verhalten • Stufe II • Kooperation & Verständnis</div>
+        </div>
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind versteht einfache verbale Anweisungen und setzt diese um. Es kann auf
+                    Aufforderungen reagieren und einfache Handlungen auf Anweisung ausführen.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Das Befolgen von
+                    Anweisungen zeigt Sprachverständnis, Aufmerksamkeit und die Bereitschaft zur Kooperation.
+                    Es ist die Grundlage für strukturiertes Lernen und soziale Anpassung.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Anweisungs-Komplexität</h3>
+                <p style="margin-bottom: 15px; color: #666;">Welche Anweisungen kann das Kind befolgen?</p>
+                <div class="instruction-levels" id="levels">
+                    <div class="level-card" data-level="1">
+                        <div class="level-num">1</div>
+                        <div class="level-text">
+                            <div class="level-title">Ein-Schritt-Anweisung mit Geste</div>
+                            <div class="level-example">"Komm her" + Handbewegung</div>
+                        </div>
+                    </div>
+                    <div class="level-card" data-level="2">
+                        <div class="level-num">2</div>
+                        <div class="level-text">
+                            <div class="level-title">Ein-Schritt-Anweisung ohne Geste</div>
+                            <div class="level-example">"Hol den Ball"</div>
+                        </div>
+                    </div>
+                    <div class="level-card" data-level="3">
+                        <div class="level-num">3</div>
+                        <div class="level-text">
+                            <div class="level-title">Zwei-Schritt-Anweisung</div>
+                            <div class="level-example">"Hol den Ball und bring ihn mir"</div>
+                        </div>
+                    </div>
+                    <div class="level-card" data-level="4">
+                        <div class="level-num">4</div>
+                        <div class="level-text">
+                            <div class="level-title">Anweisung mit Zeitverzögerung</div>
+                            <div class="level-example">"Wenn du fertig bist, räum auf"</div>
+                        </div>
+                    </div>
+                    <div class="level-card" data-level="5">
+                        <div class="level-num">5</div>
+                        <div class="level-text">
+                            <div class="level-title">Komplexe/Mehrschrittige Anweisung</div>
+                            <div class="level-example">"Zieh deine Schuhe an und komm zur Tür"</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Spielerische Anweisungen</h4>
+                    <p>Üben Sie das Befolgen von Anweisungen in lustigen Spielen.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>"Simon sagt": Nur bei "Simon sagt..." ausführen</li>
+                            <li>Schatzsuche mit Anweisungen: "Geh zum Tisch"</li>
+                            <li>Bewegungsspiele: "Spring!", "Dreh dich!"</li>
+                            <li>Loben Sie jede erfolgreiche Ausführung</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Alltags-Anweisungen</h4>
+                    <p>Nutzen Sie natürliche Situationen zum Üben.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Stellen Sie Blickkontakt her, bevor Sie sprechen</li>
+                            <li>Verwenden Sie klare, kurze Sätze</li>
+                            <li>Warten Sie, geben Sie Zeit zum Verarbeiten</li>
+                            <li>Helfen Sie bei Bedarf mit Gesten</li>
+                            <li>Feiern Sie den Erfolg</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Stufenweise Steigerung</h4>
+                    <p>Erhöhen Sie langsam die Komplexität.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Beginnen Sie mit vertrauten, motivierenden Anweisungen</li>
+                            <li>Reduzieren Sie nach und nach Gesten und Hilfen</li>
+                            <li>Fügen Sie einen zweiten Schritt hinzu</li>
+                            <li>Führen Sie kleine Verzögerungen ein</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="checklist">
+                    <li data-item="1"><span class="checkbox">✓</span><span>Reagiert auf seinen Namen</span></li>
+                    <li data-item="2"><span class="checkbox">✓</span><span>Stoppt auf "Stopp" oder "Nein"</span></li>
+                    <li data-item="3"><span class="checkbox">✓</span><span>Folgt "Komm her"</span></li>
+                    <li data-item="4"><span class="checkbox">✓</span><span>Kann Gegenstände auf Anweisung holen</span></li>
+                    <li data-item="5"><span class="checkbox">✓</span><span>Führt einfache Handlungen aus (Sitzen, Aufstehen)</span></li>
+                    <li data-item="6"><span class="checkbox">✓</span><span>Folgt Anweisungen ohne Gesten</span></li>
+                    <li data-item="7"><span class="checkbox">✓</span><span>Kann zwei Schritte nacheinander ausführen</span></li>
+                    <li data-item="8"><span class="checkbox">✓</span><span>Folgt Anweisungen beim ersten Mal</span></li>
+                </ul>
+                <div class="progress-container">
+                    <div class="progress-bar" id="checklistProgress">0%</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Anweisung</label>
+                                <input type="text" id="logInstruction" placeholder="z.B. Hol deine Schuhe">
+                            </div>
+                            <div class="form-group">
+                                <label>Erfolg</label>
+                                <select id="logSuccess">
+                                    <option value="sofort">Sofort ausgeführt</option>
+                                    <option value="wiederholung">Nach Wiederholung</option>
+                                    <option value="hilfe">Mit Hilfe</option>
+                                    <option value="nicht">Nicht ausgeführt</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notizen</label>
+                            <textarea id="logNotes" rows="2"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">➕ Hinzufügen</button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps</h3>
+                <ul class="tips-list">
+                    <li>Stellen Sie Blickkontakt her, bevor Sie die Anweisung geben</li>
+                    <li>Verwenden Sie den Namen des Kindes: "Max, komm bitte her"</li>
+                    <li>Halten Sie Anweisungen kurz und konkret</li>
+                    <li>Geben Sie dem Kind Zeit zum Verarbeiten (3-5 Sekunden)</li>
+                    <li>Loben Sie sofort nach erfolgreicher Ausführung</li>
+                    <li>Vermeiden Sie Fragen statt Anweisungen ("Willst du aufräumen?")</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = { levels: {}, checklist: {}, logs: [] };
+        const STORAGE_KEY = 'eldib_V12_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.level-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const id = this.dataset.level;
+                    const states = ['', 'mastered', 'learning'];
+                    const current = data.levels[id] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+                    this.classList.remove('mastered', 'learning');
+                    if (next) this.classList.add(next);
+                    data.levels[id] = next;
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    data.checklist[this.dataset.item] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+            document.getElementById('logDate').valueAsDate = new Date();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            Object.entries(data.levels).forEach(([id, state]) => {
+                const el = document.querySelector(`.level-card[data-level="${id}"]`);
+                if (el && state) el.classList.add(state);
+            });
+            Object.entries(data.checklist).forEach(([id, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${id}"]`);
+                if (li && checked) li.classList.add('checked');
+            });
+            updateProgress();
+            renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const bar = document.getElementById('checklistProgress');
+            bar.style.width = Math.round((checked/total)*100) + '%';
+            bar.textContent = Math.round((checked/total)*100) + '%';
+        }
+
+        function addLogEntry() {
+            const entry = {
+                id: Date.now(),
+                date: document.getElementById('logDate').value,
+                instruction: document.getElementById('logInstruction').value,
+                success: document.getElementById('logSuccess').value,
+                notes: document.getElementById('logNotes').value
+            };
+            if (!entry.date) return alert('Bitte Datum ausfüllen');
+            data.logs.unshift(entry);
+            saveData();
+            renderLogs();
+            document.getElementById('logInstruction').value = '';
+            document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const icons = { sofort: '✅', wiederholung: '🔄', hilfe: '🤝', nicht: '❌' };
+            document.getElementById('logList').innerHTML = data.logs.map(l => `
+                <div class="log-item">
+                    <strong>${new Date(l.date).toLocaleDateString('de-DE')}</strong> ${icons[l.success] || ''}
+                    <br>"${l.instruction || '-'}"
+                    ${l.notes ? `<br><small>${l.notes}</small>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() {
+            const blob = new Blob([JSON.stringify({ item: 'V-12', ...data }, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `V-12_Anweisungen_${new Date().toISOString().split('T')[0]}.json`; a.click();
+        }
+
+        init();
+    </script>
+</body>
+</html>

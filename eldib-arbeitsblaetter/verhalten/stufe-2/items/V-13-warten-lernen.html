@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-13: Warten lernen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 1.3em; color: #f57c00; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #ffe0b2; display: flex; align-items: center; gap: 10px; }
+        .info-box { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 20px; border-radius: 15px; }
+        .info-box p { line-height: 1.7; color: #e65100; }
+        .wait-timer { text-align: center; padding: 30px; background: #fafafa; border-radius: 15px; margin: 20px 0; }
+        .timer-display { font-size: 4em; font-weight: bold; color: #ff9800; margin: 20px 0; }
+        .timer-label { font-size: 1.2em; color: #666; margin-bottom: 15px; }
+        .timer-buttons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .timer-btn { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; }
+        .timer-btn.start { background: #4caf50; color: white; }
+        .timer-btn.stop { background: #f44336; color: white; }
+        .timer-btn.reset { background: #9e9e9e; color: white; }
+        .wait-scale { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
+        .wait-level { flex: 1; text-align: center; padding: 15px; background: #f5f5f5; border-radius: 10px; cursor: pointer; }
+        .wait-level:hover { background: #fff3e0; }
+        .wait-level.active { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; }
+        .wait-level .level-time { font-size: 1.5em; font-weight: bold; }
+        .wait-level .level-label { font-size: 0.8em; }
+        .exercise-card { background: #fff; border: 2px solid #ffe0b2; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .exercise-card h4 { color: #f57c00; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .exercise-number { background: #ff9800; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .steps { background: #f5f5f5; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .steps ol { margin-left: 20px; }
+        .steps li { margin-bottom: 8px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px 15px; background: #f8f9fa; margin-bottom: 8px; border-radius: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .checklist li:hover { background: #fff3e0; }
+        .checklist li.checked { background: #c8e6c9; }
+        .checklist li .checkbox { width: 24px; height: 24px; border: 2px solid #ff9800; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .checklist li.checked .checkbox { background: #ff9800; color: white; }
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff9800 0%, #f57c00 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8em; }
+        .log-entry { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; }
+        .log-form { display: grid; gap: 15px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: 600; color: #555; font-size: 0.9em; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; }
+        .btn-secondary { background: #f5f5f5; color: #555; }
+        .log-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .log-item { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        .tips-list { list-style: none; }
+        .tips-list li { padding: 12px 15px 12px 45px; background: #e8f5e9; margin-bottom: 8px; border-radius: 10px; position: relative; }
+        .tips-list li::before { content: "💡"; position: absolute; left: 15px; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-13</div>
+            <h1>Warten lernen</h1>
+            <div class="domain">Verhalten • Stufe II • Impulskontrolle</div>
+        </div>
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind kann für kurze Zeit warten, ohne frustriert zu werden. Es beginnt zu verstehen,
+                    dass Bedürfnisse nicht immer sofort erfüllt werden können und entwickelt erste Impulskontrolle.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Warten können ist eine wichtige
+                    Selbstregulationsfähigkeit. Kinder, die warten lernen, entwickeln bessere soziale Kompetenzen
+                    und sind später erfolgreicher in Schule und Leben (Marshmallow-Test).</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">⏱️</span> Warte-Timer zum Üben</h3>
+                <div class="wait-timer">
+                    <div class="timer-label">Wartezeit üben:</div>
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-buttons">
+                        <button class="timer-btn start" onclick="startTimer()">▶️ Start</button>
+                        <button class="timer-btn stop" onclick="stopTimer()">⏸️ Pause</button>
+                        <button class="timer-btn reset" onclick="resetTimer()">🔄 Reset</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Aktuelle Wartefähigkeit</h3>
+                <p style="margin-bottom: 15px; color: #666;">Wie lange kann das Kind warten?</p>
+                <div class="wait-scale" id="waitScale">
+                    <div class="wait-level" data-level="1"><div class="level-time">~10s</div><div class="level-label">Sehr kurz</div></div>
+                    <div class="wait-level" data-level="2"><div class="level-time">~30s</div><div class="level-label">Kurz</div></div>
+                    <div class="wait-level" data-level="3"><div class="level-time">1-2min</div><div class="level-label">Mittel</div></div>
+                    <div class="wait-level" data-level="4"><div class="level-time">3-5min</div><div class="level-label">Gut</div></div>
+                    <div class="wait-level" data-level="5"><div class="level-time">5+min</div><div class="level-label">Sehr gut</div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Visuelle Wartezeit</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Verwenden Sie eine Sanduhr oder einen Timer</li>
+                            <li>Zeigen Sie: "Wenn der Sand unten ist, bekommst du..."</li>
+                            <li>Beginnen Sie mit sehr kurzen Zeiten (10-15 Sekunden)</li>
+                            <li>Loben Sie das Warten sofort nach Ablauf</li>
+                            <li>Steigern Sie die Zeit langsam</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Warte-Spiele</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>"Rotes Licht, Grünes Licht" - Bewegung/Stopp</li>
+                            <li>"Freeze Dance" - Tanzen und Einfrieren</li>
+                            <li>Verstecken spielen und zählen</li>
+                            <li>Abwechseln bei Spielen üben</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Wartestrategien lehren</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Tiefe Atemzüge zusammen üben</li>
+                            <li>Ein Lied singen während des Wartens</li>
+                            <li>Bis 10 zählen</li>
+                            <li>Sich selbst etwas sagen: "Ich kann warten"</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="checklist">
+                    <li data-item="1"><span class="checkbox">✓</span><span>Kann 10 Sekunden warten</span></li>
+                    <li data-item="2"><span class="checkbox">✓</span><span>Versteht "gleich" und "warte"</span></li>
+                    <li data-item="3"><span class="checkbox">✓</span><span>Kann mit visueller Hilfe warten (Sanduhr)</span></li>
+                    <li data-item="4"><span class="checkbox">✓</span><span>Wartet auf Essen ohne zu greifen</span></li>
+                    <li data-item="5"><span class="checkbox">✓</span><span>Kann bei Spielen abwechseln</span></li>
+                    <li data-item="6"><span class="checkbox">✓</span><span>Nutzt Wartestrategien</span></li>
+                    <li data-item="7"><span class="checkbox">✓</span><span>Kann 1-2 Minuten ohne Frustration warten</span></li>
+                    <li data-item="8"><span class="checkbox">✓</span><span>Akzeptiert "später" bei Erklärung</span></li>
+                </ul>
+                <div class="progress-container"><div class="progress-bar" id="checklistProgress">0%</div></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                            <div class="form-group"><label>Situation</label><select id="logSituation">
+                                <option value="">Auswählen...</option>
+                                <option value="essen">Warten aufs Essen</option>
+                                <option value="spielzeug">Warten auf Spielzeug</option>
+                                <option value="aufmerksamkeit">Warten auf Aufmerksamkeit</option>
+                                <option value="abwechseln">Abwechseln</option>
+                                <option value="sonstiges">Sonstiges</option>
+                            </select></div>
+                            <div class="form-group"><label>Wartezeit erreicht</label><select id="logDuration">
+                                <option value="10s">~10 Sekunden</option>
+                                <option value="30s">~30 Sekunden</option>
+                                <option value="1min">~1 Minute</option>
+                                <option value="2min">~2 Minuten</option>
+                                <option value="5min">5+ Minuten</option>
+                            </select></div>
+                        </div>
+                        <div class="form-group"><label>Notizen</label><textarea id="logNotes" rows="2"></textarea></div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">➕ Hinzufügen</button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps</h3>
+                <ul class="tips-list">
+                    <li>Beginnen Sie mit sehr kurzen, machbaren Wartezeiten</li>
+                    <li>Verwenden Sie visuelle Hilfen (Sanduhr, Timer)</li>
+                    <li>Geben Sie dem Kind etwas zu tun während des Wartens</li>
+                    <li>Loben Sie jedes erfolgreiche Warten überschwänglich</li>
+                    <li>Seien Sie verlässlich: Was Sie versprechen, halten Sie</li>
+                    <li>Benennen Sie das Warten: "Du wartest so geduldig!"</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = { waitLevel: 0, checklist: {}, logs: [] };
+        let timerInterval = null;
+        let timerSeconds = 0;
+        const STORAGE_KEY = 'eldib_V13_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.wait-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.wait-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.waitLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    data.checklist[this.dataset.item] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+            document.getElementById('logDate').valueAsDate = new Date();
+            updateDisplay();
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timerSeconds = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+        }
+
+        function updateDisplay() {
+            if (data.waitLevel) document.querySelector(`.wait-level[data-level="${data.waitLevel}"]`)?.classList.add('active');
+            Object.entries(data.checklist).forEach(([id, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${id}"]`);
+                if (li && checked) li.classList.add('checked');
+            });
+            updateProgress();
+            renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const bar = document.getElementById('checklistProgress');
+            bar.style.width = Math.round((checked/total)*100) + '%';
+            bar.textContent = Math.round((checked/total)*100) + '%';
+        }
+
+        function addLogEntry() {
+            const entry = { id: Date.now(), date: document.getElementById('logDate').value, situation: document.getElementById('logSituation').value, duration: document.getElementById('logDuration').value, notes: document.getElementById('logNotes').value };
+            if (!entry.date) return alert('Bitte Datum ausfüllen');
+            data.logs.unshift(entry);
+            saveData(); renderLogs();
+            document.getElementById('logSituation').value = ''; document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            document.getElementById('logList').innerHTML = data.logs.map(l => `<div class="log-item"><strong>${new Date(l.date).toLocaleDateString('de-DE')}</strong> - ${l.situation || '-'}<br>Wartezeit: ${l.duration}${l.notes ? `<br><small>${l.notes}</small>` : ''}</div>`).join('');
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() { const blob = new Blob([JSON.stringify({ item: 'V-13', ...data }, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-13_Warten_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+
+        init();
+    </script>
+</body>
+</html>

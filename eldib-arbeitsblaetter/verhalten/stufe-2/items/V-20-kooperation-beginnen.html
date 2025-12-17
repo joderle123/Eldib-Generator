@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-20: Beginnt zu kooperieren - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 1.3em; color: #1976d2; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #bbdefb; display: flex; align-items: center; gap: 10px; }
+        .info-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 20px; border-radius: 15px; }
+        .info-box p { line-height: 1.7; color: #0d47a1; }
+        .cooperation-scale { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
+        .coop-level { flex: 1; text-align: center; padding: 20px 10px; background: #f5f5f5; border-radius: 15px; cursor: pointer; }
+        .coop-level:hover { background: #e3f2fd; }
+        .coop-level.active { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; }
+        .coop-level .level-icon { font-size: 2.5em; }
+        .coop-level .level-label { font-size: 0.8em; margin-top: 8px; }
+        .cooperation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; }
+        .coop-card { background: #f5f5f5; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .coop-card:hover { transform: translateY(-3px); }
+        .coop-card.often { background: #c8e6c9; border-color: #4caf50; }
+        .coop-card.sometimes { background: #fff9c4; border-color: #ffc107; }
+        .coop-card.rarely { background: #ffcdd2; border-color: #f44336; }
+        .coop-card .coop-icon { font-size: 2em; margin-bottom: 8px; }
+        .coop-card .coop-name { font-weight: 600; font-size: 0.9em; }
+        .exercise-card { background: #fff; border: 2px solid #bbdefb; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .exercise-card h4 { color: #1976d2; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .exercise-number { background: #2196f3; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .steps { background: #f5f5f5; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .steps ol { margin-left: 20px; }
+        .steps li { margin-bottom: 8px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px 15px; background: #f8f9fa; margin-bottom: 8px; border-radius: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .checklist li:hover { background: #e3f2fd; }
+        .checklist li.checked { background: #c8e6c9; }
+        .checklist li .checkbox { width: 24px; height: 24px; border: 2px solid #2196f3; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .checklist li.checked .checkbox { background: #2196f3; color: white; }
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #2196f3 0%, #1976d2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8em; }
+        .log-entry { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; }
+        .log-form { display: grid; gap: 15px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: 600; color: #555; font-size: 0.9em; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; }
+        .btn-secondary { background: #f5f5f5; color: #555; }
+        .log-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .log-item { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        .tips-list { list-style: none; }
+        .tips-list li { padding: 12px 15px 12px 45px; background: #e8f5e9; margin-bottom: 8px; border-radius: 10px; position: relative; }
+        .tips-list li::before { content: "💡"; position: absolute; left: 15px; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-20</div>
+            <h1>Beginnt zu kooperieren</h1>
+            <div class="domain">Verhalten • Stufe II • Zusammenarbeit</div>
+        </div>
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind zeigt erste Ansätze von Kooperation mit Erwachsenen und anderen Kindern.
+                    Es kann bei einfachen Aufgaben helfen und beginnt, mit anderen zusammenzuarbeiten.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Kooperationsfähigkeit
+                    ist grundlegend für soziales Zusammenleben. Sie erfordert Perspektivübernahme, Impulskontrolle
+                    und die Fähigkeit, eigene Bedürfnisse zugunsten gemeinsamer Ziele zurückzustellen.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Kooperationsbereitschaft</h3>
+                <div class="cooperation-scale" id="coopScale">
+                    <div class="coop-level" data-level="1"><div class="level-icon">😓</div><div class="level-label">Selten</div></div>
+                    <div class="coop-level" data-level="2"><div class="level-icon">😐</div><div class="level-label">Manchmal</div></div>
+                    <div class="coop-level" data-level="3"><div class="level-icon">🙂</div><div class="level-label">Oft</div></div>
+                    <div class="coop-level" data-level="4"><div class="level-icon">😊</div><div class="level-label">Sehr oft</div></div>
+                    <div class="coop-level" data-level="5"><div class="level-icon">🤝</div><div class="level-label">Immer</div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🤝</span> Kooperations-Situationen</h3>
+                <div class="cooperation-grid" id="situations">
+                    <div class="coop-card" data-situation="helfen"><div class="coop-icon">🙋</div><div class="coop-name">Hilft auf Bitte</div></div>
+                    <div class="coop-card" data-situation="aufraeumen"><div class="coop-icon">📦</div><div class="coop-name">Hilft beim Aufräumen</div></div>
+                    <div class="coop-card" data-situation="teilen"><div class="coop-icon">🤲</div><div class="coop-name">Teilt mit anderen</div></div>
+                    <div class="coop-card" data-situation="wechseln"><div class="coop-icon">🔄</div><div class="coop-name">Wechselt sich ab</div></div>
+                    <div class="coop-card" data-situation="tisch"><div class="coop-icon">🍽️</div><div class="coop-name">Hilft beim Tisch decken</div></div>
+                    <div class="coop-card" data-situation="gemeinsam"><div class="coop-icon">👫</div><div class="coop-name">Gemeinsames Spiel</div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Gemeinsame Aufgaben</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Einfache Helfer-Aufgaben geben</li>
+                            <li>"Kannst du mir die Servietten bringen?"</li>
+                            <li>Zusammen aufräumen, jeder räumt etwas auf</li>
+                            <li>Erfolg gemeinsam feiern</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Kooperationsspiele</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Ball hin und her rollen</li>
+                            <li>Gemeinsam einen Turm bauen</li>
+                            <li>Puzzle zusammen lösen</li>
+                            <li>Abwechselnd etwas tun (du, ich, du, ich)</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Positiv verstärken</h4>
+                    <div class="steps">
+                        <ol>
+                            <li>Kooperatives Verhalten sofort loben</li>
+                            <li>"Danke, dass du mir geholfen hast!"</li>
+                            <li>Vorbildfunktion: Zeigen Sie Kooperation</li>
+                            <li>Kleine Belohnungen für Zusammenarbeit</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="checklist">
+                    <li data-item="1"><span class="checkbox">✓</span><span>Hilft auf Bitte</span></li>
+                    <li data-item="2"><span class="checkbox">✓</span><span>Gibt Dinge auf Anfrage</span></li>
+                    <li data-item="3"><span class="checkbox">✓</span><span>Hilft bei einfachen Aufgaben</span></li>
+                    <li data-item="4"><span class="checkbox">✓</span><span>Kann abwechseln (mit Hilfe)</span></li>
+                    <li data-item="5"><span class="checkbox">✓</span><span>Teilt Spielzeug (manchmal)</span></li>
+                    <li data-item="6"><span class="checkbox">✓</span><span>Zeigt Interesse an gemeinsamer Aktivität</span></li>
+                    <li data-item="7"><span class="checkbox">✓</span><span>Bietet von sich aus Hilfe an</span></li>
+                    <li data-item="8"><span class="checkbox">✓</span><span>Zeigt Freude an Zusammenarbeit</span></li>
+                </ul>
+                <div class="progress-container"><div class="progress-bar" id="checklistProgress">0%</div></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                            <div class="form-group"><label>Situation</label><input type="text" id="logSituation" placeholder="z.B. Aufräumen"></div>
+                            <div class="form-group"><label>Kooperation</label><select id="logCoop">
+                                <option value="super">Super kooperiert</option>
+                                <option value="gut">Gut kooperiert</option>
+                                <option value="etwas">Etwas kooperiert</option>
+                                <option value="wenig">Wenig kooperiert</option>
+                            </select></div>
+                        </div>
+                        <div class="form-group"><label>Notizen</label><textarea id="logNotes" rows="2"></textarea></div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">➕ Hinzufügen</button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps</h3>
+                <ul class="tips-list">
+                    <li>Beginnen Sie mit kleinen, machbaren Kooperationsaufgaben</li>
+                    <li>Loben Sie jede Kooperation überschwänglich</li>
+                    <li>Machen Sie Kooperation attraktiv und spaßig</li>
+                    <li>Seien Sie Vorbild - kooperieren Sie mit dem Kind</li>
+                    <li>Akzeptieren Sie, dass Teilen schwer ist</li>
+                    <li>Üben Sie Abwechseln in spielerischen Situationen</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = { coopLevel: 0, situations: {}, checklist: {}, logs: [] };
+        const STORAGE_KEY = 'eldib_V20_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.coop-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.coop-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.coopLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.coop-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const id = this.dataset.situation;
+                    const states = ['', 'often', 'sometimes', 'rarely'];
+                    const current = data.situations[id] || '';
+                    const next = states[(states.indexOf(current) + 1) % states.length];
+                    this.classList.remove('often', 'sometimes', 'rarely');
+                    if (next) this.classList.add(next);
+                    data.situations[id] = next;
+                    saveData();
+                });
+            });
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    data.checklist[this.dataset.item] = this.classList.contains('checked');
+                    updateProgress(); saveData();
+                });
+            });
+            document.getElementById('logDate').valueAsDate = new Date();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            if (data.coopLevel) document.querySelector(`.coop-level[data-level="${data.coopLevel}"]`)?.classList.add('active');
+            Object.entries(data.situations).forEach(([id, state]) => {
+                const el = document.querySelector(`.coop-card[data-situation="${id}"]`);
+                if (el && state) el.classList.add(state);
+            });
+            Object.entries(data.checklist).forEach(([id, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${id}"]`);
+                if (li && checked) li.classList.add('checked');
+            });
+            updateProgress(); renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const bar = document.getElementById('checklistProgress');
+            bar.style.width = Math.round((checked/total)*100) + '%';
+            bar.textContent = Math.round((checked/total)*100) + '%';
+        }
+
+        function addLogEntry() {
+            const entry = { id: Date.now(), date: document.getElementById('logDate').value, situation: document.getElementById('logSituation').value, coop: document.getElementById('logCoop').value, notes: document.getElementById('logNotes').value };
+            if (!entry.date) return alert('Bitte Datum ausfüllen');
+            data.logs.unshift(entry); saveData(); renderLogs();
+            document.getElementById('logSituation').value = ''; document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const icons = { super: '🌟', gut: '✅', etwas: '🙂', wenig: '🤔' };
+            document.getElementById('logList').innerHTML = data.logs.map(l => `<div class="log-item"><strong>${new Date(l.date).toLocaleDateString('de-DE')}</strong> ${icons[l.coop] || ''}<br>${l.situation || '-'}${l.notes ? `<br><small>${l.notes}</small>` : ''}</div>`).join('');
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() { const blob = new Blob([JSON.stringify({ item: 'V-20', ...data }, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-20_Kooperation_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+
+        init();
+    </script>
+</body>
+</html>
