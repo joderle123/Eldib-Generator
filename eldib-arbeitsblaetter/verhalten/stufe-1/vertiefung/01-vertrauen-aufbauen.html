@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Vertrauen aufbauen - Verhalten Stufe I</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #2e7d32;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .eldib-ref {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .observation-grid {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .observation-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .observation-card:hover {
+            border-color: #4caf50;
+        }
+        .observation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .observation-title {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .observation-item {
+            font-size: 0.8em;
+            background: #4caf50;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+        }
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        .rating-label {
+            flex: 1;
+            font-size: 0.95em;
+        }
+        .rating-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        .rating-btn:hover {
+            border-color: #4caf50;
+            transform: scale(1.1);
+        }
+        .rating-btn.selected {
+            background: #4caf50;
+            border-color: #4caf50;
+        }
+        .detail-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: border-color 0.3s;
+        }
+        .detail-input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+        .detail-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+        .detail-textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+        .strategy-section {
+            background: #fff8e1;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .strategy-section h3 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+        .strategy-list {
+            display: grid;
+            gap: 10px;
+        }
+        .strategy-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+        .strategy-check {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #f57c00;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .strategy-item.checked .strategy-check {
+            background: #f57c00;
+            color: white;
+        }
+        .strategy-item.checked .strategy-check::after {
+            content: "✓";
+        }
+        .progress-tracker {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .progress-tracker h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        .progress-item {
+            margin-bottom: 15px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .progress-bar {
+            height: 12px;
+            background: #bbdefb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #42a5f5, #1976d2);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        .date-entry {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .date-input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+        .notes-section {
+            background: #fce4ec;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .notes-section h3 {
+            color: #c2185b;
+            margin-bottom: 15px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(76,175,80,0.4);
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🔍 VERTIEFUNG</div>
+            <h1>Vertrauen zu Bezugspersonen aufbauen</h1>
+            <p class="meta">Verhalten Stufe I (0-2 Jahre) | Detaillierte Beobachtung & Förderung</p>
+            <div class="eldib-ref">
+                <strong>ELDiB-Items:</strong> V-1 (Reagiert auf Ansprache), V-2 (Akzeptiert körperliche Nähe), V-3 (Zeigt Bewusstsein für Erwachsene), V-5 (Vertraut vertrauten Erwachsenen)
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Detaillierte Verhaltensbeobachtung</h2>
+            <div class="info-box">
+                <strong>Ziel dieser Vertiefung:</strong> Das Vertrauen des Kindes zu Bezugspersonen systematisch beobachten, dokumentieren und gezielt fördern. Diese detaillierte Beobachtung hilft, individuelle Stärken und Entwicklungsbereiche zu erkennen.
+            </div>
+
+            <div class="observation-grid">
+                <div class="observation-card">
+                    <div class="observation-header">
+                        <span class="observation-title">Reaktion auf Namensansprache</span>
+                        <span class="observation-item">V-1</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Reagiert, wenn der Name gerufen wird:</span>
+                        <div class="rating-buttons" data-rating="name_response">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Wendet Kopf/Blick zur rufenden Person:</span>
+                        <div class="rating-buttons" data-rating="name_turn">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="obs_name_notes" placeholder="Detaillierte Beobachtungen: In welchen Situationen reagiert das Kind besonders gut? Gibt es Unterschiede je nach Person oder Umgebung?"></textarea>
+                </div>
+
+                <div class="observation-card">
+                    <div class="observation-header">
+                        <span class="observation-title">Akzeptanz körperlicher Nähe</span>
+                        <span class="observation-item">V-2</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Lässt sich von Bezugsperson halten:</span>
+                        <div class="rating-buttons" data-rating="physical_hold">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Entspannt sich bei Berührung:</span>
+                        <div class="rating-buttons" data-rating="physical_relax">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Sucht aktiv körperliche Nähe:</span>
+                        <div class="rating-buttons" data-rating="physical_seek">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="obs_physical_notes" placeholder="Detaillierte Beobachtungen: Welche Art von Berührung wird bevorzugt? Gibt es Berührungen, die vermieden werden?"></textarea>
+                </div>
+
+                <div class="observation-card">
+                    <div class="observation-header">
+                        <span class="observation-title">Bewusstsein für Bezugspersonen</span>
+                        <span class="observation-item">V-3</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Verfolgt Bezugsperson mit Blicken:</span>
+                        <div class="rating-buttons" data-rating="aware_track">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Reagiert auf An-/Abwesenheit:</span>
+                        <div class="rating-buttons" data-rating="aware_presence">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="obs_aware_notes" placeholder="Detaillierte Beobachtungen: Wie reagiert das Kind, wenn die Bezugsperson den Raum verlässt? Zeigt es Freude bei Rückkehr?"></textarea>
+                </div>
+
+                <div class="observation-card">
+                    <div class="observation-header">
+                        <span class="observation-title">Vertrauensverhalten</span>
+                        <span class="observation-item">V-5</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Sucht Trost bei Bezugsperson:</span>
+                        <div class="rating-buttons" data-rating="trust_comfort">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Lässt sich beruhigen:</span>
+                        <div class="rating-buttons" data-rating="trust_calm">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span class="rating-label">Zeigt sichere Bindungsverhaltensweisen:</span>
+                        <div class="rating-buttons" data-rating="trust_secure">
+                            <button class="rating-btn" data-value="1">😕</button>
+                            <button class="rating-btn" data-value="2">😐</button>
+                            <button class="rating-btn" data-value="3">🙂</button>
+                            <button class="rating-btn" data-value="4">😊</button>
+                            <button class="rating-btn" data-value="5">🌟</button>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="obs_trust_notes" placeholder="Detaillierte Beobachtungen: In welchen Situationen zeigt das Kind besonderes Vertrauen? Wie äußert sich Unsicherheit?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Förderstrategien</h2>
+            <div class="strategy-section">
+                <h3>Konkrete Maßnahmen zur Vertrauensförderung</h3>
+                <p style="margin-bottom: 15px; color: #666;">Markiere die Strategien, die du anwenden möchtest:</p>
+
+                <div class="strategy-list" id="strategyList">
+                    <div class="strategy-item" data-strategy="routine">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Vorhersehbare Routinen etablieren</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Gleiche Abläufe bei Pflege, Essen, Schlafen schaffen Sicherheit</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="narrate">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Handlungen sprachlich begleiten</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Ankündigen was passiert: "Jetzt hebe ich dich hoch"</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="respond">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Feinfühlig auf Signale reagieren</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Bedürfnisse zeitnah und angemessen erfüllen</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="eye">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Blickkontakt auf Augenhöhe</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Bei Interaktion auf Augenhöhe des Kindes gehen</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="gentle">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Sanfte, langsame Bewegungen</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Keine hastigen Bewegungen, Zeit für Anpassung lassen</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="comfort">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Trösten und Beruhigen priorisieren</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Bei Unruhe sofort da sein, Kind nie "schreien lassen"</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="smile">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Positive Mimik und Stimme</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Lächeln, warme Stimme, freundlicher Gesichtsausdruck</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="skin">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Körperkontakt anbieten</strong>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Hautkontakt, Kuscheln, sanftes Streicheln wenn akzeptiert</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Eigene Förderideen:</label>
+                <textarea class="detail-textarea" id="own_strategies" placeholder="Welche weiteren Strategien möchtest du ausprobieren?"></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📈 Fortschrittsdokumentation</h2>
+            <div class="progress-tracker">
+                <h3>Entwicklungsverlauf</h3>
+
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Reaktion auf Ansprache</span>
+                        <span id="progress_name_val">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress_name" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Akzeptanz körperlicher Nähe</span>
+                        <span id="progress_physical_val">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress_physical" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Bewusstsein für Bezugspersonen</span>
+                        <span id="progress_aware_val">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress_aware" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Vertrauensverhalten</span>
+                        <span id="progress_trust_val">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress_trust" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">📅 Beobachtungstermine</h3>
+            <div id="dateEntries">
+                <div class="date-entry">
+                    <input type="date" class="date-input" id="date1">
+                    <input type="text" class="detail-input" id="date1_note" placeholder="Beobachtung/Fortschritt an diesem Tag...">
+                </div>
+                <div class="date-entry">
+                    <input type="date" class="date-input" id="date2">
+                    <input type="text" class="detail-input" id="date2_note" placeholder="Beobachtung/Fortschritt an diesem Tag...">
+                </div>
+                <div class="date-entry">
+                    <input type="date" class="date-input" id="date3">
+                    <input type="text" class="detail-input" id="date3_note" placeholder="Beobachtung/Fortschritt an diesem Tag...">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Zusammenfassung & Reflexion</h2>
+            <div class="notes-section">
+                <h3>Gesamteinschätzung</h3>
+                <textarea class="detail-textarea" id="summary" placeholder="Fasse deine Beobachtungen zusammen: Wo steht das Kind aktuell? Was sind die nächsten Entwicklungsschritte? Was braucht besondere Aufmerksamkeit?" style="min-height: 150px;"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Nächste Schritte:</label>
+                <textarea class="detail-textarea" id="next_steps" placeholder="Welche konkreten Maßnahmen planst du für die kommende Zeit?"></textarea>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="printPage()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let ratings = {};
+        let strategies = [];
+
+        // Rating buttons
+        document.querySelectorAll('.rating-buttons').forEach(group => {
+            const ratingKey = group.dataset.rating;
+            group.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    group.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    ratings[ratingKey] = parseInt(this.dataset.value);
+                    updateProgress();
+                });
+            });
+        });
+
+        // Strategy items
+        document.querySelectorAll('.strategy-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                const strategy = this.dataset.strategy;
+                if (this.classList.contains('checked')) {
+                    if (!strategies.includes(strategy)) strategies.push(strategy);
+                } else {
+                    strategies = strategies.filter(s => s !== strategy);
+                }
+            });
+        });
+
+        function updateProgress() {
+            // Name response progress
+            const nameRatings = ['name_response', 'name_turn'];
+            const nameScore = nameRatings.reduce((sum, key) => sum + (ratings[key] || 0), 0);
+            const namePercent = Math.round((nameScore / (nameRatings.length * 5)) * 100);
+            document.getElementById('progress_name').style.width = namePercent + '%';
+            document.getElementById('progress_name_val').textContent = namePercent + '%';
+
+            // Physical acceptance progress
+            const physicalRatings = ['physical_hold', 'physical_relax', 'physical_seek'];
+            const physicalScore = physicalRatings.reduce((sum, key) => sum + (ratings[key] || 0), 0);
+            const physicalPercent = Math.round((physicalScore / (physicalRatings.length * 5)) * 100);
+            document.getElementById('progress_physical').style.width = physicalPercent + '%';
+            document.getElementById('progress_physical_val').textContent = physicalPercent + '%';
+
+            // Awareness progress
+            const awareRatings = ['aware_track', 'aware_presence'];
+            const awareScore = awareRatings.reduce((sum, key) => sum + (ratings[key] || 0), 0);
+            const awarePercent = Math.round((awareScore / (awareRatings.length * 5)) * 100);
+            document.getElementById('progress_aware').style.width = awarePercent + '%';
+            document.getElementById('progress_aware_val').textContent = awarePercent + '%';
+
+            // Trust progress
+            const trustRatings = ['trust_comfort', 'trust_calm', 'trust_secure'];
+            const trustScore = trustRatings.reduce((sum, key) => sum + (ratings[key] || 0), 0);
+            const trustPercent = Math.round((trustScore / (trustRatings.length * 5)) * 100);
+            document.getElementById('progress_trust').style.width = trustPercent + '%';
+            document.getElementById('progress_trust_val').textContent = trustPercent + '%';
+        }
+
+        function saveData() {
+            const data = {
+                ratings,
+                strategies,
+                observations: {
+                    name: document.getElementById('obs_name_notes').value,
+                    physical: document.getElementById('obs_physical_notes').value,
+                    aware: document.getElementById('obs_aware_notes').value,
+                    trust: document.getElementById('obs_trust_notes').value
+                },
+                own_strategies: document.getElementById('own_strategies').value,
+                dates: {
+                    d1: document.getElementById('date1').value,
+                    d1_note: document.getElementById('date1_note').value,
+                    d2: document.getElementById('date2').value,
+                    d2_note: document.getElementById('date2_note').value,
+                    d3: document.getElementById('date3').value,
+                    d3_note: document.getElementById('date3_note').value
+                },
+                summary: document.getElementById('summary').value,
+                next_steps: document.getElementById('next_steps').value
+            };
+
+            localStorage.setItem('eldib_v1_vertiefung_vertrauen', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_vertiefung_vertrauen');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                ratings = data.ratings || {};
+                Object.keys(ratings).forEach(key => {
+                    const group = document.querySelector(`[data-rating="${key}"]`);
+                    if (group) {
+                        const btn = group.querySelector(`[data-value="${ratings[key]}"]`);
+                        if (btn) btn.classList.add('selected');
+                    }
+                });
+
+                strategies = data.strategies || [];
+                strategies.forEach(s => {
+                    const item = document.querySelector(`[data-strategy="${s}"]`);
+                    if (item) item.classList.add('checked');
+                });
+
+                if (data.observations) {
+                    document.getElementById('obs_name_notes').value = data.observations.name || '';
+                    document.getElementById('obs_physical_notes').value = data.observations.physical || '';
+                    document.getElementById('obs_aware_notes').value = data.observations.aware || '';
+                    document.getElementById('obs_trust_notes').value = data.observations.trust || '';
+                }
+
+                document.getElementById('own_strategies').value = data.own_strategies || '';
+
+                if (data.dates) {
+                    document.getElementById('date1').value = data.dates.d1 || '';
+                    document.getElementById('date1_note').value = data.dates.d1_note || '';
+                    document.getElementById('date2').value = data.dates.d2 || '';
+                    document.getElementById('date2_note').value = data.dates.d2_note || '';
+                    document.getElementById('date3').value = data.dates.d3 || '';
+                    document.getElementById('date3_note').value = data.dates.d3_note || '';
+                }
+
+                document.getElementById('summary').value = data.summary || '';
+                document.getElementById('next_steps').value = data.next_steps || '';
+
+                updateProgress();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_v1_vertiefung_vertrauen');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vertiefung-vertrauen-stufe1.json';
+            a.click();
+        }
+
+        function printPage() {
+            window.print();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

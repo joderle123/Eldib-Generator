@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Reaktion auf Stimulation - Verhalten Stufe I</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        h1 { color: #e65100; font-size: 1.8em; margin-bottom: 10px; }
+        .meta { color: #666; font-size: 0.9em; }
+        .eldib-ref {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #e65100;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe0b2;
+        }
+        .info-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .stim-category {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .stim-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .stim-icon { font-size: 2em; }
+        .stim-title { font-weight: bold; color: #e65100; font-size: 1.1em; }
+        .response-grid {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .response-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+        .response-scale {
+            display: flex;
+            gap: 5px;
+        }
+        .scale-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        .scale-btn:hover { border-color: #ff9800; }
+        .scale-btn.selected { background: #ff9800; border-color: #ff9800; color: white; }
+        .detail-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-height: 80px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+        .detail-textarea:focus { outline: none; border-color: #ff9800; }
+        .preference-section {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .preference-section h3 { color: #2e7d32; margin-bottom: 15px; }
+        .pref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .pref-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .pref-item:hover { border-color: #4caf50; }
+        .pref-item.likes { background: #c8e6c9; border-color: #4caf50; }
+        .pref-item.dislikes { background: #ffcdd2; border-color: #f44336; }
+        .pref-item.neutral { background: #fff9c4; border-color: #ffc107; }
+        .pref-icon { font-size: 1.5em; margin-bottom: 5px; }
+        .sensitivity-meter {
+            background: #fce4ec;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .sensitivity-meter h3 { color: #c2185b; margin-bottom: 15px; }
+        .meter-item { margin-bottom: 20px; }
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .meter-track {
+            height: 12px;
+            background: #f8bbd9;
+            border-radius: 6px;
+            position: relative;
+        }
+        .meter-slider {
+            width: 100%;
+            height: 12px;
+            -webkit-appearance: none;
+            background: transparent;
+            position: absolute;
+            top: 0;
+        }
+        .meter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e91e63;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        .alert-section {
+            background: #ffebee;
+            border: 2px solid #ef5350;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .alert-section h3 { color: #c62828; margin-bottom: 15px; }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9800, #e65100);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,152,0,0.4);
+        }
+        .btn-secondary { background: #e0e0e0; color: #333; }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🔍 VERTIEFUNG</div>
+            <h1>Reaktion auf Stimulation</h1>
+            <p class="meta">Verhalten Stufe I (0-2 Jahre) | Sensorische Verarbeitung beobachten</p>
+            <div class="eldib-ref">
+                <strong>ELDiB-Items:</strong> V-8 (Reagiert auf sensorische Reize), V-9 (Zeigt Interesse an Umgebung), V-10 (Toleriert verschiedene Stimulation)
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>👁️ Visuelle Stimulation</h2>
+            <div class="stim-category">
+                <div class="stim-header">
+                    <span class="stim-icon">👀</span>
+                    <span class="stim-title">Reaktion auf visuelle Reize</span>
+                </div>
+                <div class="response-grid">
+                    <div class="response-row">
+                        <span>Verfolgt Objekte mit den Augen</span>
+                        <div class="response-scale" data-scale="visual_track">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Reagiert auf Gesichter</span>
+                        <div class="response-scale" data-scale="visual_faces">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Interessiert sich für Farben/Kontraste</span>
+                        <div class="response-scale" data-scale="visual_colors">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Toleriert helles Licht</span>
+                        <div class="response-scale" data-scale="visual_light">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="detail-textarea" id="visual_notes" placeholder="Beobachtungen zur visuellen Wahrnehmung..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👂 Auditive Stimulation</h2>
+            <div class="stim-category">
+                <div class="stim-header">
+                    <span class="stim-icon">🔊</span>
+                    <span class="stim-title">Reaktion auf Geräusche</span>
+                </div>
+                <div class="response-grid">
+                    <div class="response-row">
+                        <span>Reagiert auf Stimme der Bezugsperson</span>
+                        <div class="response-scale" data-scale="audio_voice">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Wendet sich zur Geräuschquelle</span>
+                        <div class="response-scale" data-scale="audio_turn">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Toleriert laute Geräusche</span>
+                        <div class="response-scale" data-scale="audio_loud">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Reagiert auf Musik</span>
+                        <div class="response-scale" data-scale="audio_music">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="detail-textarea" id="audio_notes" placeholder="Beobachtungen zur auditiven Wahrnehmung..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✋ Taktile Stimulation</h2>
+            <div class="stim-category">
+                <div class="stim-header">
+                    <span class="stim-icon">🤚</span>
+                    <span class="stim-title">Reaktion auf Berührung</span>
+                </div>
+                <div class="response-grid">
+                    <div class="response-row">
+                        <span>Genießt sanfte Berührung</span>
+                        <div class="response-scale" data-scale="tactile_gentle">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Toleriert verschiedene Texturen</span>
+                        <div class="response-scale" data-scale="tactile_textures">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Erkundet Objekte mit Händen</span>
+                        <div class="response-scale" data-scale="tactile_explore">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="response-row">
+                        <span>Toleriert Kleidung/Wickeln</span>
+                        <div class="response-scale" data-scale="tactile_clothing">
+                            <button class="scale-btn" data-value="1">1</button>
+                            <button class="scale-btn" data-value="2">2</button>
+                            <button class="scale-btn" data-value="3">3</button>
+                            <button class="scale-btn" data-value="4">4</button>
+                            <button class="scale-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="detail-textarea" id="tactile_notes" placeholder="Beobachtungen zur taktilen Wahrnehmung..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Vorlieben & Abneigungen</h2>
+            <div class="preference-section">
+                <h3>Klicke mehrfach um zu wechseln: Grün = mag, Rot = mag nicht, Gelb = neutral</h3>
+                <div class="pref-grid" id="prefGrid">
+                    <div class="pref-item" data-pref="mobile">
+                        <div class="pref-icon">🎠</div>
+                        <div>Mobile</div>
+                    </div>
+                    <div class="pref-item" data-pref="rattle">
+                        <div class="pref-icon">🎵</div>
+                        <div>Rassel</div>
+                    </div>
+                    <div class="pref-item" data-pref="mirror">
+                        <div class="pref-icon">🪞</div>
+                        <div>Spiegel</div>
+                    </div>
+                    <div class="pref-item" data-pref="soft_toy">
+                        <div class="pref-icon">🧸</div>
+                        <div>Stofftier</div>
+                    </div>
+                    <div class="pref-item" data-pref="bath">
+                        <div class="pref-icon">🛁</div>
+                        <div>Baden</div>
+                    </div>
+                    <div class="pref-item" data-pref="massage">
+                        <div class="pref-icon">💆</div>
+                        <div>Massage</div>
+                    </div>
+                    <div class="pref-item" data-pref="swing">
+                        <div class="pref-icon">🎢</div>
+                        <div>Schaukeln</div>
+                    </div>
+                    <div class="pref-item" data-pref="outdoors">
+                        <div class="pref-icon">🌳</div>
+                        <div>Draußen</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Sensitivitäts-Profil</h2>
+            <div class="sensitivity-meter">
+                <h3>Wie empfindlich reagiert das Kind?</h3>
+
+                <div class="meter-item">
+                    <div class="meter-label">
+                        <span>Licht</span>
+                        <span>Unterempfindlich ←→ Überempfindlich</span>
+                    </div>
+                    <div class="meter-track">
+                        <input type="range" class="meter-slider" id="sens_light" min="1" max="10" value="5">
+                    </div>
+                </div>
+
+                <div class="meter-item">
+                    <div class="meter-label">
+                        <span>Geräusche</span>
+                        <span>Unterempfindlich ←→ Überempfindlich</span>
+                    </div>
+                    <div class="meter-track">
+                        <input type="range" class="meter-slider" id="sens_sound" min="1" max="10" value="5">
+                    </div>
+                </div>
+
+                <div class="meter-item">
+                    <div class="meter-label">
+                        <span>Berührung</span>
+                        <span>Unterempfindlich ←→ Überempfindlich</span>
+                    </div>
+                    <div class="meter-track">
+                        <input type="range" class="meter-slider" id="sens_touch" min="1" max="10" value="5">
+                    </div>
+                </div>
+
+                <div class="meter-item">
+                    <div class="meter-label">
+                        <span>Bewegung</span>
+                        <span>Unterempfindlich ←→ Überempfindlich</span>
+                    </div>
+                    <div class="meter-track">
+                        <input type="range" class="meter-slider" id="sens_movement" min="1" max="10" value="5">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Besondere Hinweise</h2>
+            <div class="alert-section">
+                <h3>Auffälligkeiten dokumentieren</h3>
+                <textarea class="detail-textarea" id="concerns" placeholder="Gibt es Reaktionen, die besorgniserregend erscheinen? Z.B. extreme Empfindlichkeit, keine Reaktion auf Reize, ungewöhnliches Verhalten..." style="min-height: 120px;"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Empfehlungen für die Förderung:</label>
+                <textarea class="detail-textarea" id="recommendations" placeholder="Welche Stimulation sollte gefördert werden? Was sollte vermieden werden?"></textarea>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="printPage()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let scales = {};
+        let preferences = {};
+
+        // Scale buttons
+        document.querySelectorAll('.response-scale').forEach(scale => {
+            const scaleKey = scale.dataset.scale;
+            scale.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    scale.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    scales[scaleKey] = parseInt(this.dataset.value);
+                });
+            });
+        });
+
+        // Preference items (cycle through states)
+        document.querySelectorAll('.pref-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const pref = this.dataset.pref;
+                if (this.classList.contains('likes')) {
+                    this.classList.remove('likes');
+                    this.classList.add('dislikes');
+                    preferences[pref] = 'dislikes';
+                } else if (this.classList.contains('dislikes')) {
+                    this.classList.remove('dislikes');
+                    this.classList.add('neutral');
+                    preferences[pref] = 'neutral';
+                } else if (this.classList.contains('neutral')) {
+                    this.classList.remove('neutral');
+                    preferences[pref] = null;
+                } else {
+                    this.classList.add('likes');
+                    preferences[pref] = 'likes';
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                scales,
+                notes: {
+                    visual: document.getElementById('visual_notes').value,
+                    audio: document.getElementById('audio_notes').value,
+                    tactile: document.getElementById('tactile_notes').value
+                },
+                preferences,
+                sensitivity: {
+                    light: document.getElementById('sens_light').value,
+                    sound: document.getElementById('sens_sound').value,
+                    touch: document.getElementById('sens_touch').value,
+                    movement: document.getElementById('sens_movement').value
+                },
+                concerns: document.getElementById('concerns').value,
+                recommendations: document.getElementById('recommendations').value
+            };
+
+            localStorage.setItem('eldib_v1_vertiefung_stimulation', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_vertiefung_stimulation');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                scales = data.scales || {};
+                Object.keys(scales).forEach(key => {
+                    const scale = document.querySelector(`[data-scale="${key}"]`);
+                    if (scale) {
+                        const btn = scale.querySelector(`[data-value="${scales[key]}"]`);
+                        if (btn) btn.classList.add('selected');
+                    }
+                });
+
+                if (data.notes) {
+                    document.getElementById('visual_notes').value = data.notes.visual || '';
+                    document.getElementById('audio_notes').value = data.notes.audio || '';
+                    document.getElementById('tactile_notes').value = data.notes.tactile || '';
+                }
+
+                preferences = data.preferences || {};
+                Object.keys(preferences).forEach(key => {
+                    if (preferences[key]) {
+                        const item = document.querySelector(`[data-pref="${key}"]`);
+                        if (item) item.classList.add(preferences[key]);
+                    }
+                });
+
+                if (data.sensitivity) {
+                    document.getElementById('sens_light').value = data.sensitivity.light || 5;
+                    document.getElementById('sens_sound').value = data.sensitivity.sound || 5;
+                    document.getElementById('sens_touch').value = data.sensitivity.touch || 5;
+                    document.getElementById('sens_movement').value = data.sensitivity.movement || 5;
+                }
+
+                document.getElementById('concerns').value = data.concerns || '';
+                document.getElementById('recommendations').value = data.recommendations || '';
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_v1_vertiefung_stimulation');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vertiefung-stimulation-stufe1.json';
+            a.click();
+        }
+
+        function printPage() { window.print(); }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

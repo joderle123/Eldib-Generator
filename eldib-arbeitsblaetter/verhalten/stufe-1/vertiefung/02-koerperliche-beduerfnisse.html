@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Körperliche Bedürfnisse - Verhalten Stufe I</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #1565c0;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .eldib-ref {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #bbdefb;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .need-tracker {
+            display: grid;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .need-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #1976d2;
+        }
+        .need-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .need-title {
+            font-weight: bold;
+            color: #1565c0;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .need-icon {
+            font-size: 1.5em;
+        }
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .signal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .signal-item:hover {
+            border-color: #1976d2;
+        }
+        .signal-item.observed {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        .signal-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #1976d2;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .signal-item.observed .signal-checkbox {
+            background: #1976d2;
+        }
+        .signal-item.observed .signal-checkbox::after {
+            content: "✓";
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+        .frequency-tracker {
+            background: #fff8e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .frequency-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ffe082;
+        }
+        .frequency-row:last-child {
+            border-bottom: none;
+        }
+        .frequency-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ffc107;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1em;
+        }
+        .detail-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-height: 80px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+        .detail-textarea:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+        .response-section {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .response-section h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .response-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .response-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .response-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+        .response-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #c8e6c9;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+        .response-input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+        .pattern-analysis {
+            background: #fce4ec;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .pattern-analysis h3 {
+            color: #c2185b;
+            margin-bottom: 15px;
+        }
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .time-slot {
+            padding: 10px 5px;
+            background: white;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        .time-slot:hover {
+            background: #f8bbd9;
+        }
+        .time-slot.active {
+            background: #e91e63;
+            color: white;
+        }
+        .checklist-section {
+            background: #ede7f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .checklist-section h3 {
+            color: #512da8;
+            margin-bottom: 15px;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .checklist-item.checked {
+            background: #d1c4e9;
+        }
+        .checklist-box {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #512da8;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checklist-item.checked .checklist-box {
+            background: #512da8;
+            color: white;
+        }
+        .checklist-item.checked .checklist-box::after {
+            content: "✓";
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .summary-card {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .summary-card h4 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(25,118,210,0.4);
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1976d2;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            .summary-grid { grid-template-columns: 1fr; }
+            .time-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🔍 VERTIEFUNG</div>
+            <h1>Körperliche Bedürfnisse erkennen</h1>
+            <p class="meta">Verhalten Stufe I (0-2 Jahre) | Bedürfnissignale verstehen & beantworten</p>
+            <div class="eldib-ref">
+                <strong>ELDiB-Items:</strong> V-4 (Zeigt Bedürfnisse), V-6 (Akzeptiert Versorgung), V-7 (Beruhigt sich bei Bedürfniserfüllung)
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>👶 Bedürfnissignale des Kindes</h2>
+            <div class="info-box">
+                <strong>Ziel:</strong> Die individuellen Signale des Kindes für verschiedene Bedürfnisse erkennen und dokumentieren. Jedes Kind kommuniziert anders - diese Beobachtung hilft, feinfühlig zu reagieren.
+            </div>
+
+            <div class="need-tracker">
+                <div class="need-card">
+                    <div class="need-header">
+                        <span class="need-title"><span class="need-icon">🍼</span> Hunger</span>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Welche Signale zeigt das Kind bei Hunger?</p>
+                    <div class="signal-grid" data-need="hunger">
+                        <div class="signal-item" data-signal="crying">
+                            <div class="signal-checkbox"></div>
+                            <span>Weinen</span>
+                        </div>
+                        <div class="signal-item" data-signal="sucking">
+                            <div class="signal-checkbox"></div>
+                            <span>Saugbewegungen</span>
+                        </div>
+                        <div class="signal-item" data-signal="fist">
+                            <div class="signal-checkbox"></div>
+                            <span>Hand zum Mund</span>
+                        </div>
+                        <div class="signal-item" data-signal="rooting">
+                            <div class="signal-checkbox"></div>
+                            <span>Suchbewegungen</span>
+                        </div>
+                        <div class="signal-item" data-signal="restless">
+                            <div class="signal-checkbox"></div>
+                            <span>Unruhe</span>
+                        </div>
+                        <div class="signal-item" data-signal="smacking">
+                            <div class="signal-checkbox"></div>
+                            <span>Schmatzen</span>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="hunger_notes" placeholder="Weitere Beobachtungen zu Hungersignalen..."></textarea>
+                </div>
+
+                <div class="need-card">
+                    <div class="need-header">
+                        <span class="need-title"><span class="need-icon">😴</span> Müdigkeit</span>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Welche Signale zeigt das Kind bei Müdigkeit?</p>
+                    <div class="signal-grid" data-need="tired">
+                        <div class="signal-item" data-signal="yawning">
+                            <div class="signal-checkbox"></div>
+                            <span>Gähnen</span>
+                        </div>
+                        <div class="signal-item" data-signal="eye_rubbing">
+                            <div class="signal-checkbox"></div>
+                            <span>Augen reiben</span>
+                        </div>
+                        <div class="signal-item" data-signal="fussy">
+                            <div class="signal-checkbox"></div>
+                            <span>Quengeln</span>
+                        </div>
+                        <div class="signal-item" data-signal="staring">
+                            <div class="signal-checkbox"></div>
+                            <span>Starrer Blick</span>
+                        </div>
+                        <div class="signal-item" data-signal="clingy">
+                            <div class="signal-checkbox"></div>
+                            <span>Anhänglich</span>
+                        </div>
+                        <div class="signal-item" data-signal="jerky">
+                            <div class="signal-checkbox"></div>
+                            <span>Ruckartige Bewegungen</span>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="tired_notes" placeholder="Weitere Beobachtungen zu Müdigkeitssignalen..."></textarea>
+                </div>
+
+                <div class="need-card">
+                    <div class="need-header">
+                        <span class="need-title"><span class="need-icon">😢</span> Unbehagen/Schmerz</span>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Welche Signale zeigt das Kind bei Unbehagen?</p>
+                    <div class="signal-grid" data-need="discomfort">
+                        <div class="signal-item" data-signal="intense_cry">
+                            <div class="signal-checkbox"></div>
+                            <span>Intensives Weinen</span>
+                        </div>
+                        <div class="signal-item" data-signal="arching">
+                            <div class="signal-checkbox"></div>
+                            <span>Durchstrecken</span>
+                        </div>
+                        <div class="signal-item" data-signal="grimace">
+                            <div class="signal-checkbox"></div>
+                            <span>Grimassieren</span>
+                        </div>
+                        <div class="signal-item" data-signal="legs_up">
+                            <div class="signal-checkbox"></div>
+                            <span>Beine anziehen</span>
+                        </div>
+                        <div class="signal-item" data-signal="red_face">
+                            <div class="signal-checkbox"></div>
+                            <span>Rotes Gesicht</span>
+                        </div>
+                        <div class="signal-item" data-signal="rigid">
+                            <div class="signal-checkbox"></div>
+                            <span>Anspannung</span>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="discomfort_notes" placeholder="Weitere Beobachtungen zu Unbehagen-Signalen..."></textarea>
+                </div>
+
+                <div class="need-card">
+                    <div class="need-header">
+                        <span class="need-title"><span class="need-icon">🤗</span> Nähe/Zuwendung</span>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Welche Signale zeigt das Kind bei Bedürfnis nach Nähe?</p>
+                    <div class="signal-grid" data-need="closeness">
+                        <div class="signal-item" data-signal="reaching">
+                            <div class="signal-checkbox"></div>
+                            <span>Arme ausstrecken</span>
+                        </div>
+                        <div class="signal-item" data-signal="whimper">
+                            <div class="signal-checkbox"></div>
+                            <span>Wimmern</span>
+                        </div>
+                        <div class="signal-item" data-signal="eye_contact">
+                            <div class="signal-checkbox"></div>
+                            <span>Blickkontakt suchen</span>
+                        </div>
+                        <div class="signal-item" data-signal="following">
+                            <div class="signal-checkbox"></div>
+                            <span>Mit Blicken folgen</span>
+                        </div>
+                        <div class="signal-item" data-signal="clinging">
+                            <div class="signal-checkbox"></div>
+                            <span>Festklammern</span>
+                        </div>
+                        <div class="signal-item" data-signal="calms_held">
+                            <div class="signal-checkbox"></div>
+                            <span>Beruhigt sich beim Halten</span>
+                        </div>
+                    </div>
+                    <textarea class="detail-textarea" id="closeness_notes" placeholder="Weitere Beobachtungen zu Nähe-Signalen..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Rhythmus & Muster</h2>
+            <div class="pattern-analysis">
+                <h3>Tagesrhythmus dokumentieren</h3>
+                <p style="margin-bottom: 15px; color: #666;">Zu welchen Zeiten treten bestimmte Bedürfnisse häufiger auf?</p>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block;">Hunger-Zeiten:</label>
+                    <div class="time-grid" data-pattern="hunger">
+                        <div class="time-slot" data-time="6-8">6-8</div>
+                        <div class="time-slot" data-time="8-10">8-10</div>
+                        <div class="time-slot" data-time="10-12">10-12</div>
+                        <div class="time-slot" data-time="12-14">12-14</div>
+                        <div class="time-slot" data-time="14-16">14-16</div>
+                        <div class="time-slot" data-time="16-18">16-18</div>
+                        <div class="time-slot" data-time="18-20">18-20</div>
+                        <div class="time-slot" data-time="20-22">20-22</div>
+                        <div class="time-slot" data-time="22-24">22-24</div>
+                        <div class="time-slot" data-time="0-2">0-2</div>
+                        <div class="time-slot" data-time="2-4">2-4</div>
+                        <div class="time-slot" data-time="4-6">4-6</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block;">Schlaf-Zeiten:</label>
+                    <div class="time-grid" data-pattern="sleep">
+                        <div class="time-slot" data-time="6-8">6-8</div>
+                        <div class="time-slot" data-time="8-10">8-10</div>
+                        <div class="time-slot" data-time="10-12">10-12</div>
+                        <div class="time-slot" data-time="12-14">12-14</div>
+                        <div class="time-slot" data-time="14-16">14-16</div>
+                        <div class="time-slot" data-time="16-18">16-18</div>
+                        <div class="time-slot" data-time="18-20">18-20</div>
+                        <div class="time-slot" data-time="20-22">20-22</div>
+                        <div class="time-slot" data-time="22-24">22-24</div>
+                        <div class="time-slot" data-time="0-2">0-2</div>
+                        <div class="time-slot" data-time="2-4">2-4</div>
+                        <div class="time-slot" data-time="4-6">4-6</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block;">Unruhige Phasen:</label>
+                    <div class="time-grid" data-pattern="fussy">
+                        <div class="time-slot" data-time="6-8">6-8</div>
+                        <div class="time-slot" data-time="8-10">8-10</div>
+                        <div class="time-slot" data-time="10-12">10-12</div>
+                        <div class="time-slot" data-time="12-14">12-14</div>
+                        <div class="time-slot" data-time="14-16">14-16</div>
+                        <div class="time-slot" data-time="16-18">16-18</div>
+                        <div class="time-slot" data-time="18-20">18-20</div>
+                        <div class="time-slot" data-time="20-22">20-22</div>
+                        <div class="time-slot" data-time="22-24">22-24</div>
+                        <div class="time-slot" data-time="0-2">0-2</div>
+                        <div class="time-slot" data-time="2-4">2-4</div>
+                        <div class="time-slot" data-time="4-6">4-6</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="frequency-tracker">
+                <h3 style="color: #f57c00; margin-bottom: 15px;">Häufigkeit pro Tag (Durchschnitt)</h3>
+                <div class="frequency-row">
+                    <span>Mahlzeiten:</span>
+                    <input type="number" class="frequency-input" id="freq_meals" min="0" max="20" placeholder="x">
+                </div>
+                <div class="frequency-row">
+                    <span>Schlafphasen:</span>
+                    <input type="number" class="frequency-input" id="freq_sleep" min="0" max="10" placeholder="x">
+                </div>
+                <div class="frequency-row">
+                    <span>Windelwechsel:</span>
+                    <input type="number" class="frequency-input" id="freq_diaper" min="0" max="20" placeholder="x">
+                </div>
+                <div class="frequency-row">
+                    <span>Weinphasen (> 5 Min.):</span>
+                    <input type="number" class="frequency-input" id="freq_crying" min="0" max="20" placeholder="x">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Reaktion auf Bedürfniserfüllung</h2>
+            <div class="response-section">
+                <h3>Wie reagiert das Kind, wenn Bedürfnisse erfüllt werden?</h3>
+
+                <div class="response-grid">
+                    <div class="response-item">
+                        <label>Nach dem Füttern:</label>
+                        <input type="text" class="response-input" id="response_feeding" placeholder="z.B. entspannt sich, schläft ein, ist zufrieden wach...">
+                    </div>
+                    <div class="response-item">
+                        <label>Nach dem Wickeln:</label>
+                        <input type="text" class="response-input" id="response_diaper" placeholder="z.B. ruhiger, fröhlicher, strampelt zufrieden...">
+                    </div>
+                    <div class="response-item">
+                        <label>Beim Trösten:</label>
+                        <input type="text" class="response-input" id="response_comfort" placeholder="z.B. beruhigt sich schnell/langsam, braucht bestimmte Methode...">
+                    </div>
+                    <div class="response-item">
+                        <label>Beim Einschlafen:</label>
+                        <input type="text" class="response-input" id="response_sleep" placeholder="z.B. braucht Schaukeln, Singen, Schnuller...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Beruhigungsstrategien</h2>
+            <div class="checklist-section">
+                <h3>Was hilft bei diesem Kind?</h3>
+                <p style="margin-bottom: 15px; color: #666;">Markiere die Strategien, die funktionieren:</p>
+
+                <div id="calmingStrategies">
+                    <div class="checklist-item" data-calm="rocking">
+                        <div class="checklist-box"></div>
+                        <span>Schaukeln/Wiegen</span>
+                    </div>
+                    <div class="checklist-item" data-calm="singing">
+                        <div class="checklist-box"></div>
+                        <span>Singen/Summen</span>
+                    </div>
+                    <div class="checklist-item" data-calm="white_noise">
+                        <div class="checklist-box"></div>
+                        <span>Weißes Rauschen</span>
+                    </div>
+                    <div class="checklist-item" data-calm="swaddling">
+                        <div class="checklist-box"></div>
+                        <span>Pucken/Einwickeln</span>
+                    </div>
+                    <div class="checklist-item" data-calm="sucking">
+                        <div class="checklist-box"></div>
+                        <span>Saugen (Schnuller/Finger)</span>
+                    </div>
+                    <div class="checklist-item" data-calm="walking">
+                        <div class="checklist-box"></div>
+                        <span>Herumtragen/Gehen</span>
+                    </div>
+                    <div class="checklist-item" data-calm="skin">
+                        <div class="checklist-box"></div>
+                        <span>Hautkontakt</span>
+                    </div>
+                    <div class="checklist-item" data-calm="bath">
+                        <div class="checklist-box"></div>
+                        <span>Warmes Bad</span>
+                    </div>
+                    <div class="checklist-item" data-calm="music">
+                        <div class="checklist-box"></div>
+                        <span>Ruhige Musik</span>
+                    </div>
+                    <div class="checklist-item" data-calm="dark">
+                        <div class="checklist-box"></div>
+                        <span>Abgedunkelter Raum</span>
+                    </div>
+                </div>
+
+                <textarea class="detail-textarea" id="calming_notes" placeholder="Weitere Beruhigungsstrategien, die bei diesem Kind funktionieren..." style="margin-top: 15px;"></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Zusammenfassung</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h4>Eindeutige Signale</h4>
+                    <textarea class="detail-textarea" id="clear_signals" placeholder="Welche Signale sind klar zu erkennen?"></textarea>
+                </div>
+                <div class="summary-card">
+                    <h4>Herausfordernde Situationen</h4>
+                    <textarea class="detail-textarea" id="challenges" placeholder="Welche Situationen sind schwierig?"></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Nächste Beobachtungsziele:</label>
+                <textarea class="detail-textarea" id="next_goals" placeholder="Worauf möchtest du bei den nächsten Beobachtungen besonders achten?"></textarea>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="printPage()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let signals = { hunger: [], tired: [], discomfort: [], closeness: [] };
+        let patterns = { hunger: [], sleep: [], fussy: [] };
+        let calmingStrategies = [];
+
+        // Signal items
+        document.querySelectorAll('.signal-grid').forEach(grid => {
+            const need = grid.dataset.need;
+            grid.querySelectorAll('.signal-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('observed');
+                    const signal = this.dataset.signal;
+                    if (this.classList.contains('observed')) {
+                        if (!signals[need].includes(signal)) signals[need].push(signal);
+                    } else {
+                        signals[need] = signals[need].filter(s => s !== signal);
+                    }
+                });
+            });
+        });
+
+        // Time slots
+        document.querySelectorAll('.time-grid').forEach(grid => {
+            const pattern = grid.dataset.pattern;
+            grid.querySelectorAll('.time-slot').forEach(slot => {
+                slot.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const time = this.dataset.time;
+                    if (this.classList.contains('active')) {
+                        if (!patterns[pattern].includes(time)) patterns[pattern].push(time);
+                    } else {
+                        patterns[pattern] = patterns[pattern].filter(t => t !== time);
+                    }
+                });
+            });
+        });
+
+        // Calming strategies
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                const strategy = this.dataset.calm;
+                if (this.classList.contains('checked')) {
+                    if (!calmingStrategies.includes(strategy)) calmingStrategies.push(strategy);
+                } else {
+                    calmingStrategies = calmingStrategies.filter(s => s !== strategy);
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                signals,
+                notes: {
+                    hunger: document.getElementById('hunger_notes').value,
+                    tired: document.getElementById('tired_notes').value,
+                    discomfort: document.getElementById('discomfort_notes').value,
+                    closeness: document.getElementById('closeness_notes').value
+                },
+                patterns,
+                frequency: {
+                    meals: document.getElementById('freq_meals').value,
+                    sleep: document.getElementById('freq_sleep').value,
+                    diaper: document.getElementById('freq_diaper').value,
+                    crying: document.getElementById('freq_crying').value
+                },
+                responses: {
+                    feeding: document.getElementById('response_feeding').value,
+                    diaper: document.getElementById('response_diaper').value,
+                    comfort: document.getElementById('response_comfort').value,
+                    sleep: document.getElementById('response_sleep').value
+                },
+                calmingStrategies,
+                calming_notes: document.getElementById('calming_notes').value,
+                summary: {
+                    clear: document.getElementById('clear_signals').value,
+                    challenges: document.getElementById('challenges').value,
+                    goals: document.getElementById('next_goals').value
+                }
+            };
+
+            localStorage.setItem('eldib_v1_vertiefung_beduerfnisse', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v1_vertiefung_beduerfnisse');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                signals = data.signals || { hunger: [], tired: [], discomfort: [], closeness: [] };
+                Object.keys(signals).forEach(need => {
+                    const grid = document.querySelector(`[data-need="${need}"]`);
+                    if (grid) {
+                        signals[need].forEach(signal => {
+                            const item = grid.querySelector(`[data-signal="${signal}"]`);
+                            if (item) item.classList.add('observed');
+                        });
+                    }
+                });
+
+                if (data.notes) {
+                    document.getElementById('hunger_notes').value = data.notes.hunger || '';
+                    document.getElementById('tired_notes').value = data.notes.tired || '';
+                    document.getElementById('discomfort_notes').value = data.notes.discomfort || '';
+                    document.getElementById('closeness_notes').value = data.notes.closeness || '';
+                }
+
+                patterns = data.patterns || { hunger: [], sleep: [], fussy: [] };
+                Object.keys(patterns).forEach(pattern => {
+                    const grid = document.querySelector(`[data-pattern="${pattern}"]`);
+                    if (grid) {
+                        patterns[pattern].forEach(time => {
+                            const slot = grid.querySelector(`[data-time="${time}"]`);
+                            if (slot) slot.classList.add('active');
+                        });
+                    }
+                });
+
+                if (data.frequency) {
+                    document.getElementById('freq_meals').value = data.frequency.meals || '';
+                    document.getElementById('freq_sleep').value = data.frequency.sleep || '';
+                    document.getElementById('freq_diaper').value = data.frequency.diaper || '';
+                    document.getElementById('freq_crying').value = data.frequency.crying || '';
+                }
+
+                if (data.responses) {
+                    document.getElementById('response_feeding').value = data.responses.feeding || '';
+                    document.getElementById('response_diaper').value = data.responses.diaper || '';
+                    document.getElementById('response_comfort').value = data.responses.comfort || '';
+                    document.getElementById('response_sleep').value = data.responses.sleep || '';
+                }
+
+                calmingStrategies = data.calmingStrategies || [];
+                calmingStrategies.forEach(strategy => {
+                    const item = document.querySelector(`[data-calm="${strategy}"]`);
+                    if (item) item.classList.add('checked');
+                });
+
+                document.getElementById('calming_notes').value = data.calming_notes || '';
+
+                if (data.summary) {
+                    document.getElementById('clear_signals').value = data.summary.clear || '';
+                    document.getElementById('challenges').value = data.summary.challenges || '';
+                    document.getElementById('next_goals').value = data.summary.goals || '';
+                }
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_v1_vertiefung_beduerfnisse');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vertiefung-beduerfnisse-stufe1.json';
+            a.click();
+        }
+
+        function printPage() {
+            window.print();
+        }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        // Auto-save
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
