@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-47 Umgang mit Gruppendruck - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.97); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        h1 { color: #11998e; text-align: center; margin-bottom: 10px; font-size: 1.8em; }
+        .item-code { text-align: center; color: #38ef7d; font-weight: bold; font-size: 1.2em; margin-bottom: 20px; }
+        .goal-box { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        .goal-box h3 { margin-bottom: 10px; color: #e0f7fa; }
+        .section { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .section h3 { color: #11998e; margin-bottom: 15px; border-bottom: 2px solid #38ef7d; padding-bottom: 8px; }
+
+        /* Pressure Types */
+        .pressure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .pressure-card { background: white; border-radius: 12px; padding: 20px; text-align: center; border: 2px solid #ddd; cursor: pointer; transition: all 0.3s ease; }
+        .pressure-card:hover { transform: translateY(-5px); }
+        .pressure-card.experienced { background: #e0f7fa; border-color: #11998e; }
+        .pressure-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .pressure-card h4 { color: #11998e; margin-bottom: 5px; font-size: 0.95em; }
+        .pressure-card p { color: #666; font-size: 0.8em; }
+
+        /* Resistance Strategies */
+        .strategy-list { display: grid; gap: 10px; }
+        .strategy-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; }
+        .strategy-item:hover { transform: translateX(5px); }
+        .strategy-item.mastered { background: #e0f7fa; border-left: 4px solid #11998e; }
+        .strategy-icon { font-size: 1.5em; }
+        .strategy-content h4 { color: #11998e; font-size: 0.95em; margin-bottom: 3px; }
+        .strategy-content p { color: #666; font-size: 0.85em; }
+
+        /* Scenarios */
+        .scenario-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #11998e; }
+        .scenario-card h4 { color: #11998e; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .scenario-situation { background: #e0f7fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; line-height: 1.6; }
+        .scenario-options { display: grid; gap: 10px; }
+        .scenario-option { padding: 12px 15px; background: #f8f9fa; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .scenario-option:hover { border-color: #11998e; }
+        .scenario-option.selected { background: #e0f7fa; border-color: #11998e; }
+
+        /* Values Shield */
+        .shield-container { display: flex; justify-content: center; margin: 20px 0; }
+        .shield { width: 250px; height: 300px; background: linear-gradient(180deg, #11998e 0%, #38ef7d 100%); border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; color: white; text-align: center; }
+        .shield h4 { margin-bottom: 15px; font-size: 1.1em; }
+        .shield-values { list-style: none; }
+        .shield-values li { margin: 5px 0; font-size: 0.95em; }
+
+        /* Value inputs */
+        .values-input { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .value-input { padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; }
+        .value-input:focus { outline: none; border-color: #11998e; }
+
+        /* Tracker */
+        .tracker-form { background: white; border-radius: 12px; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #11998e; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #38ef7d; }
+
+        /* Outcome Rating */
+        .outcome-rating { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .outcome-btn { padding: 10px 20px; border: 2px solid #ddd; border-radius: 20px; background: white; cursor: pointer; transition: all 0.3s ease; }
+        .outcome-btn:hover { border-color: #11998e; }
+        .outcome-btn.selected { background: #11998e; color: white; border-color: #11998e; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #38ef7d; }
+        .log-entry .log-header { display: flex; justify-content: space-between; margin-bottom: 10px; color: #666; font-size: 0.9em; }
+        .delete-log { background: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 0.8em; }
+
+        /* Progress */
+        .progress-container { background: #e9ecef; border-radius: 10px; height: 25px; overflow: hidden; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #11998e, #38ef7d); border-radius: 10px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+
+        /* Actions */
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(17,153,142,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); border-radius: 12px; padding: 20px; margin-top: 20px; }
+        .tips-box h4 { color: #11998e; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Umgang mit Gruppendruck</h1>
+        <div class="item-code">V-47 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche erkennt verschiedene Formen von Gruppendruck, entwickelt Strategien zur Resistenz und kann sich trotz sozialem Druck an eigenen Werten und Überzeugungen orientieren.</p>
+        </div>
+
+        <div class="section">
+            <h3>Arten von Gruppendruck erkennen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf Formen von Gruppendruck, die du schon erlebt hast:</p>
+            <div class="pressure-grid">
+                <div class="pressure-card" data-type="direct"><div class="icon">👊</div><h4>Direkt</h4><p>"Komm schon, mach mit!"</p></div>
+                <div class="pressure-card" data-type="indirect"><div class="icon">👀</div><h4>Indirekt</h4><p>Ausgrenzung bei Weigerung</p></div>
+                <div class="pressure-card" data-type="unspoken"><div class="icon">🤫</div><h4>Unausgesprochen</h4><p>Sich anpassen wollen</p></div>
+                <div class="pressure-card" data-type="positive"><div class="icon">⭐</div><h4>Positiv</h4><p>Zu guten Dingen ermutigen</p></div>
+                <div class="pressure-card" data-type="mockery"><div class="icon">😏</div><h4>Spott</h4><p>"Bist du etwa zu feige?"</p></div>
+                <div class="pressure-card" data-type="friendship"><div class="icon">🤝</div><h4>Freundschaft</h4><p>"Echte Freunde machen das"</p></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Mein Werte-Schutzschild</h3>
+            <p style="color: #666; margin-bottom: 15px;">Welche Werte helfen dir, standhaft zu bleiben?</p>
+            <div class="values-input">
+                <input type="text" class="value-input" id="value1" placeholder="Wert 1 (z.B. Ehrlichkeit)">
+                <input type="text" class="value-input" id="value2" placeholder="Wert 2 (z.B. Respekt)">
+                <input type="text" class="value-input" id="value3" placeholder="Wert 3 (z.B. Gesundheit)">
+                <input type="text" class="value-input" id="value4" placeholder="Wert 4 (z.B. Familie)">
+            </div>
+            <div class="shield-container">
+                <div class="shield"><h4>Mein Schutzschild</h4><ul class="shield-values" id="shieldValues"><li>-</li><li>-</li><li>-</li><li>-</li></ul></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Widerstandsstrategien</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf Strategien, die du anwenden kannst:</p>
+            <div class="strategy-list">
+                <div class="strategy-item" data-strategy="no"><span class="strategy-icon">🚫</span><div class="strategy-content"><h4>Klares Nein</h4><p>"Nein, das mache ich nicht." - ohne Erklärung</p></div></div>
+                <div class="strategy-item" data-strategy="excuse"><span class="strategy-icon">🏃</span><div class="strategy-content"><h4>Ausrede nutzen</h4><p>"Meine Eltern würden mich umbringen" / "Ich hab morgen was Wichtiges"</p></div></div>
+                <div class="strategy-item" data-strategy="humor"><span class="strategy-icon">😄</span><div class="strategy-content"><h4>Humor</h4><p>Die Situation mit einem Witz entschärfen</p></div></div>
+                <div class="strategy-item" data-strategy="question"><span class="strategy-icon">🤔</span><div class="strategy-content"><h4>Umkehr-Frage</h4><p>"Warum ist dir das so wichtig, dass ich mitmache?"</p></div></div>
+                <div class="strategy-item" data-strategy="leave"><span class="strategy-icon">🚶</span><div class="strategy-content"><h4>Situation verlassen</h4><p>Einfach gehen, ohne große Erklärung</p></div></div>
+                <div class="strategy-item" data-strategy="ally"><span class="strategy-icon">👥</span><div class="strategy-content"><h4>Verbündete suchen</h4><p>Jemanden finden, der auch nicht mitmachen will</p></div></div>
+                <div class="strategy-item" data-strategy="delay"><span class="strategy-icon">⏰</span><div class="strategy-content"><h4>Verzögern</h4><p>"Vielleicht später" - um Zeit zu gewinnen</p></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Übungssituationen</h3>
+            <div class="scenario-card" data-scenario="party">
+                <h4><span>🎉</span> Party-Situation</h4>
+                <div class="scenario-situation">Auf einer Party bietet dir jemand Alkohol an. Deine Freunde trinken alle schon und sagen: "Sei kein Spielverderber, ein Bier ist doch nichts!"</div>
+                <div class="scenario-options">
+                    <div class="scenario-option" data-choice="accept">Mitmachen, um dazuzugehören</div>
+                    <div class="scenario-option" data-choice="no">Einfach "Nein" sagen und dabei bleiben</div>
+                    <div class="scenario-option" data-choice="excuse">Sagen, dass du Medikamente nimmst</div>
+                    <div class="scenario-option" data-choice="leave">Die Party verlassen</div>
+                </div>
+            </div>
+            <div class="scenario-card" data-scenario="cheating">
+                <h4><span>📝</span> Abschreiben</h4>
+                <div class="scenario-situation">In einer Prüfung bitten dich Klassenkameraden, abschreiben zu lassen. Sie sagen: "Wir haben dir auch schon geholfen!"</div>
+                <div class="scenario-options">
+                    <div class="scenario-option" data-choice="accept">Sie abschreiben lassen</div>
+                    <div class="scenario-option" data-choice="refuse">Ablehnen und erklären warum</div>
+                    <div class="scenario-option" data-choice="ignore">So tun, als hätte ich es nicht gehört</div>
+                    <div class="scenario-option" data-choice="later">Später beim Lernen helfen anbieten</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Erfahrungen dokumentieren</h3>
+            <div class="tracker-form">
+                <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                <div class="form-group"><label>Situation</label><input type="text" id="logSituation" placeholder="Was ist passiert?"></div>
+                <div class="form-group"><label>Angewandte Strategie</label><select id="logStrategy"><option value="">Strategie wählen...</option><option value="no">Klares Nein</option><option value="excuse">Ausrede</option><option value="humor">Humor</option><option value="question">Umkehr-Frage</option><option value="leave">Situation verlassen</option><option value="ally">Verbündete</option><option value="delay">Verzögern</option></select></div>
+                <div class="form-group"><label>Wie ist es ausgegangen?</label><div class="outcome-rating" id="outcomeRating"><div class="outcome-btn" data-outcome="great">🎉 Super</div><div class="outcome-btn" data-outcome="okay">👍 OK</div><div class="outcome-btn" data-outcome="hard">😓 Schwierig</div><div class="outcome-btn" data-outcome="failed">💪 Lernmoment</div></div></div>
+                <div class="form-group"><label>Was habe ich gelernt?</label><textarea id="logLearning" placeholder="Reflexion..."></textarea></div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Entwicklungsfortschritt</h3>
+            <div class="progress-container"><div class="progress-bar" id="progressBar" style="width: 0%;">0%</div></div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Lerne, bei dir selbst zu bleiben!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps gegen Gruppendruck</h4>
+            <ul>
+                <li><strong>Kenne deine Werte:</strong> Wer seine Überzeugungen kennt, kann leichter standhaft bleiben</li>
+                <li><strong>Übe dein "Nein":</strong> Je öfter du übst, desto natürlicher wird es</li>
+                <li><strong>Wahre Freunde:</strong> Echte Freunde akzeptieren dein Nein</li>
+                <li><strong>Körpersprache:</strong> Stehe aufrecht und halte Blickkontakt</li>
+                <li><strong>Keine Erklärung nötig:</strong> "Nein" ist ein vollständiger Satz</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V47_arbeit';
+        let data = { pressureTypes: {}, values: {}, strategies: {}, scenarios: {}, logs: [] };
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.pressure-card').forEach(card => { card.addEventListener('click', function() { this.classList.toggle('experienced'); data.pressureTypes[this.dataset.type] = this.classList.contains('experienced'); updateProgress(); saveData(); }); });
+            ['value1','value2','value3','value4'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', function() { data.values[id] = this.value; updateShield(); saveData(); }); });
+            document.querySelectorAll('.strategy-item').forEach(item => { item.addEventListener('click', function() { this.classList.toggle('mastered'); data.strategies[this.dataset.strategy] = this.classList.contains('mastered'); updateProgress(); saveData(); }); });
+            document.querySelectorAll('.scenario-card').forEach(card => { const scenario = card.dataset.scenario; card.querySelectorAll('.scenario-option').forEach(opt => { opt.addEventListener('click', function() { card.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected')); this.classList.add('selected'); data.scenarios[scenario] = this.dataset.choice; updateProgress(); saveData(); }); }); });
+            document.querySelectorAll('.outcome-btn').forEach(btn => { btn.addEventListener('click', function() { document.querySelectorAll('.outcome-btn').forEach(b => b.classList.remove('selected')); this.classList.add('selected'); }); });
+            document.getElementById('logDate').valueAsDate = new Date();
+            applyStoredData(); renderLogs(); updateProgress();
+        }
+
+        function updateShield() {
+            const values = ['value1','value2','value3','value4'].map(id => data.values[id] || '-');
+            document.getElementById('shieldValues').innerHTML = values.map(v => `<li>${v}</li>`).join('');
+        }
+
+        function applyStoredData() {
+            Object.entries(data.pressureTypes).forEach(([t, e]) => { if(e) { const el = document.querySelector(`.pressure-card[data-type="${t}"]`); if(el) el.classList.add('experienced'); }});
+            Object.entries(data.values).forEach(([id, v]) => { const el = document.getElementById(id); if(el) el.value = v; });
+            updateShield();
+            Object.entries(data.strategies).forEach(([s, m]) => { if(m) { const el = document.querySelector(`.strategy-item[data-strategy="${s}"]`); if(el) el.classList.add('mastered'); }});
+            Object.entries(data.scenarios).forEach(([s, c]) => { const card = document.querySelector(`.scenario-card[data-scenario="${s}"]`); if(card) { const opt = card.querySelector(`.scenario-option[data-choice="${c}"]`); if(opt) opt.classList.add('selected'); }});
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value, situation = document.getElementById('logSituation').value, strategy = document.getElementById('logStrategy').value;
+            const selectedOutcome = document.querySelector('.outcome-btn.selected'); const outcome = selectedOutcome ? selectedOutcome.dataset.outcome : '';
+            const learning = document.getElementById('logLearning').value;
+            if(!date || !situation) { alert('Bitte fülle mindestens Datum und Situation aus!'); return; }
+            data.logs.push({ id: Date.now(), date, situation, strategy, outcome, learning });
+            document.getElementById('logSituation').value = ''; document.getElementById('logStrategy').value = ''; document.getElementById('logLearning').value = '';
+            document.querySelectorAll('.outcome-btn').forEach(b => b.classList.remove('selected'));
+            renderLogs(); updateProgress(); saveData();
+        }
+
+        function deleteLog(id) { data.logs = data.logs.filter(l => l.id !== id); renderLogs(); updateProgress(); saveData(); }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            const emojis = { great: '🎉', okay: '👍', hard: '😓', failed: '💪' };
+            container.innerHTML = [...data.logs].sort((a,b) => new Date(b.date) - new Date(a.date)).map(log => `<div class="log-entry"><div class="log-header"><span>${new Date(log.date).toLocaleDateString('de-DE')} ${log.outcome ? emojis[log.outcome] : ''}</span><button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button></div><div style="font-weight:600;color:#11998e;">${log.situation}</div>${log.strategy ? `<div style="margin-top:8px;color:#666;">Strategie: ${log.strategy}</div>` : ''}${log.learning ? `<div style="color:#555;margin-top:10px;font-style:italic;">"${log.learning}"</div>` : ''}</div>`).join('');
+        }
+
+        function updateProgress() {
+            let total = 0, achieved = 0;
+            total += 3; achieved += Math.min(Object.values(data.pressureTypes).filter(Boolean).length, 3);
+            total += 2; achieved += Math.min(Object.values(data.values).filter(v => v && v.length > 0).length, 2);
+            total += 3; achieved += Math.min(Object.values(data.strategies).filter(Boolean).length, 3);
+            total += 2; achieved += Object.keys(data.scenarios).length;
+            total += 2; achieved += Math.min(data.logs.length, 2);
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressBar').textContent = percent + '%';
+            const texts = ['Lerne, bei dir selbst zu bleiben!', 'Du erkennst Gruppendruck.', 'Du entwickelst Widerstandsstrategien.', 'Du bleibst standhaft!', 'Hervorragend! Du bist resistent gegen Gruppendruck!'];
+            document.getElementById('progressText').textContent = texts[Math.min(Math.floor(percent/25), 4)];
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if(s) { data = JSON.parse(s); if(!data.pressureTypes) data.pressureTypes = {}; if(!data.values) data.values = {}; if(!data.strategies) data.strategies = {}; if(!data.scenarios) data.scenarios = {}; if(!data.logs) data.logs = []; }}
+        function exportData() { const blob = new Blob([JSON.stringify({item:'V-47',title:'Umgang mit Gruppendruck',exportDate:new Date().toISOString(),...data}, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-47_Gruppendruck_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+        function resetData() { if(confirm('Alle Daten löschen?')) { localStorage.removeItem(STORAGE_KEY); location.reload(); }}
+        init();
+    </script>
+</body>
+</html>

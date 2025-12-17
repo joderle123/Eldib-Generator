@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-44 Moralisches Urteilen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a0072 0%, #8e24aa 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4a0072;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .item-code {
+            text-align: center;
+            color: #8e24aa;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .goal-box {
+            background: linear-gradient(135deg, #4a0072, #6a1b9a);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .goal-box h3 { margin-bottom: 10px; color: #e1bee7; }
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            color: #4a0072;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #8e24aa;
+            padding-bottom: 8px;
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .value-item {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .value-item:hover { border-color: #8e24aa; }
+        .value-item.selected { background: #f3e5f5; border-color: #8e24aa; }
+        .value-item .icon { font-size: 1.8em; margin-bottom: 8px; }
+        .value-item .name { font-size: 0.9em; font-weight: 500; color: #333; }
+
+        /* Dilemmas */
+        .dilemma-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #8e24aa;
+        }
+        .dilemma-card h4 {
+            color: #4a0072;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dilemma-situation {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .dilemma-question {
+            font-weight: 600;
+            color: #4a0072;
+            margin-bottom: 15px;
+        }
+        .dilemma-options {
+            display: grid;
+            gap: 10px;
+        }
+        .dilemma-option {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dilemma-option:hover { border-color: #8e24aa; }
+        .dilemma-option.selected { background: #e1bee7; border-color: #8e24aa; }
+        .reasoning-box {
+            margin-top: 15px;
+        }
+        .reasoning-box label {
+            display: block;
+            color: #4a0072;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .reasoning-box textarea {
+            width: 100%;
+            height: 80px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            resize: none;
+            font-size: 0.95em;
+        }
+        .reasoning-box textarea:focus { outline: none; border-color: #8e24aa; }
+
+        /* Moral Compass */
+        .compass-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .compass {
+            width: 300px;
+            height: 300px;
+            border: 4px solid #8e24aa;
+            border-radius: 50%;
+            position: relative;
+            background: white;
+        }
+        .compass-point {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75em;
+            text-align: center;
+        }
+        .compass-point:hover { border-color: #8e24aa; transform: scale(1.1); }
+        .compass-point.active { background: #f3e5f5; border-color: #8e24aa; }
+        .compass-point .icon { font-size: 1.5em; margin-bottom: 3px; }
+        .compass-point.north { top: -40px; left: 110px; }
+        .compass-point.east { top: 110px; right: -40px; }
+        .compass-point.south { bottom: -40px; left: 110px; }
+        .compass-point.west { top: 110px; left: -40px; }
+        .compass-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4a0072, #8e24aa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        /* Stages of Moral Development */
+        .stages-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .stage-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .stage-row:hover { background: #f3e5f5; }
+        .stage-row.active { background: #e1bee7; }
+        .stage-number {
+            width: 40px;
+            height: 40px;
+            background: #8e24aa;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .stage-content h4 { color: #4a0072; margin-bottom: 5px; font-size: 0.95em; }
+        .stage-content p { color: #666; font-size: 0.85em; }
+
+        /* Reflection Questions */
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .reflection-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .reflection-card h4 {
+            color: #4a0072;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .reflection-card textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            resize: none;
+            font-size: 0.9em;
+        }
+        .reflection-card textarea:focus { outline: none; border-color: #8e24aa; }
+
+        /* Tracker Form */
+        .tracker-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            color: #4a0072;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #8e24aa;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #8e24aa;
+        }
+        .log-entry .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .delete-log {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        /* Progress */
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4a0072, #8e24aa);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4a0072, #8e24aa);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(142,36,170,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-box h4 { color: #4a0072; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Moralisches Urteilen</h1>
+        <div class="item-code">V-44 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche entwickelt ein differenziertes moralisches Urteilsvermögen, kann ethische Dilemmata aus verschiedenen Perspektiven betrachten, eigene Wertvorstellungen reflektieren und begründete moralische Entscheidungen treffen.</p>
+        </div>
+
+        <div class="section">
+            <h3>Meine wichtigsten Werte</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wähle die Werte aus, die dir besonders wichtig sind:</p>
+
+            <div class="values-grid">
+                <div class="value-item" data-value="honesty"><div class="icon">🎯</div><div class="name">Ehrlichkeit</div></div>
+                <div class="value-item" data-value="fairness"><div class="icon">⚖️</div><div class="name">Gerechtigkeit</div></div>
+                <div class="value-item" data-value="respect"><div class="icon">🙏</div><div class="name">Respekt</div></div>
+                <div class="value-item" data-value="responsibility"><div class="icon">🛡️</div><div class="name">Verantwortung</div></div>
+                <div class="value-item" data-value="compassion"><div class="icon">💚</div><div class="name">Mitgefühl</div></div>
+                <div class="value-item" data-value="loyalty"><div class="icon">🤝</div><div class="name">Loyalität</div></div>
+                <div class="value-item" data-value="courage"><div class="icon">🦁</div><div class="name">Mut</div></div>
+                <div class="value-item" data-value="freedom"><div class="icon">🕊️</div><div class="name">Freiheit</div></div>
+                <div class="value-item" data-value="equality"><div class="icon">👥</div><div class="name">Gleichheit</div></div>
+                <div class="value-item" data-value="trust"><div class="icon">💎</div><div class="name">Vertrauen</div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Moralischer Kompass</h3>
+            <p style="color: #666; margin-bottom: 15px; text-align: center;">Was leitet dich bei moralischen Entscheidungen? Klicke auf die relevanten Bereiche:</p>
+
+            <div class="compass-container">
+                <div class="compass">
+                    <div class="compass-point north" data-point="consequences">
+                        <span class="icon">📊</span>
+                        <span>Konsequenzen</span>
+                    </div>
+                    <div class="compass-point east" data-point="rules">
+                        <span class="icon">📜</span>
+                        <span>Regeln/Pflichten</span>
+                    </div>
+                    <div class="compass-point south" data-point="character">
+                        <span class="icon">💎</span>
+                        <span>Charakter</span>
+                    </div>
+                    <div class="compass-point west" data-point="care">
+                        <span class="icon">❤️</span>
+                        <span>Fürsorge</span>
+                    </div>
+                    <div class="compass-center">MEIN MORALISCHER KOMPASS</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Ethische Dilemmata</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wie würdest du in diesen schwierigen Situationen entscheiden?</p>
+
+            <div class="dilemma-card" data-dilemma="cheating">
+                <h4><span>📝</span> Das Abschreiben</h4>
+                <div class="dilemma-situation">
+                    Dein bester Freund hat bei einer wichtigen Prüfung abgeschrieben. Du bist der Einzige, der es gesehen hat. Wenn er erwischt wird, muss er die Klasse wiederholen. Die Lehrerin fragt dich direkt, ob du etwas beobachtet hast.
+                </div>
+                <div class="dilemma-question">Was würdest du tun?</div>
+                <div class="dilemma-options">
+                    <div class="dilemma-option" data-choice="lie">Die Lehrerin anlügen, um deinen Freund zu schützen</div>
+                    <div class="dilemma-option" data-choice="truth">Die Wahrheit sagen, auch wenn es Konsequenzen für deinen Freund hat</div>
+                    <div class="dilemma-option" data-choice="avoid">Versuchen, der Frage auszuweichen</div>
+                    <div class="dilemma-option" data-choice="talk">Erst mit deinem Freund sprechen und ihn überzeugen, es selbst zuzugeben</div>
+                </div>
+                <div class="reasoning-box">
+                    <label>Begründe deine Entscheidung:</label>
+                    <textarea id="reasoning-cheating" placeholder="Warum hast du dich so entschieden?"></textarea>
+                </div>
+            </div>
+
+            <div class="dilemma-card" data-dilemma="found">
+                <h4><span>💰</span> Der gefundene Geldbeutel</h4>
+                <div class="dilemma-situation">
+                    Du findest einen Geldbeutel mit 200€ und einem Ausweis. Du weißt, dass der Besitzer wohlhabend ist. Gleichzeitig könnte deine Familie das Geld dringend gebrauchen.
+                </div>
+                <div class="dilemma-question">Was würdest du tun?</div>
+                <div class="dilemma-options">
+                    <div class="dilemma-option" data-choice="return-all">Den Geldbeutel vollständig zurückgeben</div>
+                    <div class="dilemma-option" data-choice="keep">Das Geld behalten, der Besitzer wird es nicht vermissen</div>
+                    <div class="dilemma-option" data-choice="return-some">Einen Teil zurückgeben, etwas behalten</div>
+                    <div class="dilemma-option" data-choice="donate">Das Geld an eine wohltätige Organisation spenden</div>
+                </div>
+                <div class="reasoning-box">
+                    <label>Begründe deine Entscheidung:</label>
+                    <textarea id="reasoning-found" placeholder="Warum hast du dich so entschieden?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Stufen moralischer Entwicklung</h3>
+            <p style="color: #666; margin-bottom: 15px;">Auf welcher Stufe siehst du dich selbst? (nach Kohlberg)</p>
+
+            <div class="stages-container">
+                <div class="stage-row" data-stage="1">
+                    <div class="stage-number">1</div>
+                    <div class="stage-content">
+                        <h4>Strafe und Gehorsam</h4>
+                        <p>"Ich tue es nicht, weil ich bestraft werde."</p>
+                    </div>
+                </div>
+                <div class="stage-row" data-stage="2">
+                    <div class="stage-number">2</div>
+                    <div class="stage-content">
+                        <h4>Eigeninteresse</h4>
+                        <p>"Was bringt es mir? Wie eine Hand die andere wäscht."</p>
+                    </div>
+                </div>
+                <div class="stage-row" data-stage="3">
+                    <div class="stage-number">3</div>
+                    <div class="stage-content">
+                        <h4>Soziale Anerkennung</h4>
+                        <p>"Ich möchte ein guter Mensch sein und von anderen anerkannt werden."</p>
+                    </div>
+                </div>
+                <div class="stage-row" data-stage="4">
+                    <div class="stage-number">4</div>
+                    <div class="stage-content">
+                        <h4>Gesellschaftliche Ordnung</h4>
+                        <p>"Regeln und Gesetze sind für alle da und müssen eingehalten werden."</p>
+                    </div>
+                </div>
+                <div class="stage-row" data-stage="5">
+                    <div class="stage-number">5</div>
+                    <div class="stage-content">
+                        <h4>Sozialvertrag</h4>
+                        <p>"Regeln können hinterfragt werden, wenn sie nicht dem Wohl aller dienen."</p>
+                    </div>
+                </div>
+                <div class="stage-row" data-stage="6">
+                    <div class="stage-number">6</div>
+                    <div class="stage-content">
+                        <h4>Universelle Prinzipien</h4>
+                        <p>"Ich folge meinem Gewissen und universellen ethischen Prinzipien."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Reflexionsfragen</h3>
+            <div class="reflection-grid">
+                <div class="reflection-card">
+                    <h4>Woher kommen meine Werte?</h4>
+                    <textarea id="reflectOrigin" placeholder="Familie, Kultur, Erfahrungen, Religion...?"></textarea>
+                </div>
+                <div class="reflection-card">
+                    <h4>Wann musste ich eine schwierige moralische Entscheidung treffen?</h4>
+                    <textarea id="reflectDifficult" placeholder="Beschreibe eine Situation..."></textarea>
+                </div>
+                <div class="reflection-card">
+                    <h4>Wie gehe ich mit Situationen um, in denen meine Werte mit denen anderer kollidieren?</h4>
+                    <textarea id="reflectConflict" placeholder="Deine Strategie..."></textarea>
+                </div>
+                <div class="reflection-card">
+                    <h4>Welchen Wert möchte ich stärker in meinem Leben umsetzen?</h4>
+                    <textarea id="reflectGoal" placeholder="Dein Ziel..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Moralische Erfahrungen dokumentieren</h3>
+            <div class="tracker-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="form-group">
+                    <label>Situation</label>
+                    <input type="text" id="logSituation" placeholder="Was ist passiert?">
+                </div>
+                <div class="form-group">
+                    <label>Welche Werte waren betroffen?</label>
+                    <input type="text" id="logValues" placeholder="z.B. Ehrlichkeit, Loyalität...">
+                </div>
+                <div class="form-group">
+                    <label>Meine Entscheidung & Reflexion</label>
+                    <textarea id="logReflection" placeholder="Was habe ich entschieden und warum?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Entwicklungsfortschritt</h3>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Beginne deine Reise zur moralischen Reife!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für moralische Entwicklung</h4>
+            <ul>
+                <li><strong>Perspektiven wechseln:</strong> Versuche, Situationen aus verschiedenen Blickwinkeln zu betrachten</li>
+                <li><strong>Hinterfragen:</strong> Frage dich "Warum?" bei moralischen Regeln und Überzeugungen</li>
+                <li><strong>Dialog suchen:</strong> Sprich mit anderen über ethische Fragen</li>
+                <li><strong>Konsequenzen bedenken:</strong> Überlege, wie deine Handlungen andere beeinflussen</li>
+                <li><strong>Vorbilder finden:</strong> Lerne von Menschen mit starken moralischen Überzeugungen</li>
+                <li><strong>Fehler eingestehen:</strong> Moralisches Wachstum beinhaltet, Fehler anzuerkennen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V44_arbeit';
+        let data = {
+            values: {},
+            compass: {},
+            dilemmas: {},
+            reasoning: {},
+            stage: null,
+            reflections: {},
+            logs: []
+        };
+
+        function init() {
+            loadData();
+
+            // Setup values
+            document.querySelectorAll('.value-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    data.values[this.dataset.value] = this.classList.contains('selected');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup compass
+            document.querySelectorAll('.compass-point').forEach(point => {
+                point.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    data.compass[this.dataset.point] = this.classList.contains('active');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup dilemmas
+            document.querySelectorAll('.dilemma-card').forEach(card => {
+                const dilemma = card.dataset.dilemma;
+                card.querySelectorAll('.dilemma-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        card.querySelectorAll('.dilemma-option').forEach(o => o.classList.remove('selected'));
+                        this.classList.add('selected');
+                        data.dilemmas[dilemma] = this.dataset.choice;
+                        updateProgress();
+                        saveData();
+                    });
+                });
+            });
+
+            // Setup reasoning textareas
+            document.querySelectorAll('.reasoning-box textarea').forEach(textarea => {
+                const id = textarea.id;
+                textarea.addEventListener('input', function() {
+                    data.reasoning[id] = this.value;
+                    saveData();
+                });
+            });
+
+            // Setup stages
+            document.querySelectorAll('.stage-row').forEach(row => {
+                row.addEventListener('click', function() {
+                    document.querySelectorAll('.stage-row').forEach(r => r.classList.remove('active'));
+                    this.classList.add('active');
+                    data.stage = parseInt(this.dataset.stage);
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup reflections
+            ['reflectOrigin', 'reflectDifficult', 'reflectConflict', 'reflectGoal'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.reflections[id] = this.value;
+                        updateProgress();
+                        saveData();
+                    });
+                }
+            });
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+
+            applyStoredData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function applyStoredData() {
+            // Apply values
+            Object.entries(data.values).forEach(([value, selected]) => {
+                if (selected) {
+                    const item = document.querySelector(`.value-item[data-value="${value}"]`);
+                    if (item) item.classList.add('selected');
+                }
+            });
+
+            // Apply compass
+            Object.entries(data.compass).forEach(([point, active]) => {
+                if (active) {
+                    const el = document.querySelector(`.compass-point[data-point="${point}"]`);
+                    if (el) el.classList.add('active');
+                }
+            });
+
+            // Apply dilemmas
+            Object.entries(data.dilemmas).forEach(([dilemma, choice]) => {
+                const card = document.querySelector(`.dilemma-card[data-dilemma="${dilemma}"]`);
+                if (card) {
+                    const option = card.querySelector(`.dilemma-option[data-choice="${choice}"]`);
+                    if (option) option.classList.add('selected');
+                }
+            });
+
+            // Apply reasoning
+            Object.entries(data.reasoning).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // Apply stage
+            if (data.stage) {
+                const row = document.querySelector(`.stage-row[data-stage="${data.stage}"]`);
+                if (row) row.classList.add('active');
+            }
+
+            // Apply reflections
+            Object.entries(data.reflections).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const situation = document.getElementById('logSituation').value;
+            const values = document.getElementById('logValues').value;
+            const reflection = document.getElementById('logReflection').value;
+
+            if (!date || !situation) {
+                alert('Bitte fülle mindestens Datum und Situation aus!');
+                return;
+            }
+
+            data.logs.push({ id: Date.now(), date, situation, values, reflection });
+
+            document.getElementById('logSituation').value = '';
+            document.getElementById('logValues').value = '';
+            document.getElementById('logReflection').value = '';
+
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(log => log.id !== id);
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            const sortedLogs = [...data.logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sortedLogs.map(log => `
+                <div class="log-entry">
+                    <div class="log-header">
+                        <span>${new Date(log.date).toLocaleDateString('de-DE')}</span>
+                        <button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button>
+                    </div>
+                    <div style="font-weight: 600; color: #4a0072;">${log.situation}</div>
+                    ${log.values ? `<div style="margin-top: 8px; color: #666;">Werte: ${log.values}</div>` : ''}
+                    ${log.reflection ? `<div style="color: #555; margin-top: 10px; font-style: italic;">"${log.reflection}"</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            let total = 0;
+            let achieved = 0;
+
+            // Values (at least 3)
+            total += 3;
+            achieved += Math.min(Object.values(data.values).filter(Boolean).length, 3);
+
+            // Compass
+            total += 2;
+            achieved += Math.min(Object.values(data.compass).filter(Boolean).length, 2);
+
+            // Dilemmas (2)
+            total += 2;
+            achieved += Object.keys(data.dilemmas).length;
+
+            // Stage
+            total += 1;
+            if (data.stage) achieved += 1;
+
+            // Reflections
+            total += 4;
+            achieved += Object.values(data.reflections).filter(v => v && v.length > 10).length;
+
+            // Logs
+            total += 2;
+            achieved += Math.min(data.logs.length, 2);
+
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = percent + '%';
+
+            const progressText = document.getElementById('progressText');
+            if (percent === 0) progressText.textContent = 'Beginne deine Reise zur moralischen Reife!';
+            else if (percent < 25) progressText.textContent = 'Du beginnst, über Werte nachzudenken.';
+            else if (percent < 50) progressText.textContent = 'Du entwickelst dein moralisches Verständnis.';
+            else if (percent < 75) progressText.textContent = 'Du denkst differenziert über ethische Fragen nach!';
+            else progressText.textContent = 'Hervorragend! Du hast ein reifes moralisches Urteilsvermögen!';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                data = JSON.parse(stored);
+                if (!data.values) data.values = {};
+                if (!data.compass) data.compass = {};
+                if (!data.dilemmas) data.dilemmas = {};
+                if (!data.reasoning) data.reasoning = {};
+                if (!data.reflections) data.reflections = {};
+                if (!data.logs) data.logs = [];
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-44',
+                title: 'Moralisches Urteilen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-44_Moralisches-Urteilen_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetData() {
+            if (confirm('Alle Daten zu diesem Arbeitsblatt löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

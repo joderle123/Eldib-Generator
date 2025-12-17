@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-42 Langfristige Ziele setzen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #134e5e;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .item-code {
+            text-align: center;
+            color: #71b280;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .goal-box {
+            background: linear-gradient(135deg, #134e5e, #1a6b7c);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .goal-box h3 { margin-bottom: 10px; color: #90d5a0; }
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            color: #134e5e;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #71b280;
+            padding-bottom: 8px;
+        }
+
+        /* Vision Board */
+        .vision-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .vision-area {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px dashed #71b280;
+            min-height: 150px;
+        }
+        .vision-area h4 {
+            color: #134e5e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vision-area textarea {
+            width: 100%;
+            height: 80px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9em;
+            resize: none;
+        }
+        .vision-area textarea:focus { outline: 2px solid #71b280; }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #134e5e, #71b280);
+            border-radius: 2px;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .timeline-item:nth-child(odd) { flex-direction: row; }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content {
+            width: 45%;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            background: #71b280;
+            border: 4px solid white;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .timeline-content h4 {
+            color: #134e5e;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .timeline-content input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .timeline-content input:focus { outline: none; border-color: #71b280; }
+
+        /* SMART Goals */
+        .smart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .smart-letter {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .smart-badge {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #134e5e, #71b280);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .smart-content { flex: 1; }
+        .smart-content h4 { color: #134e5e; margin-bottom: 5px; }
+        .smart-content p { color: #666; font-size: 0.85em; margin-bottom: 8px; }
+        .smart-content input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .smart-content input:focus { outline: none; border-color: #71b280; }
+
+        /* Goal Cards */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .goal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #71b280;
+        }
+        .goal-card h4 {
+            color: #134e5e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .goal-card .form-group { margin-bottom: 12px; }
+        .goal-card label {
+            display: block;
+            color: #555;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        .goal-card input, .goal-card select, .goal-card textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .goal-card input:focus, .goal-card select:focus, .goal-card textarea:focus {
+            outline: none;
+            border-color: #71b280;
+        }
+
+        /* Milestone Tracker */
+        .milestones-list {
+            list-style: none;
+        }
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .milestone-item:hover { transform: translateX(5px); }
+        .milestone-check {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: transparent;
+            transition: all 0.3s ease;
+        }
+        .milestone-item.completed .milestone-check {
+            background: #71b280;
+            border-color: #71b280;
+            color: white;
+        }
+        .milestone-content { flex: 1; }
+        .milestone-content input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            color: #333;
+        }
+        .milestone-content input:focus { outline: none; }
+        .milestone-item.completed .milestone-content input {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .add-milestone {
+            background: #71b280;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Obstacle Planning */
+        .obstacle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .obstacle-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .obstacle-card h4 {
+            color: #d9534f;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .obstacle-card textarea {
+            width: 100%;
+            height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.9em;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        .solution-box {
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .solution-box h5 {
+            color: #71b280;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .solution-box textarea {
+            width: 100%;
+            height: 50px;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.85em;
+            resize: none;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .progress-goal {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .progress-goal h4 {
+            color: #134e5e;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .progress-bar-container {
+            background: #e9ecef;
+            border-radius: 8px;
+            height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #134e5e, #71b280);
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+        .progress-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .progress-input input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+        }
+        .progress-input input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #71b280;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Reflection Form */
+        .reflection-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            color: #134e5e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #71b280;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #71b280;
+        }
+        .log-entry .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .delete-log {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .overall-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #134e5e, #71b280);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #134e5e, #71b280);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(113,178,128,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-box h4 { color: #134e5e; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+
+        @media (max-width: 768px) {
+            .timeline-line { display: none; }
+            .timeline-item { flex-direction: column !important; }
+            .timeline-content { width: 100%; }
+            .timeline-marker { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Langfristige Ziele setzen</h1>
+        <div class="item-code">V-42 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche entwickelt die Fähigkeit, realistische langfristige Ziele zu formulieren, diese in Teilziele zu zerlegen, Hindernisse zu antizipieren und durch beharrliches Arbeiten systematisch auf die Zielerreichung hinzuarbeiten.</p>
+        </div>
+
+        <div class="section">
+            <h3>Meine Zukunftsvision</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wie stellst du dir dein Leben in verschiedenen Bereichen vor?</p>
+
+            <div class="vision-board">
+                <div class="vision-area">
+                    <h4><span>📚</span> Bildung & Beruf</h4>
+                    <textarea id="visionEducation" placeholder="Was möchte ich lernen und beruflich erreichen?"></textarea>
+                </div>
+                <div class="vision-area">
+                    <h4><span>👥</span> Beziehungen</h4>
+                    <textarea id="visionRelations" placeholder="Wie sollen meine Beziehungen aussehen?"></textarea>
+                </div>
+                <div class="vision-area">
+                    <h4><span>💪</span> Persönlichkeit</h4>
+                    <textarea id="visionPersonal" placeholder="Welche Person möchte ich werden?"></textarea>
+                </div>
+                <div class="vision-area">
+                    <h4><span>🎯</span> Hobbies & Interessen</h4>
+                    <textarea id="visionHobbies" placeholder="Was möchte ich in meiner Freizeit tun?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>SMART Ziele formulieren</h3>
+            <p style="color: #666; margin-bottom: 15px;">Formuliere ein wichtiges Ziel nach der SMART-Methode:</p>
+
+            <div class="smart-container">
+                <div class="smart-letter">
+                    <div class="smart-badge">S</div>
+                    <div class="smart-content">
+                        <h4>Spezifisch</h4>
+                        <p>Was genau willst du erreichen?</p>
+                        <input type="text" id="smartSpecific" placeholder="Mein Ziel ist es, ...">
+                    </div>
+                </div>
+                <div class="smart-letter">
+                    <div class="smart-badge">M</div>
+                    <div class="smart-content">
+                        <h4>Messbar</h4>
+                        <p>Woran erkennst du, dass du das Ziel erreicht hast?</p>
+                        <input type="text" id="smartMeasurable" placeholder="Ich weiß, dass ich es erreicht habe, wenn ...">
+                    </div>
+                </div>
+                <div class="smart-letter">
+                    <div class="smart-badge">A</div>
+                    <div class="smart-content">
+                        <h4>Attraktiv</h4>
+                        <p>Warum ist dieses Ziel wichtig für dich?</p>
+                        <input type="text" id="smartAttractive" placeholder="Dieses Ziel ist mir wichtig, weil ...">
+                    </div>
+                </div>
+                <div class="smart-letter">
+                    <div class="smart-badge">R</div>
+                    <div class="smart-content">
+                        <h4>Realistisch</h4>
+                        <p>Was brauchst du, um das Ziel zu erreichen?</p>
+                        <input type="text" id="smartRealistic" placeholder="Ich brauche dafür ...">
+                    </div>
+                </div>
+                <div class="smart-letter">
+                    <div class="smart-badge">T</div>
+                    <div class="smart-content">
+                        <h4>Terminiert</h4>
+                        <p>Bis wann willst du das Ziel erreichen?</p>
+                        <input type="text" id="smartTimed" placeholder="Ich erreiche dieses Ziel bis ...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Meilensteine auf dem Weg</h3>
+            <p style="color: #666; margin-bottom: 15px;">Zerlege dein Ziel in kleinere Etappen (klicke zum Abhaken):</p>
+
+            <ul class="milestones-list" id="milestonesList">
+                <li class="milestone-item" data-id="1">
+                    <div class="milestone-check">✓</div>
+                    <div class="milestone-content">
+                        <input type="text" placeholder="Erster Meilenstein...">
+                    </div>
+                </li>
+                <li class="milestone-item" data-id="2">
+                    <div class="milestone-check">✓</div>
+                    <div class="milestone-content">
+                        <input type="text" placeholder="Zweiter Meilenstein...">
+                    </div>
+                </li>
+                <li class="milestone-item" data-id="3">
+                    <div class="milestone-check">✓</div>
+                    <div class="milestone-content">
+                        <input type="text" placeholder="Dritter Meilenstein...">
+                    </div>
+                </li>
+            </ul>
+            <button class="add-milestone" onclick="addMilestone()">+ Meilenstein hinzufügen</button>
+        </div>
+
+        <div class="section">
+            <h3>Hindernisse & Lösungen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Welche Hindernisse könnten auftreten und wie gehst du damit um?</p>
+
+            <div class="obstacle-grid">
+                <div class="obstacle-card">
+                    <h4><span>🚧</span> Hindernis 1</h4>
+                    <textarea id="obstacle1" placeholder="Was könnte mich aufhalten?"></textarea>
+                    <div class="solution-box">
+                        <h5>💡 Meine Lösung</h5>
+                        <textarea id="solution1" placeholder="So gehe ich damit um..."></textarea>
+                    </div>
+                </div>
+                <div class="obstacle-card">
+                    <h4><span>🚧</span> Hindernis 2</h4>
+                    <textarea id="obstacle2" placeholder="Was könnte mich aufhalten?"></textarea>
+                    <div class="solution-box">
+                        <h5>💡 Meine Lösung</h5>
+                        <textarea id="solution2" placeholder="So gehe ich damit um..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Fortschritt verfolgen</h3>
+            <div class="reflection-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="form-group">
+                    <label>Was habe ich heute für mein Ziel getan?</label>
+                    <input type="text" id="logAction" placeholder="Beschreibe deine Aktivität...">
+                </div>
+                <div class="form-group">
+                    <label>Geschätzter Fortschritt (%)</label>
+                    <div class="progress-input">
+                        <input type="range" id="logProgress" min="0" max="100" value="0">
+                        <span id="progressValue">0%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reflexion</label>
+                    <textarea id="logReflection" placeholder="Was habe ich gelernt? Was war schwierig? Was mache ich als nächstes?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Fortschritt speichern</button>
+            </div>
+
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Gesamtfortschritt</h3>
+            <div class="overall-progress">
+                <div class="overall-bar" id="overallBar" style="width: 0%;">0%</div>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Setze dir Ziele und beginne mit dem ersten Schritt!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für erfolgreiche Zielsetzung</h4>
+            <ul>
+                <li><strong>Schreibe auf:</strong> Aufgeschriebene Ziele werden 42% häufiger erreicht</li>
+                <li><strong>Visualisiere:</strong> Stelle dir regelmäßig vor, wie es sich anfühlt, das Ziel erreicht zu haben</li>
+                <li><strong>Kleine Schritte:</strong> Jeder große Erfolg besteht aus vielen kleinen Schritten</li>
+                <li><strong>Flexibel bleiben:</strong> Passe deine Strategie an, wenn nötig - aber halte am Ziel fest</li>
+                <li><strong>Feiern:</strong> Belohne dich für erreichte Meilensteine</li>
+                <li><strong>Unterstützung suchen:</strong> Teile deine Ziele mit Menschen, die dich unterstützen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V42_arbeit';
+        let data = {
+            vision: {},
+            smart: {},
+            milestones: [],
+            obstacles: {},
+            logs: []
+        };
+
+        let milestoneCounter = 3;
+
+        function init() {
+            loadData();
+
+            // Setup vision textareas
+            ['visionEducation', 'visionRelations', 'visionPersonal', 'visionHobbies'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.vision[id] = this.value;
+                        saveData();
+                        updateProgress();
+                    });
+                }
+            });
+
+            // Setup SMART inputs
+            ['smartSpecific', 'smartMeasurable', 'smartAttractive', 'smartRealistic', 'smartTimed'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.smart[id] = this.value;
+                        saveData();
+                        updateProgress();
+                    });
+                }
+            });
+
+            // Setup obstacle/solution textareas
+            ['obstacle1', 'solution1', 'obstacle2', 'solution2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.obstacles[id] = this.value;
+                        saveData();
+                    });
+                }
+            });
+
+            // Setup progress slider
+            const progressSlider = document.getElementById('logProgress');
+            const progressValue = document.getElementById('progressValue');
+            progressSlider.addEventListener('input', function() {
+                progressValue.textContent = this.value + '%';
+            });
+
+            // Setup milestones
+            setupMilestones();
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+
+            applyStoredData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function setupMilestones() {
+            document.querySelectorAll('.milestone-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'INPUT') {
+                        this.classList.toggle('completed');
+                        saveMilestones();
+                        updateProgress();
+                    }
+                });
+
+                const input = item.querySelector('input');
+                if (input) {
+                    input.addEventListener('input', function() {
+                        saveMilestones();
+                    });
+                }
+            });
+        }
+
+        function saveMilestones() {
+            data.milestones = [];
+            document.querySelectorAll('.milestone-item').forEach(item => {
+                const input = item.querySelector('input');
+                data.milestones.push({
+                    id: item.dataset.id,
+                    text: input ? input.value : '',
+                    completed: item.classList.contains('completed')
+                });
+            });
+            saveData();
+        }
+
+        function addMilestone() {
+            milestoneCounter++;
+            const list = document.getElementById('milestonesList');
+            const li = document.createElement('li');
+            li.className = 'milestone-item';
+            li.dataset.id = milestoneCounter;
+            li.innerHTML = `
+                <div class="milestone-check">✓</div>
+                <div class="milestone-content">
+                    <input type="text" placeholder="Neuer Meilenstein...">
+                </div>
+            `;
+
+            li.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    this.classList.toggle('completed');
+                    saveMilestones();
+                    updateProgress();
+                }
+            });
+
+            li.querySelector('input').addEventListener('input', function() {
+                saveMilestones();
+            });
+
+            list.appendChild(li);
+            saveMilestones();
+        }
+
+        function applyStoredData() {
+            // Apply vision
+            Object.entries(data.vision).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // Apply SMART
+            Object.entries(data.smart).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // Apply obstacles
+            Object.entries(data.obstacles).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // Apply milestones
+            if (data.milestones && data.milestones.length > 0) {
+                const list = document.getElementById('milestonesList');
+                list.innerHTML = '';
+
+                data.milestones.forEach(milestone => {
+                    const li = document.createElement('li');
+                    li.className = 'milestone-item' + (milestone.completed ? ' completed' : '');
+                    li.dataset.id = milestone.id;
+                    li.innerHTML = `
+                        <div class="milestone-check">✓</div>
+                        <div class="milestone-content">
+                            <input type="text" value="${milestone.text}" placeholder="Meilenstein...">
+                        </div>
+                    `;
+                    list.appendChild(li);
+                });
+
+                setupMilestones();
+                milestoneCounter = Math.max(...data.milestones.map(m => parseInt(m.id))) || 3;
+            }
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const action = document.getElementById('logAction').value;
+            const progress = document.getElementById('logProgress').value;
+            const reflection = document.getElementById('logReflection').value;
+
+            if (!date || !action) {
+                alert('Bitte fülle mindestens Datum und Aktivität aus!');
+                return;
+            }
+
+            data.logs.push({
+                id: Date.now(),
+                date, action, progress: parseInt(progress), reflection
+            });
+
+            // Clear form
+            document.getElementById('logAction').value = '';
+            document.getElementById('logProgress').value = 0;
+            document.getElementById('progressValue').textContent = '0%';
+            document.getElementById('logReflection').value = '';
+
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(log => log.id !== id);
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            const sortedLogs = [...data.logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sortedLogs.map(log => `
+                <div class="log-entry">
+                    <div class="log-header">
+                        <span>${new Date(log.date).toLocaleDateString('de-DE')} - Fortschritt: ${log.progress}%</span>
+                        <button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button>
+                    </div>
+                    <div style="font-weight: 600; color: #134e5e;">${log.action}</div>
+                    ${log.reflection ? `<div style="color: #555; margin-top: 10px; font-style: italic;">"${log.reflection}"</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            let total = 0;
+            let achieved = 0;
+
+            // Vision (4 areas)
+            total += 4;
+            achieved += Object.values(data.vision).filter(v => v && v.length > 10).length;
+
+            // SMART (5 components)
+            total += 5;
+            achieved += Object.values(data.smart).filter(v => v && v.length > 5).length;
+
+            // Milestones
+            const milestones = document.querySelectorAll('.milestone-item');
+            const completedMilestones = document.querySelectorAll('.milestone-item.completed');
+            if (milestones.length > 0) {
+                total += milestones.length;
+                achieved += completedMilestones.length;
+            }
+
+            // Logs bonus
+            total += 3;
+            achieved += Math.min(data.logs.length, 3);
+
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+
+            const overallBar = document.getElementById('overallBar');
+            overallBar.style.width = percent + '%';
+            overallBar.textContent = percent + '%';
+
+            const progressText = document.getElementById('progressText');
+            if (percent === 0) progressText.textContent = 'Setze dir Ziele und beginne mit dem ersten Schritt!';
+            else if (percent < 25) progressText.textContent = 'Du hast begonnen, deine Ziele zu definieren.';
+            else if (percent < 50) progressText.textContent = 'Gute Fortschritte bei der Zielsetzung!';
+            else if (percent < 75) progressText.textContent = 'Du arbeitest systematisch an deinen Zielen!';
+            else progressText.textContent = 'Hervorragend! Du bist ein echter Zielsetzer!';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                data = JSON.parse(stored);
+                if (!data.vision) data.vision = {};
+                if (!data.smart) data.smart = {};
+                if (!data.milestones) data.milestones = [];
+                if (!data.obstacles) data.obstacles = {};
+                if (!data.logs) data.logs = [];
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-42',
+                title: 'Langfristige Ziele setzen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-42_Langzeitziele_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetData() {
+            if (confirm('Alle Daten zu diesem Arbeitsblatt löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

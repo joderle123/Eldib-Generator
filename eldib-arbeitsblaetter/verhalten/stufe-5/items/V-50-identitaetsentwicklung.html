@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-50 Identitätsentwicklung - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.97); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        h1 { color: #3a1c71; text-align: center; margin-bottom: 10px; font-size: 1.8em; }
+        .item-code { text-align: center; color: #d76d77; font-weight: bold; font-size: 1.2em; margin-bottom: 20px; }
+        .goal-box { background: linear-gradient(135deg, #3a1c71, #d76d77); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        .goal-box h3 { margin-bottom: 10px; color: #ffaf7b; }
+        .section { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .section h3 { color: #3a1c71; margin-bottom: 15px; border-bottom: 2px solid #d76d77; padding-bottom: 8px; }
+
+        /* Identity Aspects */
+        .identity-wheel { display: flex; justify-content: center; margin: 20px 0; }
+        .wheel-container { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 10px; }
+        .wheel-piece { border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; text-align: center; padding: 10px; font-size: 0.75em; background: #f0f0f0; border: 2px solid #ddd; }
+        .wheel-piece:hover { transform: scale(1.05); }
+        .wheel-piece.explored { background: linear-gradient(135deg, #3a1c71, #d76d77); color: white; border-color: #3a1c71; }
+        .wheel-piece .icon { font-size: 1.5em; margin-bottom: 5px; }
+        .wheel-piece:nth-child(5) { background: #3a1c71; color: white; cursor: default; font-weight: bold; }
+
+        /* Who Am I */
+        .identity-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .identity-card { background: white; border-radius: 12px; padding: 20px; border-left: 5px solid #d76d77; }
+        .identity-card h4 { color: #3a1c71; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .identity-card textarea { width: 100%; height: 80px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; resize: none; }
+        .identity-card textarea:focus { outline: none; border-color: #d76d77; }
+
+        /* Values Ranking */
+        .values-ranking { background: white; border-radius: 12px; padding: 20px; }
+        .value-rank-item { display: flex; align-items: center; gap: 15px; padding: 12px; margin-bottom: 10px; background: #f8f9fa; border-radius: 8px; cursor: grab; transition: all 0.2s ease; }
+        .value-rank-item:hover { background: #f3e5f5; }
+        .value-rank-item.dragging { opacity: 0.5; }
+        .rank-number { width: 30px; height: 30px; background: linear-gradient(135deg, #3a1c71, #d76d77); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em; }
+        .rank-content { flex: 1; }
+        .rank-handle { color: #999; }
+
+        /* Strengths & Challenges */
+        .dual-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .column-card { background: white; border-radius: 12px; padding: 20px; }
+        .column-card.strengths { border-top: 5px solid #28a745; }
+        .column-card.challenges { border-top: 5px solid #ffc107; }
+        .column-card h4 { color: #3a1c71; margin-bottom: 15px; }
+        .trait-list { list-style: none; }
+        .trait-item { padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; }
+        .trait-item:hover { background: #e9ecef; }
+        .trait-item.selected { background: #f3e5f5; border-left: 3px solid #3a1c71; }
+
+        /* Life Story */
+        .story-timeline { position: relative; padding: 20px 0 20px 30px; }
+        .story-timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #3a1c71, #d76d77, #ffaf7b); border-radius: 2px; }
+        .story-event { position: relative; margin-bottom: 20px; padding-left: 20px; }
+        .story-event::before { content: ''; position: absolute; left: -5px; top: 5px; width: 15px; height: 15px; background: white; border: 3px solid #d76d77; border-radius: 50%; }
+        .story-event input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 5px; }
+        .story-event input:focus { outline: none; border-color: #d76d77; }
+        .story-event small { color: #666; font-size: 0.85em; }
+
+        /* Affirmations */
+        .affirmations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .affirmation { padding: 15px; background: white; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid #ddd; }
+        .affirmation:hover { border-color: #d76d77; }
+        .affirmation.resonates { background: linear-gradient(135deg, #f3e5f5, #fce4ec); border-color: #3a1c71; }
+        .affirmation p { color: #3a1c71; font-style: italic; font-size: 0.9em; }
+
+        /* Tracker */
+        .tracker-form { background: white; border-radius: 12px; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #3a1c71; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #d76d77; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #d76d77; }
+        .log-entry .log-header { display: flex; justify-content: space-between; margin-bottom: 10px; color: #666; font-size: 0.9em; }
+        .delete-log { background: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 0.8em; }
+
+        /* Progress */
+        .progress-container { background: #e9ecef; border-radius: 10px; height: 25px; overflow: hidden; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #3a1c71, #d76d77, #ffaf7b); border-radius: 10px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+
+        /* Actions */
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #3a1c71, #d76d77); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(58,28,113,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box { background: linear-gradient(135deg, #fce4ec, #f3e5f5); border-radius: 12px; padding: 20px; margin-top: 20px; }
+        .tips-box h4 { color: #3a1c71; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+
+        @media (max-width: 600px) { .dual-column { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Identitätsentwicklung</h1>
+        <div class="item-code">V-50 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche entwickelt ein stabiles und positives Selbstbild, reflektiert die eigene Identität in verschiedenen Lebensbereichen, integriert verschiedene Aspekte des Selbst und entwickelt ein kohärentes Gefühl dafür, wer er/sie ist.</p>
+        </div>
+
+        <div class="section">
+            <h3>Mein Identitäts-Rad</h3>
+            <p style="color: #666; margin-bottom: 15px; text-align: center;">Klicke auf Bereiche, die du schon erkundet hast:</p>
+            <div class="identity-wheel">
+                <div class="wheel-container">
+                    <div class="wheel-piece" data-aspect="culture"><span class="icon">🌍</span>Kultur</div>
+                    <div class="wheel-piece" data-aspect="beliefs"><span class="icon">✨</span>Überzeugungen</div>
+                    <div class="wheel-piece" data-aspect="gender"><span class="icon">⚧️</span>Geschlecht</div>
+                    <div class="wheel-piece" data-aspect="family"><span class="icon">👨‍👩‍👧</span>Familie</div>
+                    <div class="wheel-piece"><span style="font-size: 0.9em;">WER BIN ICH?</span></div>
+                    <div class="wheel-piece" data-aspect="interests"><span class="icon">🎯</span>Interessen</div>
+                    <div class="wheel-piece" data-aspect="social"><span class="icon">👥</span>Sozial</div>
+                    <div class="wheel-piece" data-aspect="talents"><span class="icon">⭐</span>Talente</div>
+                    <div class="wheel-piece" data-aspect="values"><span class="icon">💎</span>Werte</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Wer bin ich?</h3>
+            <div class="identity-cards">
+                <div class="identity-card"><h4><span>🪞</span> Ich bin...</h4><textarea id="iAm" placeholder="Beschreibe dich in 3-5 Sätzen"></textarea></div>
+                <div class="identity-card"><h4><span>💪</span> Ich bin stolz auf...</h4><textarea id="proudOf" placeholder="Was macht dich stolz?"></textarea></div>
+                <div class="identity-card"><h4><span>🌱</span> Ich wachse, indem...</h4><textarea id="growing" placeholder="Wie entwickelst du dich weiter?"></textarea></div>
+                <div class="identity-card"><h4><span>🎭</span> Andere sehen mich als...</h4><textarea id="othersSee" placeholder="Wie wirst du wahrgenommen?"></textarea></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Meine Stärken & Herausforderungen</h3>
+            <div class="dual-column">
+                <div class="column-card strengths"><h4>💪 Stärken</h4><ul class="trait-list" id="strengthsList">
+                    <li class="trait-item" data-trait="empathy">Einfühlsam</li><li class="trait-item" data-trait="creative">Kreativ</li><li class="trait-item" data-trait="honest">Ehrlich</li><li class="trait-item" data-trait="reliable">Zuverlässig</li><li class="trait-item" data-trait="humorous">Humorvoll</li><li class="trait-item" data-trait="curious">Neugierig</li><li class="trait-item" data-trait="brave">Mutig</li><li class="trait-item" data-trait="patient">Geduldig</li>
+                </ul></div>
+                <div class="column-card challenges"><h4>🌱 Wachstumsbereiche</h4><ul class="trait-list" id="challengesList">
+                    <li class="trait-item" data-trait="patience">Geduld</li><li class="trait-item" data-trait="confidence">Selbstvertrauen</li><li class="trait-item" data-trait="organization">Organisation</li><li class="trait-item" data-trait="assertiveness">Durchsetzung</li><li class="trait-item" data-trait="focus">Konzentration</li><li class="trait-item" data-trait="openness">Offenheit</li><li class="trait-item" data-trait="flexibility">Flexibilität</li><li class="trait-item" data-trait="selfcare">Selbstfürsorge</li>
+                </ul></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Meine Lebensgeschichte - Prägende Momente</h3>
+            <div class="story-timeline">
+                <div class="story-event"><input type="text" id="event1" placeholder="Ein prägender Moment aus meiner Kindheit..."><small>Kindheit</small></div>
+                <div class="story-event"><input type="text" id="event2" placeholder="Eine wichtige Erfahrung..."><small>Schulzeit</small></div>
+                <div class="story-event"><input type="text" id="event3" placeholder="Ein Wendepunkt..."><small>Jugend</small></div>
+                <div class="story-event"><input type="text" id="event4" placeholder="Was mich geformt hat..."><small>Aktuell</small></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Positive Selbstaussagen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf Aussagen, die für dich stimmig sind:</p>
+            <div class="affirmations-grid">
+                <div class="affirmation" data-aff="enough"><p>"Ich bin genug, so wie ich bin."</p></div>
+                <div class="affirmation" data-aff="unique"><p>"Ich bin einzigartig und wertvoll."</p></div>
+                <div class="affirmation" data-aff="capable"><p>"Ich bin fähig zu wachsen und zu lernen."</p></div>
+                <div class="affirmation" data-aff="deserve"><p>"Ich verdiene Respekt und Liebe."</p></div>
+                <div class="affirmation" data-aff="mistakes"><p>"Fehler helfen mir zu wachsen."</p></div>
+                <div class="affirmation" data-aff="voice"><p>"Meine Stimme ist wichtig."</p></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Identitätsreflexion dokumentieren</h3>
+            <div class="tracker-form">
+                <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                <div class="form-group"><label>Thema / Frage</label><input type="text" id="logTopic" placeholder="Worüber hast du nachgedacht?"></div>
+                <div class="form-group"><label>Erkenntnis</label><textarea id="logInsight" placeholder="Was hast du über dich gelernt?"></textarea></div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Identitätsentwicklung - Fortschritt</h3>
+            <div class="progress-container"><div class="progress-bar" id="progressBar" style="width: 0%;">0%</div></div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Entdecke, wer du wirklich bist!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für Identitätsentwicklung</h4>
+            <ul>
+                <li><strong>Sei geduldig:</strong> Identität entwickelt sich ein Leben lang</li>
+                <li><strong>Experimentiere:</strong> Probiere verschiedene Rollen und Interessen aus</li>
+                <li><strong>Reflektiere:</strong> Nimm dir Zeit zum Nachdenken über dich selbst</li>
+                <li><strong>Akzeptiere Widersprüche:</strong> Du kannst verschiedene Seiten haben</li>
+                <li><strong>Vergleiche dich nicht:</strong> Dein Weg ist einzigartig</li>
+                <li><strong>Suche Unterstützung:</strong> Gespräche mit anderen helfen bei der Selbstfindung</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V50_arbeit';
+        let data = { aspects: {}, identity: {}, strengths: {}, challenges: {}, events: {}, affirmations: {}, logs: [] };
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.wheel-piece[data-aspect]').forEach(piece => { piece.addEventListener('click', function() { this.classList.toggle('explored'); data.aspects[this.dataset.aspect] = this.classList.contains('explored'); updateProgress(); saveData(); }); });
+            ['iAm','proudOf','growing','othersSee'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', function() { data.identity[id] = this.value; updateProgress(); saveData(); }); });
+            document.querySelectorAll('#strengthsList .trait-item').forEach(item => { item.addEventListener('click', function() { this.classList.toggle('selected'); data.strengths[this.dataset.trait] = this.classList.contains('selected'); updateProgress(); saveData(); }); });
+            document.querySelectorAll('#challengesList .trait-item').forEach(item => { item.addEventListener('click', function() { this.classList.toggle('selected'); data.challenges[this.dataset.trait] = this.classList.contains('selected'); updateProgress(); saveData(); }); });
+            ['event1','event2','event3','event4'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', function() { data.events[id] = this.value; updateProgress(); saveData(); }); });
+            document.querySelectorAll('.affirmation').forEach(aff => { aff.addEventListener('click', function() { this.classList.toggle('resonates'); data.affirmations[this.dataset.aff] = this.classList.contains('resonates'); updateProgress(); saveData(); }); });
+            document.getElementById('logDate').valueAsDate = new Date();
+            applyStoredData(); renderLogs(); updateProgress();
+        }
+
+        function applyStoredData() {
+            Object.entries(data.aspects).forEach(([a, e]) => { if(e) { const el = document.querySelector(`.wheel-piece[data-aspect="${a}"]`); if(el) el.classList.add('explored'); }});
+            Object.entries(data.identity).forEach(([id, v]) => { const el = document.getElementById(id); if(el) el.value = v; });
+            Object.entries(data.strengths).forEach(([t, s]) => { if(s) { const el = document.querySelector(`#strengthsList .trait-item[data-trait="${t}"]`); if(el) el.classList.add('selected'); }});
+            Object.entries(data.challenges).forEach(([t, s]) => { if(s) { const el = document.querySelector(`#challengesList .trait-item[data-trait="${t}"]`); if(el) el.classList.add('selected'); }});
+            Object.entries(data.events).forEach(([id, v]) => { const el = document.getElementById(id); if(el) el.value = v; });
+            Object.entries(data.affirmations).forEach(([a, r]) => { if(r) { const el = document.querySelector(`.affirmation[data-aff="${a}"]`); if(el) el.classList.add('resonates'); }});
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value, topic = document.getElementById('logTopic').value, insight = document.getElementById('logInsight').value;
+            if(!date || !topic) { alert('Bitte fülle mindestens Datum und Thema aus!'); return; }
+            data.logs.push({ id: Date.now(), date, topic, insight });
+            document.getElementById('logTopic').value = ''; document.getElementById('logInsight').value = '';
+            renderLogs(); updateProgress(); saveData();
+        }
+
+        function deleteLog(id) { data.logs = data.logs.filter(l => l.id !== id); renderLogs(); updateProgress(); saveData(); }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            container.innerHTML = [...data.logs].sort((a,b) => new Date(b.date) - new Date(a.date)).map(log => `<div class="log-entry"><div class="log-header"><span>${new Date(log.date).toLocaleDateString('de-DE')}</span><button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button></div><div style="font-weight:600;color:#3a1c71;">${log.topic}</div>${log.insight ? `<div style="color:#555;margin-top:10px;font-style:italic;">"${log.insight}"</div>` : ''}</div>`).join('');
+        }
+
+        function updateProgress() {
+            let total = 0, achieved = 0;
+            total += 4; achieved += Math.min(Object.values(data.aspects).filter(Boolean).length, 4);
+            total += 4; achieved += Object.values(data.identity).filter(v => v && v.length > 10).length;
+            total += 2; achieved += Math.min(Object.values(data.strengths).filter(Boolean).length, 2);
+            total += 2; achieved += Math.min(Object.values(data.challenges).filter(Boolean).length, 2);
+            total += 2; achieved += Math.min(Object.values(data.events).filter(v => v && v.length > 5).length, 2);
+            total += 2; achieved += Math.min(Object.values(data.affirmations).filter(Boolean).length, 2);
+            total += 2; achieved += Math.min(data.logs.length, 2);
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressBar').textContent = percent + '%';
+            const texts = ['Entdecke, wer du wirklich bist!', 'Du beginnst, dich selbst zu erkunden.', 'Dein Selbstbild wird klarer.', 'Du entwickelst ein starkes Selbstbewusstsein!', 'Hervorragend! Du hast eine gefestigte Identität!'];
+            document.getElementById('progressText').textContent = texts[Math.min(Math.floor(percent/25), 4)];
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if(s) { data = JSON.parse(s); if(!data.aspects) data.aspects = {}; if(!data.identity) data.identity = {}; if(!data.strengths) data.strengths = {}; if(!data.challenges) data.challenges = {}; if(!data.events) data.events = {}; if(!data.affirmations) data.affirmations = {}; if(!data.logs) data.logs = []; }}
+        function exportData() { const blob = new Blob([JSON.stringify({item:'V-50',title:'Identitätsentwicklung',exportDate:new Date().toISOString(),...data}, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-50_Identitaetsentwicklung_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+        function resetData() { if(confirm('Alle Daten löschen?')) { localStorage.removeItem(STORAGE_KEY); location.reload(); }}
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-43 Führungskompetenzen entwickeln - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .item-code {
+            text-align: center;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .goal-box {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .goal-box h3 { margin-bottom: 10px; color: #5dade2; }
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        /* Leadership Styles */
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .style-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .style-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .style-card.selected { border-color: #3498db; background: #ebf5fb; }
+        .style-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .style-card h4 { color: #2c3e50; margin-bottom: 8px; }
+        .style-card p { color: #666; font-size: 0.85em; }
+
+        /* Competency Wheel */
+        .competencies-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .competency-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+        }
+        .competency-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        .competency-rating {
+            display: flex;
+            gap: 5px;
+        }
+        .rating-star {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .rating-star:hover { border-color: #3498db; }
+        .rating-star.active { background: #3498db; border-color: #3498db; color: white; }
+
+        /* Scenarios */
+        .scenario-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #2c3e50;
+        }
+        .scenario-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .scenario-card .situation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .response-options {
+            display: grid;
+            gap: 10px;
+        }
+        .response-option {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .response-option:hover { border-color: #3498db; }
+        .response-option.selected { background: #ebf5fb; border-color: #3498db; }
+        .response-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            display: none;
+        }
+        .response-feedback.show { display: block; }
+        .response-feedback.good { background: #d4edda; color: #155724; }
+        .response-feedback.okay { background: #fff3cd; color: #856404; }
+
+        /* Action Plan */
+        .action-plan {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .action-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .action-number {
+            width: 35px;
+            height: 35px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .action-content { flex: 1; }
+        .action-content input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+        .action-content input:focus { outline: none; border-color: #3498db; }
+        .action-content small { color: #666; }
+
+        /* Reflection */
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .reflection-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .reflection-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reflection-card textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            resize: none;
+            font-size: 0.9em;
+        }
+        .reflection-card textarea:focus { outline: none; border-color: #3498db; }
+
+        /* Tracker Form */
+        .tracker-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+        }
+        .log-entry .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .delete-log {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        /* Progress */
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2c3e50, #3498db);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(52,152,219,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box {
+            background: linear-gradient(135deg, #ebf5fb, #d4e6f1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-box h4 { color: #2c3e50; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Führungskompetenzen entwickeln</h1>
+        <div class="item-code">V-43 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche entwickelt altersangemessene Führungskompetenzen, kann Verantwortung für andere übernehmen, Gruppen moderieren, motivieren und dabei verschiedene Führungsstile situationsgerecht einsetzen.</p>
+        </div>
+
+        <div class="section">
+            <h3>Führungsstile kennenlernen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Welche Führungsstile kennst du? Wähle die aus, die dir am meisten entsprechen:</p>
+
+            <div class="styles-grid">
+                <div class="style-card" data-style="democratic">
+                    <div class="icon">🗳️</div>
+                    <h4>Demokratisch</h4>
+                    <p>Alle werden einbezogen, Entscheidungen gemeinsam getroffen</p>
+                </div>
+                <div class="style-card" data-style="coaching">
+                    <div class="icon">🎯</div>
+                    <h4>Coaching</h4>
+                    <p>Andere unterstützen und fördern, Stärken entwickeln</p>
+                </div>
+                <div class="style-card" data-style="visionary">
+                    <div class="icon">🔮</div>
+                    <h4>Visionär</h4>
+                    <p>Begeistern durch Ideen und klare Ziele</p>
+                </div>
+                <div class="style-card" data-style="servant">
+                    <div class="icon">🤝</div>
+                    <h4>Dienend</h4>
+                    <p>Bedürfnisse anderer in den Vordergrund stellen</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Führungskompetenzen-Check</h3>
+            <p style="color: #666; margin-bottom: 15px;">Bewerte deine Fähigkeiten (1-5 Punkte):</p>
+
+            <div class="competencies-container">
+                <div class="competency-item">
+                    <h4><span>📢</span> Kommunikation</h4>
+                    <div class="competency-rating" data-comp="communication">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>👂</span> Aktives Zuhören</h4>
+                    <div class="competency-rating" data-comp="listening">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>🎯</span> Entscheidungsfähigkeit</h4>
+                    <div class="competency-rating" data-comp="decisions">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>🔥</span> Motivation</h4>
+                    <div class="competency-rating" data-comp="motivation">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>⚖️</span> Fairness</h4>
+                    <div class="competency-rating" data-comp="fairness">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>🎭</span> Empathie</h4>
+                    <div class="competency-rating" data-comp="empathy">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>🗂️</span> Organisation</h4>
+                    <div class="competency-rating" data-comp="organization">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+                <div class="competency-item">
+                    <h4><span>🛡️</span> Verantwortung</h4>
+                    <div class="competency-rating" data-comp="responsibility">
+                        <div class="rating-star" data-val="1">1</div>
+                        <div class="rating-star" data-val="2">2</div>
+                        <div class="rating-star" data-val="3">3</div>
+                        <div class="rating-star" data-val="4">4</div>
+                        <div class="rating-star" data-val="5">5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Führungssituationen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wie würdest du in diesen Situationen reagieren?</p>
+
+            <div class="scenario-card" data-scenario="conflict">
+                <h4><span>⚡</span> Konflikt im Team</h4>
+                <div class="situation">
+                    Zwei Teammitglieder streiten sich während eines Gruppenprojekts. Die Arbeit kommt nicht voran und die Stimmung ist angespannt.
+                </div>
+                <div class="response-options">
+                    <div class="response-option" data-response="ignore">Den Konflikt ignorieren und hoffen, dass er sich von selbst löst</div>
+                    <div class="response-option" data-response="decide">Selbst entscheiden, wer Recht hat</div>
+                    <div class="response-option" data-response="mediate">Beide Seiten anhören und gemeinsam eine Lösung finden</div>
+                    <div class="response-option" data-response="separate">Die beiden trennen und die Aufgaben neu verteilen</div>
+                </div>
+                <div class="response-feedback" id="feedback-conflict"></div>
+            </div>
+
+            <div class="scenario-card" data-scenario="motivation">
+                <h4><span>😔</span> Demotiviertes Teammitglied</h4>
+                <div class="situation">
+                    Ein Teammitglied beteiligt sich kaum noch, wirkt unmotiviert und zieht sich zurück.
+                </div>
+                <div class="response-options">
+                    <div class="response-option" data-response="pressure">Mehr Druck ausüben und klare Ansagen machen</div>
+                    <div class="response-option" data-response="ignore">Die Person erstmal in Ruhe lassen</div>
+                    <div class="response-option" data-response="talk">Ein persönliches Gespräch suchen und nach Gründen fragen</div>
+                    <div class="response-option" data-response="replace">Die Person aus dem Projekt nehmen</div>
+                </div>
+                <div class="response-feedback" id="feedback-motivation"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Mein Führungs-Aktionsplan</h3>
+            <div class="action-plan">
+                <div class="action-item">
+                    <div class="action-number">1</div>
+                    <div class="action-content">
+                        <input type="text" id="action1" placeholder="Welche Führungskompetenz möchte ich verbessern?">
+                        <small>Konkrete Kompetenz benennen</small>
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">2</div>
+                    <div class="action-content">
+                        <input type="text" id="action2" placeholder="Wie werde ich diese üben?">
+                        <small>Konkrete Übungsmöglichkeiten</small>
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-number">3</div>
+                    <div class="action-content">
+                        <input type="text" id="action3" placeholder="Woran erkenne ich Fortschritte?">
+                        <small>Messbare Erfolgskriterien</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Selbstreflexion</h3>
+            <div class="reflection-grid">
+                <div class="reflection-card">
+                    <h4><span>💪</span> Meine Stärken als Führungsperson</h4>
+                    <textarea id="reflectStrengths" placeholder="Was kann ich gut?"></textarea>
+                </div>
+                <div class="reflection-card">
+                    <h4><span>🌱</span> Woran möchte ich arbeiten</h4>
+                    <textarea id="reflectGrowth" placeholder="Was möchte ich verbessern?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Führungserfahrung dokumentieren</h3>
+            <div class="tracker-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="form-group">
+                    <label>Situation</label>
+                    <input type="text" id="logSituation" placeholder="In welcher Situation hast du Führung übernommen?">
+                </div>
+                <div class="form-group">
+                    <label>Verwendeter Führungsstil</label>
+                    <select id="logStyle">
+                        <option value="">Stil wählen...</option>
+                        <option value="democratic">Demokratisch</option>
+                        <option value="coaching">Coaching</option>
+                        <option value="visionary">Visionär</option>
+                        <option value="servant">Dienend</option>
+                        <option value="mixed">Gemischt</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Was habe ich gelernt?</label>
+                    <textarea id="logLearning" placeholder="Reflexion über die Erfahrung..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Entwicklungsfortschritt</h3>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Beginne deine Reise als Führungspersönlichkeit!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für erfolgreiche Führung</h4>
+            <ul>
+                <li><strong>Vorbild sein:</strong> Lebe das vor, was du von anderen erwartest</li>
+                <li><strong>Zuhören:</strong> Gute Führung beginnt mit aktivem Zuhören</li>
+                <li><strong>Delegieren:</strong> Vertraue anderen Aufgaben an und gib ihnen Raum zu wachsen</li>
+                <li><strong>Feedback:</strong> Gib konstruktives Feedback und nimm Feedback an</li>
+                <li><strong>Flexibilität:</strong> Passe deinen Führungsstil der Situation an</li>
+                <li><strong>Fehlerkultur:</strong> Erlaube Fehler - sie sind Lernchancen für alle</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V43_arbeit';
+        let data = {
+            styles: {},
+            competencies: {},
+            scenarios: {},
+            actions: {},
+            reflections: {},
+            logs: []
+        };
+
+        const scenarioFeedback = {
+            conflict: {
+                mediate: { type: 'good', text: 'Ausgezeichnet! Aktives Zuhören und gemeinsame Lösungsfindung sind Zeichen guter Führung.' },
+                separate: { type: 'okay', text: 'Kann kurzfristig helfen, aber der Konflikt sollte später noch bearbeitet werden.' },
+                decide: { type: 'okay', text: 'Kann schnell sein, aber beide Seiten sollten gehört werden.' },
+                ignore: { type: 'okay', text: 'Konflikte lösen sich selten von selbst - besser aktiv angehen.' }
+            },
+            motivation: {
+                talk: { type: 'good', text: 'Sehr gut! Empathie und persönliches Interesse zeigen sind wichtige Führungsqualitäten.' },
+                ignore: { type: 'okay', text: 'Manchmal brauchen Menschen Raum, aber nachfragen zeigt, dass du dich kümmerst.' },
+                pressure: { type: 'okay', text: 'Druck kann kurzfristig wirken, aber die Ursache des Problems wird nicht gelöst.' },
+                replace: { type: 'okay', text: 'Sollte nur der letzte Ausweg sein - erst die Gründe verstehen.' }
+            }
+        };
+
+        function init() {
+            loadData();
+
+            // Setup style cards
+            document.querySelectorAll('.style-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    data.styles[this.dataset.style] = this.classList.contains('selected');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup competency ratings
+            document.querySelectorAll('.competency-rating').forEach(rating => {
+                const comp = rating.dataset.comp;
+                rating.querySelectorAll('.rating-star').forEach(star => {
+                    star.addEventListener('click', function() {
+                        const val = parseInt(this.dataset.val);
+                        data.competencies[comp] = val;
+
+                        rating.querySelectorAll('.rating-star').forEach((s, i) => {
+                            s.classList.toggle('active', i < val);
+                        });
+
+                        updateProgress();
+                        saveData();
+                    });
+                });
+            });
+
+            // Setup scenario responses
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                const scenario = card.dataset.scenario;
+                card.querySelectorAll('.response-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        card.querySelectorAll('.response-option').forEach(o => o.classList.remove('selected'));
+                        this.classList.add('selected');
+
+                        const response = this.dataset.response;
+                        data.scenarios[scenario] = response;
+
+                        const feedback = scenarioFeedback[scenario][response];
+                        const feedbackEl = document.getElementById(`feedback-${scenario}`);
+                        feedbackEl.textContent = feedback.text;
+                        feedbackEl.className = `response-feedback show ${feedback.type}`;
+
+                        updateProgress();
+                        saveData();
+                    });
+                });
+            });
+
+            // Setup action plan
+            ['action1', 'action2', 'action3'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.actions[id] = this.value;
+                        saveData();
+                    });
+                }
+            });
+
+            // Setup reflections
+            ['reflectStrengths', 'reflectGrowth'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.reflections[id] = this.value;
+                        updateProgress();
+                        saveData();
+                    });
+                }
+            });
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+
+            applyStoredData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function applyStoredData() {
+            // Apply styles
+            Object.entries(data.styles).forEach(([style, selected]) => {
+                if (selected) {
+                    const card = document.querySelector(`.style-card[data-style="${style}"]`);
+                    if (card) card.classList.add('selected');
+                }
+            });
+
+            // Apply competencies
+            Object.entries(data.competencies).forEach(([comp, val]) => {
+                const rating = document.querySelector(`.competency-rating[data-comp="${comp}"]`);
+                if (rating) {
+                    rating.querySelectorAll('.rating-star').forEach((s, i) => {
+                        s.classList.toggle('active', i < val);
+                    });
+                }
+            });
+
+            // Apply scenarios
+            Object.entries(data.scenarios).forEach(([scenario, response]) => {
+                const card = document.querySelector(`.scenario-card[data-scenario="${scenario}"]`);
+                if (card) {
+                    const option = card.querySelector(`.response-option[data-response="${response}"]`);
+                    if (option) option.classList.add('selected');
+
+                    const feedback = scenarioFeedback[scenario][response];
+                    const feedbackEl = document.getElementById(`feedback-${scenario}`);
+                    feedbackEl.textContent = feedback.text;
+                    feedbackEl.className = `response-feedback show ${feedback.type}`;
+                }
+            });
+
+            // Apply actions
+            Object.entries(data.actions).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // Apply reflections
+            Object.entries(data.reflections).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const situation = document.getElementById('logSituation').value;
+            const style = document.getElementById('logStyle').value;
+            const learning = document.getElementById('logLearning').value;
+
+            if (!date || !situation) {
+                alert('Bitte fülle mindestens Datum und Situation aus!');
+                return;
+            }
+
+            data.logs.push({ id: Date.now(), date, situation, style, learning });
+
+            document.getElementById('logSituation').value = '';
+            document.getElementById('logStyle').value = '';
+            document.getElementById('logLearning').value = '';
+
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(log => log.id !== id);
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            const sortedLogs = [...data.logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sortedLogs.map(log => `
+                <div class="log-entry">
+                    <div class="log-header">
+                        <span>${new Date(log.date).toLocaleDateString('de-DE')}${log.style ? ` - ${log.style}` : ''}</span>
+                        <button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button>
+                    </div>
+                    <div style="font-weight: 600; color: #2c3e50;">${log.situation}</div>
+                    ${log.learning ? `<div style="color: #555; margin-top: 10px; font-style: italic;">"${log.learning}"</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            let total = 0;
+            let achieved = 0;
+
+            // Styles (4 total, at least 1)
+            total += 2;
+            achieved += Math.min(Object.values(data.styles).filter(Boolean).length, 2);
+
+            // Competencies (8 total)
+            total += 8;
+            achieved += Object.values(data.competencies).filter(v => v >= 3).length;
+
+            // Scenarios (2 total)
+            total += 2;
+            achieved += Object.keys(data.scenarios).length;
+
+            // Reflections
+            total += 2;
+            achieved += Object.values(data.reflections).filter(v => v && v.length > 10).length;
+
+            // Logs
+            total += 3;
+            achieved += Math.min(data.logs.length, 3);
+
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = percent + '%';
+
+            const progressText = document.getElementById('progressText');
+            if (percent === 0) progressText.textContent = 'Beginne deine Reise als Führungspersönlichkeit!';
+            else if (percent < 25) progressText.textContent = 'Du lernst verschiedene Führungsstile kennen.';
+            else if (percent < 50) progressText.textContent = 'Du entwickelst deine Führungskompetenzen.';
+            else if (percent < 75) progressText.textContent = 'Du wächst in deine Führungsrolle hinein!';
+            else progressText.textContent = 'Hervorragend! Du bist eine inspirierende Führungspersönlichkeit!';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                data = JSON.parse(stored);
+                if (!data.styles) data.styles = {};
+                if (!data.competencies) data.competencies = {};
+                if (!data.scenarios) data.scenarios = {};
+                if (!data.actions) data.actions = {};
+                if (!data.reflections) data.reflections = {};
+                if (!data.logs) data.logs = [];
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-43',
+                title: 'Führungskompetenzen entwickeln',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-43_Fuehrungskompetenzen_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetData() {
+            if (confirm('Alle Daten zu diesem Arbeitsblatt löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

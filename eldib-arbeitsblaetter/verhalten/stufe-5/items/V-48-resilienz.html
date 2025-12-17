@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-48 Resilienz entwickeln - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.97); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 1.8em; }
+        .item-code { text-align: center; color: #764ba2; font-weight: bold; font-size: 1.2em; margin-bottom: 20px; }
+        .goal-box { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        .goal-box h3 { margin-bottom: 10px; color: #e8daef; }
+        .section { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .section h3 { color: #667eea; margin-bottom: 15px; border-bottom: 2px solid #764ba2; padding-bottom: 8px; }
+
+        /* Resilience Pillars */
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .pillar { background: white; border-radius: 12px; padding: 20px; text-align: center; border-bottom: 5px solid #764ba2; cursor: pointer; transition: all 0.3s ease; }
+        .pillar:hover { transform: translateY(-5px); }
+        .pillar.strong { background: #f3e5f5; border-color: #667eea; }
+        .pillar .icon { font-size: 2em; margin-bottom: 10px; }
+        .pillar h4 { color: #667eea; font-size: 0.9em; }
+
+        /* Coping Strategies */
+        .coping-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .coping-card { background: white; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #ddd; }
+        .coping-card:hover { border-color: #764ba2; }
+        .coping-card.active { background: #f3e5f5; border-color: #667eea; }
+        .coping-card h4 { color: #667eea; margin-bottom: 8px; font-size: 0.95em; display: flex; align-items: center; gap: 8px; }
+        .coping-card p { color: #666; font-size: 0.85em; }
+
+        /* Growth Mindset */
+        .mindset-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
+        .mindset-table th { background: #667eea; color: white; padding: 15px; }
+        .mindset-table td { padding: 15px; border-bottom: 1px solid #eee; }
+        .mindset-table tr:last-child td { border-bottom: none; }
+        .fixed-mindset { color: #dc3545; }
+        .growth-mindset { color: #28a745; }
+        .mindset-check { text-align: center; }
+        .mindset-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ddd; background: white; cursor: pointer; transition: all 0.2s ease; }
+        .mindset-btn.selected { background: #667eea; border-color: #667eea; }
+
+        /* Setback Journal */
+        .setback-form { background: white; border-radius: 12px; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #667eea; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #764ba2; }
+
+        /* Bounce-Back Meter */
+        .meter-container { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
+        .bounce-meter { width: 80%; max-width: 400px; height: 30px; background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%); border-radius: 15px; position: relative; margin: 20px 0; }
+        .meter-thumb { position: absolute; width: 25px; height: 40px; background: white; border: 3px solid #667eea; border-radius: 5px; top: -5px; cursor: pointer; transition: left 0.1s ease; }
+        .meter-labels { display: flex; justify-content: space-between; width: 80%; max-width: 400px; font-size: 0.85em; color: #666; }
+
+        /* Support Network */
+        .network-container { background: white; border-radius: 12px; padding: 20px; }
+        .network-category { margin-bottom: 15px; }
+        .network-category h4 { color: #667eea; margin-bottom: 10px; font-size: 0.95em; }
+        .network-inputs { display: flex; flex-wrap: wrap; gap: 10px; }
+        .network-input { padding: 10px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.9em; width: 150px; }
+        .network-input:focus { outline: none; border-color: #764ba2; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #764ba2; }
+        .log-entry .log-header { display: flex; justify-content: space-between; margin-bottom: 10px; color: #666; font-size: 0.9em; }
+        .delete-log { background: #dc3545; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 0.8em; }
+
+        /* Progress */
+        .progress-container { background: #e9ecef; border-radius: 10px; height: 25px; overflow: hidden; margin: 15px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 10px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+
+        /* Actions */
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box { background: linear-gradient(135deg, #f3e5f5, #e1bee7); border-radius: 12px; padding: 20px; margin-top: 20px; }
+        .tips-box h4 { color: #667eea; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resilienz entwickeln</h1>
+        <div class="item-code">V-48 | Verhalten Stufe V</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Der Jugendliche entwickelt psychische Widerstandskraft, kann Rückschläge und Krisen konstruktiv bewältigen, lernt aus Misserfolgen und erholt sich von schwierigen Situationen gestärkt.</p>
+        </div>
+
+        <div class="section">
+            <h3>Die 7 Säulen der Resilienz</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf Säulen, die bei dir stark ausgeprägt sind:</p>
+            <div class="pillars-grid">
+                <div class="pillar" data-pillar="optimism"><div class="icon">☀️</div><h4>Optimismus</h4></div>
+                <div class="pillar" data-pillar="acceptance"><div class="icon">🤝</div><h4>Akzeptanz</h4></div>
+                <div class="pillar" data-pillar="solution"><div class="icon">🔧</div><h4>Lösungs-orientierung</h4></div>
+                <div class="pillar" data-pillar="responsibility"><div class="icon">🛡️</div><h4>Selbst-verantwortung</h4></div>
+                <div class="pillar" data-pillar="network"><div class="icon">👥</div><h4>Netzwerk</h4></div>
+                <div class="pillar" data-pillar="future"><div class="icon">🎯</div><h4>Zukunfts-planung</h4></div>
+                <div class="pillar" data-pillar="efficacy"><div class="icon">💪</div><h4>Selbst-wirksamkeit</h4></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Meine Bewältigungsstrategien</h3>
+            <p style="color: #666; margin-bottom: 15px;">Welche Strategien nutzt du bei Stress? Klicke auf aktive:</p>
+            <div class="coping-grid">
+                <div class="coping-card" data-coping="talk"><h4><span>💬</span> Reden</h4><p>Mit jemandem über Probleme sprechen</p></div>
+                <div class="coping-card" data-coping="sport"><h4><span>🏃</span> Bewegung</h4><p>Sport und körperliche Aktivität</p></div>
+                <div class="coping-card" data-coping="creative"><h4><span>🎨</span> Kreativität</h4><p>Kunst, Musik, Schreiben</p></div>
+                <div class="coping-card" data-coping="nature"><h4><span>🌳</span> Natur</h4><p>Zeit draußen verbringen</p></div>
+                <div class="coping-card" data-coping="mindful"><h4><span>🧘</span> Achtsamkeit</h4><p>Meditation, tiefes Atmen</p></div>
+                <div class="coping-card" data-coping="routine"><h4><span>📅</span> Routine</h4><p>Struktur und feste Abläufe</p></div>
+                <div class="coping-card" data-coping="humor"><h4><span>😄</span> Humor</h4><p>Lachen und Leichtigkeit</p></div>
+                <div class="coping-card" data-coping="goals"><h4><span>🎯</span> Ziele setzen</h4><p>Kleine erreichbare Schritte</p></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Growth Mindset Check</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wie denkst du über Herausforderungen?</p>
+            <table class="mindset-table">
+                <thead><tr><th class="fixed-mindset">Fixed Mindset</th><th>Ich denke...</th><th class="growth-mindset">Growth Mindset</th></tr></thead>
+                <tbody>
+                    <tr><td class="fixed-mindset">"Ich kann das nicht"</td><td class="mindset-check"><button class="mindset-btn" data-item="can" data-type="fixed"></button><button class="mindset-btn" data-item="can" data-type="growth"></button></td><td class="growth-mindset">"Ich kann es noch nicht"</td></tr>
+                    <tr><td class="fixed-mindset">"Das ist zu schwer"</td><td class="mindset-check"><button class="mindset-btn" data-item="hard" data-type="fixed"></button><button class="mindset-btn" data-item="hard" data-type="growth"></button></td><td class="growth-mindset">"Das braucht mehr Übung"</td></tr>
+                    <tr><td class="fixed-mindset">"Ich gebe auf"</td><td class="mindset-check"><button class="mindset-btn" data-item="give" data-type="fixed"></button><button class="mindset-btn" data-item="give" data-type="growth"></button></td><td class="growth-mindset">"Ich versuche es anders"</td></tr>
+                    <tr><td class="fixed-mindset">"Fehler zeigen mein Versagen"</td><td class="mindset-check"><button class="mindset-btn" data-item="fail" data-type="fixed"></button><button class="mindset-btn" data-item="fail" data-type="growth"></button></td><td class="growth-mindset">"Fehler helfen mir zu lernen"</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Mein Unterstützungsnetzwerk</h3>
+            <div class="network-container">
+                <div class="network-category"><h4>👨‍👩‍👧 Familie</h4><div class="network-inputs"><input type="text" class="network-input" id="family1" placeholder="Person 1"><input type="text" class="network-input" id="family2" placeholder="Person 2"></div></div>
+                <div class="network-category"><h4>👫 Freunde</h4><div class="network-inputs"><input type="text" class="network-input" id="friend1" placeholder="Freund/in 1"><input type="text" class="network-input" id="friend2" placeholder="Freund/in 2"></div></div>
+                <div class="network-category"><h4>🏫 Schule/Arbeit</h4><div class="network-inputs"><input type="text" class="network-input" id="school1" placeholder="Person 1"><input type="text" class="network-input" id="school2" placeholder="Person 2"></div></div>
+                <div class="network-category"><h4>💚 Professionelle Hilfe</h4><div class="network-inputs"><input type="text" class="network-input" id="prof1" placeholder="z.B. Beratung"><input type="text" class="network-input" id="prof2" placeholder="z.B. Hotline"></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Resilienz-Tagebuch</h3>
+            <div class="setback-form">
+                <div class="form-group"><label>Datum</label><input type="date" id="logDate"></div>
+                <div class="form-group"><label>Herausforderung/Rückschlag</label><input type="text" id="logChallenge" placeholder="Was ist passiert?"></div>
+                <div class="form-group"><label>Meine Reaktion</label><textarea id="logReaction" placeholder="Wie habe ich reagiert?"></textarea></div>
+                <div class="form-group"><label>Was habe ich gelernt?</label><textarea id="logLearning" placeholder="Welche Erkenntnisse nehme ich mit?"></textarea></div>
+                <div class="form-group"><label>Bounce-Back Level</label>
+                    <div class="meter-container">
+                        <div class="bounce-meter"><div class="meter-thumb" id="meterThumb" style="left: 50%;"></div></div>
+                        <div class="meter-labels"><span>Noch kämpfend</span><span>Stabil</span><span>Gestärkt</span></div>
+                        <input type="hidden" id="bounceLevel" value="50">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Entwicklungsfortschritt</h3>
+            <div class="progress-container"><div class="progress-bar" id="progressBar" style="width: 0%;">0%</div></div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Baue deine innere Stärke auf!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für mehr Resilienz</h4>
+            <ul>
+                <li><strong>Selbstfürsorge:</strong> Schlaf, Ernährung und Bewegung sind die Basis</li>
+                <li><strong>Verbindungen pflegen:</strong> Beziehungen sind der wichtigste Schutzfaktor</li>
+                <li><strong>Perspektive wechseln:</strong> Jede Krise birgt auch Chancen</li>
+                <li><strong>Kleine Schritte:</strong> Große Probleme in handhabbare Teile zerlegen</li>
+                <li><strong>Hilfe annehmen:</strong> Stark sein heißt auch, Unterstützung zu suchen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V48_arbeit';
+        let data = { pillars: {}, coping: {}, mindset: {}, network: {}, logs: [] };
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.pillar').forEach(p => { p.addEventListener('click', function() { this.classList.toggle('strong'); data.pillars[this.dataset.pillar] = this.classList.contains('strong'); updateProgress(); saveData(); }); });
+            document.querySelectorAll('.coping-card').forEach(c => { c.addEventListener('click', function() { this.classList.toggle('active'); data.coping[this.dataset.coping] = this.classList.contains('active'); updateProgress(); saveData(); }); });
+            document.querySelectorAll('.mindset-btn').forEach(btn => { btn.addEventListener('click', function() { const item = this.dataset.item; const type = this.dataset.type; document.querySelectorAll(`.mindset-btn[data-item="${item}"]`).forEach(b => b.classList.remove('selected')); this.classList.add('selected'); data.mindset[item] = type; updateProgress(); saveData(); }); });
+            ['family1','family2','friend1','friend2','school1','school2','prof1','prof2'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', function() { data.network[id] = this.value; updateProgress(); saveData(); }); });
+
+            // Meter drag
+            const meter = document.querySelector('.bounce-meter');
+            const thumb = document.getElementById('meterThumb');
+            let dragging = false;
+            thumb.addEventListener('mousedown', () => dragging = true);
+            document.addEventListener('mouseup', () => dragging = false);
+            document.addEventListener('mousemove', (e) => { if(!dragging) return; const rect = meter.getBoundingClientRect(); let pct = ((e.clientX - rect.left) / rect.width) * 100; pct = Math.max(0, Math.min(100, pct)); thumb.style.left = pct + '%'; document.getElementById('bounceLevel').value = Math.round(pct); });
+
+            document.getElementById('logDate').valueAsDate = new Date();
+            applyStoredData(); renderLogs(); updateProgress();
+        }
+
+        function applyStoredData() {
+            Object.entries(data.pillars).forEach(([p, s]) => { if(s) { const el = document.querySelector(`.pillar[data-pillar="${p}"]`); if(el) el.classList.add('strong'); }});
+            Object.entries(data.coping).forEach(([c, a]) => { if(a) { const el = document.querySelector(`.coping-card[data-coping="${c}"]`); if(el) el.classList.add('active'); }});
+            Object.entries(data.mindset).forEach(([item, type]) => { const btn = document.querySelector(`.mindset-btn[data-item="${item}"][data-type="${type}"]`); if(btn) btn.classList.add('selected'); });
+            Object.entries(data.network).forEach(([id, v]) => { const el = document.getElementById(id); if(el) el.value = v; });
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value, challenge = document.getElementById('logChallenge').value;
+            const reaction = document.getElementById('logReaction').value, learning = document.getElementById('logLearning').value;
+            const bounceLevel = parseInt(document.getElementById('bounceLevel').value);
+            if(!date || !challenge) { alert('Bitte fülle mindestens Datum und Herausforderung aus!'); return; }
+            data.logs.push({ id: Date.now(), date, challenge, reaction, learning, bounceLevel });
+            document.getElementById('logChallenge').value = ''; document.getElementById('logReaction').value = ''; document.getElementById('logLearning').value = '';
+            renderLogs(); updateProgress(); saveData();
+        }
+
+        function deleteLog(id) { data.logs = data.logs.filter(l => l.id !== id); renderLogs(); updateProgress(); saveData(); }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            container.innerHTML = [...data.logs].sort((a,b) => new Date(b.date) - new Date(a.date)).map(log => `<div class="log-entry"><div class="log-header"><span>${new Date(log.date).toLocaleDateString('de-DE')} - Bounce-Back: ${log.bounceLevel}%</span><button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button></div><div style="font-weight:600;color:#667eea;">${log.challenge}</div>${log.reaction ? `<div style="margin-top:8px;color:#666;">Reaktion: ${log.reaction}</div>` : ''}${log.learning ? `<div style="color:#555;margin-top:10px;font-style:italic;">"${log.learning}"</div>` : ''}</div>`).join('');
+        }
+
+        function updateProgress() {
+            let total = 0, achieved = 0;
+            total += 3; achieved += Math.min(Object.values(data.pillars).filter(Boolean).length, 3);
+            total += 3; achieved += Math.min(Object.values(data.coping).filter(Boolean).length, 3);
+            total += 2; achieved += Object.values(data.mindset).filter(v => v === 'growth').length * 0.5;
+            total += 2; achieved += Math.min(Object.values(data.network).filter(v => v && v.length > 0).length / 2, 2);
+            total += 2; achieved += Math.min(data.logs.length, 2);
+            const percent = total > 0 ? Math.round((achieved / total) * 100) : 0;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressBar').textContent = percent + '%';
+            const texts = ['Baue deine innere Stärke auf!', 'Du lernst deine Resilienz-Ressourcen kennen.', 'Du entwickelst Bewältigungsstrategien.', 'Deine Widerstandskraft wächst!', 'Hervorragend! Du bist resilient!'];
+            document.getElementById('progressText').textContent = texts[Math.min(Math.floor(percent/25), 4)];
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if(s) { data = JSON.parse(s); if(!data.pillars) data.pillars = {}; if(!data.coping) data.coping = {}; if(!data.mindset) data.mindset = {}; if(!data.network) data.network = {}; if(!data.logs) data.logs = []; }}
+        function exportData() { const blob = new Blob([JSON.stringify({item:'V-48',title:'Resilienz entwickeln',exportDate:new Date().toISOString(),...data}, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `V-48_Resilienz_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+        function resetData() { if(confirm('Alle Daten löschen?')) { localStorage.removeItem(STORAGE_KEY); location.reload(); }}
+        init();
+    </script>
+</body>
+</html>
