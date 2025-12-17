@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Nonverbale Kommunikation (Stufe I) - ELDiB K-1 bis K-5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0d1b2a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #2d6a6a, #1a4040);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .eldib-ref li:last-child {
+            border-bottom: none;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Signal Tracker */
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .signal-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .signal-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .signal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .signal-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .signal-counter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+        .counter-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .counter-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .counter-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 40px;
+            color: #4ecdc4;
+        }
+
+        /* Response Observation */
+        .observation-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+        .observation-table th {
+            text-align: left;
+            padding: 10px;
+            color: #888;
+            font-size: 0.85rem;
+            font-weight: normal;
+        }
+        .observation-table td {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+        }
+        .observation-table td:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        .observation-table td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        .response-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .response-btn {
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .response-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .response-btn.selected {
+            background: #4ecdc4;
+            border-color: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        /* Attention Tracker */
+        .attention-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .attention-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .attention-label {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .attention-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .attention-btn {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .attention-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .attention-btn.selected {
+            background: linear-gradient(135deg, #4ecdc4, #2d8a85);
+            border-color: #4ecdc4;
+        }
+
+        /* Daily Log */
+        .daily-log {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .log-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .log-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .log-field {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .log-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .log-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Week Overview */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .day-rating {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .rating-dot {
+            width: 100%;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .rating-dot:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .rating-dot.level-1 { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+        .rating-dot.level-2 { background: #f39c12; border-color: #f39c12; color: #fff; }
+        .rating-dot.level-3 { background: #2ecc71; border-color: #2ecc71; color: #fff; }
+
+        /* Strategies */
+        .strategy-list {
+            display: grid;
+            gap: 10px;
+        }
+        .strategy-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .strategy-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .strategy-check {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: transparent;
+            transition: all 0.3s;
+        }
+        .strategy-item.active .strategy-check {
+            background: #4ecdc4;
+            border-color: #4ecdc4;
+            color: #1a1a2e;
+        }
+        .strategy-text {
+            flex: 1;
+        }
+        .strategy-text h4 {
+            margin-bottom: 3px;
+        }
+        .strategy-text p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4ecdc4, #2d8a85);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78,205,196,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👀 Nonverbale Kommunikation beobachten</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Kommunikation Stufe I (0-2 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items K-1 bis K-5</h3>
+                <ul>
+                    <li><strong>K-1:</strong> Reagiert auf Ansprache (Blickkontakt, Kopfwenden)</li>
+                    <li><strong>K-2:</strong> Zeigt Aufmerksamkeit für Gesichter</li>
+                    <li><strong>K-3:</strong> Reagiert auf emotionale Mimik</li>
+                    <li><strong>K-4:</strong> Gibt Laute von sich als Reaktion</li>
+                    <li><strong>K-5:</strong> Nutzt Gestik zur Kontaktaufnahme</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name des Kindes</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 18 Monate">
+                </div>
+                <div>
+                    <label>Beobachtungszeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 45-47">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Kommunikationssignale zählen</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Zähle, wie oft das Kind verschiedene Kommunikationssignale zeigt.
+            </p>
+
+            <div class="signal-grid">
+                <div class="signal-card">
+                    <div class="signal-icon">👁️</div>
+                    <div class="signal-name">Blickkontakt</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('blick', -1)">−</button>
+                        <span class="counter-value" id="counter-blick">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('blick', 1)">+</button>
+                    </div>
+                </div>
+                <div class="signal-card">
+                    <div class="signal-icon">😊</div>
+                    <div class="signal-name">Lächeln</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('laecheln', -1)">−</button>
+                        <span class="counter-value" id="counter-laecheln">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('laecheln', 1)">+</button>
+                    </div>
+                </div>
+                <div class="signal-card">
+                    <div class="signal-icon">👆</div>
+                    <div class="signal-name">Zeigen</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('zeigen', -1)">−</button>
+                        <span class="counter-value" id="counter-zeigen">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('zeigen', 1)">+</button>
+                    </div>
+                </div>
+                <div class="signal-card">
+                    <div class="signal-icon">🗣️</div>
+                    <div class="signal-name">Lautieren</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('laut', -1)">−</button>
+                        <span class="counter-value" id="counter-laut">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('laut', 1)">+</button>
+                    </div>
+                </div>
+                <div class="signal-card">
+                    <div class="signal-icon">🙌</div>
+                    <div class="signal-name">Arme strecken</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('arme', -1)">−</button>
+                        <span class="counter-value" id="counter-arme">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('arme', 1)">+</button>
+                    </div>
+                </div>
+                <div class="signal-card">
+                    <div class="signal-icon">🔄</div>
+                    <div class="signal-name">Kopf wenden</div>
+                    <div class="signal-counter">
+                        <button class="counter-btn" onclick="adjustCounter('kopf', -1)">−</button>
+                        <span class="counter-value" id="counter-kopf">0</span>
+                        <button class="counter-btn" onclick="adjustCounter('kopf', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👂 Reaktion auf Ansprache</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie reagiert das Kind auf verschiedene Anspracheformen?
+            </p>
+
+            <table class="observation-table">
+                <tr>
+                    <th>Anspracheart</th>
+                    <th>Reaktion</th>
+                </tr>
+                <tr>
+                    <td>Namensruf</td>
+                    <td>
+                        <div class="response-btns">
+                            <button class="response-btn" data-item="name" data-v="keine">Keine</button>
+                            <button class="response-btn" data-item="name" data-v="manchmal">Manchmal</button>
+                            <button class="response-btn" data-item="name" data-v="oft">Oft</button>
+                            <button class="response-btn" data-item="name" data-v="immer">Immer</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Freundliche Stimme</td>
+                    <td>
+                        <div class="response-btns">
+                            <button class="response-btn" data-item="freundlich" data-v="keine">Keine</button>
+                            <button class="response-btn" data-item="freundlich" data-v="manchmal">Manchmal</button>
+                            <button class="response-btn" data-item="freundlich" data-v="oft">Oft</button>
+                            <button class="response-btn" data-item="freundlich" data-v="immer">Immer</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Singende Stimme</td>
+                    <td>
+                        <div class="response-btns">
+                            <button class="response-btn" data-item="singen" data-v="keine">Keine</button>
+                            <button class="response-btn" data-item="singen" data-v="manchmal">Manchmal</button>
+                            <button class="response-btn" data-item="singen" data-v="oft">Oft</button>
+                            <button class="response-btn" data-item="singen" data-v="immer">Immer</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Bekannte Bezugsperson</td>
+                    <td>
+                        <div class="response-btns">
+                            <button class="response-btn" data-item="bezug" data-v="keine">Keine</button>
+                            <button class="response-btn" data-item="bezug" data-v="manchmal">Manchmal</button>
+                            <button class="response-btn" data-item="bezug" data-v="oft">Oft</button>
+                            <button class="response-btn" data-item="bezug" data-v="immer">Immer</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fremde Person</td>
+                    <td>
+                        <div class="response-btns">
+                            <button class="response-btn" data-item="fremd" data-v="keine">Keine</button>
+                            <button class="response-btn" data-item="fremd" data-v="manchmal">Manchmal</button>
+                            <button class="response-btn" data-item="fremd" data-v="oft">Oft</button>
+                            <button class="response-btn" data-item="fremd" data-v="immer">Immer</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>😊 Mimik-Reaktion</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie reagiert das Kind auf verschiedene Gesichtsausdrücke?
+            </p>
+
+            <div class="attention-scale">
+                <div class="attention-item">
+                    <div class="attention-label">Reagiert auf freudige Mimik (Lächeln)</div>
+                    <div class="attention-btns">
+                        <button class="attention-btn" data-q="freude" data-v="1">Kaum</button>
+                        <button class="attention-btn" data-q="freude" data-v="2">Etwas</button>
+                        <button class="attention-btn" data-q="freude" data-v="3">Deutlich</button>
+                        <button class="attention-btn" data-q="freude" data-v="4">Sehr stark</button>
+                    </div>
+                </div>
+                <div class="attention-item">
+                    <div class="attention-label">Reagiert auf besorgte/ernste Mimik</div>
+                    <div class="attention-btns">
+                        <button class="attention-btn" data-q="ernst" data-v="1">Kaum</button>
+                        <button class="attention-btn" data-q="ernst" data-v="2">Etwas</button>
+                        <button class="attention-btn" data-q="ernst" data-v="3">Deutlich</button>
+                        <button class="attention-btn" data-q="ernst" data-v="4">Sehr stark</button>
+                    </div>
+                </div>
+                <div class="attention-item">
+                    <div class="attention-label">Imitiert Gesichtsausdrücke</div>
+                    <div class="attention-btns">
+                        <button class="attention-btn" data-q="imitation" data-v="1">Nie</button>
+                        <button class="attention-btn" data-q="imitation" data-v="2">Selten</button>
+                        <button class="attention-btn" data-q="imitation" data-v="3">Manchmal</button>
+                        <button class="attention-btn" data-q="imitation" data-v="4">Oft</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Übersicht: Kommunikationsqualität</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Einschätzung der Kommunikation (🔴 = wenig, 🟡 = mittel, 🟢 = viel)
+            </p>
+
+            <div class="week-grid">
+                <div class="day-cell">
+                    <div class="day-name">Mo</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="mo" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="mo" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="mo" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Di</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="di" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="di" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="di" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Mi</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="mi" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="mi" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="mi" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Do</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="do" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="do" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="do" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Fr</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="fr" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="fr" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="fr" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Sa</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="sa" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="sa" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="sa" data-level="3">🟢</button>
+                    </div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">So</div>
+                    <div class="day-rating">
+                        <button class="rating-dot" data-day="so" data-level="1">🔴</button>
+                        <button class="rating-dot" data-day="so" data-level="2">🟡</button>
+                        <button class="rating-dot" data-day="so" data-level="3">🟢</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Förderstrategien</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Welche Strategien werden aktuell eingesetzt?
+            </p>
+
+            <div class="strategy-list">
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div class="strategy-text">
+                        <h4>Blickkontakt suchen</h4>
+                        <p>Auf Augenhöhe gehen, warten bis Kind schaut</p>
+                    </div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div class="strategy-text">
+                        <h4>Übertriebene Mimik</h4>
+                        <p>Deutliche, langsame Gesichtsausdrücke zeigen</p>
+                    </div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div class="strategy-text">
+                        <h4>Warten und Pausen</h4>
+                        <p>Zeit für Reaktion geben, nicht überstimulieren</p>
+                    </div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div class="strategy-text">
+                        <h4>Laute spiegeln</h4>
+                        <p>Kindliche Laute aufgreifen und wiederholen</p>
+                    </div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div class="strategy-text">
+                        <h4>Rhythmische Interaktion</h4>
+                        <p>Lieder, Reime, Fingerspiele einsetzen</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Besondere Beobachtungen, Situationen, Fortschritte..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_k1_vertiefung_nonverbal';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            counters: { blick: 0, laecheln: 0, zeigen: 0, laut: 0, arme: 0, kopf: 0 },
+            responses: {},
+            mimik: {},
+            weekRating: {},
+            strategies: [],
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Response buttons
+            document.querySelectorAll('.response-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const item = this.dataset.item;
+                    document.querySelectorAll(`.response-btn[data-item="${item}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.responses[item] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Attention buttons
+            document.querySelectorAll('.attention-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const q = this.dataset.q;
+                    document.querySelectorAll(`.attention-btn[data-q="${q}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.mimik[q] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Week rating
+            document.querySelectorAll('.rating-dot').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    const level = this.dataset.level;
+
+                    document.querySelectorAll(`.rating-dot[data-day="${day}"]`).forEach(b => {
+                        b.classList.remove('level-1', 'level-2', 'level-3');
+                    });
+
+                    this.classList.add(`level-${level}`);
+                    data.weekRating[day] = level;
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+        }
+
+        function adjustCounter(type, delta) {
+            data.counters[type] = Math.max(0, (data.counters[type] || 0) + delta);
+            document.getElementById(`counter-${type}`).textContent = data.counters[type];
+            autoSave();
+        }
+
+        function toggleStrategy(el) {
+            el.classList.toggle('active');
+            const text = el.querySelector('h4').textContent;
+
+            if (el.classList.contains('active')) {
+                if (!data.strategies.includes(text)) {
+                    data.strategies.push(text);
+                }
+            } else {
+                data.strategies = data.strategies.filter(s => s !== text);
+            }
+            autoSave();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                // Restore counters
+                Object.keys(data.counters).forEach(type => {
+                    const el = document.getElementById(`counter-${type}`);
+                    if (el) el.textContent = data.counters[type];
+                });
+
+                // Restore responses
+                Object.keys(data.responses).forEach(item => {
+                    const btn = document.querySelector(`.response-btn[data-item="${item}"][data-v="${data.responses[item]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore mimik
+                Object.keys(data.mimik).forEach(q => {
+                    const btn = document.querySelector(`.attention-btn[data-q="${q}"][data-v="${data.mimik[q]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore week rating
+                Object.keys(data.weekRating).forEach(day => {
+                    const btn = document.querySelector(`.rating-dot[data-day="${day}"][data-level="${data.weekRating[day]}"]`);
+                    if (btn) btn.classList.add(`level-${data.weekRating[day]}`);
+                });
+
+                // Restore strategies
+                data.strategies.forEach(text => {
+                    document.querySelectorAll('.strategy-item h4').forEach(h4 => {
+                        if (h4.textContent === text) {
+                            h4.closest('.strategy-item').classList.add('active');
+                        }
+                    });
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() {
+            window.print();
+        }
+
+        function exportData() {
+            const exportData = {
+                ...data,
+                exportDate: new Date().toISOString(),
+                worksheet: 'ELDiB Kommunikation Stufe I - Nonverbale Kommunikation'
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_k1_nonverbal_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

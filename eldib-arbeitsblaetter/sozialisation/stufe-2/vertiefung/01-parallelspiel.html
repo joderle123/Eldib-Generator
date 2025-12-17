@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Parallelspiel & erste Interaktionen (Stufe II) - ELDiB S-11 bis S-15</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e17055 0%, #8b3a2f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 { font-size: 1.8rem; color: #ffeaa7; margin-bottom: 10px; }
+        .subtitle { color: #ddd; font-size: 1rem; }
+        .eldib-ref {
+            background: linear-gradient(135deg, #d35400, #a04000);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 { color: #fff; margin-bottom: 10px; }
+        .eldib-ref ul { list-style: none; font-size: 0.9rem; }
+        .eldib-ref li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 { color: #ffeaa7; margin-bottom: 20px; font-size: 1.3rem; }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-input label { display: block; margin-bottom: 5px; color: #ddd; font-size: 0.85rem; }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .skill-grid { display: grid; gap: 12px; }
+        .skill-item {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 8px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .skill-btn {
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .skill-btn:hover { background: rgba(255,255,255,0.1); }
+        .skill-btn.selected {
+            background: linear-gradient(135deg, #d35400, #a04000);
+            border-color: #d35400;
+            color: #fff;
+        }
+        .play-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .play-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .play-card:hover { background: rgba(255,255,255,0.05); }
+        .play-card.selected { border-color: #ffeaa7; background: rgba(255,234,167,0.1); }
+        .play-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .play-name { font-size: 0.9rem; margin-bottom: 5px; }
+        .play-desc { font-size: 0.75rem; color: #aaa; }
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .counter-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .counter-icon { font-size: 2rem; margin-bottom: 8px; }
+        .counter-name { font-size: 0.85rem; margin-bottom: 10px; }
+        .counter-controls { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .counter-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .counter-value { font-size: 1.5rem; font-weight: 700; min-width: 40px; color: #ffeaa7; }
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; }
+        .day-score {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .day-score.s-1 { background: #d63031; border-color: #d63031; }
+        .day-score.s-2 { background: #e17055; border-color: #e17055; }
+        .day-score.s-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-score.s-4 { background: #00cec9; border-color: #00cec9; }
+        .day-score.s-5 { background: #00b894; border-color: #00b894; }
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-primary { background: linear-gradient(135deg, #ffeaa7, #d35400); color: #1a1a2e; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        @media print { body { background: white; color: black; } .btn { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧸 Parallelspiel & erste Interaktionen</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Sozialisation Stufe II (2-5 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items S-11 bis S-15</h3>
+                <ul>
+                    <li><strong>S-11:</strong> Spielt neben anderen Kindern (Parallelspiel)</li>
+                    <li><strong>S-12:</strong> Zeigt Interesse an anderen Kindern</li>
+                    <li><strong>S-13:</strong> Teilt auf Aufforderung Spielzeug</li>
+                    <li><strong>S-14:</strong> Nimmt an kurzen gemeinsamen Aktivitäten teil</li>
+                    <li><strong>S-15:</strong> Beginnt einfache Rollenspiele</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div><label>Name des Kindes</label><input type="text" id="childName" placeholder="Vorname"></div>
+                <div><label>Alter</label><input type="text" id="childAge" placeholder="z.B. 3 Jahre"></div>
+                <div><label>Zeitraum</label><input type="text" id="period" placeholder="z.B. KW 45-47"></div>
+                <div><label>Beobachter/in</label><input type="text" id="observer" placeholder="Name"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Soziale Fertigkeiten bewerten</h2>
+            <div class="skill-grid">
+                <div class="skill-item">
+                    <div>Spielt neben anderen (Parallelspiel)</div>
+                    <button class="skill-btn" data-skill="parallel" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="parallel" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="parallel" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="parallel" data-v="4">Oft</button>
+                </div>
+                <div class="skill-item">
+                    <div>Zeigt Interesse an anderen Kindern</div>
+                    <button class="skill-btn" data-skill="interesse" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="interesse" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="interesse" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="interesse" data-v="4">Oft</button>
+                </div>
+                <div class="skill-item">
+                    <div>Teilt Spielzeug</div>
+                    <button class="skill-btn" data-skill="teilen" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="teilen" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="teilen" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="teilen" data-v="4">Oft</button>
+                </div>
+                <div class="skill-item">
+                    <div>Nimmt an gemeinsamen Aktivitäten teil</div>
+                    <button class="skill-btn" data-skill="gemeinsam" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="gemeinsam" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="gemeinsam" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="gemeinsam" data-v="4">Oft</button>
+                </div>
+                <div class="skill-item">
+                    <div>Zeigt Rollenspiel-Anfänge</div>
+                    <button class="skill-btn" data-skill="rollenspiel" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="rollenspiel" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="rollenspiel" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="rollenspiel" data-v="4">Oft</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎮 Beobachtete Spielformen</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">Welche Spielformen zeigt das Kind? (anklicken)</p>
+            <div class="play-types">
+                <div class="play-card" data-type="allein">
+                    <div class="play-icon">👤</div>
+                    <div class="play-name">Alleinspiel</div>
+                    <div class="play-desc">Spielt für sich allein</div>
+                </div>
+                <div class="play-card" data-type="parallel">
+                    <div class="play-icon">👤👤</div>
+                    <div class="play-name">Parallelspiel</div>
+                    <div class="play-desc">Spielt neben anderen</div>
+                </div>
+                <div class="play-card" data-type="beobachten">
+                    <div class="play-icon">👀</div>
+                    <div class="play-name">Zuschauen</div>
+                    <div class="play-desc">Beobachtet andere</div>
+                </div>
+                <div class="play-card" data-type="assoziativ">
+                    <div class="play-icon">🤝</div>
+                    <div class="play-name">Assoziatives Spiel</div>
+                    <div class="play-desc">Lose Interaktion</div>
+                </div>
+                <div class="play-card" data-type="kooperativ">
+                    <div class="play-icon">👥</div>
+                    <div class="play-name">Kooperatives Spiel</div>
+                    <div class="play-desc">Gemeinsames Ziel</div>
+                </div>
+                <div class="play-card" data-type="rollen">
+                    <div class="play-icon">🎭</div>
+                    <div class="play-name">Rollenspiel</div>
+                    <div class="play-desc">So-tun-als-ob</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Interaktionen zählen</h2>
+            <div class="counter-grid">
+                <div class="counter-card">
+                    <div class="counter-icon">👋</div>
+                    <div class="counter-name">Kontaktaufnahme</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjust('kontakt',-1)">−</button>
+                        <span class="counter-value" id="c-kontakt">0</span>
+                        <button class="counter-btn" onclick="adjust('kontakt',1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">🎁</div>
+                    <div class="counter-name">Teilen</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjust('teilen',-1)">−</button>
+                        <span class="counter-value" id="c-teilen">0</span>
+                        <button class="counter-btn" onclick="adjust('teilen',1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">😊</div>
+                    <div class="counter-name">Positive Interaktion</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjust('positiv',-1)">−</button>
+                        <span class="counter-value" id="c-positiv">0</span>
+                        <button class="counter-btn" onclick="adjust('positiv',1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">😤</div>
+                    <div class="counter-name">Konflikte</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjust('konflikt',-1)">−</button>
+                        <span class="counter-value" id="c-konflikt">0</span>
+                        <button class="counter-btn" onclick="adjust('konflikt',1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker</h2>
+            <div class="week-grid">
+                <div class="day-cell"><div class="day-name">Mo</div><div class="day-score" data-day="mo">-</div></div>
+                <div class="day-cell"><div class="day-name">Di</div><div class="day-score" data-day="di">-</div></div>
+                <div class="day-cell"><div class="day-name">Mi</div><div class="day-score" data-day="mi">-</div></div>
+                <div class="day-cell"><div class="day-name">Do</div><div class="day-score" data-day="do">-</div></div>
+                <div class="day-cell"><div class="day-name">Fr</div><div class="day-score" data-day="fr">-</div></div>
+                <div class="day-cell"><div class="day-name">Sa</div><div class="day-score" data-day="sa">-</div></div>
+                <div class="day-cell"><div class="day-name">So</div><div class="day-score" data-day="so">-</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const KEY = 'eldib_s2_vertiefung_parallelspiel';
+        let data = { meta: {}, skills: {}, playTypes: [], counters: {kontakt:0,teilen:0,positiv:0,konflikt:0}, week: {}, notes: '' };
+
+        document.addEventListener('DOMContentLoaded', () => { loadData(); setup(); });
+
+        function setup() {
+            document.querySelectorAll('.meta-input input').forEach(i => {
+                i.addEventListener('input', () => { data.meta[i.id] = i.value; save(); });
+            });
+            document.querySelectorAll('.skill-btn').forEach(b => {
+                b.addEventListener('click', function() {
+                    const s = this.dataset.skill;
+                    document.querySelectorAll(`.skill-btn[data-skill="${s}"]`).forEach(x => x.classList.remove('selected'));
+                    this.classList.add('selected');
+                    data.skills[s] = this.dataset.v;
+                    save();
+                });
+            });
+            document.querySelectorAll('.play-card').forEach(c => {
+                c.addEventListener('click', function() {
+                    const t = this.dataset.type;
+                    this.classList.toggle('selected');
+                    if (this.classList.contains('selected')) { if (!data.playTypes.includes(t)) data.playTypes.push(t); }
+                    else { data.playTypes = data.playTypes.filter(x => x !== t); }
+                    save();
+                });
+            });
+            document.querySelectorAll('.day-score').forEach(d => {
+                d.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let c = parseInt(data.week[day]) || 0;
+                    c = (c % 5) + 1;
+                    data.week[day] = c;
+                    this.textContent = c;
+                    this.className = 'day-score s-' + c;
+                    save();
+                });
+            });
+            document.getElementById('notes').addEventListener('input', function() { data.notes = this.value; save(); });
+        }
+
+        function adjust(type, delta) {
+            data.counters[type] = Math.max(0, (data.counters[type]||0) + delta);
+            document.getElementById('c-'+type).textContent = data.counters[type];
+            save();
+        }
+
+        function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
+        function saveData() { save(); alert('Gespeichert!'); }
+
+        function loadData() {
+            const s = localStorage.getItem(KEY);
+            if (s) {
+                data = JSON.parse(s);
+                Object.keys(data.meta).forEach(k => { const e = document.getElementById(k); if(e) e.value = data.meta[k]; });
+                Object.keys(data.skills).forEach(k => {
+                    const b = document.querySelector(`.skill-btn[data-skill="${k}"][data-v="${data.skills[k]}"]`);
+                    if(b) b.classList.add('selected');
+                });
+                data.playTypes.forEach(t => {
+                    const c = document.querySelector(`.play-card[data-type="${t}"]`);
+                    if(c) c.classList.add('selected');
+                });
+                Object.keys(data.counters).forEach(k => {
+                    const e = document.getElementById('c-'+k);
+                    if(e) e.textContent = data.counters[k];
+                });
+                Object.keys(data.week).forEach(d => {
+                    const e = document.querySelector(`.day-score[data-day="${d}"]`);
+                    if(e) { e.textContent = data.week[d]; e.classList.add('s-'+data.week[d]); }
+                });
+                if(data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() { if(confirm('Löschen?')) { localStorage.removeItem(KEY); location.reload(); } }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify({...data, worksheet:'ELDiB S-II Parallelspiel', exportDate:new Date().toISOString()}, null, 2)], {type:'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `eldib_s2_parallelspiel_${data.meta.childName||'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+    </script>
+</body>
+</html>

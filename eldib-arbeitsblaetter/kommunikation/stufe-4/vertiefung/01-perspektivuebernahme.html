@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Perspektivübernahme (Stufe IV) - ELDiB K-31 bis K-35</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #341f97 0%, #1e0a3c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #a29bfe;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #6c5ce7, #4834d4);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 650px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #a29bfe;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Perspective Cards */
+        .perspective-scenario {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #a29bfe;
+        }
+        .scenario-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #a29bfe;
+        }
+        .scenario-description {
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .perspective-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .perspective-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .perspective-card label {
+            display: block;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .perspective-card textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Skills Assessment */
+        .skill-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .skill-label {
+            font-size: 0.9rem;
+        }
+        .skill-btn {
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .skill-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .skill-btn.selected {
+            background: linear-gradient(135deg, #6c5ce7, #4834d4);
+            border-color: #6c5ce7;
+            color: #fff;
+        }
+
+        /* Emotion Recognition */
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .emotion-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .emotion-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .emotion-card.good {
+            border-color: #00b894;
+            background: rgba(0,184,148,0.1);
+        }
+        .emotion-card.medium {
+            border-color: #fdcb6e;
+            background: rgba(253,203,110,0.1);
+        }
+        .emotion-card.needs-work {
+            border-color: #d63031;
+            background: rgba(214,48,49,0.1);
+        }
+        .emotion-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .emotion-name {
+            font-size: 0.85rem;
+        }
+        .emotion-status {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            color: #888;
+        }
+
+        /* Situation Analysis */
+        .situation-log {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .situation-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .situation-header input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+        }
+        .situation-questions {
+            display: grid;
+            gap: 12px;
+        }
+        .situation-q {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .situation-q label {
+            display: block;
+            font-size: 0.85rem;
+            color: #a29bfe;
+            margin-bottom: 8px;
+        }
+        .situation-q textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Week Tracker */
+        .week-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .day-rating {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .day-rating.r-1 { background: #d63031; border-color: #d63031; }
+        .day-rating.r-2 { background: #e17055; border-color: #e17055; }
+        .day-rating.r-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-rating.r-4 { background: #00cec9; border-color: #00cec9; }
+        .day-rating.r-5 { background: #00b894; border-color: #00b894; }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(162,155,254,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-add:hover {
+            border-color: #a29bfe;
+            color: #a29bfe;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔮 Perspektiven verstehen</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Kommunikation Stufe IV (9-12 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items K-31 bis K-35</h3>
+                <ul>
+                    <li><strong>K-31:</strong> Erkennt Gefühle anderer an nonverbalen Signalen</li>
+                    <li><strong>K-32:</strong> Kann sich in die Lage anderer versetzen</li>
+                    <li><strong>K-33:</strong> Versteht unterschiedliche Sichtweisen</li>
+                    <li><strong>K-34:</strong> Passt Kommunikation an Gesprächspartner an</li>
+                    <li><strong>K-35:</strong> Erkennt Ironie und übertragene Bedeutungen</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 11 Jahre">
+                </div>
+                <div>
+                    <label>Zeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 20-22">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Perspektiven-Szenario</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Analysiere diese Situation aus verschiedenen Perspektiven.
+            </p>
+
+            <div class="perspective-scenario">
+                <div class="scenario-title">Szenario: Der neue Schüler</div>
+                <div class="scenario-description">
+                    Tom ist neu in der Klasse. In der Pause steht er alleine am Rand des Schulhofs.
+                    Eine Gruppe Kinder spielt Fußball und ruft laut. Ein Mädchen, Lisa, bemerkt Tom
+                    und geht zu ihm. "Hey, willst du mitspielen?" fragt sie. Tom schüttelt den Kopf
+                    und sagt: "Nein danke, ich schaue lieber zu."
+                </div>
+                <div class="perspective-grid">
+                    <div class="perspective-card">
+                        <label>Wie fühlt sich Tom?</label>
+                        <textarea id="persp-tom" placeholder="Was denkt und fühlt Tom in dieser Situation?"></textarea>
+                    </div>
+                    <div class="perspective-card">
+                        <label>Wie fühlt sich Lisa?</label>
+                        <textarea id="persp-lisa" placeholder="Was denkt und fühlt Lisa?"></textarea>
+                    </div>
+                    <div class="perspective-card">
+                        <label>Was könnten die Gründe für Toms Verhalten sein?</label>
+                        <textarea id="persp-gruende" placeholder="Warum verhält Tom sich so?"></textarea>
+                    </div>
+                    <div class="perspective-card">
+                        <label>Was könnte Lisa als nächstes tun?</label>
+                        <textarea id="persp-next" placeholder="Welche Möglichkeiten hat Lisa?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Fähigkeiten-Bewertung</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut sind diese Fähigkeiten entwickelt?
+            </p>
+
+            <div class="skill-row">
+                <div class="skill-label">Erkennt Gefühle an Mimik</div>
+                <button class="skill-btn" data-skill="mimik" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="mimik" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="mimik" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="mimik" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="mimik" data-v="5">Immer</button>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-label">Erkennt Gefühle an Körpersprache</div>
+                <button class="skill-btn" data-skill="koerper" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="koerper" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="koerper" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="koerper" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="koerper" data-v="5">Immer</button>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-label">Versetzt sich in andere hinein</div>
+                <button class="skill-btn" data-skill="empathie" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="empathie" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="empathie" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="empathie" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="empathie" data-v="5">Immer</button>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-label">Akzeptiert andere Meinungen</div>
+                <button class="skill-btn" data-skill="meinung" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="meinung" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="meinung" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="meinung" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="meinung" data-v="5">Immer</button>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-label">Passt Sprache an Zuhörer an</div>
+                <button class="skill-btn" data-skill="anpassen" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="anpassen" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="anpassen" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="anpassen" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="anpassen" data-v="5">Immer</button>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-label">Versteht Ironie/Sarkasmus</div>
+                <button class="skill-btn" data-skill="ironie" data-v="1">Nie</button>
+                <button class="skill-btn" data-skill="ironie" data-v="2">Selten</button>
+                <button class="skill-btn" data-skill="ironie" data-v="3">Manchmal</button>
+                <button class="skill-btn" data-skill="ironie" data-v="4">Oft</button>
+                <button class="skill-btn" data-skill="ironie" data-v="5">Immer</button>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>😊 Emotionserkennung</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Klicke auf die Emotionen, um den Erkennungsstand zu markieren (grün = gut, gelb = manchmal, rot = schwierig)
+            </p>
+
+            <div class="emotion-grid">
+                <div class="emotion-card" data-emotion="freude">
+                    <div class="emotion-icon">😊</div>
+                    <div class="emotion-name">Freude</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="trauer">
+                    <div class="emotion-icon">😢</div>
+                    <div class="emotion-name">Trauer</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="wut">
+                    <div class="emotion-icon">😠</div>
+                    <div class="emotion-name">Wut</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="angst">
+                    <div class="emotion-icon">😨</div>
+                    <div class="emotion-name">Angst</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="ueberraschung">
+                    <div class="emotion-icon">😲</div>
+                    <div class="emotion-name">Überraschung</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="ekel">
+                    <div class="emotion-icon">🤢</div>
+                    <div class="emotion-name">Ekel</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="scham">
+                    <div class="emotion-icon">😳</div>
+                    <div class="emotion-name">Scham</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+                <div class="emotion-card" data-emotion="stolz">
+                    <div class="emotion-icon">😌</div>
+                    <div class="emotion-name">Stolz</div>
+                    <div class="emotion-status">Klicken zum Ändern</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Situations-Protokoll</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Dokumentiere Situationen, in denen Perspektivübernahme gezeigt wurde (oder nicht).
+            </p>
+
+            <div id="situationContainer">
+                <div class="situation-log">
+                    <div class="situation-header">
+                        <input type="text" class="sit-date" placeholder="Datum">
+                        <input type="text" class="sit-context" placeholder="Situation/Kontext">
+                    </div>
+                    <div class="situation-questions">
+                        <div class="situation-q">
+                            <label>Was ist passiert?</label>
+                            <textarea class="sit-what" placeholder="Beschreibe die Situation..."></textarea>
+                        </div>
+                        <div class="situation-q">
+                            <label>Welche Perspektive wurde eingenommen/nicht eingenommen?</label>
+                            <textarea class="sit-persp" placeholder="Perspektivübernahme..."></textarea>
+                        </div>
+                        <div class="situation-q">
+                            <label>Was hat geholfen / was hätte helfen können?</label>
+                            <textarea class="sit-help" placeholder="Hilfreiche Strategien..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-add" onclick="addSituation()">+ Neue Situation hinzufügen</button>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Einschätzung der Perspektivübernahme (1-5, klicken zum Ändern)
+            </p>
+
+            <div class="week-tracker">
+                <div class="day-cell">
+                    <div class="day-name">Mo</div>
+                    <div class="day-rating" data-day="mo">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Di</div>
+                    <div class="day-rating" data-day="di">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Mi</div>
+                    <div class="day-rating" data-day="mi">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Do</div>
+                    <div class="day-rating" data-day="do">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Fr</div>
+                    <div class="day-rating" data-day="fr">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Sa</div>
+                    <div class="day-rating" data-day="sa">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">So</div>
+                    <div class="day-rating" data-day="so">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen, Fortschritte, Herausforderungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_k4_vertiefung_perspektive';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            perspectives: { tom: '', lisa: '', gruende: '', next: '' },
+            skills: {},
+            emotions: {},
+            situations: [],
+            weekTracker: {},
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Perspective textareas
+            ['tom', 'lisa', 'gruende', 'next'].forEach(id => {
+                const el = document.getElementById(`persp-${id}`);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.perspectives[id] = this.value;
+                        autoSave();
+                    });
+                }
+            });
+
+            // Skill buttons
+            document.querySelectorAll('.skill-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const skill = this.dataset.skill;
+                    document.querySelectorAll(`.skill-btn[data-skill="${skill}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.skills[skill] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Emotion cards
+            document.querySelectorAll('.emotion-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const emotion = this.dataset.emotion;
+                    const states = ['', 'good', 'medium', 'needs-work'];
+                    let current = 0;
+
+                    states.forEach((state, idx) => {
+                        if (this.classList.contains(state) && state !== '') {
+                            current = idx;
+                        }
+                    });
+
+                    current = (current + 1) % states.length;
+
+                    this.classList.remove('good', 'medium', 'needs-work');
+                    if (states[current]) {
+                        this.classList.add(states[current]);
+                    }
+
+                    const statusEl = this.querySelector('.emotion-status');
+                    const statusTexts = ['Klicken zum Ändern', 'Gut erkannt', 'Manchmal erkannt', 'Schwierig'];
+                    statusEl.textContent = statusTexts[current];
+
+                    data.emotions[emotion] = states[current] || null;
+                    autoSave();
+                });
+            });
+
+            // Day ratings
+            document.querySelectorAll('.day-rating').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let current = parseInt(data.weekTracker[day]) || 0;
+                    current = (current % 5) + 1;
+
+                    data.weekTracker[day] = current;
+                    this.textContent = current;
+                    this.className = 'day-rating';
+                    this.classList.add(`r-${current}`);
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+
+            // Situation listeners
+            setupSituationListeners();
+        }
+
+        function setupSituationListeners() {
+            document.querySelectorAll('.situation-log').forEach(log => {
+                log.querySelectorAll('input, textarea').forEach(el => {
+                    el.addEventListener('input', saveSituations);
+                });
+            });
+        }
+
+        function saveSituations() {
+            data.situations = [];
+            document.querySelectorAll('.situation-log').forEach(log => {
+                data.situations.push({
+                    date: log.querySelector('.sit-date').value,
+                    context: log.querySelector('.sit-context').value,
+                    what: log.querySelector('.sit-what').value,
+                    persp: log.querySelector('.sit-persp').value,
+                    help: log.querySelector('.sit-help').value
+                });
+            });
+            autoSave();
+        }
+
+        function addSituation() {
+            const container = document.getElementById('situationContainer');
+            const html = `
+                <div class="situation-log">
+                    <div class="situation-header">
+                        <input type="text" class="sit-date" placeholder="Datum">
+                        <input type="text" class="sit-context" placeholder="Situation/Kontext">
+                    </div>
+                    <div class="situation-questions">
+                        <div class="situation-q">
+                            <label>Was ist passiert?</label>
+                            <textarea class="sit-what" placeholder="Beschreibe die Situation..."></textarea>
+                        </div>
+                        <div class="situation-q">
+                            <label>Welche Perspektive wurde eingenommen/nicht eingenommen?</label>
+                            <textarea class="sit-persp" placeholder="Perspektivübernahme..."></textarea>
+                        </div>
+                        <div class="situation-q">
+                            <label>Was hat geholfen / was hätte helfen können?</label>
+                            <textarea class="sit-help" placeholder="Hilfreiche Strategien..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            setupSituationListeners();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            saveSituations();
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                // Restore perspectives
+                Object.keys(data.perspectives).forEach(id => {
+                    const el = document.getElementById(`persp-${id}`);
+                    if (el && data.perspectives[id]) el.value = data.perspectives[id];
+                });
+
+                // Restore skills
+                Object.keys(data.skills).forEach(skill => {
+                    const btn = document.querySelector(`.skill-btn[data-skill="${skill}"][data-v="${data.skills[skill]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore emotions
+                Object.keys(data.emotions).forEach(emotion => {
+                    if (data.emotions[emotion]) {
+                        const card = document.querySelector(`.emotion-card[data-emotion="${emotion}"]`);
+                        if (card) {
+                            card.classList.add(data.emotions[emotion]);
+                            const statusTexts = { good: 'Gut erkannt', medium: 'Manchmal erkannt', 'needs-work': 'Schwierig' };
+                            card.querySelector('.emotion-status').textContent = statusTexts[data.emotions[emotion]];
+                        }
+                    }
+                });
+
+                // Restore situations
+                if (data.situations && data.situations.length > 0) {
+                    const container = document.getElementById('situationContainer');
+                    container.innerHTML = '';
+                    data.situations.forEach(sit => {
+                        const html = `
+                            <div class="situation-log">
+                                <div class="situation-header">
+                                    <input type="text" class="sit-date" value="${sit.date || ''}" placeholder="Datum">
+                                    <input type="text" class="sit-context" value="${sit.context || ''}" placeholder="Situation/Kontext">
+                                </div>
+                                <div class="situation-questions">
+                                    <div class="situation-q">
+                                        <label>Was ist passiert?</label>
+                                        <textarea class="sit-what" placeholder="Beschreibe die Situation...">${sit.what || ''}</textarea>
+                                    </div>
+                                    <div class="situation-q">
+                                        <label>Welche Perspektive wurde eingenommen/nicht eingenommen?</label>
+                                        <textarea class="sit-persp" placeholder="Perspektivübernahme...">${sit.persp || ''}</textarea>
+                                    </div>
+                                    <div class="situation-q">
+                                        <label>Was hat geholfen / was hätte helfen können?</label>
+                                        <textarea class="sit-help" placeholder="Hilfreiche Strategien...">${sit.help || ''}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                    setupSituationListeners();
+                }
+
+                // Restore week tracker
+                Object.keys(data.weekTracker).forEach(day => {
+                    const cell = document.querySelector(`.day-rating[data-day="${day}"]`);
+                    if (cell) {
+                        cell.textContent = data.weekTracker[day];
+                        cell.classList.add(`r-${data.weekTracker[day]}`);
+                    }
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() { window.print(); }
+
+        function exportData() {
+            saveSituations();
+            const exp = { ...data, exportDate: new Date().toISOString(), worksheet: 'ELDiB Kommunikation Stufe IV - Perspektivübernahme' };
+            const blob = new Blob([JSON.stringify(exp, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_k4_perspektive_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

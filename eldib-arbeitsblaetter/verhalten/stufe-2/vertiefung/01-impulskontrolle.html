@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Impulskontrolle entwickeln - Verhalten Stufe II</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        h1 { color: #0277bd; font-size: 1.8em; margin-bottom: 10px; }
+        .meta { color: #666; font-size: 0.9em; }
+        .eldib-ref {
+            background: #e1f5fe;
+            border: 1px solid #4fc3f7;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #0277bd;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #b3e5fc;
+        }
+        .info-box {
+            background: #e1f5fe;
+            border-left: 4px solid #03a9f4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .behavior-tracker {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .behavior-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #03a9f4;
+        }
+        .behavior-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .behavior-title { font-weight: bold; color: #0277bd; }
+        .frequency-counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .counter-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #03a9f4;
+            background: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        .counter-btn:hover { background: #e1f5fe; }
+        .counter-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #0277bd;
+            min-width: 40px;
+            text-align: center;
+        }
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .context-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .context-item:hover { border-color: #03a9f4; }
+        .context-item.selected { background: #e1f5fe; border-color: #03a9f4; }
+        .detail-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-height: 80px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+        .detail-textarea:focus { outline: none; border-color: #03a9f4; }
+        .strategy-section {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .strategy-section h3 { color: #2e7d32; margin-bottom: 15px; }
+        .strategy-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .strategy-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .strategy-item.active { background: #c8e6c9; }
+        .strategy-check {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4caf50;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .strategy-item.active .strategy-check { background: #4caf50; color: white; }
+        .strategy-item.active .strategy-check::after { content: "✓"; }
+        .progress-section {
+            background: #fff3e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .progress-section h3 { color: #e65100; margin-bottom: 15px; }
+        .week-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .day-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+        .day-cell.green { background: #c8e6c9; }
+        .day-cell.yellow { background: #fff9c4; }
+        .day-cell.red { background: #ffcdd2; }
+        .day-cell:not(.green):not(.yellow):not(.red) { background: #f5f5f5; }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #03a9f4, #0277bd);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(3,169,244,0.4);
+        }
+        .btn-secondary { background: #e0e0e0; color: #333; }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #03a9f4;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🔍 VERTIEFUNG</div>
+            <h1>Impulskontrolle entwickeln</h1>
+            <p class="meta">Verhalten Stufe II (2-5 Jahre) | Selbstregulation beobachten & fördern</p>
+            <div class="eldib-ref">
+                <strong>ELDiB-Items:</strong> V-11 (Wartet kurz), V-12 (Akzeptiert einfache Grenzen), V-13 (Kontrolliert erste Impulse), V-14 (Befolgt einfache Regeln)
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📊 Verhaltensbeobachtung</h2>
+            <div class="info-box">
+                <strong>Ziel:</strong> Impulsives Verhalten systematisch dokumentieren, Auslöser erkennen und wirksame Strategien entwickeln.
+            </div>
+
+            <div class="behavior-tracker">
+                <div class="behavior-card">
+                    <div class="behavior-header">
+                        <span class="behavior-title">Kann nicht warten</span>
+                        <div class="frequency-counter">
+                            <button class="counter-btn" onclick="changeCounter('wait', -1)">-</button>
+                            <span class="counter-value" id="wait_count">0</span>
+                            <button class="counter-btn" onclick="changeCounter('wait', 1)">+</button>
+                            <span style="font-size: 0.8em; color: #666;">pro Tag</span>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Typische Situationen:</p>
+                    <div class="context-grid" data-context="wait">
+                        <div class="context-item" data-item="meal">Essen warten</div>
+                        <div class="context-item" data-item="turn">Warten auf Reihe</div>
+                        <div class="context-item" data-item="attention">Aufmerksamkeit</div>
+                        <div class="context-item" data-item="toy">Spielzeug</div>
+                    </div>
+                    <textarea class="detail-textarea" id="wait_notes" placeholder="Detaillierte Beobachtungen..."></textarea>
+                </div>
+
+                <div class="behavior-card">
+                    <div class="behavior-header">
+                        <span class="behavior-title">Wutausbrüche/Trotz</span>
+                        <div class="frequency-counter">
+                            <button class="counter-btn" onclick="changeCounter('tantrum', -1)">-</button>
+                            <span class="counter-value" id="tantrum_count">0</span>
+                            <button class="counter-btn" onclick="changeCounter('tantrum', 1)">+</button>
+                            <span style="font-size: 0.8em; color: #666;">pro Tag</span>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Auslöser:</p>
+                    <div class="context-grid" data-context="tantrum">
+                        <div class="context-item" data-item="no">Nein hören</div>
+                        <div class="context-item" data-item="transition">Übergänge</div>
+                        <div class="context-item" data-item="tired">Müdigkeit</div>
+                        <div class="context-item" data-item="frustration">Frustration</div>
+                    </div>
+                    <textarea class="detail-textarea" id="tantrum_notes" placeholder="Detaillierte Beobachtungen..."></textarea>
+                </div>
+
+                <div class="behavior-card">
+                    <div class="behavior-header">
+                        <span class="behavior-title">Missachtet Regeln</span>
+                        <div class="frequency-counter">
+                            <button class="counter-btn" onclick="changeCounter('rules', -1)">-</button>
+                            <span class="counter-value" id="rules_count">0</span>
+                            <button class="counter-btn" onclick="changeCounter('rules', 1)">+</button>
+                            <span style="font-size: 0.8em; color: #666;">pro Tag</span>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 10px; color: #666;">Welche Regeln:</p>
+                    <div class="context-grid" data-context="rules">
+                        <div class="context-item" data-item="safety">Sicherheit</div>
+                        <div class="context-item" data-item="social">Soziale Regeln</div>
+                        <div class="context-item" data-item="routine">Routinen</div>
+                        <div class="context-item" data-item="sharing">Teilen</div>
+                    </div>
+                    <textarea class="detail-textarea" id="rules_notes" placeholder="Detaillierte Beobachtungen..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Förderstrategien</h2>
+            <div class="strategy-section">
+                <h3>Welche Strategien funktionieren?</h3>
+                <div class="strategy-grid" id="strategyGrid">
+                    <div class="strategy-item" data-strategy="countdown">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Countdown nutzen</strong>
+                            <p style="font-size: 0.85em; color: #666;">"Noch 5, 4, 3, 2, 1..."</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="timer">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Visuelle Timer</strong>
+                            <p style="font-size: 0.85em; color: #666;">Sanduhr, Timer-App zeigen</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="distract">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Ablenkung anbieten</strong>
+                            <p style="font-size: 0.85em; color: #666;">Kurze Aktivität während des Wartens</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="choice">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Wahlmöglichkeiten geben</strong>
+                            <p style="font-size: 0.85em; color: #666;">"Möchtest du A oder B?"</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="praise">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Sofort loben</strong>
+                            <p style="font-size: 0.85em; color: #666;">Positives Verhalten verstärken</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="calm_down">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Beruhigungsecke</strong>
+                            <p style="font-size: 0.85em; color: #666;">Rückzugsort zum Regulieren</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="routine">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Klare Routinen</strong>
+                            <p style="font-size: 0.85em; color: #666;">Vorhersehbare Abläufe</p>
+                        </div>
+                    </div>
+                    <div class="strategy-item" data-strategy="warnings">
+                        <div class="strategy-check"></div>
+                        <div>
+                            <strong>Vorwarnungen</strong>
+                            <p style="font-size: 0.85em; color: #666;">"In 5 Minuten räumen wir auf"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochenverlauf</h2>
+            <div class="progress-section">
+                <h3>Wie war die Woche? (Klicke zum Färben: grün=gut, gelb=mittel, rot=schwierig)</h3>
+                <div class="week-tracker" id="weekTracker">
+                    <div class="day-cell" data-day="mo"><div>Mo</div></div>
+                    <div class="day-cell" data-day="di"><div>Di</div></div>
+                    <div class="day-cell" data-day="mi"><div>Mi</div></div>
+                    <div class="day-cell" data-day="do"><div>Do</div></div>
+                    <div class="day-cell" data-day="fr"><div>Fr</div></div>
+                    <div class="day-cell" data-day="sa"><div>Sa</div></div>
+                    <div class="day-cell" data-day="so"><div>So</div></div>
+                </div>
+                <textarea class="detail-textarea" id="week_summary" placeholder="Zusammenfassung der Woche: Fortschritte, Rückschläge, Erkenntnisse..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Ziele & nächste Schritte</h2>
+            <div style="display: grid; gap: 15px;">
+                <div>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Kurzfristiges Ziel (diese Woche):</label>
+                    <textarea class="detail-textarea" id="short_goal" placeholder="z.B. 30 Sekunden warten können ohne Wutausbruch"></textarea>
+                </div>
+                <div>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Langfristiges Ziel (diesen Monat):</label>
+                    <textarea class="detail-textarea" id="long_goal" placeholder="z.B. 2 Minuten in der Warteschlange stehen können"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="printPage()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let counters = { wait: 0, tantrum: 0, rules: 0 };
+        let contexts = { wait: [], tantrum: [], rules: [] };
+        let strategies = [];
+        let weekDays = {};
+
+        function changeCounter(type, delta) {
+            counters[type] = Math.max(0, (counters[type] || 0) + delta);
+            document.getElementById(type + '_count').textContent = counters[type];
+        }
+
+        // Context items
+        document.querySelectorAll('.context-grid').forEach(grid => {
+            const ctx = grid.dataset.context;
+            grid.querySelectorAll('.context-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const val = this.dataset.item;
+                    if (this.classList.contains('selected')) {
+                        if (!contexts[ctx].includes(val)) contexts[ctx].push(val);
+                    } else {
+                        contexts[ctx] = contexts[ctx].filter(c => c !== val);
+                    }
+                });
+            });
+        });
+
+        // Strategy items
+        document.querySelectorAll('.strategy-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const strat = this.dataset.strategy;
+                if (this.classList.contains('active')) {
+                    if (!strategies.includes(strat)) strategies.push(strat);
+                } else {
+                    strategies = strategies.filter(s => s !== strat);
+                }
+            });
+        });
+
+        // Week tracker
+        document.querySelectorAll('.day-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const day = this.dataset.day;
+                if (this.classList.contains('green')) {
+                    this.classList.remove('green');
+                    this.classList.add('yellow');
+                    weekDays[day] = 'yellow';
+                } else if (this.classList.contains('yellow')) {
+                    this.classList.remove('yellow');
+                    this.classList.add('red');
+                    weekDays[day] = 'red';
+                } else if (this.classList.contains('red')) {
+                    this.classList.remove('red');
+                    weekDays[day] = null;
+                } else {
+                    this.classList.add('green');
+                    weekDays[day] = 'green';
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                counters,
+                contexts,
+                notes: {
+                    wait: document.getElementById('wait_notes').value,
+                    tantrum: document.getElementById('tantrum_notes').value,
+                    rules: document.getElementById('rules_notes').value
+                },
+                strategies,
+                weekDays,
+                week_summary: document.getElementById('week_summary').value,
+                goals: {
+                    short: document.getElementById('short_goal').value,
+                    long: document.getElementById('long_goal').value
+                }
+            };
+            localStorage.setItem('eldib_v2_vertiefung_impulskontrolle', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v2_vertiefung_impulskontrolle');
+            if (saved) {
+                const data = JSON.parse(saved);
+                counters = data.counters || { wait: 0, tantrum: 0, rules: 0 };
+                Object.keys(counters).forEach(k => {
+                    document.getElementById(k + '_count').textContent = counters[k];
+                });
+
+                contexts = data.contexts || { wait: [], tantrum: [], rules: [] };
+                Object.keys(contexts).forEach(ctx => {
+                    const grid = document.querySelector(`[data-context="${ctx}"]`);
+                    if (grid) {
+                        contexts[ctx].forEach(item => {
+                            const el = grid.querySelector(`[data-item="${item}"]`);
+                            if (el) el.classList.add('selected');
+                        });
+                    }
+                });
+
+                if (data.notes) {
+                    document.getElementById('wait_notes').value = data.notes.wait || '';
+                    document.getElementById('tantrum_notes').value = data.notes.tantrum || '';
+                    document.getElementById('rules_notes').value = data.notes.rules || '';
+                }
+
+                strategies = data.strategies || [];
+                strategies.forEach(s => {
+                    const item = document.querySelector(`[data-strategy="${s}"]`);
+                    if (item) item.classList.add('active');
+                });
+
+                weekDays = data.weekDays || {};
+                Object.keys(weekDays).forEach(day => {
+                    if (weekDays[day]) {
+                        const cell = document.querySelector(`[data-day="${day}"]`);
+                        if (cell) cell.classList.add(weekDays[day]);
+                    }
+                });
+
+                document.getElementById('week_summary').value = data.week_summary || '';
+                if (data.goals) {
+                    document.getElementById('short_goal').value = data.goals.short || '';
+                    document.getElementById('long_goal').value = data.goals.long || '';
+                }
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_v2_vertiefung_impulskontrolle');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vertiefung-impulskontrolle-stufe2.json';
+            a.click();
+        }
+
+        function printPage() { window.print(); }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        let autoSaveTimer;
+        document.querySelectorAll('textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

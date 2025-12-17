@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Selbststeuerung - Verhalten Stufe III</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        h1 { color: #7b1fa2; font-size: 1.8em; margin-bottom: 10px; }
+        .meta { color: #666; font-size: 0.9em; }
+        .eldib-ref {
+            background: #f3e5f5;
+            border: 1px solid #ce93d8;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #7b1fa2;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1bee7;
+        }
+        .info-box {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .emotion-wheel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .emotion-item {
+            padding: 15px 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .emotion-item:hover { border-color: #9c27b0; }
+        .emotion-item.selected { background: #e1bee7; border-color: #9c27b0; }
+        .emotion-icon { font-size: 2em; margin-bottom: 5px; }
+        .emotion-name { font-size: 0.85em; }
+        .regulation-scale {
+            margin: 20px 0;
+        }
+        .scale-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .scale-label { flex: 1; }
+        .scale-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .scale-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .scale-btn:hover { border-color: #9c27b0; }
+        .scale-btn.selected { background: #9c27b0; border-color: #9c27b0; color: white; }
+        .strategy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .strategy-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .strategy-card:hover { border-color: #9c27b0; transform: translateY(-2px); }
+        .strategy-card.selected { background: #e1bee7; border-color: #9c27b0; }
+        .strategy-icon { font-size: 2em; margin-bottom: 10px; text-align: center; }
+        .strategy-title { font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .strategy-desc { font-size: 0.85em; color: #666; text-align: center; }
+        .detail-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .detail-textarea:focus { outline: none; border-color: #9c27b0; }
+        .situation-logger {
+            background: #fff8e1;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .situation-logger h3 { color: #f57c00; margin-bottom: 15px; }
+        .log-entry {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-entry input, .log-entry textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ffe082;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+        .log-entry label {
+            font-size: 0.9em;
+            color: #f57c00;
+            font-weight: bold;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(156,39,176,0.4);
+        }
+        .btn-secondary { background: #e0e0e0; color: #333; }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .save-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #9c27b0;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .save-notice.show { opacity: 1; transform: translateY(0); }
+        @media (max-width: 600px) {
+            .emotion-wheel { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🔍 VERTIEFUNG</div>
+            <h1>Selbststeuerung & Emotionsregulation</h1>
+            <p class="meta">Verhalten Stufe III (5-9 Jahre) | Gefühle erkennen & regulieren</p>
+            <div class="eldib-ref">
+                <strong>ELDiB-Items:</strong> V-21 (Erkennt eigene Gefühle), V-22 (Drückt Gefühle angemessen aus), V-23 (Reguliert Emotionen), V-24 (Nutzt Strategien zur Beruhigung)
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>😊 Gefühle erkennen</h2>
+            <div class="info-box">
+                <strong>Ziel:</strong> Das Kind lernt, verschiedene Gefühle bei sich selbst zu erkennen und zu benennen - der erste Schritt zur Selbstregulation.
+            </div>
+
+            <p style="margin-bottom: 15px;">Welche Gefühle zeigt das Kind häufig? (Mehrfachauswahl)</p>
+            <div class="emotion-wheel" id="emotionWheel">
+                <div class="emotion-item" data-emotion="happy"><div class="emotion-icon">😊</div><div class="emotion-name">Freude</div></div>
+                <div class="emotion-item" data-emotion="sad"><div class="emotion-icon">😢</div><div class="emotion-name">Trauer</div></div>
+                <div class="emotion-item" data-emotion="angry"><div class="emotion-icon">😠</div><div class="emotion-name">Wut</div></div>
+                <div class="emotion-item" data-emotion="scared"><div class="emotion-icon">😨</div><div class="emotion-name">Angst</div></div>
+                <div class="emotion-item" data-emotion="surprised"><div class="emotion-icon">😲</div><div class="emotion-name">Überraschung</div></div>
+                <div class="emotion-item" data-emotion="frustrated"><div class="emotion-icon">😤</div><div class="emotion-name">Frustration</div></div>
+                <div class="emotion-item" data-emotion="excited"><div class="emotion-icon">🤩</div><div class="emotion-name">Aufregung</div></div>
+                <div class="emotion-item" data-emotion="jealous"><div class="emotion-icon">😒</div><div class="emotion-name">Eifersucht</div></div>
+            </div>
+
+            <div class="regulation-scale">
+                <h3 style="margin-bottom: 15px;">Wie gut kann das Kind... (1=selten, 5=meistens)</h3>
+                <div class="scale-row">
+                    <span class="scale-label">Eigene Gefühle benennen</span>
+                    <div class="scale-buttons" data-skill="name_feelings">
+                        <button class="scale-btn" data-value="1">1</button>
+                        <button class="scale-btn" data-value="2">2</button>
+                        <button class="scale-btn" data-value="3">3</button>
+                        <button class="scale-btn" data-value="4">4</button>
+                        <button class="scale-btn" data-value="5">5</button>
+                    </div>
+                </div>
+                <div class="scale-row">
+                    <span class="scale-label">Gefühle angemessen ausdrücken</span>
+                    <div class="scale-buttons" data-skill="express_feelings">
+                        <button class="scale-btn" data-value="1">1</button>
+                        <button class="scale-btn" data-value="2">2</button>
+                        <button class="scale-btn" data-value="3">3</button>
+                        <button class="scale-btn" data-value="4">4</button>
+                        <button class="scale-btn" data-value="5">5</button>
+                    </div>
+                </div>
+                <div class="scale-row">
+                    <span class="scale-label">Sich selbst beruhigen</span>
+                    <div class="scale-buttons" data-skill="self_calm">
+                        <button class="scale-btn" data-value="1">1</button>
+                        <button class="scale-btn" data-value="2">2</button>
+                        <button class="scale-btn" data-value="3">3</button>
+                        <button class="scale-btn" data-value="4">4</button>
+                        <button class="scale-btn" data-value="5">5</button>
+                    </div>
+                </div>
+                <div class="scale-row">
+                    <span class="scale-label">Strategien selbstständig anwenden</span>
+                    <div class="scale-buttons" data-skill="use_strategies">
+                        <button class="scale-btn" data-value="1">1</button>
+                        <button class="scale-btn" data-value="2">2</button>
+                        <button class="scale-btn" data-value="3">3</button>
+                        <button class="scale-btn" data-value="4">4</button>
+                        <button class="scale-btn" data-value="5">5</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🧘 Regulationsstrategien</h2>
+            <p style="margin-bottom: 15px;">Welche Strategien helfen dem Kind? (Auswählen)</p>
+
+            <div class="strategy-cards" id="strategyCards">
+                <div class="strategy-card" data-strategy="breathing">
+                    <div class="strategy-icon">🌬️</div>
+                    <div class="strategy-title">Atemübungen</div>
+                    <div class="strategy-desc">Tief ein- und ausatmen</div>
+                </div>
+                <div class="strategy-card" data-strategy="counting">
+                    <div class="strategy-icon">🔢</div>
+                    <div class="strategy-title">Zählen</div>
+                    <div class="strategy-desc">Bis 10 zählen</div>
+                </div>
+                <div class="strategy-card" data-strategy="movement">
+                    <div class="strategy-icon">🏃</div>
+                    <div class="strategy-title">Bewegung</div>
+                    <div class="strategy-desc">Hüpfen, Rennen, Tanzen</div>
+                </div>
+                <div class="strategy-card" data-strategy="quiet_space">
+                    <div class="strategy-icon">🏠</div>
+                    <div class="strategy-title">Rückzugsort</div>
+                    <div class="strategy-desc">Ruhige Ecke aufsuchen</div>
+                </div>
+                <div class="strategy-card" data-strategy="squeeze">
+                    <div class="strategy-icon">🧸</div>
+                    <div class="strategy-title">Kneten/Drücken</div>
+                    <div class="strategy-desc">Stressball, Knetmasse</div>
+                </div>
+                <div class="strategy-card" data-strategy="talk">
+                    <div class="strategy-icon">💬</div>
+                    <div class="strategy-title">Darüber reden</div>
+                    <div class="strategy-desc">Gefühle mitteilen</div>
+                </div>
+                <div class="strategy-card" data-strategy="draw">
+                    <div class="strategy-icon">🎨</div>
+                    <div class="strategy-title">Malen/Zeichnen</div>
+                    <div class="strategy-desc">Gefühle ausdrücken</div>
+                </div>
+                <div class="strategy-card" data-strategy="music">
+                    <div class="strategy-icon">🎵</div>
+                    <div class="strategy-title">Musik</div>
+                    <div class="strategy-desc">Beruhigende Musik hören</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Weitere Strategien, die helfen:</label>
+                <textarea class="detail-textarea" id="other_strategies" placeholder="Beschreibe individuelle Strategien, die bei diesem Kind funktionieren..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Situations-Protokoll</h2>
+            <div class="situation-logger">
+                <h3>Dokumentiere eine herausfordernde Situation</h3>
+
+                <div class="log-entry">
+                    <label>Situation (Was ist passiert?)</label>
+                    <textarea id="log_situation" placeholder="Beschreibe die Situation..."></textarea>
+                </div>
+                <div class="log-entry">
+                    <label>Auslöser (Was hat das Gefühl ausgelöst?)</label>
+                    <input type="text" id="log_trigger" placeholder="z.B. Streit mit Freund, Übergang, Frustration...">
+                </div>
+                <div class="log-entry">
+                    <label>Gefühl (Welches Gefühl zeigte das Kind?)</label>
+                    <input type="text" id="log_feeling" placeholder="z.B. Wut, Trauer, Angst...">
+                </div>
+                <div class="log-entry">
+                    <label>Reaktion (Wie hat das Kind reagiert?)</label>
+                    <textarea id="log_reaction" placeholder="Beschreibe das Verhalten..."></textarea>
+                </div>
+                <div class="log-entry">
+                    <label>Was hat geholfen? (Welche Strategie wurde angewendet?)</label>
+                    <textarea id="log_helped" placeholder="Was hat zur Beruhigung beigetragen?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Förderplan</h2>
+            <div style="display: grid; gap: 15px;">
+                <div>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Aktueller Entwicklungsstand:</label>
+                    <textarea class="detail-textarea" id="current_level" placeholder="Wo steht das Kind aktuell in der Emotionsregulation?"></textarea>
+                </div>
+                <div>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Nächstes Entwicklungsziel:</label>
+                    <textarea class="detail-textarea" id="next_goal" placeholder="Welche Fähigkeit soll als nächstes gefördert werden?"></textarea>
+                </div>
+                <div>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Konkrete Maßnahmen:</label>
+                    <textarea class="detail-textarea" id="measures" placeholder="Wie wird das Ziel im Alltag geübt?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📄 Exportieren</button>
+            <button class="btn btn-secondary" onclick="printPage()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <div class="save-notice" id="saveNotice">✓ Gespeichert!</div>
+
+    <script>
+        let emotions = [];
+        let skills = {};
+        let strategies = [];
+
+        // Emotion wheel
+        document.querySelectorAll('.emotion-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const emotion = this.dataset.emotion;
+                if (this.classList.contains('selected')) {
+                    if (!emotions.includes(emotion)) emotions.push(emotion);
+                } else {
+                    emotions = emotions.filter(e => e !== emotion);
+                }
+            });
+        });
+
+        // Scale buttons
+        document.querySelectorAll('.scale-buttons').forEach(group => {
+            const skill = group.dataset.skill;
+            group.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    group.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    skills[skill] = parseInt(this.dataset.value);
+                });
+            });
+        });
+
+        // Strategy cards
+        document.querySelectorAll('.strategy-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const strategy = this.dataset.strategy;
+                if (this.classList.contains('selected')) {
+                    if (!strategies.includes(strategy)) strategies.push(strategy);
+                } else {
+                    strategies = strategies.filter(s => s !== strategy);
+                }
+            });
+        });
+
+        function saveData() {
+            const data = {
+                emotions,
+                skills,
+                strategies,
+                other_strategies: document.getElementById('other_strategies').value,
+                log: {
+                    situation: document.getElementById('log_situation').value,
+                    trigger: document.getElementById('log_trigger').value,
+                    feeling: document.getElementById('log_feeling').value,
+                    reaction: document.getElementById('log_reaction').value,
+                    helped: document.getElementById('log_helped').value
+                },
+                plan: {
+                    current: document.getElementById('current_level').value,
+                    goal: document.getElementById('next_goal').value,
+                    measures: document.getElementById('measures').value
+                }
+            };
+            localStorage.setItem('eldib_v3_vertiefung_selbststeuerung', JSON.stringify(data));
+            showSaveNotice();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('eldib_v3_vertiefung_selbststeuerung');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                emotions = data.emotions || [];
+                emotions.forEach(e => {
+                    const item = document.querySelector(`[data-emotion="${e}"]`);
+                    if (item) item.classList.add('selected');
+                });
+
+                skills = data.skills || {};
+                Object.keys(skills).forEach(skill => {
+                    const group = document.querySelector(`[data-skill="${skill}"]`);
+                    if (group) {
+                        const btn = group.querySelector(`[data-value="${skills[skill]}"]`);
+                        if (btn) btn.classList.add('selected');
+                    }
+                });
+
+                strategies = data.strategies || [];
+                strategies.forEach(s => {
+                    const card = document.querySelector(`[data-strategy="${s}"]`);
+                    if (card) card.classList.add('selected');
+                });
+
+                document.getElementById('other_strategies').value = data.other_strategies || '';
+
+                if (data.log) {
+                    document.getElementById('log_situation').value = data.log.situation || '';
+                    document.getElementById('log_trigger').value = data.log.trigger || '';
+                    document.getElementById('log_feeling').value = data.log.feeling || '';
+                    document.getElementById('log_reaction').value = data.log.reaction || '';
+                    document.getElementById('log_helped').value = data.log.helped || '';
+                }
+
+                if (data.plan) {
+                    document.getElementById('current_level').value = data.plan.current || '';
+                    document.getElementById('next_goal').value = data.plan.goal || '';
+                    document.getElementById('measures').value = data.plan.measures || '';
+                }
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const data = localStorage.getItem('eldib_v3_vertiefung_selbststeuerung');
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vertiefung-selbststeuerung-stufe3.json';
+            a.click();
+        }
+
+        function printPage() { window.print(); }
+
+        function showSaveNotice() {
+            const notice = document.getElementById('saveNotice');
+            notice.classList.add('show');
+            setTimeout(() => notice.classList.remove('show'), 2000);
+        }
+
+        let autoSaveTimer;
+        document.querySelectorAll('textarea, input').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(saveData, 2000);
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Identität & Werte (Stufe V) - ELDiB S-41 bis S-45</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #2d3436 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { text-align: center; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 20px; margin-bottom: 30px; }
+        h1 { font-size: 1.8rem; color: #dfe6e9; margin-bottom: 10px; }
+        .subtitle { color: #b2bec3; }
+        .eldib-ref { background: linear-gradient(135deg, #636e72, #2d3436); padding: 15px 25px; border-radius: 12px; margin: 20px auto; max-width: 650px; }
+        .eldib-ref h3 { color: #fff; margin-bottom: 10px; }
+        .eldib-ref ul { list-style: none; font-size: 0.9rem; }
+        .eldib-ref li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .section { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; margin-bottom: 25px; }
+        .section h2 { color: #dfe6e9; margin-bottom: 20px; font-size: 1.3rem; }
+        .meta-input { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .meta-input label { display: block; margin-bottom: 5px; color: #b2bec3; font-size: 0.85rem; }
+        .meta-input input { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; }
+        .skill-grid { display: grid; gap: 12px; }
+        .skill-item { display: grid; grid-template-columns: 2fr repeat(5, 1fr); gap: 8px; align-items: center; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; }
+        .skill-btn { padding: 10px 5px; border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; background: transparent; color: #b2bec3; cursor: pointer; font-size: 0.7rem; text-align: center; }
+        .skill-btn:hover { background: rgba(255,255,255,0.1); }
+        .skill-btn.selected { background: linear-gradient(135deg, #636e72, #2d3436); border-color: #dfe6e9; color: #fff; }
+        .value-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        .value-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .value-card:hover { background: rgba(255,255,255,0.05); }
+        .value-card.selected { border-color: #dfe6e9; background: rgba(223,230,233,0.1); }
+        .value-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .value-name { font-size: 0.85rem; }
+        .reflection-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #b2bec3; }
+        .reflection-q { font-size: 1rem; margin-bottom: 12px; color: #dfe6e9; }
+        .reflection-card textarea { width: 100%; padding: 12px; border: none; border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; min-height: 100px; resize: vertical; }
+        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .day-cell { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; text-align: center; }
+        .day-name { font-size: 0.75rem; color: #b2bec3; margin-bottom: 8px; }
+        .day-score { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); background: transparent; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto; cursor: pointer; font-weight: 600; }
+        .day-score.s-1 { background: #d63031; border-color: #d63031; }
+        .day-score.s-2 { background: #e17055; border-color: #e17055; }
+        .day-score.s-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-score.s-4 { background: #00cec9; border-color: #00cec9; }
+        .day-score.s-5 { background: #00b894; border-color: #00b894; }
+        .notes-area { width: 100%; min-height: 100px; padding: 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; background: rgba(0,0,0,0.3); color: #fff; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #dfe6e9, #b2bec3); color: #2d3436; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        @media print { body { background: white; color: black; } .btn { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🪞 Identität & Wertorientierung</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Sozialisation Stufe V (12-16+ Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items S-41 bis S-45</h3>
+                <ul>
+                    <li><strong>S-41:</strong> Entwickelt eigene Identität und Selbstbild</li>
+                    <li><strong>S-42:</strong> Handelt nach internalisierten Werten</li>
+                    <li><strong>S-43:</strong> Zeigt gesellschaftliches Verantwortungsbewusstsein</li>
+                    <li><strong>S-44:</strong> Reflektiert soziale Rollen und Erwartungen</li>
+                    <li><strong>S-45:</strong> Plant und gestaltet Zukunftsperspektiven</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div><label>Name</label><input type="text" id="personName" placeholder="Vorname"></div>
+                <div><label>Alter</label><input type="text" id="personAge" placeholder="z.B. 15 Jahre"></div>
+                <div><label>Zeitraum</label><input type="text" id="period" placeholder="z.B. Dezember 2024"></div>
+                <div><label>Begleiter/in</label><input type="text" id="coach" placeholder="Name"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Entwicklungsstand bewerten</h2>
+            <div class="skill-grid">
+                <div class="skill-item">
+                    <div>Entwickelt eigene Identität</div>
+                    <button class="skill-btn" data-s="identitaet" data-v="1">Beginnend</button>
+                    <button class="skill-btn" data-s="identitaet" data-v="2">Entwickelnd</button>
+                    <button class="skill-btn" data-s="identitaet" data-v="3">Teilweise</button>
+                    <button class="skill-btn" data-s="identitaet" data-v="4">Weitgehend</button>
+                    <button class="skill-btn" data-s="identitaet" data-v="5">Stabil</button>
+                </div>
+                <div class="skill-item">
+                    <div>Handelt nach eigenen Werten</div>
+                    <button class="skill-btn" data-s="werte" data-v="1">Selten</button>
+                    <button class="skill-btn" data-s="werte" data-v="2">Manchmal</button>
+                    <button class="skill-btn" data-s="werte" data-v="3">Oft</button>
+                    <button class="skill-btn" data-s="werte" data-v="4">Meistens</button>
+                    <button class="skill-btn" data-s="werte" data-v="5">Konsequent</button>
+                </div>
+                <div class="skill-item">
+                    <div>Gesellschaftliches Engagement</div>
+                    <button class="skill-btn" data-s="engagement" data-v="1">Kein</button>
+                    <button class="skill-btn" data-s="engagement" data-v="2">Wenig</button>
+                    <button class="skill-btn" data-s="engagement" data-v="3">Etwas</button>
+                    <button class="skill-btn" data-s="engagement" data-v="4">Aktiv</button>
+                    <button class="skill-btn" data-s="engagement" data-v="5">Sehr aktiv</button>
+                </div>
+                <div class="skill-item">
+                    <div>Reflektiert soziale Rollen</div>
+                    <button class="skill-btn" data-s="rollen" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="rollen" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="rollen" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="rollen" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="rollen" data-v="5">Regelmäßig</button>
+                </div>
+                <div class="skill-item">
+                    <div>Plant Zukunft</div>
+                    <button class="skill-btn" data-s="zukunft" data-v="1">Nicht</button>
+                    <button class="skill-btn" data-s="zukunft" data-v="2">Vage</button>
+                    <button class="skill-btn" data-s="zukunft" data-v="3">Ansätze</button>
+                    <button class="skill-btn" data-s="zukunft" data-v="4">Konkret</button>
+                    <button class="skill-btn" data-s="zukunft" data-v="5">Durchdacht</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💎 Persönliche Werte</h2>
+            <p style="color: #b2bec3; margin-bottom: 20px; font-size: 0.9rem;">Welche Werte sind dem Jugendlichen wichtig? (Auswählen)</p>
+            <div class="value-grid">
+                <div class="value-card" data-val="ehrlichkeit"><div class="value-icon">💎</div><div class="value-name">Ehrlichkeit</div></div>
+                <div class="value-card" data-val="respekt"><div class="value-icon">🤝</div><div class="value-name">Respekt</div></div>
+                <div class="value-card" data-val="freiheit"><div class="value-icon">🕊️</div><div class="value-name">Freiheit</div></div>
+                <div class="value-card" data-val="gerechtigkeit"><div class="value-icon">⚖️</div><div class="value-name">Gerechtigkeit</div></div>
+                <div class="value-card" data-val="familie"><div class="value-icon">👨‍👩‍👧‍👦</div><div class="value-name">Familie</div></div>
+                <div class="value-card" data-val="erfolg"><div class="value-icon">🏆</div><div class="value-name">Erfolg</div></div>
+                <div class="value-card" data-val="kreativitaet"><div class="value-icon">🎨</div><div class="value-name">Kreativität</div></div>
+                <div class="value-card" data-val="hilfe"><div class="value-icon">💝</div><div class="value-name">Hilfsbereitschaft</div></div>
+                <div class="value-card" data-val="wissen"><div class="value-icon">📚</div><div class="value-name">Wissen</div></div>
+                <div class="value-card" data-val="natur"><div class="value-icon">🌿</div><div class="value-name">Umwelt</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🤔 Identitätsreflexion</h2>
+            <div class="reflection-card">
+                <div class="reflection-q">Wer bin ich? Was macht mich aus?</div>
+                <textarea id="r1" placeholder="Eigene Stärken, Eigenschaften, Besonderheiten..."></textarea>
+            </div>
+            <div class="reflection-card">
+                <div class="reflection-q">Welche Rollen habe ich? (Familie, Schule, Freunde...)</div>
+                <textarea id="r2" placeholder="Verschiedene soziale Rollen und wie ich sie erlebe..."></textarea>
+            </div>
+            <div class="reflection-card">
+                <div class="reflection-q">Wie sehe ich meine Zukunft?</div>
+                <textarea id="r3" placeholder="Träume, Ziele, Pläne..."></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker: Identitätsentwicklung</h2>
+            <div class="week-grid">
+                <div class="day-cell"><div class="day-name">Mo</div><div class="day-score" data-day="mo">-</div></div>
+                <div class="day-cell"><div class="day-name">Di</div><div class="day-score" data-day="di">-</div></div>
+                <div class="day-cell"><div class="day-name">Mi</div><div class="day-score" data-day="mi">-</div></div>
+                <div class="day-cell"><div class="day-name">Do</div><div class="day-score" data-day="do">-</div></div>
+                <div class="day-cell"><div class="day-name">Fr</div><div class="day-score" data-day="fr">-</div></div>
+                <div class="day-cell"><div class="day-name">Sa</div><div class="day-score" data-day="sa">-</div></div>
+                <div class="day-cell"><div class="day-name">So</div><div class="day-score" data-day="so">-</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Notizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const KEY = 'eldib_s5_vertiefung_identitaet';
+        let data = { meta: {}, skills: {}, values: [], reflections: {}, week: {}, notes: '' };
+
+        document.addEventListener('DOMContentLoaded', () => { loadData(); setup(); });
+
+        function setup() {
+            document.querySelectorAll('.meta-input input').forEach(i => { i.addEventListener('input', () => { data.meta[i.id] = i.value; save(); }); });
+            document.querySelectorAll('.skill-btn').forEach(b => {
+                b.addEventListener('click', function() {
+                    const s = this.dataset.s;
+                    document.querySelectorAll(`.skill-btn[data-s="${s}"]`).forEach(x => x.classList.remove('selected'));
+                    this.classList.add('selected');
+                    data.skills[s] = this.dataset.v;
+                    save();
+                });
+            });
+            document.querySelectorAll('.value-card').forEach(c => {
+                c.addEventListener('click', function() {
+                    const v = this.dataset.val;
+                    this.classList.toggle('selected');
+                    if (this.classList.contains('selected')) { if (!data.values.includes(v)) data.values.push(v); }
+                    else { data.values = data.values.filter(x => x !== v); }
+                    save();
+                });
+            });
+            ['r1','r2','r3'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.addEventListener('input', function() { data.reflections[id] = this.value; save(); });
+            });
+            document.querySelectorAll('.day-score').forEach(d => {
+                d.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let c = parseInt(data.week[day]) || 0;
+                    c = (c % 5) + 1;
+                    data.week[day] = c;
+                    this.textContent = c;
+                    this.className = 'day-score s-' + c;
+                    save();
+                });
+            });
+            document.getElementById('notes').addEventListener('input', function() { data.notes = this.value; save(); });
+        }
+
+        function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
+        function saveData() { save(); alert('Gespeichert!'); }
+
+        function loadData() {
+            const s = localStorage.getItem(KEY);
+            if (s) {
+                data = JSON.parse(s);
+                Object.keys(data.meta).forEach(k => { const e = document.getElementById(k); if(e) e.value = data.meta[k]; });
+                Object.keys(data.skills).forEach(k => { const b = document.querySelector(`.skill-btn[data-s="${k}"][data-v="${data.skills[k]}"]`); if(b) b.classList.add('selected'); });
+                data.values.forEach(v => { const c = document.querySelector(`.value-card[data-val="${v}"]`); if(c) c.classList.add('selected'); });
+                Object.keys(data.reflections).forEach(id => { const e = document.getElementById(id); if(e) e.value = data.reflections[id]; });
+                Object.keys(data.week).forEach(d => { const e = document.querySelector(`.day-score[data-day="${d}"]`); if(e) { e.textContent = data.week[d]; e.classList.add('s-'+data.week[d]); } });
+                if(data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() { if(confirm('Löschen?')) { localStorage.removeItem(KEY); location.reload(); } }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify({...data, worksheet:'ELDiB S-V Identität & Werte', exportDate:new Date().toISOString()}, null, 2)], {type:'application/json'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `eldib_s5_identitaet_${data.meta.personName||'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+    </script>
+</body>
+</html>

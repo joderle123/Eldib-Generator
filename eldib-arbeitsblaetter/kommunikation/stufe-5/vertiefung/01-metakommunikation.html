@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Metakommunikation (Stufe V) - ELDiB K-41 bis K-45</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #0a1931 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #82ccdd;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #3c6382, #0a3d62);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 650px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #82ccdd;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Communication Analysis */
+        .analysis-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #82ccdd;
+        }
+        .analysis-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #82ccdd;
+        }
+        .analysis-content {
+            display: grid;
+            gap: 15px;
+        }
+        .analysis-field {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .analysis-field label {
+            display: block;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .analysis-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Four-Sides Model */
+        .four-sides {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .side-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+        }
+        .side-card.sachinhalt { border-top: 3px solid #00b894; }
+        .side-card.selbstoffenbarung { border-top: 3px solid #fdcb6e; }
+        .side-card.beziehung { border-top: 3px solid #e17055; }
+        .side-card.appell { border-top: 3px solid #0984e3; }
+        .side-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .side-card textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Skills Matrix */
+        .skills-matrix {
+            display: grid;
+            gap: 12px;
+        }
+        .skill-item {
+            display: grid;
+            grid-template-columns: 2fr repeat(5, 1fr);
+            gap: 8px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .skill-name {
+            font-size: 0.9rem;
+        }
+        .skill-btn {
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+        .skill-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .skill-btn.selected {
+            background: linear-gradient(135deg, #3c6382, #0a3d62);
+            border-color: #3c6382;
+            color: #fff;
+        }
+
+        /* Conflict Resolution */
+        .conflict-log {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .conflict-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .conflict-header input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+        }
+        .conflict-phases {
+            display: grid;
+            gap: 12px;
+        }
+        .phase-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .phase-item label {
+            display: block;
+            font-size: 0.85rem;
+            color: #82ccdd;
+            margin-bottom: 8px;
+        }
+        .phase-item textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 50px;
+        }
+        .conflict-strategies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .strategy-chip {
+            padding: 8px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .strategy-chip:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .strategy-chip.selected {
+            background: #3c6382;
+            border-color: #3c6382;
+            color: #fff;
+        }
+
+        /* Reflection Questions */
+        .reflection-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .reflection-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .reflection-q {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #82ccdd;
+        }
+        .reflection-scale {
+            display: flex;
+            gap: 8px;
+        }
+        .scale-opt {
+            flex: 1;
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .scale-opt:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .scale-opt.selected {
+            background: linear-gradient(135deg, #3c6382, #0a3d62);
+            border-color: #3c6382;
+            color: #fff;
+        }
+
+        /* Week Tracker */
+        .week-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .day-score {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .day-score.s-1 { background: #d63031; border-color: #d63031; }
+        .day-score.s-2 { background: #e17055; border-color: #e17055; }
+        .day-score.s-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-score.s-4 { background: #00cec9; border-color: #00cec9; }
+        .day-score.s-5 { background: #00b894; border-color: #00b894; }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #82ccdd, #3c6382);
+            color: #0a1931;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(130,204,221,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-add:hover {
+            border-color: #82ccdd;
+            color: #82ccdd;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Metakommunikation verstehen</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Kommunikation Stufe V (12-16+ Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items K-41 bis K-45</h3>
+                <ul>
+                    <li><strong>K-41:</strong> Reflektiert eigenes Kommunikationsverhalten</li>
+                    <li><strong>K-42:</strong> Erkennt Kommunikationsmuster und -störungen</li>
+                    <li><strong>K-43:</strong> Kann über Kommunikation kommunizieren (Metakommunikation)</li>
+                    <li><strong>K-44:</strong> Löst Kommunikationskonflikte konstruktiv</li>
+                    <li><strong>K-45:</strong> Argumentiert differenziert und respektvoll</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name</label>
+                    <input type="text" id="personName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="personAge" placeholder="z.B. 15 Jahre">
+                </div>
+                <div>
+                    <label>Zeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. Dezember 2024">
+                </div>
+                <div>
+                    <label>Begleiter/in</label>
+                    <input type="text" id="coach" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📦 Vier-Seiten-Modell Analyse</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Analysiere eine Aussage nach dem Kommunikationsquadrat von Schulz von Thun.
+            </p>
+
+            <div class="analysis-card">
+                <div class="analysis-title">Beispielaussage zum Analysieren</div>
+                <div class="analysis-field">
+                    <label>Die Aussage</label>
+                    <textarea id="statement" placeholder="z.B. 'Du hast dein Zimmer immer noch nicht aufgeräumt!'"></textarea>
+                </div>
+            </div>
+
+            <div class="four-sides">
+                <div class="side-card sachinhalt">
+                    <div class="side-title">📊 Sachinhalt</div>
+                    <textarea id="side-sach" placeholder="Welche Information wird sachlich vermittelt?"></textarea>
+                </div>
+                <div class="side-card selbstoffenbarung">
+                    <div class="side-title">💭 Selbstoffenbarung</div>
+                    <textarea id="side-selbst" placeholder="Was sagt die Person über sich selbst aus?"></textarea>
+                </div>
+                <div class="side-card beziehung">
+                    <div class="side-title">❤️ Beziehung</div>
+                    <textarea id="side-bez" placeholder="Was sagt die Person über die Beziehung zum Empfänger?"></textarea>
+                </div>
+                <div class="side-card appell">
+                    <div class="side-title">📢 Appell</div>
+                    <textarea id="side-appell" placeholder="Was soll der Empfänger tun/denken/fühlen?"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Metakommunikative Fähigkeiten</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut sind diese Fähigkeiten entwickelt?
+            </p>
+
+            <div class="skills-matrix">
+                <div class="skill-item">
+                    <div class="skill-name">Erkennt eigene Kommunikationsmuster</div>
+                    <button class="skill-btn" data-skill="pattern" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="pattern" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="pattern" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="pattern" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="pattern" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Kann Missverständnisse klären</div>
+                    <button class="skill-btn" data-skill="clarify" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="clarify" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="clarify" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="clarify" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="clarify" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Spricht über Kommunikationsweise</div>
+                    <button class="skill-btn" data-skill="meta" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="meta" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="meta" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="meta" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="meta" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Nutzt Ich-Botschaften</div>
+                    <button class="skill-btn" data-skill="ich" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="ich" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="ich" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="ich" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="ich" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Argumentiert respektvoll</div>
+                    <button class="skill-btn" data-skill="respekt" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="respekt" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="respekt" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="respekt" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="respekt" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Akzeptiert andere Meinungen</div>
+                    <button class="skill-btn" data-skill="akzept" data-v="1">Nie</button>
+                    <button class="skill-btn" data-skill="akzept" data-v="2">Selten</button>
+                    <button class="skill-btn" data-skill="akzept" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-skill="akzept" data-v="4">Oft</button>
+                    <button class="skill-btn" data-skill="akzept" data-v="5">Immer</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚔️ Konfliktlösung dokumentieren</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Protokolliere Kommunikationskonflikte und deren Bearbeitung.
+            </p>
+
+            <div id="conflictContainer">
+                <div class="conflict-log">
+                    <div class="conflict-header">
+                        <input type="text" class="conf-date" placeholder="Datum">
+                        <input type="text" class="conf-partner" placeholder="Mit wem?">
+                        <input type="text" class="conf-topic" placeholder="Thema">
+                    </div>
+                    <div class="conflict-phases">
+                        <div class="phase-item">
+                            <label>Was war das Problem? (Kommunikationsstörung)</label>
+                            <textarea class="conf-problem" placeholder="Beschreibe die Störung..."></textarea>
+                        </div>
+                        <div class="phase-item">
+                            <label>Wie wurde es angesprochen? (Metakommunikation)</label>
+                            <textarea class="conf-meta" placeholder="Was wurde über die Kommunikation gesagt?"></textarea>
+                        </div>
+                        <div class="phase-item">
+                            <label>Lösung / Ergebnis</label>
+                            <textarea class="conf-result" placeholder="Wie wurde es gelöst?"></textarea>
+                        </div>
+                    </div>
+                    <div class="conflict-strategies">
+                        <button class="strategy-chip" data-idx="0" data-strat="ichbot">Ich-Botschaften</button>
+                        <button class="strategy-chip" data-idx="0" data-strat="aktives">Aktives Zuhören</button>
+                        <button class="strategy-chip" data-idx="0" data-strat="pause">Pause einlegen</button>
+                        <button class="strategy-chip" data-idx="0" data-strat="nachfragen">Nachfragen</button>
+                        <button class="strategy-chip" data-idx="0" data-strat="kompromiss">Kompromiss finden</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-add" onclick="addConflict()">+ Neuen Konflikt dokumentieren</button>
+        </section>
+
+        <section class="section">
+            <h2>🤔 Selbstreflexion</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut gelingt dir das in Gesprächen?
+            </p>
+
+            <div class="reflection-grid">
+                <div class="reflection-item">
+                    <div class="reflection-q">Ich bemerke, wenn ein Gespräch nicht gut läuft</div>
+                    <div class="reflection-scale">
+                        <button class="scale-opt" data-q="bemerken" data-v="1">Selten</button>
+                        <button class="scale-opt" data-q="bemerken" data-v="2">Manchmal</button>
+                        <button class="scale-opt" data-q="bemerken" data-v="3">Oft</button>
+                        <button class="scale-opt" data-q="bemerken" data-v="4">Meistens</button>
+                        <button class="scale-opt" data-q="bemerken" data-v="5">Immer</button>
+                    </div>
+                </div>
+                <div class="reflection-item">
+                    <div class="reflection-q">Ich spreche an, wenn ich mich unwohl fühle</div>
+                    <div class="reflection-scale">
+                        <button class="scale-opt" data-q="ansprechen" data-v="1">Selten</button>
+                        <button class="scale-opt" data-q="ansprechen" data-v="2">Manchmal</button>
+                        <button class="scale-opt" data-q="ansprechen" data-v="3">Oft</button>
+                        <button class="scale-opt" data-q="ansprechen" data-v="4">Meistens</button>
+                        <button class="scale-opt" data-q="ansprechen" data-v="5">Immer</button>
+                    </div>
+                </div>
+                <div class="reflection-item">
+                    <div class="reflection-q">Ich kann meine Argumente sachlich vortragen</div>
+                    <div class="reflection-scale">
+                        <button class="scale-opt" data-q="sachlich" data-v="1">Selten</button>
+                        <button class="scale-opt" data-q="sachlich" data-v="2">Manchmal</button>
+                        <button class="scale-opt" data-q="sachlich" data-v="3">Oft</button>
+                        <button class="scale-opt" data-q="sachlich" data-v="4">Meistens</button>
+                        <button class="scale-opt" data-q="sachlich" data-v="5">Immer</button>
+                    </div>
+                </div>
+                <div class="reflection-item">
+                    <div class="reflection-q">Ich bleibe auch bei Kritik respektvoll</div>
+                    <div class="reflection-scale">
+                        <button class="scale-opt" data-q="kritik" data-v="1">Selten</button>
+                        <button class="scale-opt" data-q="kritik" data-v="2">Manchmal</button>
+                        <button class="scale-opt" data-q="kritik" data-v="3">Oft</button>
+                        <button class="scale-opt" data-q="kritik" data-v="4">Meistens</button>
+                        <button class="scale-opt" data-q="kritik" data-v="5">Immer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Einschätzung der Kommunikationsqualität (1-5)
+            </p>
+
+            <div class="week-tracker">
+                <div class="day-cell">
+                    <div class="day-name">Mo</div>
+                    <div class="day-score" data-day="mo">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Di</div>
+                    <div class="day-score" data-day="di">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Mi</div>
+                    <div class="day-score" data-day="mi">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Do</div>
+                    <div class="day-score" data-day="do">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Fr</div>
+                    <div class="day-score" data-day="fr">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Sa</div>
+                    <div class="day-score" data-day="sa">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">So</div>
+                    <div class="day-score" data-day="so">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Freie Reflexion</h2>
+            <textarea class="notes-area" id="notes" placeholder="Gedanken zur eigenen Kommunikation, Erkenntnisse, Ziele..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_k5_vertiefung_metakomm';
+
+        let data = {
+            meta: { name: '', age: '', period: '', coach: '' },
+            statement: '',
+            fourSides: { sach: '', selbst: '', bez: '', appell: '' },
+            skills: {},
+            conflicts: [],
+            reflection: {},
+            weekTracker: {},
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'personName') data.meta.name = this.value;
+                    else if (this.id === 'personAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'coach') data.meta.coach = this.value;
+                    autoSave();
+                });
+            });
+
+            // Statement
+            document.getElementById('statement').addEventListener('input', function() {
+                data.statement = this.value;
+                autoSave();
+            });
+
+            // Four sides
+            ['sach', 'selbst', 'bez', 'appell'].forEach(side => {
+                const el = document.getElementById(`side-${side}`);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.fourSides[side] = this.value;
+                        autoSave();
+                    });
+                }
+            });
+
+            // Skill buttons
+            document.querySelectorAll('.skill-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const skill = this.dataset.skill;
+                    document.querySelectorAll(`.skill-btn[data-skill="${skill}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.skills[skill] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Reflection scales
+            document.querySelectorAll('.scale-opt').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const q = this.dataset.q;
+                    document.querySelectorAll(`.scale-opt[data-q="${q}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.reflection[q] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Day scores
+            document.querySelectorAll('.day-score').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let current = parseInt(data.weekTracker[day]) || 0;
+                    current = (current % 5) + 1;
+
+                    data.weekTracker[day] = current;
+                    this.textContent = current;
+                    this.className = 'day-score';
+                    this.classList.add(`s-${current}`);
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+
+            setupConflictListeners();
+        }
+
+        function setupConflictListeners() {
+            document.querySelectorAll('.conflict-log').forEach(log => {
+                log.querySelectorAll('input, textarea').forEach(el => {
+                    el.addEventListener('input', saveConflicts);
+                });
+                log.querySelectorAll('.strategy-chip').forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                        saveConflicts();
+                    });
+                });
+            });
+        }
+
+        function saveConflicts() {
+            data.conflicts = [];
+            document.querySelectorAll('.conflict-log').forEach(log => {
+                const strategies = [];
+                log.querySelectorAll('.strategy-chip.selected').forEach(chip => {
+                    strategies.push(chip.dataset.strat);
+                });
+                data.conflicts.push({
+                    date: log.querySelector('.conf-date').value,
+                    partner: log.querySelector('.conf-partner').value,
+                    topic: log.querySelector('.conf-topic').value,
+                    problem: log.querySelector('.conf-problem').value,
+                    meta: log.querySelector('.conf-meta').value,
+                    result: log.querySelector('.conf-result').value,
+                    strategies: strategies
+                });
+            });
+            autoSave();
+        }
+
+        function addConflict() {
+            const container = document.getElementById('conflictContainer');
+            const idx = document.querySelectorAll('.conflict-log').length;
+            const html = `
+                <div class="conflict-log">
+                    <div class="conflict-header">
+                        <input type="text" class="conf-date" placeholder="Datum">
+                        <input type="text" class="conf-partner" placeholder="Mit wem?">
+                        <input type="text" class="conf-topic" placeholder="Thema">
+                    </div>
+                    <div class="conflict-phases">
+                        <div class="phase-item">
+                            <label>Was war das Problem? (Kommunikationsstörung)</label>
+                            <textarea class="conf-problem" placeholder="Beschreibe die Störung..."></textarea>
+                        </div>
+                        <div class="phase-item">
+                            <label>Wie wurde es angesprochen? (Metakommunikation)</label>
+                            <textarea class="conf-meta" placeholder="Was wurde über die Kommunikation gesagt?"></textarea>
+                        </div>
+                        <div class="phase-item">
+                            <label>Lösung / Ergebnis</label>
+                            <textarea class="conf-result" placeholder="Wie wurde es gelöst?"></textarea>
+                        </div>
+                    </div>
+                    <div class="conflict-strategies">
+                        <button class="strategy-chip" data-idx="${idx}" data-strat="ichbot">Ich-Botschaften</button>
+                        <button class="strategy-chip" data-idx="${idx}" data-strat="aktives">Aktives Zuhören</button>
+                        <button class="strategy-chip" data-idx="${idx}" data-strat="pause">Pause einlegen</button>
+                        <button class="strategy-chip" data-idx="${idx}" data-strat="nachfragen">Nachfragen</button>
+                        <button class="strategy-chip" data-idx="${idx}" data-strat="kompromiss">Kompromiss finden</button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            setupConflictListeners();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            saveConflicts();
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('personName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('personAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.coach) document.getElementById('coach').value = data.meta.coach;
+
+                // Restore statement
+                if (data.statement) document.getElementById('statement').value = data.statement;
+
+                // Restore four sides
+                Object.keys(data.fourSides).forEach(side => {
+                    const el = document.getElementById(`side-${side}`);
+                    if (el && data.fourSides[side]) el.value = data.fourSides[side];
+                });
+
+                // Restore skills
+                Object.keys(data.skills).forEach(skill => {
+                    const btn = document.querySelector(`.skill-btn[data-skill="${skill}"][data-v="${data.skills[skill]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore conflicts
+                if (data.conflicts && data.conflicts.length > 0) {
+                    const container = document.getElementById('conflictContainer');
+                    container.innerHTML = '';
+                    data.conflicts.forEach((conf, idx) => {
+                        const stratBtns = ['ichbot', 'aktives', 'pause', 'nachfragen', 'kompromiss'].map(strat => {
+                            const selected = conf.strategies && conf.strategies.includes(strat) ? 'selected' : '';
+                            const labels = { ichbot: 'Ich-Botschaften', aktives: 'Aktives Zuhören', pause: 'Pause einlegen', nachfragen: 'Nachfragen', kompromiss: 'Kompromiss finden' };
+                            return `<button class="strategy-chip ${selected}" data-idx="${idx}" data-strat="${strat}">${labels[strat]}</button>`;
+                        }).join('');
+
+                        const html = `
+                            <div class="conflict-log">
+                                <div class="conflict-header">
+                                    <input type="text" class="conf-date" value="${conf.date || ''}" placeholder="Datum">
+                                    <input type="text" class="conf-partner" value="${conf.partner || ''}" placeholder="Mit wem?">
+                                    <input type="text" class="conf-topic" value="${conf.topic || ''}" placeholder="Thema">
+                                </div>
+                                <div class="conflict-phases">
+                                    <div class="phase-item">
+                                        <label>Was war das Problem?</label>
+                                        <textarea class="conf-problem" placeholder="Beschreibe die Störung...">${conf.problem || ''}</textarea>
+                                    </div>
+                                    <div class="phase-item">
+                                        <label>Wie wurde es angesprochen?</label>
+                                        <textarea class="conf-meta" placeholder="Was wurde über die Kommunikation gesagt?">${conf.meta || ''}</textarea>
+                                    </div>
+                                    <div class="phase-item">
+                                        <label>Lösung / Ergebnis</label>
+                                        <textarea class="conf-result" placeholder="Wie wurde es gelöst?">${conf.result || ''}</textarea>
+                                    </div>
+                                </div>
+                                <div class="conflict-strategies">${stratBtns}</div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                    setupConflictListeners();
+                }
+
+                // Restore reflection
+                Object.keys(data.reflection).forEach(q => {
+                    const btn = document.querySelector(`.scale-opt[data-q="${q}"][data-v="${data.reflection[q]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore week tracker
+                Object.keys(data.weekTracker).forEach(day => {
+                    const cell = document.querySelector(`.day-score[data-day="${day}"]`);
+                    if (cell) {
+                        cell.textContent = data.weekTracker[day];
+                        cell.classList.add(`s-${data.weekTracker[day]}`);
+                    }
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() { window.print(); }
+
+        function exportData() {
+            saveConflicts();
+            const exp = { ...data, exportDate: new Date().toISOString(), worksheet: 'ELDiB Kommunikation Stufe V - Metakommunikation' };
+            const blob = new Blob([JSON.stringify(exp, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_k5_metakomm_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

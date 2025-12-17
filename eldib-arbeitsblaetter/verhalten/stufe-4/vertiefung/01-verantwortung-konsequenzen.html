@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Verantwortung & Konsequenzen (Stufe IV) - ELDiB V-31 bis V-35</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #4a90a4, #2d5f6e);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .eldib-ref li:last-child {
+            border-bottom: none;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input, .meta-input select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Consequence Chain Builder */
+        .chain-builder {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .chain-arrow {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+        .chain-box {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .chain-box.action {
+            border-color: #e74c3c;
+        }
+        .chain-box.short-term {
+            border-color: #f39c12;
+        }
+        .chain-box.long-term {
+            border-color: #3498db;
+        }
+        .chain-box.alternative {
+            border-color: #2ecc71;
+        }
+        .chain-box label {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .chain-box textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Responsibility Matrix */
+        .responsibility-matrix {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .matrix-header {
+            background: rgba(255,215,0,0.2);
+            padding: 12px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .matrix-cell {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .matrix-cell.area {
+            justify-content: flex-start;
+            font-size: 0.9rem;
+        }
+        .level-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .level-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .level-btn.selected {
+            background: #ffd700;
+            color: #1a1a2e;
+            border-color: #ffd700;
+        }
+
+        /* Situation Analysis */
+        .situation-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4a90a4;
+        }
+        .situation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .situation-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .situation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .situation-field {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .situation-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .situation-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        /* Reflection Scale */
+        .reflection-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .reflection-question {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .reflection-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+        .scale-option {
+            flex: 1;
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .scale-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .scale-option.selected {
+            background: linear-gradient(135deg, #4a90a4, #2d5f6e);
+            border-color: #4a90a4;
+        }
+
+        /* Progress Tracker */
+        .progress-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .day-score {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .day-score.score-1 { background: #e74c3c; border-color: #e74c3c; }
+        .day-score.score-2 { background: #f39c12; border-color: #f39c12; }
+        .day-score.score-3 { background: #f1c40f; border-color: #f1c40f; color: #333; }
+        .day-score.score-4 { background: #2ecc71; border-color: #2ecc71; }
+        .day-score.score-5 { background: #27ae60; border-color: #27ae60; }
+
+        /* Goals Section */
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .goal-checkbox {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: transparent;
+            font-size: 1.2rem;
+        }
+        .goal-checkbox.checked {
+            background: #2ecc71;
+            border-color: #2ecc71;
+            color: #fff;
+        }
+        .goal-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+                padding: 20px;
+            }
+            .section {
+                background: white;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            .btn, .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Verantwortung & Konsequenzen verstehen</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Verhalten Stufe IV (9-12 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items V-31 bis V-35</h3>
+                <ul>
+                    <li><strong>V-31:</strong> Übernimmt Verantwortung für eigenes Handeln</li>
+                    <li><strong>V-32:</strong> Erkennt Konsequenzen des eigenen Verhaltens</li>
+                    <li><strong>V-33:</strong> Kann Bedürfnisbefriedigung aufschieben</li>
+                    <li><strong>V-34:</strong> Zeigt Ausdauer bei schwierigen Aufgaben</li>
+                    <li><strong>V-35:</strong> Handelt zunehmend selbstständig und überlegt</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name des Kindes/Jugendlichen</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 10 Jahre">
+                </div>
+                <div>
+                    <label>Beobachtungszeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 12-14">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔗 Konsequenzkette analysieren</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Analysiere eine konkrete Situation: Welche Handlung führte zu welchen Konsequenzen?
+            </p>
+
+            <div class="chain-builder">
+                <div class="chain-step">
+                    <div class="chain-box action">
+                        <label>1. Ausgangssituation / Handlung</label>
+                        <textarea id="chain1" placeholder="Was ist passiert? Welches Verhalten wurde gezeigt?"></textarea>
+                    </div>
+                </div>
+                <div class="chain-arrow">↓</div>
+                <div class="chain-step">
+                    <div class="chain-box short-term">
+                        <label>2. Kurzfristige Konsequenz</label>
+                        <textarea id="chain2" placeholder="Was passierte direkt danach?"></textarea>
+                    </div>
+                </div>
+                <div class="chain-arrow">↓</div>
+                <div class="chain-step">
+                    <div class="chain-box long-term">
+                        <label>3. Langfristige Konsequenz</label>
+                        <textarea id="chain3" placeholder="Welche weiteren Auswirkungen gab es?"></textarea>
+                    </div>
+                </div>
+                <div class="chain-arrow">↓</div>
+                <div class="chain-step">
+                    <div class="chain-box alternative">
+                        <label>4. Alternative Handlungsmöglichkeit</label>
+                        <textarea id="chain4" placeholder="Was hätte man anders machen können?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Verantwortungsmatrix</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Bewerte, wie gut Verantwortung in verschiedenen Bereichen übernommen wird (1=selten, 2=manchmal, 3=oft)
+            </p>
+
+            <div class="responsibility-matrix">
+                <div class="matrix-header">Bereich</div>
+                <div class="matrix-header">1</div>
+                <div class="matrix-header">2</div>
+                <div class="matrix-header">3</div>
+
+                <div class="matrix-cell area">Schulische Aufgaben</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="schule" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="schule" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="schule" data-level="3">3</button></div>
+
+                <div class="matrix-cell area">Persönliche Sachen</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sachen" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sachen" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sachen" data-level="3">3</button></div>
+
+                <div class="matrix-cell area">Soziale Beziehungen</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sozial" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sozial" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="sozial" data-level="3">3</button></div>
+
+                <div class="matrix-cell area">Fehler eingestehen</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="fehler" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="fehler" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="fehler" data-level="3">3</button></div>
+
+                <div class="matrix-cell area">Absprachen einhalten</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="absprachen" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="absprachen" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="absprachen" data-level="3">3</button></div>
+
+                <div class="matrix-cell area">Haushaltsaufgaben</div>
+                <div class="matrix-cell"><button class="level-btn" data-area="haushalt" data-level="1">1</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="haushalt" data-level="2">2</button></div>
+                <div class="matrix-cell"><button class="level-btn" data-area="haushalt" data-level="3">3</button></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⏳ Aufschieben von Bedürfnissen</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut kann das Kind/der Jugendliche Bedürfnisse aufschieben?
+            </p>
+
+            <div class="reflection-item">
+                <div class="reflection-question">Kann warten, bis er/sie an der Reihe ist</div>
+                <div class="reflection-scale">
+                    <button class="scale-option" data-q="warten" data-v="1">Sehr schwer</button>
+                    <button class="scale-option" data-q="warten" data-v="2">Schwer</button>
+                    <button class="scale-option" data-q="warten" data-v="3">Geht so</button>
+                    <button class="scale-option" data-q="warten" data-v="4">Gut</button>
+                    <button class="scale-option" data-q="warten" data-v="5">Sehr gut</button>
+                </div>
+            </div>
+
+            <div class="reflection-item">
+                <div class="reflection-question">Kann Belohnung aufschieben für größeres Ziel</div>
+                <div class="reflection-scale">
+                    <button class="scale-option" data-q="belohnung" data-v="1">Sehr schwer</button>
+                    <button class="scale-option" data-q="belohnung" data-v="2">Schwer</button>
+                    <button class="scale-option" data-q="belohnung" data-v="3">Geht so</button>
+                    <button class="scale-option" data-q="belohnung" data-v="4">Gut</button>
+                    <button class="scale-option" data-q="belohnung" data-v="5">Sehr gut</button>
+                </div>
+            </div>
+
+            <div class="reflection-item">
+                <div class="reflection-question">Beendet Aufgaben, bevor etwas Angenehmes getan wird</div>
+                <div class="reflection-scale">
+                    <button class="scale-option" data-q="aufgaben" data-v="1">Sehr schwer</button>
+                    <button class="scale-option" data-q="aufgaben" data-v="2">Schwer</button>
+                    <button class="scale-option" data-q="aufgaben" data-v="3">Geht so</button>
+                    <button class="scale-option" data-q="aufgaben" data-v="4">Gut</button>
+                    <button class="scale-option" data-q="aufgaben" data-v="5">Sehr gut</button>
+                </div>
+            </div>
+
+            <div class="reflection-item">
+                <div class="reflection-question">Bleibt bei Frustration an einer Aufgabe dran</div>
+                <div class="reflection-scale">
+                    <button class="scale-option" data-q="frustration" data-v="1">Sehr schwer</button>
+                    <button class="scale-option" data-q="frustration" data-v="2">Schwer</button>
+                    <button class="scale-option" data-q="frustration" data-v="3">Geht so</button>
+                    <button class="scale-option" data-q="frustration" data-v="4">Gut</button>
+                    <button class="scale-option" data-q="frustration" data-v="5">Sehr gut</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker: Selbstständigkeit</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Bewertung der Selbstständigkeit (1=viel Unterstützung nötig, 5=sehr selbstständig)
+            </p>
+
+            <div class="progress-week">
+                <div class="day-cell">
+                    <div class="day-name">Mo</div>
+                    <div class="day-score" data-day="mo">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Di</div>
+                    <div class="day-score" data-day="di">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Mi</div>
+                    <div class="day-score" data-day="mi">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Do</div>
+                    <div class="day-score" data-day="do">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Fr</div>
+                    <div class="day-score" data-day="fr">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Sa</div>
+                    <div class="day-score" data-day="sa">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">So</div>
+                    <div class="day-score" data-day="so">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Entwicklungsziele</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Konkrete Ziele für die nächste Zeit
+            </p>
+
+            <div id="goalsContainer">
+                <div class="goal-item">
+                    <div class="goal-checkbox" onclick="toggleGoal(this)">✓</div>
+                    <div class="goal-text">Konsequenzen des eigenen Handelns benennen können</div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-checkbox" onclick="toggleGoal(this)">✓</div>
+                    <div class="goal-text">Bei Fehlern Verantwortung übernehmen</div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-checkbox" onclick="toggleGoal(this)">✓</div>
+                    <div class="goal-text">Eine Woche lang tägliche Aufgaben selbstständig erledigen</div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-checkbox" onclick="toggleGoal(this)">✓</div>
+                    <div class="goal-text">10 Minuten an einer schwierigen Aufgabe dranbleiben</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Besondere Beobachtungen, Fortschritte, Herausforderungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_v4_vertiefung_verantwortung';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            chain: { c1: '', c2: '', c3: '', c4: '' },
+            matrix: {},
+            delay: {},
+            weekTracker: {},
+            goals: {},
+            notes: ''
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const field = this.id.replace('child', '').toLowerCase();
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Chain textareas
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`chain${i}`);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        data.chain[`c${i}`] = this.value;
+                        autoSave();
+                    });
+                }
+            }
+
+            // Matrix buttons
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const area = this.dataset.area;
+                    const level = this.dataset.level;
+
+                    // Deselect others in same row
+                    document.querySelectorAll(`.level-btn[data-area="${area}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+
+                    this.classList.add('selected');
+                    data.matrix[area] = level;
+                    autoSave();
+                });
+            });
+
+            // Scale options
+            document.querySelectorAll('.scale-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const q = this.dataset.q;
+                    const v = this.dataset.v;
+
+                    document.querySelectorAll(`.scale-option[data-q="${q}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+
+                    this.classList.add('selected');
+                    data.delay[q] = v;
+                    autoSave();
+                });
+            });
+
+            // Week tracker
+            document.querySelectorAll('.day-score').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let current = parseInt(data.weekTracker[day]) || 0;
+                    current = (current % 5) + 1;
+
+                    data.weekTracker[day] = current;
+                    this.textContent = current;
+
+                    // Remove old classes
+                    this.className = 'day-score';
+                    this.classList.add(`score-${current}`);
+
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+        }
+
+        function toggleGoal(el) {
+            el.classList.toggle('checked');
+            const text = el.nextElementSibling.textContent;
+            data.goals[text] = el.classList.contains('checked');
+            autoSave();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                // Restore chain
+                for (let i = 1; i <= 4; i++) {
+                    const el = document.getElementById(`chain${i}`);
+                    if (el && data.chain[`c${i}`]) el.value = data.chain[`c${i}`];
+                }
+
+                // Restore matrix
+                Object.keys(data.matrix).forEach(area => {
+                    const btn = document.querySelector(`.level-btn[data-area="${area}"][data-level="${data.matrix[area]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore delay scales
+                Object.keys(data.delay).forEach(q => {
+                    const btn = document.querySelector(`.scale-option[data-q="${q}"][data-v="${data.delay[q]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore week tracker
+                Object.keys(data.weekTracker).forEach(day => {
+                    const cell = document.querySelector(`.day-score[data-day="${day}"]`);
+                    if (cell) {
+                        cell.textContent = data.weekTracker[day];
+                        cell.classList.add(`score-${data.weekTracker[day]}`);
+                    }
+                });
+
+                // Restore goals
+                Object.keys(data.goals).forEach(text => {
+                    if (data.goals[text]) {
+                        document.querySelectorAll('.goal-text').forEach(el => {
+                            if (el.textContent === text) {
+                                el.previousElementSibling.classList.add('checked');
+                            }
+                        });
+                    }
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() {
+            window.print();
+        }
+
+        function exportData() {
+            const exportData = {
+                ...data,
+                exportDate: new Date().toISOString(),
+                worksheet: 'ELDiB Verhalten Stufe IV - Verantwortung & Konsequenzen'
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_v4_verantwortung_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Gruppenintegration (Stufe IV) - ELDiB S-31 bis S-35</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00b894 0%, #006c5b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { text-align: center; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 20px; margin-bottom: 30px; }
+        h1 { font-size: 1.8rem; color: #55efc4; margin-bottom: 10px; }
+        .subtitle { color: #ddd; }
+        .eldib-ref { background: linear-gradient(135deg, #00a085, #006050); padding: 15px 25px; border-radius: 12px; margin: 20px auto; max-width: 650px; }
+        .eldib-ref h3 { color: #fff; margin-bottom: 10px; }
+        .eldib-ref ul { list-style: none; font-size: 0.9rem; }
+        .eldib-ref li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .section { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; margin-bottom: 25px; }
+        .section h2 { color: #55efc4; margin-bottom: 20px; font-size: 1.3rem; }
+        .meta-input { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .meta-input label { display: block; margin-bottom: 5px; color: #ddd; font-size: 0.85rem; }
+        .meta-input input { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; }
+        .skill-grid { display: grid; gap: 12px; }
+        .skill-item { display: grid; grid-template-columns: 2fr repeat(5, 1fr); gap: 8px; align-items: center; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; }
+        .skill-btn { padding: 10px 5px; border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; background: transparent; color: #ddd; cursor: pointer; font-size: 0.7rem; text-align: center; }
+        .skill-btn:hover { background: rgba(255,255,255,0.1); }
+        .skill-btn.selected { background: linear-gradient(135deg, #00a085, #006050); border-color: #00a085; color: #fff; }
+        .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .role-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .role-card:hover { background: rgba(255,255,255,0.05); }
+        .role-card.selected { border-color: #55efc4; background: rgba(85,239,196,0.1); }
+        .role-icon { font-size: 2rem; margin-bottom: 8px; }
+        .role-name { font-size: 0.9rem; }
+        .group-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #55efc4; }
+        .group-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .group-header input { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff; }
+        .group-qualities { display: flex; flex-wrap: wrap; gap: 8px; }
+        .quality-chip { padding: 8px 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; background: transparent; color: #aaa; cursor: pointer; font-size: 0.85rem; }
+        .quality-chip:hover { background: rgba(255,255,255,0.1); }
+        .quality-chip.selected { background: #00a085; border-color: #00a085; color: #fff; }
+        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .day-cell { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; text-align: center; }
+        .day-name { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; }
+        .day-score { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); background: transparent; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto; cursor: pointer; font-weight: 600; }
+        .day-score.s-1 { background: #d63031; border-color: #d63031; }
+        .day-score.s-2 { background: #e17055; border-color: #e17055; }
+        .day-score.s-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-score.s-4 { background: #00cec9; border-color: #00cec9; }
+        .day-score.s-5 { background: #00b894; border-color: #00b894; }
+        .notes-area { width: 100%; min-height: 100px; padding: 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; background: rgba(0,0,0,0.3); color: #fff; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: linear-gradient(135deg, #55efc4, #00a085); color: #1a1a2e; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .btn-add { width: 100%; padding: 15px; border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; background: transparent; color: #aaa; cursor: pointer; margin-top: 15px; }
+        .btn-add:hover { border-color: #55efc4; color: #55efc4; }
+        @media print { body { background: white; color: black; } .btn { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👥 Gruppenintegration vertiefen</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Sozialisation Stufe IV (9-12 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items S-31 bis S-35</h3>
+                <ul>
+                    <li><strong>S-31:</strong> Findet seinen Platz in der Peer-Gruppe</li>
+                    <li><strong>S-32:</strong> Übernimmt Verantwortung in der Gruppe</li>
+                    <li><strong>S-33:</strong> Handelt zunehmend unabhängig von Erwachsenen</li>
+                    <li><strong>S-34:</strong> Zeigt Loyalität gegenüber Freunden</li>
+                    <li><strong>S-35:</strong> Differenziert zwischen verschiedenen sozialen Kontexten</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div><label>Name</label><input type="text" id="childName" placeholder="Vorname"></div>
+                <div><label>Alter</label><input type="text" id="childAge" placeholder="z.B. 11 Jahre"></div>
+                <div><label>Zeitraum</label><input type="text" id="period" placeholder="z.B. November 2024"></div>
+                <div><label>Beobachter/in</label><input type="text" id="observer" placeholder="Name"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Gruppenkompetenzen bewerten</h2>
+            <div class="skill-grid">
+                <div class="skill-item">
+                    <div>Findet Platz in Peer-Gruppe</div>
+                    <button class="skill-btn" data-s="platz" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="platz" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="platz" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="platz" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="platz" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div>Übernimmt Verantwortung</div>
+                    <button class="skill-btn" data-s="verantwortung" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="verantwortung" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="verantwortung" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="verantwortung" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="verantwortung" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div>Handelt unabhängig</div>
+                    <button class="skill-btn" data-s="unabhaengig" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="unabhaengig" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="unabhaengig" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="unabhaengig" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="unabhaengig" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div>Zeigt Loyalität</div>
+                    <button class="skill-btn" data-s="loyal" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="loyal" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="loyal" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="loyal" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="loyal" data-v="5">Immer</button>
+                </div>
+                <div class="skill-item">
+                    <div>Passt Verhalten an Kontext an</div>
+                    <button class="skill-btn" data-s="kontext" data-v="1">Nie</button>
+                    <button class="skill-btn" data-s="kontext" data-v="2">Selten</button>
+                    <button class="skill-btn" data-s="kontext" data-v="3">Manchmal</button>
+                    <button class="skill-btn" data-s="kontext" data-v="4">Oft</button>
+                    <button class="skill-btn" data-s="kontext" data-v="5">Immer</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Rollen in der Gruppe</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">Welche Rollen nimmt das Kind typischerweise ein?</p>
+            <div class="role-grid">
+                <div class="role-card" data-role="fuehrer"><div class="role-icon">👑</div><div class="role-name">Anführer/in</div></div>
+                <div class="role-card" data-role="vermittler"><div class="role-icon">🤝</div><div class="role-name">Vermittler/in</div></div>
+                <div class="role-card" data-role="mitlaeufer"><div class="role-icon">👣</div><div class="role-name">Mitläufer/in</div></div>
+                <div class="role-card" data-role="clown"><div class="role-icon">🤡</div><div class="role-name">Klassenclow</div></div>
+                <div class="role-card" data-role="helfer"><div class="role-icon">💪</div><div class="role-name">Helfer/in</div></div>
+                <div class="role-card" data-role="einzelgaenger"><div class="role-icon">🚶</div><div class="role-name">Einzelgänger/in</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👥 Gruppenzugehörigkeiten</h2>
+            <div id="groupContainer">
+                <div class="group-card">
+                    <div class="group-header">
+                        <input type="text" class="g-name" placeholder="Name der Gruppe/des Kontexts">
+                        <input type="text" class="g-members" placeholder="Anzahl Mitglieder">
+                        <input type="text" class="g-type" placeholder="Art (Schule, Sport...)">
+                    </div>
+                    <div class="group-qualities">
+                        <button class="quality-chip" data-q="akzeptiert">Akzeptiert</button>
+                        <button class="quality-chip" data-q="integriert">Gut integriert</button>
+                        <button class="quality-chip" data-q="fuehrt">Führungsrolle</button>
+                        <button class="quality-chip" data-q="konflikte">Konflikte</button>
+                        <button class="quality-chip" data-q="randposition">Randposition</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addGroup()">+ Weitere Gruppe</button>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker</h2>
+            <div class="week-grid">
+                <div class="day-cell"><div class="day-name">Mo</div><div class="day-score" data-day="mo">-</div></div>
+                <div class="day-cell"><div class="day-name">Di</div><div class="day-score" data-day="di">-</div></div>
+                <div class="day-cell"><div class="day-name">Mi</div><div class="day-score" data-day="mi">-</div></div>
+                <div class="day-cell"><div class="day-name">Do</div><div class="day-score" data-day="do">-</div></div>
+                <div class="day-cell"><div class="day-name">Fr</div><div class="day-score" data-day="fr">-</div></div>
+                <div class="day-cell"><div class="day-name">Sa</div><div class="day-score" data-day="sa">-</div></div>
+                <div class="day-cell"><div class="day-name">So</div><div class="day-score" data-day="so">-</div></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const KEY = 'eldib_s4_vertiefung_gruppenintegration';
+        let data = { meta: {}, skills: {}, roles: [], groups: [], week: {}, notes: '' };
+
+        document.addEventListener('DOMContentLoaded', () => { loadData(); setup(); });
+
+        function setup() {
+            document.querySelectorAll('.meta-input input').forEach(i => { i.addEventListener('input', () => { data.meta[i.id] = i.value; save(); }); });
+            document.querySelectorAll('.skill-btn').forEach(b => {
+                b.addEventListener('click', function() {
+                    const s = this.dataset.s;
+                    document.querySelectorAll(`.skill-btn[data-s="${s}"]`).forEach(x => x.classList.remove('selected'));
+                    this.classList.add('selected');
+                    data.skills[s] = this.dataset.v;
+                    save();
+                });
+            });
+            document.querySelectorAll('.role-card').forEach(c => {
+                c.addEventListener('click', function() {
+                    const r = this.dataset.role;
+                    this.classList.toggle('selected');
+                    if (this.classList.contains('selected')) { if (!data.roles.includes(r)) data.roles.push(r); }
+                    else { data.roles = data.roles.filter(x => x !== r); }
+                    save();
+                });
+            });
+            document.querySelectorAll('.day-score').forEach(d => {
+                d.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let c = parseInt(data.week[day]) || 0;
+                    c = (c % 5) + 1;
+                    data.week[day] = c;
+                    this.textContent = c;
+                    this.className = 'day-score s-' + c;
+                    save();
+                });
+            });
+            document.getElementById('notes').addEventListener('input', function() { data.notes = this.value; save(); });
+            setupGroupListeners();
+        }
+
+        function setupGroupListeners() {
+            document.querySelectorAll('.group-card').forEach(card => {
+                card.querySelectorAll('input').forEach(i => i.addEventListener('input', saveGroups));
+                card.querySelectorAll('.quality-chip').forEach(c => { c.addEventListener('click', function() { this.classList.toggle('selected'); saveGroups(); }); });
+            });
+        }
+
+        function saveGroups() {
+            data.groups = [];
+            document.querySelectorAll('.group-card').forEach(card => {
+                const qualities = [];
+                card.querySelectorAll('.quality-chip.selected').forEach(c => qualities.push(c.dataset.q));
+                data.groups.push({ name: card.querySelector('.g-name').value, members: card.querySelector('.g-members').value, type: card.querySelector('.g-type').value, qualities: qualities });
+            });
+            save();
+        }
+
+        function addGroup() {
+            document.getElementById('groupContainer').insertAdjacentHTML('beforeend', `
+                <div class="group-card">
+                    <div class="group-header">
+                        <input type="text" class="g-name" placeholder="Name der Gruppe">
+                        <input type="text" class="g-members" placeholder="Anzahl Mitglieder">
+                        <input type="text" class="g-type" placeholder="Art">
+                    </div>
+                    <div class="group-qualities">
+                        <button class="quality-chip" data-q="akzeptiert">Akzeptiert</button>
+                        <button class="quality-chip" data-q="integriert">Gut integriert</button>
+                        <button class="quality-chip" data-q="fuehrt">Führungsrolle</button>
+                        <button class="quality-chip" data-q="konflikte">Konflikte</button>
+                        <button class="quality-chip" data-q="randposition">Randposition</button>
+                    </div>
+                </div>
+            `);
+            setupGroupListeners();
+        }
+
+        function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
+        function saveData() { saveGroups(); save(); alert('Gespeichert!'); }
+
+        function loadData() {
+            const s = localStorage.getItem(KEY);
+            if (s) {
+                data = JSON.parse(s);
+                Object.keys(data.meta).forEach(k => { const e = document.getElementById(k); if(e) e.value = data.meta[k]; });
+                Object.keys(data.skills).forEach(k => { const b = document.querySelector(`.skill-btn[data-s="${k}"][data-v="${data.skills[k]}"]`); if(b) b.classList.add('selected'); });
+                data.roles.forEach(r => { const c = document.querySelector(`.role-card[data-role="${r}"]`); if(c) c.classList.add('selected'); });
+                if (data.groups && data.groups.length > 0) {
+                    const container = document.getElementById('groupContainer');
+                    container.innerHTML = '';
+                    data.groups.forEach(g => {
+                        const qChips = ['akzeptiert','integriert','fuehrt','konflikte','randposition'].map(q => {
+                            const sel = g.qualities && g.qualities.includes(q) ? 'selected' : '';
+                            const labels = {akzeptiert:'Akzeptiert',integriert:'Gut integriert',fuehrt:'Führungsrolle',konflikte:'Konflikte',randposition:'Randposition'};
+                            return `<button class="quality-chip ${sel}" data-q="${q}">${labels[q]}</button>`;
+                        }).join('');
+                        container.insertAdjacentHTML('beforeend', `<div class="group-card"><div class="group-header"><input type="text" class="g-name" value="${g.name||''}" placeholder="Name"><input type="text" class="g-members" value="${g.members||''}" placeholder="Anzahl"><input type="text" class="g-type" value="${g.type||''}" placeholder="Art"></div><div class="group-qualities">${qChips}</div></div>`);
+                    });
+                    setupGroupListeners();
+                }
+                Object.keys(data.week).forEach(d => { const e = document.querySelector(`.day-score[data-day="${d}"]`); if(e) { e.textContent = data.week[d]; e.classList.add('s-'+data.week[d]); } });
+                if(data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() { if(confirm('Löschen?')) { localStorage.removeItem(KEY); location.reload(); } }
+
+        function exportData() {
+            saveGroups();
+            const blob = new Blob([JSON.stringify({...data, worksheet:'ELDiB S-IV Gruppenintegration', exportDate:new Date().toISOString()}, null, 2)], {type:'application/json'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `eldib_s4_gruppe_${data.meta.childName||'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Bindung & Beziehung (Stufe I) - ELDiB S-1 bis S-5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d63031 0%, #6c1d1d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #fab1a0;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #ddd;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #e55039, #b33939);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #fab1a0;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ddd;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Attachment Indicators */
+        .indicator-grid {
+            display: grid;
+            gap: 12px;
+        }
+        .indicator-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .indicator-label {
+            font-size: 0.9rem;
+        }
+        .ind-btn {
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .ind-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .ind-btn.selected {
+            background: linear-gradient(135deg, #e55039, #b33939);
+            border-color: #e55039;
+            color: #fff;
+        }
+
+        /* Caregiver Tracker */
+        .caregiver-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .caregiver-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .caregiver-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .caregiver-card.selected {
+            border-color: #fab1a0;
+            background: rgba(250,177,160,0.1);
+        }
+        .caregiver-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .caregiver-name {
+            font-size: 0.9rem;
+        }
+        .caregiver-quality {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .quality-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quality-dot.q-1 { background: #d63031; border-color: #d63031; }
+        .quality-dot.q-2 { background: #fdcb6e; border-color: #fdcb6e; }
+        .quality-dot.q-3 { background: #00b894; border-color: #00b894; }
+
+        /* Behavior Counter */
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .counter-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .counter-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .counter-name {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .counter-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .counter-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .counter-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .counter-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 40px;
+            color: #fab1a0;
+        }
+
+        /* Situation Log */
+        .log-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #fab1a0;
+        }
+        .log-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .log-header input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+        }
+        .log-fields {
+            display: grid;
+            gap: 12px;
+        }
+        .log-field {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .log-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+        .log-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Week Grid */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .day-score {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .day-score.s-1 { background: #d63031; border-color: #d63031; }
+        .day-score.s-2 { background: #e17055; border-color: #e17055; }
+        .day-score.s-3 { background: #fdcb6e; border-color: #fdcb6e; color: #333; }
+        .day-score.s-4 { background: #00cec9; border-color: #00cec9; }
+        .day-score.s-5 { background: #00b894; border-color: #00b894; }
+
+        /* Strategies */
+        .strategy-list {
+            display: grid;
+            gap: 10px;
+        }
+        .strategy-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .strategy-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .strategy-check {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: transparent;
+        }
+        .strategy-item.active .strategy-check {
+            background: #00b894;
+            border-color: #00b894;
+            color: #fff;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #fab1a0, #e55039);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(250,177,160,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-add:hover {
+            border-color: #fab1a0;
+            color: #fab1a0;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>❤️ Bindung & Beziehung beobachten</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Sozialisation Stufe I (0-2 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items S-1 bis S-5</h3>
+                <ul>
+                    <li><strong>S-1:</strong> Zeigt Unterscheidung zwischen vertrauten und fremden Personen</li>
+                    <li><strong>S-2:</strong> Sucht Nähe zur Bezugsperson bei Unsicherheit</li>
+                    <li><strong>S-3:</strong> Zeigt Freude bei Wiedersehen mit Bezugsperson</li>
+                    <li><strong>S-4:</strong> Lässt sich von Bezugsperson trösten</li>
+                    <li><strong>S-5:</strong> Zeigt beginnende soziale Referenzierung</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name des Kindes</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 14 Monate">
+                </div>
+                <div>
+                    <label>Beobachtungszeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 40-42">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Bindungsindikatoren</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie häufig zeigt das Kind diese Verhaltensweisen?
+            </p>
+
+            <div class="indicator-grid">
+                <div class="indicator-item">
+                    <div class="indicator-label">Unterscheidet vertraute/fremde Personen</div>
+                    <button class="ind-btn" data-ind="unterscheiden" data-v="1">Nie</button>
+                    <button class="ind-btn" data-ind="unterscheiden" data-v="2">Selten</button>
+                    <button class="ind-btn" data-ind="unterscheiden" data-v="3">Manchmal</button>
+                    <button class="ind-btn" data-ind="unterscheiden" data-v="4">Oft</button>
+                </div>
+                <div class="indicator-item">
+                    <div class="indicator-label">Sucht Nähe bei Unsicherheit</div>
+                    <button class="ind-btn" data-ind="naehe" data-v="1">Nie</button>
+                    <button class="ind-btn" data-ind="naehe" data-v="2">Selten</button>
+                    <button class="ind-btn" data-ind="naehe" data-v="3">Manchmal</button>
+                    <button class="ind-btn" data-ind="naehe" data-v="4">Oft</button>
+                </div>
+                <div class="indicator-item">
+                    <div class="indicator-label">Zeigt Freude bei Wiedersehen</div>
+                    <button class="ind-btn" data-ind="freude" data-v="1">Nie</button>
+                    <button class="ind-btn" data-ind="freude" data-v="2">Selten</button>
+                    <button class="ind-btn" data-ind="freude" data-v="3">Manchmal</button>
+                    <button class="ind-btn" data-ind="freude" data-v="4">Oft</button>
+                </div>
+                <div class="indicator-item">
+                    <div class="indicator-label">Lässt sich trösten</div>
+                    <button class="ind-btn" data-ind="troesten" data-v="1">Nie</button>
+                    <button class="ind-btn" data-ind="troesten" data-v="2">Selten</button>
+                    <button class="ind-btn" data-ind="troesten" data-v="3">Manchmal</button>
+                    <button class="ind-btn" data-ind="troesten" data-v="4">Oft</button>
+                </div>
+                <div class="indicator-item">
+                    <div class="indicator-label">Schaut zu Bezugsperson bei Unsicherheit</div>
+                    <button class="ind-btn" data-ind="referenz" data-v="1">Nie</button>
+                    <button class="ind-btn" data-ind="referenz" data-v="2">Selten</button>
+                    <button class="ind-btn" data-ind="referenz" data-v="3">Manchmal</button>
+                    <button class="ind-btn" data-ind="referenz" data-v="4">Oft</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👥 Bezugspersonen</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">
+                Wähle die Bezugspersonen aus und bewerte die Bindungsqualität (🔴 unsicher, 🟡 gemischt, 🟢 sicher)
+            </p>
+
+            <div class="caregiver-grid">
+                <div class="caregiver-card" data-person="mutter">
+                    <div class="caregiver-icon">👩</div>
+                    <div class="caregiver-name">Mutter</div>
+                    <div class="caregiver-quality">
+                        <button class="quality-dot" data-person="mutter" data-q="1"></button>
+                        <button class="quality-dot" data-person="mutter" data-q="2"></button>
+                        <button class="quality-dot" data-person="mutter" data-q="3"></button>
+                    </div>
+                </div>
+                <div class="caregiver-card" data-person="vater">
+                    <div class="caregiver-icon">👨</div>
+                    <div class="caregiver-name">Vater</div>
+                    <div class="caregiver-quality">
+                        <button class="quality-dot" data-person="vater" data-q="1"></button>
+                        <button class="quality-dot" data-person="vater" data-q="2"></button>
+                        <button class="quality-dot" data-person="vater" data-q="3"></button>
+                    </div>
+                </div>
+                <div class="caregiver-card" data-person="erzieher">
+                    <div class="caregiver-icon">🧑‍🏫</div>
+                    <div class="caregiver-name">Erzieher/in</div>
+                    <div class="caregiver-quality">
+                        <button class="quality-dot" data-person="erzieher" data-q="1"></button>
+                        <button class="quality-dot" data-person="erzieher" data-q="2"></button>
+                        <button class="quality-dot" data-person="erzieher" data-q="3"></button>
+                    </div>
+                </div>
+                <div class="caregiver-card" data-person="gross">
+                    <div class="caregiver-icon">👴</div>
+                    <div class="caregiver-name">Großeltern</div>
+                    <div class="caregiver-quality">
+                        <button class="quality-dot" data-person="gross" data-q="1"></button>
+                        <button class="quality-dot" data-person="gross" data-q="2"></button>
+                        <button class="quality-dot" data-person="gross" data-q="3"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Verhaltensweisen zählen</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">
+                Zähle, wie oft das Kind bestimmte Bindungsverhaltensweisen zeigt.
+            </p>
+
+            <div class="counter-grid">
+                <div class="counter-card">
+                    <div class="counter-icon">🤗</div>
+                    <div class="counter-name">Arme hochstrecken</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjustCount('arme', -1)">−</button>
+                        <span class="counter-value" id="count-arme">0</span>
+                        <button class="counter-btn" onclick="adjustCount('arme', 1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">😢</div>
+                    <div class="counter-name">Weinen bei Trennung</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjustCount('trennung', -1)">−</button>
+                        <span class="counter-value" id="count-trennung">0</span>
+                        <button class="counter-btn" onclick="adjustCount('trennung', 1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">😊</div>
+                    <div class="counter-name">Freude bei Wiedersehen</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjustCount('wiedersehen', -1)">−</button>
+                        <span class="counter-value" id="count-wiedersehen">0</span>
+                        <button class="counter-btn" onclick="adjustCount('wiedersehen', 1)">+</button>
+                    </div>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon">👀</div>
+                    <div class="counter-name">Rückversicherungsblick</div>
+                    <div class="counter-controls">
+                        <button class="counter-btn" onclick="adjustCount('blick', -1)">−</button>
+                        <span class="counter-value" id="count-blick">0</span>
+                        <button class="counter-btn" onclick="adjustCount('blick', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Situations-Protokoll</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">
+                Dokumentiere Situationen, die Bindungsverhalten zeigen.
+            </p>
+
+            <div id="logContainer">
+                <div class="log-card">
+                    <div class="log-header">
+                        <input type="text" class="log-date" placeholder="Datum">
+                        <input type="text" class="log-situation" placeholder="Situation">
+                    </div>
+                    <div class="log-fields">
+                        <div class="log-field">
+                            <label>Beobachtetes Verhalten</label>
+                            <textarea class="log-behavior" placeholder="Was hat das Kind getan?"></textarea>
+                        </div>
+                        <div class="log-field">
+                            <label>Reaktion der Bezugsperson</label>
+                            <textarea class="log-response" placeholder="Wie hat die Bezugsperson reagiert?"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-add" onclick="addLog()">+ Neue Situation hinzufügen</button>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker: Bindungsqualität</h2>
+            <p style="color: #ddd; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Einschätzung (1-5, klicken zum Ändern)
+            </p>
+
+            <div class="week-grid">
+                <div class="day-cell">
+                    <div class="day-name">Mo</div>
+                    <div class="day-score" data-day="mo">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Di</div>
+                    <div class="day-score" data-day="di">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Mi</div>
+                    <div class="day-score" data-day="mi">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Do</div>
+                    <div class="day-score" data-day="do">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Fr</div>
+                    <div class="day-score" data-day="fr">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">Sa</div>
+                    <div class="day-score" data-day="sa">-</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-name">So</div>
+                    <div class="day-score" data-day="so">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Förderstrategien</h2>
+            <div class="strategy-list">
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div>Feinfühlige Reaktion auf Signale</div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div>Konstante Verfügbarkeit</div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div>Sanfte Trennungsrituale</div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div>Körperkontakt anbieten</div>
+                </div>
+                <div class="strategy-item" onclick="toggleStrategy(this)">
+                    <div class="strategy-check">✓</div>
+                    <div>Freude beim Wiedersehen zeigen</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_s1_vertiefung_bindung';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            indicators: {},
+            caregivers: {},
+            counters: { arme: 0, trennung: 0, wiedersehen: 0, blick: 0 },
+            logs: [],
+            weekTracker: {},
+            strategies: [],
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Indicators
+            document.querySelectorAll('.ind-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ind = this.dataset.ind;
+                    document.querySelectorAll(`.ind-btn[data-ind="${ind}"]`).forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    data.indicators[ind] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Quality dots
+            document.querySelectorAll('.quality-dot').forEach(dot => {
+                dot.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const person = this.dataset.person;
+                    const q = this.dataset.q;
+                    document.querySelectorAll(`.quality-dot[data-person="${person}"]`).forEach(d => {
+                        d.classList.remove('q-1', 'q-2', 'q-3');
+                    });
+                    this.classList.add(`q-${q}`);
+                    data.caregivers[person] = q;
+                    autoSave();
+                });
+            });
+
+            // Day scores
+            document.querySelectorAll('.day-score').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let current = parseInt(data.weekTracker[day]) || 0;
+                    current = (current % 5) + 1;
+                    data.weekTracker[day] = current;
+                    this.textContent = current;
+                    this.className = 'day-score';
+                    this.classList.add(`s-${current}`);
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+
+            setupLogListeners();
+        }
+
+        function adjustCount(type, delta) {
+            data.counters[type] = Math.max(0, (data.counters[type] || 0) + delta);
+            document.getElementById(`count-${type}`).textContent = data.counters[type];
+            autoSave();
+        }
+
+        function toggleStrategy(el) {
+            el.classList.toggle('active');
+            const text = el.querySelector('div:last-child').textContent;
+            if (el.classList.contains('active')) {
+                if (!data.strategies.includes(text)) data.strategies.push(text);
+            } else {
+                data.strategies = data.strategies.filter(s => s !== text);
+            }
+            autoSave();
+        }
+
+        function setupLogListeners() {
+            document.querySelectorAll('.log-card').forEach(log => {
+                log.querySelectorAll('input, textarea').forEach(el => {
+                    el.addEventListener('input', saveLogs);
+                });
+            });
+        }
+
+        function saveLogs() {
+            data.logs = [];
+            document.querySelectorAll('.log-card').forEach(log => {
+                data.logs.push({
+                    date: log.querySelector('.log-date').value,
+                    situation: log.querySelector('.log-situation').value,
+                    behavior: log.querySelector('.log-behavior').value,
+                    response: log.querySelector('.log-response').value
+                });
+            });
+            autoSave();
+        }
+
+        function addLog() {
+            const container = document.getElementById('logContainer');
+            const html = `
+                <div class="log-card">
+                    <div class="log-header">
+                        <input type="text" class="log-date" placeholder="Datum">
+                        <input type="text" class="log-situation" placeholder="Situation">
+                    </div>
+                    <div class="log-fields">
+                        <div class="log-field">
+                            <label>Beobachtetes Verhalten</label>
+                            <textarea class="log-behavior" placeholder="Was hat das Kind getan?"></textarea>
+                        </div>
+                        <div class="log-field">
+                            <label>Reaktion der Bezugsperson</label>
+                            <textarea class="log-response" placeholder="Wie hat die Bezugsperson reagiert?"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            setupLogListeners();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            saveLogs();
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                Object.keys(data.indicators).forEach(ind => {
+                    const btn = document.querySelector(`.ind-btn[data-ind="${ind}"][data-v="${data.indicators[ind]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                Object.keys(data.caregivers).forEach(person => {
+                    const dot = document.querySelector(`.quality-dot[data-person="${person}"][data-q="${data.caregivers[person]}"]`);
+                    if (dot) dot.classList.add(`q-${data.caregivers[person]}`);
+                });
+
+                Object.keys(data.counters).forEach(type => {
+                    const el = document.getElementById(`count-${type}`);
+                    if (el) el.textContent = data.counters[type];
+                });
+
+                if (data.logs && data.logs.length > 0) {
+                    const container = document.getElementById('logContainer');
+                    container.innerHTML = '';
+                    data.logs.forEach(log => {
+                        const html = `
+                            <div class="log-card">
+                                <div class="log-header">
+                                    <input type="text" class="log-date" value="${log.date || ''}" placeholder="Datum">
+                                    <input type="text" class="log-situation" value="${log.situation || ''}" placeholder="Situation">
+                                </div>
+                                <div class="log-fields">
+                                    <div class="log-field">
+                                        <label>Beobachtetes Verhalten</label>
+                                        <textarea class="log-behavior" placeholder="...">${log.behavior || ''}</textarea>
+                                    </div>
+                                    <div class="log-field">
+                                        <label>Reaktion der Bezugsperson</label>
+                                        <textarea class="log-response" placeholder="...">${log.response || ''}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                    setupLogListeners();
+                }
+
+                Object.keys(data.weekTracker).forEach(day => {
+                    const cell = document.querySelector(`.day-score[data-day="${day}"]`);
+                    if (cell) {
+                        cell.textContent = data.weekTracker[day];
+                        cell.classList.add(`s-${data.weekTracker[day]}`);
+                    }
+                });
+
+                data.strategies.forEach(text => {
+                    document.querySelectorAll('.strategy-item').forEach(el => {
+                        if (el.querySelector('div:last-child').textContent === text) {
+                            el.classList.add('active');
+                        }
+                    });
+                });
+
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() { window.print(); }
+
+        function exportData() {
+            saveLogs();
+            const exp = { ...data, exportDate: new Date().toISOString(), worksheet: 'ELDiB Sozialisation Stufe I - Bindung & Beziehung' };
+            const blob = new Blob([JSON.stringify(exp, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_s1_bindung_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

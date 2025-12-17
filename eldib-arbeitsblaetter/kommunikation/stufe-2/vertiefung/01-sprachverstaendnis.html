@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Sprachverständnis (Stufe II) - ELDiB K-11 bis K-15</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #74b9ff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #0984e3, #0652DD);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .eldib-ref li:last-child {
+            border-bottom: none;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #74b9ff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Understanding Matrix */
+        .understanding-grid {
+            display: grid;
+            gap: 12px;
+        }
+        .understanding-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .understanding-label {
+            font-size: 0.95rem;
+        }
+        .level-btn {
+            padding: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .level-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .level-btn.selected {
+            background: #0984e3;
+            border-color: #0984e3;
+            color: #fff;
+        }
+
+        /* Word Tracker */
+        .word-tracker {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .word-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .word-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .add-word-btn {
+            padding: 12px 20px;
+            background: #0984e3;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .word-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(9,132,227,0.2);
+            border-radius: 20px;
+            border: 1px solid #0984e3;
+        }
+        .word-tag .remove-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Instruction Tracker */
+        .instruction-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .instruction-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .instruction-text {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 3px solid #74b9ff;
+        }
+        .instruction-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .instruction-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .instruction-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .instruction-btn.selected {
+            background: linear-gradient(135deg, #0984e3, #0652DD);
+            border-color: #0984e3;
+        }
+
+        /* Daily Progress */
+        .daily-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .day-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .day-stars {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .star-btn {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            opacity: 0.4;
+        }
+        .star-btn:hover {
+            opacity: 0.7;
+        }
+        .star-btn.selected {
+            opacity: 1;
+            background: rgba(255,215,0,0.2);
+        }
+
+        /* Context Observation */
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .context-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .context-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .context-card.selected {
+            border-color: #0984e3;
+            background: rgba(9,132,227,0.1);
+        }
+        .context-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .context-name {
+            font-size: 0.9rem;
+        }
+
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(116,185,255,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👂 Sprachverständnis entwickeln</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Kommunikation Stufe II (2-5 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items K-11 bis K-15</h3>
+                <ul>
+                    <li><strong>K-11:</strong> Versteht einfache Aufforderungen</li>
+                    <li><strong>K-12:</strong> Reagiert auf Namen von bekannten Gegenständen</li>
+                    <li><strong>K-13:</strong> Versteht einfache Fragen (Wer? Was?)</li>
+                    <li><strong>K-14:</strong> Folgt zwei-Schritt-Anweisungen</li>
+                    <li><strong>K-15:</strong> Versteht Verneinungen und Verbote</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name des Kindes</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 3 Jahre">
+                </div>
+                <div>
+                    <label>Beobachtungszeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 12-14">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Verstehens-Matrix</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut versteht das Kind verschiedene sprachliche Elemente?
+            </p>
+
+            <div class="understanding-grid">
+                <div class="understanding-item">
+                    <div class="understanding-label">Eigenen Namen</div>
+                    <button class="level-btn" data-item="name" data-v="1">Nie</button>
+                    <button class="level-btn" data-item="name" data-v="2">Selten</button>
+                    <button class="level-btn" data-item="name" data-v="3">Manchmal</button>
+                    <button class="level-btn" data-item="name" data-v="4">Immer</button>
+                </div>
+                <div class="understanding-item">
+                    <div class="understanding-label">Vertraute Objekte (Ball, Puppe...)</div>
+                    <button class="level-btn" data-item="objekte" data-v="1">Nie</button>
+                    <button class="level-btn" data-item="objekte" data-v="2">Selten</button>
+                    <button class="level-btn" data-item="objekte" data-v="3">Manchmal</button>
+                    <button class="level-btn" data-item="objekte" data-v="4">Immer</button>
+                </div>
+                <div class="understanding-item">
+                    <div class="understanding-label">Körperteile (Hand, Fuß, Kopf...)</div>
+                    <button class="level-btn" data-item="koerper" data-v="1">Nie</button>
+                    <button class="level-btn" data-item="koerper" data-v="2">Selten</button>
+                    <button class="level-btn" data-item="koerper" data-v="3">Manchmal</button>
+                    <button class="level-btn" data-item="koerper" data-v="4">Immer</button>
+                </div>
+                <div class="understanding-item">
+                    <div class="understanding-label">Handlungsverben (essen, trinken...)</div>
+                    <button class="level-btn" data-item="verben" data-v="1">Nie</button>
+                    <button class="level-btn" data-item="verben" data-v="2">Selten</button>
+                    <button class="level-btn" data-item="verben" data-v="3">Manchmal</button>
+                    <button class="level-btn" data-item="verben" data-v="4">Immer</button>
+                </div>
+                <div class="understanding-item">
+                    <div class="understanding-label">"Nein" / Verbote</div>
+                    <button class="level-btn" data-item="nein" data-v="1">Nie</button>
+                    <button class="level-btn" data-item="nein" data-v="2">Selten</button>
+                    <button class="level-btn" data-item="nein" data-v="3">Manchmal</button>
+                    <button class="level-btn" data-item="nein" data-v="4">Immer</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Wortschatz-Tracker</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Welche Wörter versteht das Kind sicher? (Rezeptiver Wortschatz)
+            </p>
+
+            <div class="word-tracker">
+                <div class="word-input-row">
+                    <input type="text" class="word-input" id="newWord" placeholder="Neues Wort eingeben...">
+                    <button class="add-word-btn" onclick="addWord()">+ Hinzufügen</button>
+                </div>
+                <div class="word-list" id="wordList"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Anweisungen verstehen</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Testet das Verständnis verschiedener Anweisungstypen.
+            </p>
+
+            <div class="instruction-grid">
+                <div class="instruction-item">
+                    <div class="instruction-text">"Gib mir den Ball."</div>
+                    <div class="instruction-btns">
+                        <button class="instruction-btn" data-instr="ball" data-v="none">Nicht verstanden</button>
+                        <button class="instruction-btn" data-instr="ball" data-v="help">Mit Hilfe</button>
+                        <button class="instruction-btn" data-instr="ball" data-v="ok">Verstanden</button>
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-text">"Wo ist die Puppe?"</div>
+                    <div class="instruction-btns">
+                        <button class="instruction-btn" data-instr="puppe" data-v="none">Nicht verstanden</button>
+                        <button class="instruction-btn" data-instr="puppe" data-v="help">Mit Hilfe</button>
+                        <button class="instruction-btn" data-instr="puppe" data-v="ok">Verstanden</button>
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-text">"Hol deine Schuhe und setz dich hin."</div>
+                    <div class="instruction-btns">
+                        <button class="instruction-btn" data-instr="schuhe" data-v="none">Nicht verstanden</button>
+                        <button class="instruction-btn" data-instr="schuhe" data-v="help">Mit Hilfe</button>
+                        <button class="instruction-btn" data-instr="schuhe" data-v="ok">Verstanden</button>
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-text">"Nicht anfassen!"</div>
+                    <div class="instruction-btns">
+                        <button class="instruction-btn" data-instr="nicht" data-v="none">Nicht verstanden</button>
+                        <button class="instruction-btn" data-instr="nicht" data-v="help">Mit Hilfe</button>
+                        <button class="instruction-btn" data-instr="nicht" data-v="ok">Verstanden</button>
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-text">"Wer hat den roten Becher?"</div>
+                    <div class="instruction-btns">
+                        <button class="instruction-btn" data-instr="wer" data-v="none">Nicht verstanden</button>
+                        <button class="instruction-btn" data-instr="wer" data-v="help">Mit Hilfe</button>
+                        <button class="instruction-btn" data-instr="wer" data-v="ok">Verstanden</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🌍 Kontexte mit gutem Verständnis</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                In welchen Situationen zeigt das Kind das beste Sprachverständnis?
+            </p>
+
+            <div class="context-grid">
+                <div class="context-card" data-context="essen">
+                    <div class="context-icon">🍽️</div>
+                    <div class="context-name">Essen / Mahlzeiten</div>
+                </div>
+                <div class="context-card" data-context="spielen">
+                    <div class="context-icon">🎮</div>
+                    <div class="context-name">Freies Spielen</div>
+                </div>
+                <div class="context-card" data-context="anziehen">
+                    <div class="context-icon">👕</div>
+                    <div class="context-name">An-/Ausziehen</div>
+                </div>
+                <div class="context-card" data-context="draussen">
+                    <div class="context-icon">🌳</div>
+                    <div class="context-name">Draußen</div>
+                </div>
+                <div class="context-card" data-context="buch">
+                    <div class="context-icon">📚</div>
+                    <div class="context-name">Bücher anschauen</div>
+                </div>
+                <div class="context-card" data-context="routine">
+                    <div class="context-icon">🔄</div>
+                    <div class="context-name">Routinen</div>
+                </div>
+                <div class="context-card" data-context="einzel">
+                    <div class="context-icon">👤</div>
+                    <div class="context-name">1:1 Situation</div>
+                </div>
+                <div class="context-card" data-context="gruppe">
+                    <div class="context-icon">👥</div>
+                    <div class="context-name">Gruppe</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Fortschritt</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Einschätzung des Sprachverständnisses (⭐ = gut, ⭐⭐ = sehr gut, ⭐⭐⭐ = hervorragend)
+            </p>
+
+            <div class="daily-tracker">
+                <div class="day-card">
+                    <div class="day-name">Mo</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="mo" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="mo" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="mo" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">Di</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="di" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="di" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="di" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">Mi</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="mi" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="mi" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="mi" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">Do</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="do" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="do" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="do" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">Fr</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="fr" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="fr" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="fr" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">Sa</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="sa" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="sa" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="sa" data-stars="1">⭐</button>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-name">So</div>
+                    <div class="day-stars">
+                        <button class="star-btn" data-day="so" data-stars="3">⭐⭐⭐</button>
+                        <button class="star-btn" data-day="so" data-stars="2">⭐⭐</button>
+                        <button class="star-btn" data-day="so" data-stars="1">⭐</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Besondere Beobachtungen, Situationen, Fortschritte, Herausforderungen..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_k2_vertiefung_sprachverstaendnis';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            understanding: {},
+            words: [],
+            instructions: {},
+            contexts: [],
+            weekProgress: {},
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Understanding levels
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const item = this.dataset.item;
+                    document.querySelectorAll(`.level-btn[data-item="${item}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.understanding[item] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Instruction buttons
+            document.querySelectorAll('.instruction-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const instr = this.dataset.instr;
+                    document.querySelectorAll(`.instruction-btn[data-instr="${instr}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.instructions[instr] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Context cards
+            document.querySelectorAll('.context-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const context = this.dataset.context;
+                    this.classList.toggle('selected');
+
+                    if (this.classList.contains('selected')) {
+                        if (!data.contexts.includes(context)) {
+                            data.contexts.push(context);
+                        }
+                    } else {
+                        data.contexts = data.contexts.filter(c => c !== context);
+                    }
+                    autoSave();
+                });
+            });
+
+            // Star buttons
+            document.querySelectorAll('.star-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    document.querySelectorAll(`.star-btn[data-day="${day}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.weekProgress[day] = this.dataset.stars;
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+
+            // Word input enter key
+            document.getElementById('newWord').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addWord();
+                }
+            });
+        }
+
+        function addWord() {
+            const input = document.getElementById('newWord');
+            const word = input.value.trim();
+            if (word && !data.words.includes(word)) {
+                data.words.push(word);
+                renderWords();
+                input.value = '';
+                autoSave();
+            }
+        }
+
+        function removeWord(word) {
+            data.words = data.words.filter(w => w !== word);
+            renderWords();
+            autoSave();
+        }
+
+        function renderWords() {
+            const container = document.getElementById('wordList');
+            container.innerHTML = data.words.map(word => `
+                <div class="word-tag">
+                    <span>${word}</span>
+                    <button class="remove-btn" onclick="removeWord('${word}')">×</button>
+                </div>
+            `).join('');
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                // Restore understanding
+                Object.keys(data.understanding).forEach(item => {
+                    const btn = document.querySelector(`.level-btn[data-item="${item}"][data-v="${data.understanding[item]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore words
+                renderWords();
+
+                // Restore instructions
+                Object.keys(data.instructions).forEach(instr => {
+                    const btn = document.querySelector(`.instruction-btn[data-instr="${instr}"][data-v="${data.instructions[instr]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore contexts
+                data.contexts.forEach(context => {
+                    const card = document.querySelector(`.context-card[data-context="${context}"]`);
+                    if (card) card.classList.add('selected');
+                });
+
+                // Restore week progress
+                Object.keys(data.weekProgress).forEach(day => {
+                    const btn = document.querySelector(`.star-btn[data-day="${day}"][data-stars="${data.weekProgress[day]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() {
+            window.print();
+        }
+
+        function exportData() {
+            const exportData = {
+                ...data,
+                exportDate: new Date().toISOString(),
+                worksheet: 'ELDiB Kommunikation Stufe II - Sprachverständnis'
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_k2_sprachverstaendnis_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

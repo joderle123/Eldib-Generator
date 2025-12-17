@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertiefung: Gesprächsführung (Stufe III) - ELDiB K-21 bis K-25</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #00cec9;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        .eldib-ref {
+            background: linear-gradient(135deg, #00b894, #00796b);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .eldib-ref h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .eldib-ref ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .eldib-ref li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .eldib-ref li:last-child {
+            border-bottom: none;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #00cec9;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .meta-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .meta-input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        /* Conversation Skills Grid */
+        .skills-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .skill-item {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .skill-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .skill-eldib {
+            font-size: 0.75rem;
+            color: #00cec9;
+            padding: 3px 8px;
+            background: rgba(0,206,201,0.2);
+            border-radius: 10px;
+        }
+        .skill-scale {
+            display: flex;
+            gap: 8px;
+        }
+        .scale-btn {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .scale-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .scale-btn.selected {
+            background: linear-gradient(135deg, #00b894, #00796b);
+            border-color: #00b894;
+            color: #fff;
+        }
+
+        /* Conversation Log */
+        .convo-log {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00cec9;
+        }
+        .convo-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .convo-header input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        .convo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .convo-field {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .convo-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .convo-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .convo-rating {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .rating-chip {
+            padding: 8px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .rating-chip:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .rating-chip.selected {
+            background: #00cec9;
+            border-color: #00cec9;
+            color: #1a1a2e;
+        }
+
+        /* Turn-Taking Tracker */
+        .turn-tracker {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .turn-cell {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .turn-cell:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .turn-cell.selected {
+            border-color: #00cec9;
+            background: rgba(0,206,201,0.1);
+        }
+        .turn-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .turn-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Week Grid */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .day-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .day-score {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .day-score.score-1 { background: #e74c3c; border-color: #e74c3c; }
+        .day-score.score-2 { background: #f39c12; border-color: #f39c12; }
+        .day-score.score-3 { background: #f1c40f; border-color: #f1c40f; color: #333; }
+        .day-score.score-4 { background: #2ecc71; border-color: #2ecc71; }
+        .day-score.score-5 { background: #00b894; border-color: #00b894; }
+
+        /* Strategies */
+        .strategy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .strategy-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .strategy-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .strategy-card.active {
+            border-color: #00b894;
+            background: rgba(0,184,148,0.1);
+        }
+        .strategy-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .strategy-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .strategy-desc {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,206,201,0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn-add {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        .btn-add:hover {
+            border-color: #00cec9;
+            color: #00cec9;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .section { background: white; border: 1px solid #ccc; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💬 Gesprächsführung meistern</h1>
+            <p class="subtitle">Vertiefungs-Arbeitsblatt Kommunikation Stufe III (5-9 Jahre)</p>
+            <div class="eldib-ref">
+                <h3>ELDiB-Bezug: Items K-21 bis K-25</h3>
+                <ul>
+                    <li><strong>K-21:</strong> Beginnt von sich aus Gespräche</li>
+                    <li><strong>K-22:</strong> Hält Blickkontakt während Gesprächen</li>
+                    <li><strong>K-23:</strong> Wartet, bis andere ausgesprochen haben</li>
+                    <li><strong>K-24:</strong> Bleibt beim Thema des Gesprächs</li>
+                    <li><strong>K-25:</strong> Stellt angemessene Rückfragen</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>📋 Dokumentation</h2>
+            <div class="meta-input">
+                <div>
+                    <label>Name des Kindes</label>
+                    <input type="text" id="childName" placeholder="Vorname">
+                </div>
+                <div>
+                    <label>Alter</label>
+                    <input type="text" id="childAge" placeholder="z.B. 7 Jahre">
+                </div>
+                <div>
+                    <label>Beobachtungszeitraum</label>
+                    <input type="text" id="period" placeholder="z.B. KW 15-17">
+                </div>
+                <div>
+                    <label>Beobachter/in</label>
+                    <input type="text" id="observer" placeholder="Name">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Gesprächsfähigkeiten bewerten</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie häufig zeigt das Kind diese Fähigkeiten in Gesprächen?
+            </p>
+
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Beginnt selbst Gespräche</span>
+                        <span class="skill-eldib">K-21</span>
+                    </div>
+                    <div class="skill-scale">
+                        <button class="scale-btn" data-skill="start" data-v="1">Nie</button>
+                        <button class="scale-btn" data-skill="start" data-v="2">Selten</button>
+                        <button class="scale-btn" data-skill="start" data-v="3">Manchmal</button>
+                        <button class="scale-btn" data-skill="start" data-v="4">Oft</button>
+                        <button class="scale-btn" data-skill="start" data-v="5">Immer</button>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Hält Blickkontakt</span>
+                        <span class="skill-eldib">K-22</span>
+                    </div>
+                    <div class="skill-scale">
+                        <button class="scale-btn" data-skill="blick" data-v="1">Nie</button>
+                        <button class="scale-btn" data-skill="blick" data-v="2">Selten</button>
+                        <button class="scale-btn" data-skill="blick" data-v="3">Manchmal</button>
+                        <button class="scale-btn" data-skill="blick" data-v="4">Oft</button>
+                        <button class="scale-btn" data-skill="blick" data-v="5">Immer</button>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Wartet, bis andere ausreden</span>
+                        <span class="skill-eldib">K-23</span>
+                    </div>
+                    <div class="skill-scale">
+                        <button class="scale-btn" data-skill="warten" data-v="1">Nie</button>
+                        <button class="scale-btn" data-skill="warten" data-v="2">Selten</button>
+                        <button class="scale-btn" data-skill="warten" data-v="3">Manchmal</button>
+                        <button class="scale-btn" data-skill="warten" data-v="4">Oft</button>
+                        <button class="scale-btn" data-skill="warten" data-v="5">Immer</button>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Bleibt beim Thema</span>
+                        <span class="skill-eldib">K-24</span>
+                    </div>
+                    <div class="skill-scale">
+                        <button class="scale-btn" data-skill="thema" data-v="1">Nie</button>
+                        <button class="scale-btn" data-skill="thema" data-v="2">Selten</button>
+                        <button class="scale-btn" data-skill="thema" data-v="3">Manchmal</button>
+                        <button class="scale-btn" data-skill="thema" data-v="4">Oft</button>
+                        <button class="scale-btn" data-skill="thema" data-v="5">Immer</button>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Stellt passende Rückfragen</span>
+                        <span class="skill-eldib">K-25</span>
+                    </div>
+                    <div class="skill-scale">
+                        <button class="scale-btn" data-skill="fragen" data-v="1">Nie</button>
+                        <button class="scale-btn" data-skill="fragen" data-v="2">Selten</button>
+                        <button class="scale-btn" data-skill="fragen" data-v="3">Manchmal</button>
+                        <button class="scale-btn" data-skill="fragen" data-v="4">Oft</button>
+                        <button class="scale-btn" data-skill="fragen" data-v="5">Immer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Sprecherwechsel-Beobachtung</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Wie gut gelingt der Wechsel zwischen Sprechen und Zuhören?
+            </p>
+
+            <div class="turn-tracker">
+                <div class="turn-cell" data-turn="unterbricht">
+                    <div class="turn-icon">🚫</div>
+                    <div class="turn-label">Unterbricht häufig</div>
+                </div>
+                <div class="turn-cell" data-turn="uebersieht">
+                    <div class="turn-icon">👀</div>
+                    <div class="turn-label">Übersieht Signale</div>
+                </div>
+                <div class="turn-cell" data-turn="wartet">
+                    <div class="turn-icon">⏳</div>
+                    <div class="turn-label">Wartet zu lange</div>
+                </div>
+                <div class="turn-cell" data-turn="angemessen">
+                    <div class="turn-icon">✅</div>
+                    <div class="turn-label">Angemessener Wechsel</div>
+                </div>
+                <div class="turn-cell" data-turn="fliessend">
+                    <div class="turn-icon">🌊</div>
+                    <div class="turn-label">Fließender Wechsel</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Gesprächs-Protokoll</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Dokumentiere beobachtete Gespräche.
+            </p>
+
+            <div id="convoContainer">
+                <div class="convo-log">
+                    <div class="convo-header">
+                        <input type="text" class="convo-date" placeholder="Datum">
+                        <input type="text" class="convo-partner" placeholder="Gesprächspartner">
+                        <input type="text" class="convo-context" placeholder="Situation/Kontext">
+                    </div>
+                    <div class="convo-content">
+                        <div class="convo-field">
+                            <label>Gelungene Aspekte</label>
+                            <textarea class="convo-positive" placeholder="Was hat gut geklappt?"></textarea>
+                        </div>
+                        <div class="convo-field">
+                            <label>Herausforderungen</label>
+                            <textarea class="convo-challenge" placeholder="Was war schwierig?"></textarea>
+                        </div>
+                        <div class="convo-rating">
+                            <button class="rating-chip" data-idx="0" data-rate="blick">👁️ Blickkontakt</button>
+                            <button class="rating-chip" data-idx="0" data-rate="warten">⏳ Warten</button>
+                            <button class="rating-chip" data-idx="0" data-rate="thema">📌 Beim Thema</button>
+                            <button class="rating-chip" data-idx="0" data-rate="fragen">❓ Rückfragen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-add" onclick="addConvoLog()">+ Neues Gesprächs-Protokoll</button>
+        </section>
+
+        <section class="section">
+            <h2>📅 Wochen-Tracker: Gesprächsqualität</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Tägliche Bewertung (1-5, klicken zum Ändern)
+            </p>
+
+            <div class="week-grid">
+                <div class="day-box">
+                    <div class="day-name">Mo</div>
+                    <div class="day-score" data-day="mo">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">Di</div>
+                    <div class="day-score" data-day="di">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">Mi</div>
+                    <div class="day-score" data-day="mi">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">Do</div>
+                    <div class="day-score" data-day="do">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">Fr</div>
+                    <div class="day-score" data-day="fr">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">Sa</div>
+                    <div class="day-score" data-day="sa">-</div>
+                </div>
+                <div class="day-box">
+                    <div class="day-name">So</div>
+                    <div class="day-score" data-day="so">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Förderstrategien</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                Welche Strategien werden eingesetzt?
+            </p>
+
+            <div class="strategy-cards">
+                <div class="strategy-card" data-strategy="modell">
+                    <div class="strategy-icon">🎭</div>
+                    <div class="strategy-title">Modellieren</div>
+                    <div class="strategy-desc">Gute Gesprächsführung vorleben</div>
+                </div>
+                <div class="strategy-card" data-strategy="signal">
+                    <div class="strategy-icon">🚦</div>
+                    <div class="strategy-title">Signalkarten</div>
+                    <div class="strategy-desc">Visuelle Hinweise für Wechsel</div>
+                </div>
+                <div class="strategy-card" data-strategy="timer">
+                    <div class="strategy-icon">⏱️</div>
+                    <div class="strategy-title">Redezeit-Timer</div>
+                    <div class="strategy-desc">Zeitliche Struktur geben</div>
+                </div>
+                <div class="strategy-card" data-strategy="feedback">
+                    <div class="strategy-icon">👏</div>
+                    <div class="strategy-title">Positives Feedback</div>
+                    <div class="strategy-desc">Gelungenes sofort loben</div>
+                </div>
+                <div class="strategy-card" data-strategy="ueben">
+                    <div class="strategy-icon">🎮</div>
+                    <div class="strategy-title">Gesprächsspiele</div>
+                    <div class="strategy-desc">Spielerisch üben</div>
+                </div>
+                <div class="strategy-card" data-strategy="video">
+                    <div class="strategy-icon">📹</div>
+                    <div class="strategy-title">Video-Feedback</div>
+                    <div class="strategy-desc">Aufnahmen gemeinsam anschauen</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Beobachtungsnotizen</h2>
+            <textarea class="notes-area" id="notes" placeholder="Weitere Beobachtungen, Fortschritte, Besonderheiten..."></textarea>
+        </section>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            <button class="btn btn-secondary" onclick="clearData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_k3_vertiefung_gespraech';
+
+        let data = {
+            meta: { name: '', age: '', period: '', observer: '' },
+            skills: {},
+            turnTaking: [],
+            conversations: [],
+            weekTracker: {},
+            strategies: [],
+            notes: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Meta inputs
+            document.querySelectorAll('.meta-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'childName') data.meta.name = this.value;
+                    else if (this.id === 'childAge') data.meta.age = this.value;
+                    else if (this.id === 'period') data.meta.period = this.value;
+                    else if (this.id === 'observer') data.meta.observer = this.value;
+                    autoSave();
+                });
+            });
+
+            // Skill scale buttons
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const skill = this.dataset.skill;
+                    document.querySelectorAll(`.scale-btn[data-skill="${skill}"]`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    data.skills[skill] = this.dataset.v;
+                    autoSave();
+                });
+            });
+
+            // Turn-taking cells
+            document.querySelectorAll('.turn-cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const turn = this.dataset.turn;
+                    this.classList.toggle('selected');
+
+                    if (this.classList.contains('selected')) {
+                        if (!data.turnTaking.includes(turn)) {
+                            data.turnTaking.push(turn);
+                        }
+                    } else {
+                        data.turnTaking = data.turnTaking.filter(t => t !== turn);
+                    }
+                    autoSave();
+                });
+            });
+
+            // Day scores
+            document.querySelectorAll('.day-score').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const day = this.dataset.day;
+                    let current = parseInt(data.weekTracker[day]) || 0;
+                    current = (current % 5) + 1;
+
+                    data.weekTracker[day] = current;
+                    this.textContent = current;
+                    this.className = 'day-score';
+                    this.classList.add(`score-${current}`);
+                    autoSave();
+                });
+            });
+
+            // Strategy cards
+            document.querySelectorAll('.strategy-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const strategy = this.dataset.strategy;
+                    this.classList.toggle('active');
+
+                    if (this.classList.contains('active')) {
+                        if (!data.strategies.includes(strategy)) {
+                            data.strategies.push(strategy);
+                        }
+                    } else {
+                        data.strategies = data.strategies.filter(s => s !== strategy);
+                    }
+                    autoSave();
+                });
+            });
+
+            // Notes
+            document.getElementById('notes').addEventListener('input', function() {
+                data.notes = this.value;
+                autoSave();
+            });
+
+            // Initial conversation log listeners
+            setupConvoLogListeners();
+        }
+
+        function setupConvoLogListeners() {
+            document.querySelectorAll('.convo-log').forEach((log, idx) => {
+                log.querySelectorAll('input, textarea').forEach(el => {
+                    el.addEventListener('input', saveConversations);
+                });
+
+                log.querySelectorAll('.rating-chip').forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                        saveConversations();
+                    });
+                });
+            });
+        }
+
+        function saveConversations() {
+            data.conversations = [];
+            document.querySelectorAll('.convo-log').forEach(log => {
+                const ratings = [];
+                log.querySelectorAll('.rating-chip.selected').forEach(chip => {
+                    ratings.push(chip.dataset.rate);
+                });
+
+                data.conversations.push({
+                    date: log.querySelector('.convo-date').value,
+                    partner: log.querySelector('.convo-partner').value,
+                    context: log.querySelector('.convo-context').value,
+                    positive: log.querySelector('.convo-positive').value,
+                    challenge: log.querySelector('.convo-challenge').value,
+                    ratings: ratings
+                });
+            });
+            autoSave();
+        }
+
+        function addConvoLog() {
+            const container = document.getElementById('convoContainer');
+            const idx = document.querySelectorAll('.convo-log').length;
+
+            const logHtml = `
+                <div class="convo-log">
+                    <div class="convo-header">
+                        <input type="text" class="convo-date" placeholder="Datum">
+                        <input type="text" class="convo-partner" placeholder="Gesprächspartner">
+                        <input type="text" class="convo-context" placeholder="Situation/Kontext">
+                    </div>
+                    <div class="convo-content">
+                        <div class="convo-field">
+                            <label>Gelungene Aspekte</label>
+                            <textarea class="convo-positive" placeholder="Was hat gut geklappt?"></textarea>
+                        </div>
+                        <div class="convo-field">
+                            <label>Herausforderungen</label>
+                            <textarea class="convo-challenge" placeholder="Was war schwierig?"></textarea>
+                        </div>
+                        <div class="convo-rating">
+                            <button class="rating-chip" data-idx="${idx}" data-rate="blick">👁️ Blickkontakt</button>
+                            <button class="rating-chip" data-idx="${idx}" data-rate="warten">⏳ Warten</button>
+                            <button class="rating-chip" data-idx="${idx}" data-rate="thema">📌 Beim Thema</button>
+                            <button class="rating-chip" data-idx="${idx}" data-rate="fragen">❓ Rückfragen</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', logHtml);
+            setupConvoLogListeners();
+        }
+
+        function autoSave() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function saveData() {
+            saveConversations();
+            autoSave();
+            alert('Daten wurden gespeichert!');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore meta
+                if (data.meta.name) document.getElementById('childName').value = data.meta.name;
+                if (data.meta.age) document.getElementById('childAge').value = data.meta.age;
+                if (data.meta.period) document.getElementById('period').value = data.meta.period;
+                if (data.meta.observer) document.getElementById('observer').value = data.meta.observer;
+
+                // Restore skills
+                Object.keys(data.skills).forEach(skill => {
+                    const btn = document.querySelector(`.scale-btn[data-skill="${skill}"][data-v="${data.skills[skill]}"]`);
+                    if (btn) btn.classList.add('selected');
+                });
+
+                // Restore turn-taking
+                data.turnTaking.forEach(turn => {
+                    const cell = document.querySelector(`.turn-cell[data-turn="${turn}"]`);
+                    if (cell) cell.classList.add('selected');
+                });
+
+                // Restore conversations
+                if (data.conversations && data.conversations.length > 0) {
+                    const container = document.getElementById('convoContainer');
+                    container.innerHTML = '';
+
+                    data.conversations.forEach((convo, idx) => {
+                        const ratingBtns = ['blick', 'warten', 'thema', 'fragen'].map(rate => {
+                            const selected = convo.ratings && convo.ratings.includes(rate) ? 'selected' : '';
+                            const icons = { blick: '👁️ Blickkontakt', warten: '⏳ Warten', thema: '📌 Beim Thema', fragen: '❓ Rückfragen' };
+                            return `<button class="rating-chip ${selected}" data-idx="${idx}" data-rate="${rate}">${icons[rate]}</button>`;
+                        }).join('');
+
+                        const logHtml = `
+                            <div class="convo-log">
+                                <div class="convo-header">
+                                    <input type="text" class="convo-date" value="${convo.date || ''}" placeholder="Datum">
+                                    <input type="text" class="convo-partner" value="${convo.partner || ''}" placeholder="Gesprächspartner">
+                                    <input type="text" class="convo-context" value="${convo.context || ''}" placeholder="Situation/Kontext">
+                                </div>
+                                <div class="convo-content">
+                                    <div class="convo-field">
+                                        <label>Gelungene Aspekte</label>
+                                        <textarea class="convo-positive" placeholder="Was hat gut geklappt?">${convo.positive || ''}</textarea>
+                                    </div>
+                                    <div class="convo-field">
+                                        <label>Herausforderungen</label>
+                                        <textarea class="convo-challenge" placeholder="Was war schwierig?">${convo.challenge || ''}</textarea>
+                                    </div>
+                                    <div class="convo-rating">${ratingBtns}</div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', logHtml);
+                    });
+
+                    setupConvoLogListeners();
+                }
+
+                // Restore week tracker
+                Object.keys(data.weekTracker).forEach(day => {
+                    const cell = document.querySelector(`.day-score[data-day="${day}"]`);
+                    if (cell) {
+                        cell.textContent = data.weekTracker[day];
+                        cell.classList.add(`score-${data.weekTracker[day]}`);
+                    }
+                });
+
+                // Restore strategies
+                data.strategies.forEach(strategy => {
+                    const card = document.querySelector(`.strategy-card[data-strategy="${strategy}"]`);
+                    if (card) card.classList.add('active');
+                });
+
+                // Restore notes
+                if (data.notes) document.getElementById('notes').value = data.notes;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Alle Daten wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function printWorksheet() {
+            window.print();
+        }
+
+        function exportData() {
+            saveConversations();
+            const exportData = {
+                ...data,
+                exportDate: new Date().toISOString(),
+                worksheet: 'ELDiB Kommunikation Stufe III - Gesprächsführung'
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `eldib_k3_gespraech_${data.meta.name || 'export'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
