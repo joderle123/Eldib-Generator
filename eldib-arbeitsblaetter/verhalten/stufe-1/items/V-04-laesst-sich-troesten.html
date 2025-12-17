@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-04: Lässt sich trösten - ELDiB Arbeitsblatt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .header .item-code {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .header .domain {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #f57c00;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe0b2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.5em;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .info-box p {
+            line-height: 1.7;
+            color: #e65100;
+        }
+        .comfort-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .comfort-level {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .comfort-level:hover {
+            background: #fff3e0;
+        }
+        .comfort-level.active {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+        .comfort-level .level-icon {
+            font-size: 2em;
+            width: 50px;
+            text-align: center;
+        }
+        .comfort-level .level-text {
+            flex: 1;
+        }
+        .comfort-level .level-title {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .comfort-level .level-desc {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        .exercise-card {
+            background: #fff;
+            border: 2px solid #ffe0b2;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            border-color: #ff9800;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
+        }
+        .exercise-card h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .exercise-number {
+            background: #ff9800;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .exercise-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .steps {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .steps ol {
+            margin-left: 20px;
+        }
+        .steps li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .comfort-strategies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .strategy-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .strategy-card:hover {
+            background: #fff3e0;
+            transform: translateY(-3px);
+        }
+        .strategy-card.effective {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+        .strategy-card.sometimes {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+        .strategy-card.ineffective {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+        .strategy-card .strategy-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .strategy-card .strategy-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .strategy-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover {
+            background: #fff3e0;
+        }
+        .checklist li.checked {
+            background: #c8e6c9;
+        }
+        .checklist li .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ff9800;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checklist li.checked .checkbox {
+            background: #ff9800;
+            color: white;
+        }
+        .log-entry {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-form {
+            display: grid;
+            gap: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9800 0%, #f57c00 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .log-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .tips-list {
+            list-style: none;
+        }
+        .tips-list li {
+            padding: 12px 15px;
+            padding-left: 45px;
+            background: #e8f5e9;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .tips-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 15px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .distress-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .distress-day {
+            text-align: center;
+            padding: 10px 5px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .distress-day .day-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .distress-day .day-value {
+            font-size: 1.5em;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .comfort-strategies {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-04</div>
+            <h1>Lässt sich trösten</h1>
+            <div class="domain">Verhalten • Stufe I • Emotionsregulation</div>
+        </div>
+
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind lässt sich bei Kummer, Schmerz oder Frustration von einer vertrauten Person beruhigen.
+                    Es nimmt Trostangebote an und kann sich durch Zuwendung, körperliche Nähe oder andere Beruhigungsstrategien
+                    wieder regulieren. Die Fähigkeit, Trost anzunehmen, ist grundlegend für die Entwicklung von Bindungssicherheit.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Kinder lernen Emotionsregulation zunächst
+                    durch Ko-Regulation mit Bezugspersonen. Die Erfahrung, getröstet zu werden, bildet die Basis für die spätere
+                    Selbstregulation und das Vertrauen in die eigene Bewältigungsfähigkeit.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Aktuelle Trostfähigkeit</h3>
+                <p style="margin-bottom: 15px; color: #666;">Wie gut lässt sich das Kind derzeit trösten?</p>
+                <div class="comfort-scale" id="comfortScale">
+                    <div class="comfort-level" data-level="1">
+                        <div class="level-icon">😭</div>
+                        <div class="level-text">
+                            <div class="level-title">Nicht tröstbar</div>
+                            <div class="level-desc">Weist alle Trostversuche ab, Weinen hält lange an</div>
+                        </div>
+                    </div>
+                    <div class="comfort-level" data-level="2">
+                        <div class="level-icon">😢</div>
+                        <div class="level-text">
+                            <div class="level-title">Schwer tröstbar</div>
+                            <div class="level-desc">Braucht sehr lange (15+ Min), um sich zu beruhigen</div>
+                        </div>
+                    </div>
+                    <div class="comfort-level" data-level="3">
+                        <div class="level-icon">😐</div>
+                        <div class="level-text">
+                            <div class="level-title">Manchmal tröstbar</div>
+                            <div class="level-desc">Nimmt Trost situationsabhängig an, braucht 5-15 Min</div>
+                        </div>
+                    </div>
+                    <div class="comfort-level" data-level="4">
+                        <div class="level-icon">🙂</div>
+                        <div class="level-text">
+                            <div class="level-title">Gut tröstbar</div>
+                            <div class="level-desc">Lässt sich meist schnell beruhigen (unter 5 Min)</div>
+                        </div>
+                    </div>
+                    <div class="comfort-level" data-level="5">
+                        <div class="level-icon">😊</div>
+                        <div class="level-text">
+                            <div class="level-title">Leicht tröstbar</div>
+                            <div class="level-desc">Nimmt Trost sofort an, erholt sich schnell</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🛠️</span> Wirksame Troststrategien</h3>
+                <p style="margin-bottom: 10px; color: #666;">Klicken Sie auf die Strategien, um zu markieren, wie wirksam sie bei diesem Kind sind:</p>
+                <div class="strategy-legend">
+                    <div class="legend-item"><div class="legend-color" style="background: #e8f5e9; border: 2px solid #4caf50;"></div> Wirksam</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #fff3e0; border: 2px solid #ff9800;"></div> Manchmal</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #ffebee; border: 2px solid #f44336;"></div> Unwirksam</div>
+                </div>
+                <div class="comfort-strategies" id="strategies">
+                    <div class="strategy-card" data-strategy="holding">
+                        <div class="strategy-icon">🤗</div>
+                        <div class="strategy-name">Auf den Arm nehmen</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="rocking">
+                        <div class="strategy-icon">🪑</div>
+                        <div class="strategy-name">Wiegen/Schaukeln</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="singing">
+                        <div class="strategy-icon">🎵</div>
+                        <div class="strategy-name">Singen/Summen</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="talking">
+                        <div class="strategy-icon">💬</div>
+                        <div class="strategy-name">Leises Sprechen</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="stroking">
+                        <div class="strategy-icon">✋</div>
+                        <div class="strategy-name">Streicheln</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="distraction">
+                        <div class="strategy-icon">🧸</div>
+                        <div class="strategy-name">Ablenkung</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="pacifier">
+                        <div class="strategy-icon">🍼</div>
+                        <div class="strategy-name">Schnuller/Flasche</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="blanket">
+                        <div class="strategy-icon">🧣</div>
+                        <div class="strategy-name">Kuscheltuch</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="walking">
+                        <div class="strategy-icon">🚶</div>
+                        <div class="strategy-name">Herumlaufen</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="music">
+                        <div class="strategy-icon">🎶</div>
+                        <div class="strategy-name">Musik</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="white-noise">
+                        <div class="strategy-icon">🌊</div>
+                        <div class="strategy-name">Weißes Rauschen</div>
+                    </div>
+                    <div class="strategy-card" data-strategy="bath">
+                        <div class="strategy-icon">🛁</div>
+                        <div class="strategy-name">Warmes Bad</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Konstante Trostrituale etablieren</h4>
+                    <p>Entwickeln Sie ein verlässliches Trostritual, das dem Kind Sicherheit gibt.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Identifizieren Sie die wirksamste Troststrategie für das Kind</li>
+                            <li>Kombinieren Sie 2-3 Elemente zu einem Ritual (z.B. Aufnehmen + Wiegen + Summen)</li>
+                            <li>Verwenden Sie immer dieselben Worte/Melodien</li>
+                            <li>Führen Sie das Ritual bei jedem Kummer gleich durch</li>
+                            <li>Bleiben Sie selbst ruhig und reguliert</li>
+                            <li>Beenden Sie das Ritual erst, wenn das Kind sich beruhigt hat</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Präventive Beruhigung</h4>
+                    <p>Lernen Sie die frühen Stresssignale des Kindes kennen und handeln Sie, bevor die Erregung zu hoch wird.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Beobachten Sie frühe Unruheanzeichen (Quengeln, Abwenden, Grimassieren)</li>
+                            <li>Handeln Sie sofort bei ersten Anzeichen</li>
+                            <li>Bieten Sie proaktiv Nähe und Sicherheit an</li>
+                            <li>Vermeiden Sie bekannte Stressauslöser wenn möglich</li>
+                            <li>Schaffen Sie vorhersehbare Routinen</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Emotionales Spiegeln</h4>
+                    <p>Validieren Sie die Gefühle des Kindes, bevor Sie trösten.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Benennen Sie das Gefühl: "Du bist traurig/wütend/erschrocken"</li>
+                            <li>Zeigen Sie Verständnis: "Ich verstehe, das ist schwer"</li>
+                            <li>Bieten Sie Ihre Präsenz an: "Ich bin hier für dich"</li>
+                            <li>Warten Sie kurz, ob das Kind von sich aus Nähe sucht</li>
+                            <li>Bieten Sie dann körperlichen Trost an</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="observationChecklist">
+                    <li data-item="1">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt erkennbares Verhalten bei Kummer (weinen, schreien)</span>
+                    </li>
+                    <li data-item="2">
+                        <span class="checkbox">✓</span>
+                        <span>Reagiert auf die Anwesenheit der Bezugsperson</span>
+                    </li>
+                    <li data-item="3">
+                        <span class="checkbox">✓</span>
+                        <span>Beruhigt sich, wenn aufgenommen wird</span>
+                    </li>
+                    <li data-item="4">
+                        <span class="checkbox">✓</span>
+                        <span>Akzeptiert körperliche Trostgesten</span>
+                    </li>
+                    <li data-item="5">
+                        <span class="checkbox">✓</span>
+                        <span>Entspannt sich bei vertrauter Stimme</span>
+                    </li>
+                    <li data-item="6">
+                        <span class="checkbox">✓</span>
+                        <span>Kann sich innerhalb von 10 Minuten beruhigen</span>
+                    </li>
+                    <li data-item="7">
+                        <span class="checkbox">✓</span>
+                        <span>Sucht aktiv Trost bei Bezugsperson</span>
+                    </li>
+                    <li data-item="8">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Erleichterung nach dem Trösten</span>
+                    </li>
+                </ul>
+                <div class="progress-container">
+                    <div class="progress-bar" id="checklistProgress">0%</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Trost-Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Uhrzeit</label>
+                                <input type="time" id="logTime">
+                            </div>
+                            <div class="form-group">
+                                <label>Auslöser</label>
+                                <select id="logTrigger">
+                                    <option value="">Auswählen...</option>
+                                    <option value="hunger">Hunger</option>
+                                    <option value="muede">Müdigkeit</option>
+                                    <option value="schmerz">Schmerz/Unwohlsein</option>
+                                    <option value="trennung">Trennung/Allein</option>
+                                    <option value="reizueberflutung">Reizüberflutung</option>
+                                    <option value="frustration">Frustration</option>
+                                    <option value="angst">Angst/Erschrecken</option>
+                                    <option value="unbekannt">Unbekannt</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Verwendete Strategie</label>
+                                <select id="logStrategy">
+                                    <option value="">Auswählen...</option>
+                                    <option value="holding">Auf den Arm nehmen</option>
+                                    <option value="rocking">Wiegen/Schaukeln</option>
+                                    <option value="singing">Singen/Summen</option>
+                                    <option value="talking">Leises Sprechen</option>
+                                    <option value="stroking">Streicheln</option>
+                                    <option value="distraction">Ablenkung</option>
+                                    <option value="combination">Kombination</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Dauer bis Beruhigung</label>
+                                <select id="logDuration">
+                                    <option value="sofort">Sofort (< 1 Min)</option>
+                                    <option value="kurz">Kurz (1-5 Min)</option>
+                                    <option value="mittel">Mittel (5-15 Min)</option>
+                                    <option value="lang">Lang (15-30 Min)</option>
+                                    <option value="sehr-lang">Sehr lang (> 30 Min)</option>
+                                    <option value="nicht">Nicht beruhigt</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Erfolg</label>
+                                <select id="logSuccess">
+                                    <option value="5">Sehr gut</option>
+                                    <option value="4">Gut</option>
+                                    <option value="3">Mäßig</option>
+                                    <option value="2">Wenig</option>
+                                    <option value="1">Nicht erfolgreich</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notizen</label>
+                            <textarea id="logNotes" rows="3" placeholder="Was hat besonders geholfen? Was war schwierig?"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">
+                            <span>➕</span> Eintrag hinzufügen
+                        </button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps zur Förderung</h3>
+                <ul class="tips-list">
+                    <li>Reagieren Sie schnell auf Kummer - Kinder lernen, dass ihre Bedürfnisse gehört werden</li>
+                    <li>Bleiben Sie selbst ruhig - Ihre Regulation überträgt sich auf das Kind</li>
+                    <li>Akzeptieren Sie, dass manche Kinder länger brauchen, um sich zu beruhigen</li>
+                    <li>Vermeiden Sie es, das Kind abzulenken, bevor Sie seine Gefühle validiert haben</li>
+                    <li>Beenden Sie Trostversuche nicht zu früh - warten Sie auf echte Entspannung</li>
+                    <li>Bei schwer tröstbaren Kindern: Schließen Sie körperliche Ursachen aus</li>
+                    <li>Entwickeln Sie ein "Notfall-Repertoire" an Strategien für schwierige Momente</li>
+                    <li>Gönnen Sie sich Pausen - die Betreuung eines schwer tröstbaren Kindes ist anstrengend</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">
+                    <span>💾</span> Speichern
+                </button>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <span>🖨️</span> Drucken
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📤</span> Exportieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            comfortLevel: 0,
+            strategies: {},
+            checklist: {},
+            logs: []
+        };
+
+        const STORAGE_KEY = 'eldib_V4_arbeit';
+
+        function init() {
+            loadData();
+            setupEventListeners();
+            updateDisplay();
+        }
+
+        function setupEventListeners() {
+            // Comfort scale
+            document.querySelectorAll('.comfort-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.comfort-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.comfortLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+
+            // Strategies - cycle through effectiveness
+            document.querySelectorAll('.strategy-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const strategyId = this.dataset.strategy;
+                    const states = ['', 'effective', 'sometimes', 'ineffective'];
+                    const currentState = data.strategies[strategyId] || '';
+                    const currentIndex = states.indexOf(currentState);
+                    const nextIndex = (currentIndex + 1) % states.length;
+
+                    this.classList.remove('effective', 'sometimes', 'ineffective');
+                    if (states[nextIndex]) {
+                        this.classList.add(states[nextIndex]);
+                    }
+                    data.strategies[strategyId] = states[nextIndex];
+                    saveData();
+                });
+            });
+
+            // Checklist
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemId = this.dataset.item;
+                    this.classList.toggle('checked');
+                    data.checklist[itemId] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Set today's date and current time
+            document.getElementById('logDate').valueAsDate = new Date();
+            document.getElementById('logTime').value = new Date().toTimeString().slice(0, 5);
+        }
+
+        function updateDisplay() {
+            // Comfort level
+            if (data.comfortLevel) {
+                document.querySelector(`.comfort-level[data-level="${data.comfortLevel}"]`)?.classList.add('active');
+            }
+
+            // Strategies
+            Object.entries(data.strategies).forEach(([strategy, state]) => {
+                const el = document.querySelector(`.strategy-card[data-strategy="${strategy}"]`);
+                if (el && state) {
+                    el.classList.add(state);
+                }
+            });
+
+            // Checklist
+            Object.entries(data.checklist).forEach(([item, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${item}"]`);
+                if (li && checked) {
+                    li.classList.add('checked');
+                }
+            });
+
+            updateProgress();
+            renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            const progressBar = document.getElementById('checklistProgress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function addLogEntry() {
+            const date = document.getElementById('logDate').value;
+            const time = document.getElementById('logTime').value;
+            const trigger = document.getElementById('logTrigger').value;
+            const strategy = document.getElementById('logStrategy').value;
+            const duration = document.getElementById('logDuration').value;
+            const success = document.getElementById('logSuccess').value;
+            const notes = document.getElementById('logNotes').value;
+
+            if (!date || !trigger) {
+                alert('Bitte füllen Sie mindestens Datum und Auslöser aus.');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                date,
+                time,
+                trigger,
+                strategy,
+                duration,
+                success: parseInt(success),
+                notes
+            };
+
+            data.logs.unshift(entry);
+            saveData();
+            renderLogs();
+
+            // Reset form
+            document.getElementById('logTrigger').value = '';
+            document.getElementById('logStrategy').value = '';
+            document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logList');
+            const triggers = {
+                hunger: 'Hunger',
+                muede: 'Müdigkeit',
+                schmerz: 'Schmerz',
+                trennung: 'Trennung',
+                reizueberflutung: 'Reizüberflutung',
+                frustration: 'Frustration',
+                angst: 'Angst',
+                unbekannt: 'Unbekannt'
+            };
+            const strategies = {
+                holding: 'Auf den Arm nehmen',
+                rocking: 'Wiegen',
+                singing: 'Singen',
+                talking: 'Sprechen',
+                stroking: 'Streicheln',
+                distraction: 'Ablenkung',
+                combination: 'Kombination'
+            };
+            const durations = {
+                sofort: '< 1 Min',
+                kurz: '1-5 Min',
+                mittel: '5-15 Min',
+                lang: '15-30 Min',
+                'sehr-lang': '> 30 Min',
+                nicht: 'Nicht beruhigt'
+            };
+
+            container.innerHTML = data.logs.map(log => {
+                const stars = '⭐'.repeat(log.success);
+                return `
+                    <div class="log-item">
+                        <div class="log-item-header">
+                            <span>📅 ${new Date(log.date).toLocaleDateString('de-DE')} ${log.time || ''}</span>
+                            <span>⏱️ ${durations[log.duration] || log.duration}</span>
+                        </div>
+                        <div class="log-item-content">
+                            <strong>Auslöser:</strong> ${triggers[log.trigger] || log.trigger}<br>
+                            <strong>Strategie:</strong> ${strategies[log.strategy] || log.strategy || '-'}<br>
+                            <strong>Erfolg:</strong> ${stars || '(nicht bewertet)'}
+                            ${log.notes ? `<p style="margin-top: 8px; color: #666;">${log.notes}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-04: Lässt sich trösten',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-04_Troesten_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-1: Reagiert auf Erwachsene - Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        header { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 30px; text-align: center; }
+        h1 { font-size: 1.6rem; margin-bottom: 10px; }
+        .item-code { background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-weight: 600; }
+        .item-description { font-size: 1.1rem; opacity: 0.95; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section h2 { color: #667eea; font-size: 1.3rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .info-box { background: #f0f4ff; border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #667eea; }
+        .activity-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 2px solid #e9ecef; }
+        .activity-card h3 { color: #495057; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .activity-card h3 .icon { font-size: 1.5rem; }
+        .activity-steps { list-style: none; counter-reset: step; }
+        .activity-steps li { counter-increment: step; padding: 10px 0 10px 50px; position: relative; border-bottom: 1px solid #e9ecef; }
+        .activity-steps li:last-child { border-bottom: none; }
+        .activity-steps li::before { content: counter(step); position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 35px; height: 35px; background: #667eea; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .log-entry { background: #fff; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .log-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .log-header input, .log-header select { width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .log-body textarea { width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; min-height: 100px; resize: vertical; }
+        .rating-scale { display: flex; gap: 10px; margin: 15px 0; }
+        .rating-btn { flex: 1; padding: 15px 10px; border: 2px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; text-align: center; transition: all 0.3s; }
+        .rating-btn:hover { border-color: #667eea; background: #f0f4ff; }
+        .rating-btn.selected { border-color: #667eea; background: #667eea; color: #fff; }
+        .rating-btn .emoji { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px; background: #f8f9fa; margin-bottom: 8px; border-radius: 8px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; }
+        .checklist li:hover { background: #e9ecef; }
+        .checklist li.checked { background: #d4edda; }
+        .checklist li .check { width: 24px; height: 24px; border: 2px solid #667eea; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: transparent; }
+        .checklist li.checked .check { background: #667eea; color: #fff; }
+        .progress-section { background: #f0f4ff; border-radius: 12px; padding: 20px; }
+        .progress-bar { height: 20px; background: #e9ecef; border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 10px; transition: width 0.5s; }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .btn-secondary { background: #f8f9fa; color: #495057; border: 2px solid #e9ecef; }
+        .btn-add { width: 100%; padding: 15px; border: 2px dashed #ccc; border-radius: 12px; background: transparent; color: #666; cursor: pointer; margin-top: 15px; }
+        .btn-add:hover { border-color: #667eea; color: #667eea; }
+        .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .tip-card { background: #fff3cd; border-radius: 10px; padding: 15px; border-left: 4px solid #ffc107; }
+        .tip-card h4 { color: #856404; margin-bottom: 8px; }
+        .tip-card p { font-size: 0.9rem; color: #856404; }
+        @media print { body { background: #fff; } .container { box-shadow: none; } .btn, .btn-add { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="item-code">V-1 | Verhalten Stufe I</div>
+            <h1>Reagiert auf Erwachsene, die Grundbedürfnisse befriedigen</h1>
+            <p class="item-description">Das Kind zeigt eine erkennbare Reaktion, wenn eine vertraute Person erscheint, die seine Grundbedürfnisse stillt.</p>
+        </header>
+
+        <div class="content">
+            <section class="section">
+                <h2>🎯 Was bedeutet dieses Ziel?</h2>
+                <div class="info-box">
+                    <p><strong>Dieses Entwicklungsziel zeigt sich, wenn das Kind:</strong></p>
+                    <ul style="margin: 15px 0 0 20px;">
+                        <li>Ruhiger wird, wenn eine bekannte Person kommt</li>
+                        <li>Den Kopf zur Bezugsperson wendet</li>
+                        <li>Die Augen öffnet oder Blickkontakt sucht</li>
+                        <li>Körperbewegungen zeigt (Strampeln, Arme bewegen)</li>
+                        <li>Laute von sich gibt</li>
+                        <li>Aufhört zu weinen, wenn die Bezugsperson spricht</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🛠️ Übungen zum Arbeiten an diesem Ziel</h2>
+
+                <div class="activity-card">
+                    <h3><span class="icon">👋</span> Übung 1: Begrüßungsritual</h3>
+                    <ol class="activity-steps">
+                        <li>Nähere dich dem Kind langsam und ruhig</li>
+                        <li>Sprich das Kind mit sanfter Stimme an: "Hallo [Name], ich bin da"</li>
+                        <li>Warte 5-10 Sekunden und beobachte die Reaktion</li>
+                        <li>Wiederhole die Begrüßung und berühre sanft die Hand oder Wange</li>
+                        <li>Dokumentiere, welche Reaktion das Kind zeigt</li>
+                    </ol>
+                </div>
+
+                <div class="activity-card">
+                    <h3><span class="icon">🍼</span> Übung 2: Ankündigung der Bedürfnisbefriedigung</h3>
+                    <ol class="activity-steps">
+                        <li>Bevor du das Kind fütterst/wickelst, kündige es verbal an</li>
+                        <li>Zeige dem Kind die Flasche/Windel und benenne sie</li>
+                        <li>Beobachte, ob das Kind die Verbindung erkennt</li>
+                        <li>Wiederhole die gleichen Worte/Rituale bei jeder Versorgung</li>
+                        <li>Notiere Veränderungen in der Reaktion über die Zeit</li>
+                    </ol>
+                </div>
+
+                <div class="activity-card">
+                    <h3><span class="icon">🎵</span> Übung 3: Stimmerkennung</h3>
+                    <ol class="activity-steps">
+                        <li>Sprich oder singe aus kurzer Entfernung zum Kind</li>
+                        <li>Beobachte, ob das Kind die Stimme sucht</li>
+                        <li>Bewege dich langsam ins Blickfeld des Kindes</li>
+                        <li>Lächle und sprich weiter mit dem Kind</li>
+                        <li>Wiederhole dies mehrmals täglich zu verschiedenen Zeiten</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>✅ Beobachtungs-Checkliste</h2>
+                <p style="margin-bottom: 15px; color: #666;">Klicke auf die Verhaltensweisen, die du beim Kind beobachtet hast:</p>
+                <ul class="checklist" id="checklist">
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Wird ruhiger, wenn Bezugsperson kommt</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Wendet den Kopf zur Stimme</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Öffnet die Augen bei Ansprache</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Zeigt Körperbewegungen (Strampeln)</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Gibt Laute von sich</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Sucht Blickkontakt</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Hört auf zu weinen bei Stimme</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Zeigt Vorfreude bei Routinen</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>📝 Übungs-Protokoll</h2>
+                <div id="logContainer">
+                    <div class="log-entry">
+                        <div class="log-header">
+                            <input type="date" class="log-date">
+                            <input type="text" class="log-activity" placeholder="Welche Übung?">
+                            <input type="text" class="log-duration" placeholder="Dauer (z.B. 5 Min)">
+                        </div>
+                        <label style="display: block; margin-bottom: 10px; color: #666;">Wie hat das Kind reagiert?</label>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="selectRating(this, 0)"><span class="emoji">😴</span>Keine Reaktion</button>
+                            <button class="rating-btn" onclick="selectRating(this, 0)"><span class="emoji">🤔</span>Leichte Reaktion</button>
+                            <button class="rating-btn" onclick="selectRating(this, 0)"><span class="emoji">😊</span>Deutliche Reaktion</button>
+                            <button class="rating-btn" onclick="selectRating(this, 0)"><span class="emoji">🎉</span>Starke Reaktion</button>
+                        </div>
+                        <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung der Beobachtung:</label>
+                        <textarea class="log-notes" placeholder="Was genau hast du beobachtet? Wie hat das Kind reagiert?"></textarea>
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addLogEntry()">+ Weiteren Eintrag hinzufügen</button>
+            </section>
+
+            <section class="section">
+                <h2>📊 Fortschritt</h2>
+                <div class="progress-section">
+                    <p>Beobachtete Verhaltensweisen: <strong id="progressCount">0</strong> von 8</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" style="text-align: center; color: #666;">Beginne mit den Beobachtungen</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>💡 Tipps für die Förderung</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>🔄 Wiederholung</h4>
+                        <p>Nutze immer die gleichen Worte und Rituale - Vorhersagbarkeit schafft Sicherheit.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>⏰ Timing</h4>
+                        <p>Übe wenn das Kind wach und aufmerksam ist, nicht wenn es müde oder hungrig ist.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>😊 Geduld</h4>
+                        <p>Gib dem Kind Zeit zu reagieren. Manche Kinder brauchen länger als andere.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>📍 Nähe</h4>
+                        <p>Bleibe in Sichtweite und nahe genug, damit das Kind dich wahrnehmen kann.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V1_arbeit';
+        let data = { checklist: [], logs: [], savedAt: null };
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            updateProgress();
+            saveData();
+        }
+
+        function selectRating(btn, logIdx) {
+            const parent = btn.closest('.log-entry');
+            parent.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function updateProgress() {
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const total = document.querySelectorAll('.checklist li').length;
+            const percent = (checked / total) * 100;
+
+            document.getElementById('progressCount').textContent = checked;
+            document.getElementById('progressFill').style.width = percent + '%';
+
+            let text = 'Beginne mit den Beobachtungen';
+            if (percent > 0 && percent < 50) text = 'Guter Anfang! Weiter beobachten.';
+            if (percent >= 50 && percent < 100) text = 'Sehr gut! Das Kind zeigt deutliche Fortschritte.';
+            if (percent === 100) text = '🎉 Alle Verhaltensweisen beobachtet! Ziel erreicht!';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function addLogEntry() {
+            const container = document.getElementById('logContainer');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="log-header">
+                    <input type="date" class="log-date">
+                    <input type="text" class="log-activity" placeholder="Welche Übung?">
+                    <input type="text" class="log-duration" placeholder="Dauer">
+                </div>
+                <label style="display: block; margin-bottom: 10px; color: #666;">Wie hat das Kind reagiert?</label>
+                <div class="rating-scale">
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😴</span>Keine Reaktion</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🤔</span>Leichte Reaktion</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😊</span>Deutliche Reaktion</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🎉</span>Starke Reaktion</button>
+                </div>
+                <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung:</label>
+                <textarea class="log-notes" placeholder="Was hast du beobachtet?"></textarea>
+            `;
+            container.appendChild(entry);
+        }
+
+        function saveData() {
+            data.checklist = [];
+            document.querySelectorAll('.checklist li').forEach((li, i) => {
+                if (li.classList.contains('checked')) data.checklist.push(i);
+            });
+
+            data.logs = [];
+            document.querySelectorAll('.log-entry').forEach(entry => {
+                const selectedRating = entry.querySelector('.rating-btn.selected');
+                data.logs.push({
+                    date: entry.querySelector('.log-date').value,
+                    activity: entry.querySelector('.log-activity').value,
+                    duration: entry.querySelector('.log-duration').value,
+                    rating: selectedRating ? selectedRating.querySelector('.emoji').textContent : '',
+                    notes: entry.querySelector('.log-notes').value
+                });
+            });
+
+            data.savedAt = new Date().toISOString();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            // Visual feedback
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Gespeichert!';
+            setTimeout(() => btn.textContent = originalText, 2000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Restore checklist
+                const items = document.querySelectorAll('.checklist li');
+                data.checklist.forEach(i => {
+                    if (items[i]) items[i].classList.add('checked');
+                });
+
+                // Restore logs
+                if (data.logs && data.logs.length > 0) {
+                    const container = document.getElementById('logContainer');
+                    container.innerHTML = '';
+                    data.logs.forEach(log => {
+                        const entry = document.createElement('div');
+                        entry.className = 'log-entry';
+                        entry.innerHTML = `
+                            <div class="log-header">
+                                <input type="date" class="log-date" value="${log.date || ''}">
+                                <input type="text" class="log-activity" value="${log.activity || ''}" placeholder="Welche Übung?">
+                                <input type="text" class="log-duration" value="${log.duration || ''}" placeholder="Dauer">
+                            </div>
+                            <label style="display: block; margin-bottom: 10px; color: #666;">Wie hat das Kind reagiert?</label>
+                            <div class="rating-scale">
+                                <button class="rating-btn ${log.rating === '😴' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">😴</span>Keine Reaktion</button>
+                                <button class="rating-btn ${log.rating === '🤔' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">🤔</span>Leichte Reaktion</button>
+                                <button class="rating-btn ${log.rating === '😊' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">😊</span>Deutliche Reaktion</button>
+                                <button class="rating-btn ${log.rating === '🎉' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">🎉</span>Starke Reaktion</button>
+                            </div>
+                            <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung:</label>
+                            <textarea class="log-notes" placeholder="Was hast du beobachtet?">${log.notes || ''}</textarea>
+                        `;
+                        container.appendChild(entry);
+                    });
+                }
+
+                updateProgress();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `ELDiB_V1_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

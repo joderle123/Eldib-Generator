@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-07: Zeigt Aufmerksamkeit für Bezugsperson - ELDiB Arbeitsblatt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .header .item-code {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .header .domain {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8e6c9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.5em;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .info-box p {
+            line-height: 1.7;
+            color: #1b5e20;
+        }
+        .attention-meter {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .attention-level {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .attention-level:hover {
+            background: #e8f5e9;
+        }
+        .attention-level.active {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            color: white;
+        }
+        .attention-level .level-indicator {
+            display: flex;
+            gap: 3px;
+        }
+        .attention-level .level-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+        }
+        .attention-level.active .level-dot {
+            background: rgba(255,255,255,0.5);
+        }
+        .attention-level.active .level-dot.filled {
+            background: white;
+        }
+        .attention-level .level-text {
+            flex: 1;
+        }
+        .attention-level .level-title {
+            font-weight: 600;
+        }
+        .attention-level .level-desc {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        .attention-behaviors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .behavior-card {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .behavior-card:hover {
+            background: #e8f5e9;
+            transform: translateY(-3px);
+        }
+        .behavior-card.observed {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #43a047;
+        }
+        .behavior-card .behavior-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .behavior-card .behavior-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .exercise-card {
+            background: #fff;
+            border: 2px solid #c8e6c9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            border-color: #43a047;
+            box-shadow: 0 5px 20px rgba(67, 160, 71, 0.2);
+        }
+        .exercise-card h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .exercise-number {
+            background: #43a047;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .exercise-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .steps {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .steps ol {
+            margin-left: 20px;
+        }
+        .steps li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover {
+            background: #e8f5e9;
+        }
+        .checklist li.checked {
+            background: #c8e6c9;
+        }
+        .checklist li .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #43a047;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checklist li.checked .checkbox {
+            background: #43a047;
+            color: white;
+        }
+        .log-entry {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-form {
+            display: grid;
+            gap: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #43a047;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(67, 160, 71, 0.4);
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #43a047 0%, #2e7d32 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .log-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .tips-list {
+            list-style: none;
+        }
+        .tips-list li {
+            padding: 12px 15px;
+            padding-left: 45px;
+            background: #fff8e1;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .tips-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 15px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .duration-tracker {
+            background: #fafafa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .duration-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .duration-input input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .duration-input input:focus {
+            outline: none;
+            border-color: #43a047;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .attention-behaviors {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-07</div>
+            <h1>Zeigt Aufmerksamkeit für Bezugsperson</h1>
+            <div class="domain">Verhalten • Stufe I • Bindung & Orientierung</div>
+        </div>
+
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind richtet seine Aufmerksamkeit gezielt auf vertraute Bezugspersonen. Es erkennt diese,
+                    unterscheidet sie von Fremden und zeigt besonderes Interesse an ihrer Anwesenheit. Diese selektive
+                    Aufmerksamkeit ist ein wichtiger Meilenstein der Bindungsentwicklung.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Die bevorzugte Orientierung auf
+                    Bezugspersonen zeigt, dass das Kind beginnt, sichere Bindungen aufzubauen. Es lernt, seine Umwelt
+                    zu unterscheiden und findet in der Bezugsperson einen "sicheren Hafen".</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Aufmerksamkeitsniveau</h3>
+                <p style="margin-bottom: 15px; color: #666;">Wie stark zeigt das Kind Aufmerksamkeit für die Bezugsperson?</p>
+                <div class="attention-meter" id="attentionMeter">
+                    <div class="attention-level" data-level="1">
+                        <div class="level-indicator">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                        <div class="level-text">
+                            <div class="level-title">Kaum erkennbar</div>
+                            <div class="level-desc">Zeigt keine besondere Reaktion auf Bezugsperson</div>
+                        </div>
+                    </div>
+                    <div class="attention-level" data-level="2">
+                        <div class="level-indicator">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                        <div class="level-text">
+                            <div class="level-title">Gelegentlich</div>
+                            <div class="level-desc">Reagiert manchmal auf Bezugsperson</div>
+                        </div>
+                    </div>
+                    <div class="attention-level" data-level="3">
+                        <div class="level-indicator">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                        <div class="level-text">
+                            <div class="level-title">Regelmäßig</div>
+                            <div class="level-desc">Zeigt oft Interesse an Bezugsperson</div>
+                        </div>
+                    </div>
+                    <div class="attention-level" data-level="4">
+                        <div class="level-indicator">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot"></span>
+                        </div>
+                        <div class="level-text">
+                            <div class="level-title">Deutlich</div>
+                            <div class="level-desc">Zeigt klare Bevorzugung der Bezugsperson</div>
+                        </div>
+                    </div>
+                    <div class="attention-level" data-level="5">
+                        <div class="level-indicator">
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                            <span class="level-dot filled"></span>
+                        </div>
+                        <div class="level-text">
+                            <div class="level-title">Sehr ausgeprägt</div>
+                            <div class="level-desc">Starke, konstante Orientierung zur Bezugsperson</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">👀</span> Beobachtete Aufmerksamkeitszeichen</h3>
+                <p style="margin-bottom: 15px; color: #666;">Welche Verhaltensweisen zeigt das Kind? Markieren Sie alle beobachteten:</p>
+                <div class="attention-behaviors" id="behaviors">
+                    <div class="behavior-card" data-behavior="blickkontakt">
+                        <div class="behavior-icon">👁️</div>
+                        <div class="behavior-name">Sucht Blickkontakt</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="kopfwenden">
+                        <div class="behavior-icon">↩️</div>
+                        <div class="behavior-name">Wendet Kopf zur Person</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="laecheln">
+                        <div class="behavior-icon">😊</div>
+                        <div class="behavior-name">Lächelt die Person an</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="beruhigt">
+                        <div class="behavior-icon">😌</div>
+                        <div class="behavior-name">Beruhigt sich bei Anwesenheit</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="stimme">
+                        <div class="behavior-icon">👂</div>
+                        <div class="behavior-name">Reagiert auf Stimme</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="folgt">
+                        <div class="behavior-icon">👣</div>
+                        <div class="behavior-name">Folgt mit den Augen</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="arme">
+                        <div class="behavior-icon">🙋</div>
+                        <div class="behavior-name">Streckt Arme aus</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="freude">
+                        <div class="behavior-icon">🎉</div>
+                        <div class="behavior-name">Zeigt Freude beim Kommen</div>
+                    </div>
+                    <div class="behavior-card" data-behavior="unterscheidet">
+                        <div class="behavior-icon">👥</div>
+                        <div class="behavior-name">Unterscheidet von Fremden</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">⏱️</span> Aufmerksamkeitsdauer</h3>
+                <div class="duration-tracker">
+                    <p style="margin-bottom: 15px; color: #666;">Wie lange kann das Kind seine Aufmerksamkeit auf die Bezugsperson halten?</p>
+                    <div class="duration-input">
+                        <span>Durchschnittlich</span>
+                        <input type="number" id="durationSeconds" min="0" max="300" value="0">
+                        <span>Sekunden am Stück</span>
+                        <button class="btn btn-secondary" onclick="saveDuration()">Speichern</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Gesicht-zu-Gesicht-Spiele</h4>
+                    <p>Fördern Sie die gegenseitige Aufmerksamkeit durch nahes Interagieren.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Positionieren Sie sich im Sichtfeld des Kindes (ca. 25-30 cm Abstand)</li>
+                            <li>Warten Sie, bis das Kind Sie anschaut</li>
+                            <li>Reagieren Sie mit Lächeln und Mimik</li>
+                            <li>Sprechen Sie sanft mit dem Kind</li>
+                            <li>Folgen Sie dem Blick des Kindes, wenn es wegschaut</li>
+                            <li>Versuchen Sie, den Blickkontakt wieder herzustellen</li>
+                            <li>Beenden Sie, wenn das Kind Ermüdung zeigt</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Versteckspiele (Guck-Guck)</h4>
+                    <p>Klassische Spiele, die Aufmerksamkeit und Erwartung fördern.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Etablieren Sie Blickkontakt mit dem Kind</li>
+                            <li>Bedecken Sie Ihr Gesicht kurz mit den Händen oder einem Tuch</li>
+                            <li>Erscheinen Sie wieder mit "Guck-Guck!"</li>
+                            <li>Beobachten Sie die Reaktion des Kindes (Erwartung, Freude)</li>
+                            <li>Wiederholen Sie das Spiel, variieren Sie das Timing</li>
+                            <li>Lassen Sie das Kind auch Sie "suchen"</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Komm-und-Geh-Übungen</h4>
+                    <p>Trainieren Sie die Orientierung auf die Bezugsperson bei Bewegung.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Verlassen Sie den Raum kurz (wenige Sekunden)</li>
+                            <li>Rufen Sie das Kind beim Namen</li>
+                            <li>Kommen Sie zurück und zeigen Sie Freude</li>
+                            <li>Beobachten Sie, ob das Kind Sie erwartet hat</li>
+                            <li>Verlängern Sie schrittweise die Abwesenheit</li>
+                            <li>Verbalisieren Sie: "Ich komme wieder!"</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="observationChecklist">
+                    <li data-item="1">
+                        <span class="checkbox">✓</span>
+                        <span>Erkennt die Bezugsperson wieder</span>
+                    </li>
+                    <li data-item="2">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Interesse, wenn Bezugsperson erscheint</span>
+                    </li>
+                    <li data-item="3">
+                        <span class="checkbox">✓</span>
+                        <span>Folgt der Bezugsperson mit den Augen</span>
+                    </li>
+                    <li data-item="4">
+                        <span class="checkbox">✓</span>
+                        <span>Reagiert anders auf Bezugsperson als auf Fremde</span>
+                    </li>
+                    <li data-item="5">
+                        <span class="checkbox">✓</span>
+                        <span>Sucht aktiv nach der Bezugsperson</span>
+                    </li>
+                    <li data-item="6">
+                        <span class="checkbox">✓</span>
+                        <span>Beruhigt sich durch Anwesenheit der Bezugsperson</span>
+                    </li>
+                    <li data-item="7">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Freude bei Interaktion mit Bezugsperson</span>
+                    </li>
+                    <li data-item="8">
+                        <span class="checkbox">✓</span>
+                        <span>Hält Aufmerksamkeit für längere Zeit aufrecht</span>
+                    </li>
+                </ul>
+                <div class="progress-container">
+                    <div class="progress-bar" id="checklistProgress">0%</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Interaktionsprotokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Situation</label>
+                                <select id="logSituation">
+                                    <option value="">Auswählen...</option>
+                                    <option value="ankunft">Ankunft/Begrüßung</option>
+                                    <option value="spiel">Spielsituation</option>
+                                    <option value="pflege">Pflegeroutine</option>
+                                    <option value="essen">Essenssituation</option>
+                                    <option value="trennung">Trennungssituation</option>
+                                    <option value="sonstige">Sonstige</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Aufmerksamkeitsdauer</label>
+                                <select id="logDuration">
+                                    <option value="kurz">Kurz (< 10 Sek)</option>
+                                    <option value="mittel">Mittel (10-30 Sek)</option>
+                                    <option value="lang">Lang (30-60 Sek)</option>
+                                    <option value="sehr-lang">Sehr lang (> 60 Sek)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Intensität</label>
+                                <select id="logIntensity">
+                                    <option value="5">Sehr intensiv</option>
+                                    <option value="4">Intensiv</option>
+                                    <option value="3" selected>Moderat</option>
+                                    <option value="2">Gering</option>
+                                    <option value="1">Kaum vorhanden</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Initiative vom Kind?</label>
+                                <select id="logInitiative">
+                                    <option value="kind">Kind hat begonnen</option>
+                                    <option value="erwachsener">Erwachsener hat begonnen</option>
+                                    <option value="gemeinsam">Gemeinsam entstanden</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Beobachtungen</label>
+                            <textarea id="logNotes" rows="3" placeholder="Was ist Ihnen aufgefallen?"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">
+                            <span>➕</span> Eintrag hinzufügen
+                        </button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps zur Förderung</h3>
+                <ul class="tips-list">
+                    <li>Seien Sie präsent und aufmerksam, wenn das Kind Sie anschaut</li>
+                    <li>Reagieren Sie prompt und konsistent auf die Aufmerksamkeit des Kindes</li>
+                    <li>Verwenden Sie eine lebendige Mimik und melodische Stimme</li>
+                    <li>Respektieren Sie, wenn das Kind den Blick abwendet (Pause)</li>
+                    <li>Schaffen Sie vorhersehbare Rituale, auf die das Kind sich freuen kann</li>
+                    <li>Vermeiden Sie Überstimulation - Qualität vor Quantität</li>
+                    <li>Sprechen Sie das Kind häufig mit Namen an</li>
+                    <li>Bei Entwicklungsverzögerungen: Frühförderung in Betracht ziehen</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">
+                    <span>💾</span> Speichern
+                </button>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <span>🖨️</span> Drucken
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📤</span> Exportieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            attentionLevel: 0,
+            behaviors: [],
+            duration: 0,
+            checklist: {},
+            logs: []
+        };
+
+        const STORAGE_KEY = 'eldib_V7_arbeit';
+
+        function init() {
+            loadData();
+            setupEventListeners();
+            updateDisplay();
+        }
+
+        function setupEventListeners() {
+            // Attention levels
+            document.querySelectorAll('.attention-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.attention-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.attentionLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+
+            // Behavior cards
+            document.querySelectorAll('.behavior-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const behaviorId = this.dataset.behavior;
+                    this.classList.toggle('observed');
+                    if (this.classList.contains('observed')) {
+                        if (!data.behaviors.includes(behaviorId)) {
+                            data.behaviors.push(behaviorId);
+                        }
+                    } else {
+                        data.behaviors = data.behaviors.filter(b => b !== behaviorId);
+                    }
+                    saveData();
+                });
+            });
+
+            // Checklist
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemId = this.dataset.item;
+                    this.classList.toggle('checked');
+                    data.checklist[itemId] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+        }
+
+        function updateDisplay() {
+            // Attention level
+            if (data.attentionLevel) {
+                document.querySelector(`.attention-level[data-level="${data.attentionLevel}"]`)?.classList.add('active');
+            }
+
+            // Behaviors
+            data.behaviors.forEach(behavior => {
+                const el = document.querySelector(`.behavior-card[data-behavior="${behavior}"]`);
+                if (el) {
+                    el.classList.add('observed');
+                }
+            });
+
+            // Duration
+            document.getElementById('durationSeconds').value = data.duration || 0;
+
+            // Checklist
+            Object.entries(data.checklist).forEach(([item, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${item}"]`);
+                if (li && checked) {
+                    li.classList.add('checked');
+                }
+            });
+
+            updateProgress();
+            renderLogs();
+        }
+
+        function saveDuration() {
+            data.duration = parseInt(document.getElementById('durationSeconds').value) || 0;
+            saveData();
+            alert('Dauer gespeichert!');
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            const progressBar = document.getElementById('checklistProgress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function addLogEntry() {
+            const date = document.getElementById('logDate').value;
+            const situation = document.getElementById('logSituation').value;
+            const duration = document.getElementById('logDuration').value;
+            const intensity = document.getElementById('logIntensity').value;
+            const initiative = document.getElementById('logInitiative').value;
+            const notes = document.getElementById('logNotes').value;
+
+            if (!date || !situation) {
+                alert('Bitte füllen Sie mindestens Datum und Situation aus.');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                date,
+                situation,
+                duration,
+                intensity: parseInt(intensity),
+                initiative,
+                notes
+            };
+
+            data.logs.unshift(entry);
+            saveData();
+            renderLogs();
+
+            // Reset form
+            document.getElementById('logSituation').value = '';
+            document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logList');
+            const situations = {
+                ankunft: 'Ankunft',
+                spiel: 'Spielsituation',
+                pflege: 'Pflege',
+                essen: 'Essen',
+                trennung: 'Trennung',
+                sonstige: 'Sonstige'
+            };
+            const durations = {
+                kurz: '< 10 Sek',
+                mittel: '10-30 Sek',
+                lang: '30-60 Sek',
+                'sehr-lang': '> 60 Sek'
+            };
+            const initiatives = {
+                kind: '👶 Kind',
+                erwachsener: '👤 Erwachsener',
+                gemeinsam: '🤝 Gemeinsam'
+            };
+
+            container.innerHTML = data.logs.map(log => `
+                <div class="log-item">
+                    <div class="log-item-header">
+                        <span>📅 ${new Date(log.date).toLocaleDateString('de-DE')}</span>
+                        <span>⏱️ ${durations[log.duration] || log.duration}</span>
+                    </div>
+                    <div class="log-item-content">
+                        <strong>Situation:</strong> ${situations[log.situation] || log.situation}<br>
+                        <strong>Intensität:</strong> ${'⭐'.repeat(log.intensity)}<br>
+                        <strong>Initiative:</strong> ${initiatives[log.initiative] || log.initiative}
+                        ${log.notes ? `<p style="margin-top: 8px; color: #666;">${log.notes}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-07: Zeigt Aufmerksamkeit für Bezugsperson',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-07_Aufmerksamkeit_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        init();
+    </script>
+</body>
+</html>

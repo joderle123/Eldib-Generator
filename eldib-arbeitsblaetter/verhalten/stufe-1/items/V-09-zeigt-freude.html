@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-09: Zeigt Freude und positive Emotionen - ELDiB Arbeitsblatt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff9c4 0%, #ffecb3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ffc107 0%, #ffa000 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header .item-code {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .header .domain {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #f57f17;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffecb3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.5em;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffecb3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .info-box p {
+            line-height: 1.7;
+            color: #f57f17;
+        }
+        .joy-meter {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 10px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 15px;
+        }
+        .joy-level {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .joy-level:hover {
+            transform: scale(1.1);
+        }
+        .joy-level.active .joy-bar {
+            background: linear-gradient(180deg, #ffc107 0%, #ffa000 100%);
+        }
+        .joy-bar {
+            height: 100%;
+            background: #e0e0e0;
+            border-radius: 10px 10px 0 0;
+            margin: 0 auto;
+            width: 40px;
+            transition: all 0.3s ease;
+        }
+        .joy-level[data-level="1"] .joy-bar { height: 30px; }
+        .joy-level[data-level="2"] .joy-bar { height: 50px; }
+        .joy-level[data-level="3"] .joy-bar { height: 70px; }
+        .joy-level[data-level="4"] .joy-bar { height: 90px; }
+        .joy-level[data-level="5"] .joy-bar { height: 110px; }
+        .joy-level .joy-emoji {
+            font-size: 2em;
+            margin-top: 10px;
+        }
+        .joy-level .joy-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .joy-expressions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .expression-card {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .expression-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .expression-card.observed {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffecb3 100%);
+            border-color: #ffc107;
+        }
+        .expression-card .expression-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .expression-card .expression-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.85em;
+        }
+        .trigger-section {
+            background: #fafafa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .trigger-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .trigger-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .trigger-item:hover {
+            background: #fff9c4;
+        }
+        .trigger-item.active {
+            background: #ffecb3;
+            border: 1px solid #ffc107;
+        }
+        .trigger-item .trigger-icon {
+            font-size: 1.3em;
+        }
+        .trigger-item .trigger-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffc107;
+            border-radius: 4px;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .trigger-item.active .trigger-check {
+            background: #ffc107;
+            color: white;
+        }
+        .exercise-card {
+            background: #fff;
+            border: 2px solid #ffecb3;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            border-color: #ffc107;
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.2);
+        }
+        .exercise-card h4 {
+            color: #f57f17;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .exercise-number {
+            background: #ffc107;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .exercise-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .steps {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .steps ol {
+            margin-left: 20px;
+        }
+        .steps li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover {
+            background: #fff9c4;
+        }
+        .checklist li.checked {
+            background: #ffecb3;
+        }
+        .checklist li .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ffc107;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checklist li.checked .checkbox {
+            background: #ffc107;
+            color: white;
+        }
+        .log-entry {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-form {
+            display: grid;
+            gap: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffc107;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffc107 0%, #ffa000 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffc107 0%, #ffa000 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .log-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .tips-list {
+            list-style: none;
+        }
+        .tips-list li {
+            padding: 12px 15px;
+            padding-left: 45px;
+            background: #e8f5e9;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .tips-list li::before {
+            content: "☀️";
+            position: absolute;
+            left: 15px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .joy-expressions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-09</div>
+            <h1>Zeigt Freude und positive Emotionen</h1>
+            <div class="domain">Verhalten • Stufe I • Emotionaler Ausdruck</div>
+        </div>
+
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind zeigt erkennbare Ausdrücke von Freude, Vergnügen und Zufriedenheit. Es lächelt, lacht,
+                    zeigt strahlende Augen oder drückt Freude durch Körperbewegungen aus. Diese positive Affektivität
+                    ist ein Zeichen für emotionales Wohlbefinden und die Grundlage für positive soziale Interaktionen.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Die Fähigkeit, Freude zu zeigen und
+                    zu empfinden, ist fundamental für die psychische Gesundheit. Das "soziale Lächeln" (ab ca. 6-8 Wochen)
+                    ist einer der ersten wichtigen Meilensteine der sozial-emotionalen Entwicklung.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📊</span> Freude-Intensität</h3>
+                <p style="margin-bottom: 15px; color: #666;">Wie intensiv zeigt das Kind Freudeausdrücke?</p>
+                <div class="joy-meter" id="joyMeter">
+                    <div class="joy-level" data-level="1">
+                        <div class="joy-bar"></div>
+                        <div class="joy-emoji">😐</div>
+                        <div class="joy-label">Selten/<br>kaum</div>
+                    </div>
+                    <div class="joy-level" data-level="2">
+                        <div class="joy-bar"></div>
+                        <div class="joy-emoji">🙂</div>
+                        <div class="joy-label">Gelegent-<br>lich</div>
+                    </div>
+                    <div class="joy-level" data-level="3">
+                        <div class="joy-bar"></div>
+                        <div class="joy-emoji">😊</div>
+                        <div class="joy-label">Regel-<br>mäßig</div>
+                    </div>
+                    <div class="joy-level" data-level="4">
+                        <div class="joy-bar"></div>
+                        <div class="joy-emoji">😄</div>
+                        <div class="joy-label">Häufig</div>
+                    </div>
+                    <div class="joy-level" data-level="5">
+                        <div class="joy-bar"></div>
+                        <div class="joy-emoji">🤗</div>
+                        <div class="joy-label">Sehr<br>intensiv</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">😊</span> Beobachtete Freudeausdrücke</h3>
+                <p style="margin-bottom: 15px; color: #666;">Welche Freudeausdrücke zeigt das Kind? Markieren Sie alle beobachteten:</p>
+                <div class="joy-expressions" id="expressions">
+                    <div class="expression-card" data-expression="laecheln">
+                        <div class="expression-icon">😊</div>
+                        <div class="expression-name">Lächeln</div>
+                    </div>
+                    <div class="expression-card" data-expression="lachen">
+                        <div class="expression-icon">😂</div>
+                        <div class="expression-name">Lachen</div>
+                    </div>
+                    <div class="expression-card" data-expression="strahlen">
+                        <div class="expression-icon">✨</div>
+                        <div class="expression-name">Strahlende Augen</div>
+                    </div>
+                    <div class="expression-card" data-expression="strampeln">
+                        <div class="expression-icon">🦵</div>
+                        <div class="expression-name">Freudiges Strampeln</div>
+                    </div>
+                    <div class="expression-card" data-expression="arme">
+                        <div class="expression-icon">🙌</div>
+                        <div class="expression-name">Arme bewegen</div>
+                    </div>
+                    <div class="expression-card" data-expression="laute">
+                        <div class="expression-icon">🗣️</div>
+                        <div class="expression-name">Freudige Laute</div>
+                    </div>
+                    <div class="expression-card" data-expression="quietschen">
+                        <div class="expression-icon">🎵</div>
+                        <div class="expression-name">Quietschen/Jauchzen</div>
+                    </div>
+                    <div class="expression-card" data-expression="entspannung">
+                        <div class="expression-icon">😌</div>
+                        <div class="expression-name">Entspannte Haltung</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎯</span> Auslöser für Freude</h3>
+                <div class="trigger-section">
+                    <p style="color: #666;">Was löst beim Kind Freude aus? Markieren Sie die zutreffenden:</p>
+                    <div class="trigger-list" id="triggers">
+                        <div class="trigger-item" data-trigger="bezugsperson">
+                            <span class="trigger-icon">👩</span>
+                            <span>Gesicht der Bezugsperson</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="stimme">
+                            <span class="trigger-icon">🗣️</span>
+                            <span>Stimme der Bezugsperson</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="koerper">
+                            <span class="trigger-icon">🤗</span>
+                            <span>Körperkontakt/Kuscheln</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="spiele">
+                            <span class="trigger-icon">🎮</span>
+                            <span>Interaktive Spiele</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="musik">
+                            <span class="trigger-icon">🎵</span>
+                            <span>Musik/Singen</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="bewegung">
+                            <span class="trigger-icon">🔄</span>
+                            <span>Bewegung (Schaukeln)</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="spielzeug">
+                            <span class="trigger-icon">🧸</span>
+                            <span>Lieblingsspielzeug</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="essen">
+                            <span class="trigger-icon">🍼</span>
+                            <span>Essen/Füttern</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="bad">
+                            <span class="trigger-icon">🛁</span>
+                            <span>Baden</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                        <div class="trigger-item" data-trigger="guckguck">
+                            <span class="trigger-icon">👀</span>
+                            <span>Guck-Guck-Spiele</span>
+                            <span class="trigger-check">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Freude-Spiegel</h4>
+                    <p>Spiegeln Sie die positiven Emotionen des Kindes, um sie zu verstärken.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Beobachten Sie aufmerksam auf erste Anzeichen von Freude</li>
+                            <li>Sobald das Kind lächelt, lächeln Sie zurück - groß und deutlich!</li>
+                            <li>Fügen Sie freudige Laute hinzu: "Ooooh, du freust dich!"</li>
+                            <li>Spiegeln Sie die Körperbewegungen des Kindes</li>
+                            <li>Halten Sie den Moment - pausieren Sie andere Aktivitäten</li>
+                            <li>Wiederholen Sie, was die Freude ausgelöst hat</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Freude-Auslöser finden</h4>
+                    <p>Systematisch herausfinden, was das Kind erfreut.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Führen Sie ein "Freude-Tagebuch" über 1-2 Wochen</li>
+                            <li>Notieren Sie jede Situation, in der das Kind Freude zeigt</li>
+                            <li>Achten Sie auf: Zeit, Aktivität, Personen, Umgebung</li>
+                            <li>Identifizieren Sie Muster und Vorlieben</li>
+                            <li>Bauen Sie die wirksamsten Auslöser in den Alltag ein</li>
+                            <li>Teilen Sie die Erkenntnisse mit anderen Betreuenden</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Interaktive Freudespiele</h4>
+                    <p>Gezielte Spiele, die positive Emotionen fördern.</p>
+                    <div class="steps">
+                        <ol>
+                            <li><strong>Guck-Guck:</strong> Verstecken und Erscheinen - Erwartung aufbauen</li>
+                            <li><strong>Kitzeln:</strong> Sanftes Kitzeln mit Ankündigung</li>
+                            <li><strong>Reime & Lieder:</strong> "Hoppe hoppe Reiter", Fingerspiele</li>
+                            <li><strong>Spiegel-Spiel:</strong> Gemeinsam Grimassen schneiden</li>
+                            <li><strong>Seifenblasen:</strong> Visuelle Faszination und Staunen</li>
+                            <li>Beobachten Sie, welche Spiele die größte Freude auslösen</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="observationChecklist">
+                    <li data-item="1">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt soziales Lächeln (nicht nur Reflex)</span>
+                    </li>
+                    <li data-item="2">
+                        <span class="checkbox">✓</span>
+                        <span>Lächelt als Reaktion auf vertraute Gesichter</span>
+                    </li>
+                    <li data-item="3">
+                        <span class="checkbox">✓</span>
+                        <span>Lacht hörbar</span>
+                    </li>
+                    <li data-item="4">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Freude durch Körperbewegung</span>
+                    </li>
+                    <li data-item="5">
+                        <span class="checkbox">✓</span>
+                        <span>Gibt freudige Laute von sich</span>
+                    </li>
+                    <li data-item="6">
+                        <span class="checkbox">✓</span>
+                        <span>Freude ist situationsangemessen</span>
+                    </li>
+                    <li data-item="7">
+                        <span class="checkbox">✓</span>
+                        <span>Freude ist teilbar (reagiert auf Freude anderer)</span>
+                    </li>
+                    <li data-item="8">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Freude regelmäßig im Tagesverlauf</span>
+                    </li>
+                </ul>
+                <div class="progress-container">
+                    <div class="progress-bar" id="checklistProgress">0%</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Freude-Protokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Uhrzeit</label>
+                                <input type="time" id="logTime">
+                            </div>
+                            <div class="form-group">
+                                <label>Auslöser</label>
+                                <select id="logTrigger">
+                                    <option value="">Auswählen...</option>
+                                    <option value="bezugsperson">Bezugsperson</option>
+                                    <option value="spiel">Spiel/Interaktion</option>
+                                    <option value="musik">Musik/Singen</option>
+                                    <option value="bewegung">Bewegung</option>
+                                    <option value="spielzeug">Spielzeug</option>
+                                    <option value="essen">Essen</option>
+                                    <option value="spontan">Spontan</option>
+                                    <option value="sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Art des Ausdrucks</label>
+                                <select id="logExpression">
+                                    <option value="">Auswählen...</option>
+                                    <option value="laecheln">Lächeln</option>
+                                    <option value="lachen">Lachen</option>
+                                    <option value="quietschen">Quietschen/Jauchzen</option>
+                                    <option value="strampeln">Freudiges Strampeln</option>
+                                    <option value="kombination">Kombination</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Intensität</label>
+                                <select id="logIntensity">
+                                    <option value="5">Sehr intensiv</option>
+                                    <option value="4">Intensiv</option>
+                                    <option value="3" selected>Moderat</option>
+                                    <option value="2">Leicht</option>
+                                    <option value="1">Angedeutet</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Dauer</label>
+                                <select id="logDuration">
+                                    <option value="kurz">Kurz (< 30 Sek)</option>
+                                    <option value="mittel">Mittel (30 Sek - 2 Min)</option>
+                                    <option value="lang">Lang (> 2 Min)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Beobachtungen</label>
+                            <textarea id="logNotes" rows="3" placeholder="Was genau hat das Kind gemacht? Was war besonders schön?"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">
+                            <span>➕</span> Eintrag hinzufügen
+                        </button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">☀️</span> Tipps zur Förderung</h3>
+                <ul class="tips-list">
+                    <li>Seien Sie selbst fröhlich und ausdrucksstark - Freude ist ansteckend!</li>
+                    <li>Reagieren Sie immer auf die Freude des Kindes - verstärken Sie sie!</li>
+                    <li>Bauen Sie "Freude-Momente" bewusst in den Alltag ein</li>
+                    <li>Respektieren Sie das Temperament des Kindes - manche sind zurückhaltender</li>
+                    <li>Bei wenig Freudeausdruck: Mögliche Ursachen abklären (Hören, Sehen, Bindung)</li>
+                    <li>Vermeiden Sie Überstimulation - auch positive Erregung braucht Pausen</li>
+                    <li>Fotografieren oder filmen Sie Freudemomente für die Dokumentation</li>
+                    <li>Teilen Sie die Freude mit anderen Bezugspersonen</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">
+                    <span>💾</span> Speichern
+                </button>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <span>🖨️</span> Drucken
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📤</span> Exportieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            joyLevel: 0,
+            expressions: [],
+            triggers: [],
+            checklist: {},
+            logs: []
+        };
+
+        const STORAGE_KEY = 'eldib_V9_arbeit';
+
+        function init() {
+            loadData();
+            setupEventListeners();
+            updateDisplay();
+        }
+
+        function setupEventListeners() {
+            // Joy levels
+            document.querySelectorAll('.joy-level').forEach(level => {
+                level.addEventListener('click', function() {
+                    document.querySelectorAll('.joy-level').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    data.joyLevel = parseInt(this.dataset.level);
+                    saveData();
+                });
+            });
+
+            // Expression cards
+            document.querySelectorAll('.expression-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const exprId = this.dataset.expression;
+                    this.classList.toggle('observed');
+                    if (this.classList.contains('observed')) {
+                        if (!data.expressions.includes(exprId)) {
+                            data.expressions.push(exprId);
+                        }
+                    } else {
+                        data.expressions = data.expressions.filter(e => e !== exprId);
+                    }
+                    saveData();
+                });
+            });
+
+            // Trigger items
+            document.querySelectorAll('.trigger-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const triggerId = this.dataset.trigger;
+                    this.classList.toggle('active');
+                    if (this.classList.contains('active')) {
+                        if (!data.triggers.includes(triggerId)) {
+                            data.triggers.push(triggerId);
+                        }
+                    } else {
+                        data.triggers = data.triggers.filter(t => t !== triggerId);
+                    }
+                    saveData();
+                });
+            });
+
+            // Checklist
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemId = this.dataset.item;
+                    this.classList.toggle('checked');
+                    data.checklist[itemId] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Set today's date and current time
+            document.getElementById('logDate').valueAsDate = new Date();
+            document.getElementById('logTime').value = new Date().toTimeString().slice(0, 5);
+        }
+
+        function updateDisplay() {
+            // Joy level
+            if (data.joyLevel) {
+                document.querySelector(`.joy-level[data-level="${data.joyLevel}"]`)?.classList.add('active');
+            }
+
+            // Expressions
+            data.expressions.forEach(expr => {
+                const el = document.querySelector(`.expression-card[data-expression="${expr}"]`);
+                if (el) el.classList.add('observed');
+            });
+
+            // Triggers
+            data.triggers.forEach(trigger => {
+                const el = document.querySelector(`.trigger-item[data-trigger="${trigger}"]`);
+                if (el) el.classList.add('active');
+            });
+
+            // Checklist
+            Object.entries(data.checklist).forEach(([item, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${item}"]`);
+                if (li && checked) li.classList.add('checked');
+            });
+
+            updateProgress();
+            renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            const progressBar = document.getElementById('checklistProgress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function addLogEntry() {
+            const date = document.getElementById('logDate').value;
+            const time = document.getElementById('logTime').value;
+            const trigger = document.getElementById('logTrigger').value;
+            const expression = document.getElementById('logExpression').value;
+            const intensity = document.getElementById('logIntensity').value;
+            const duration = document.getElementById('logDuration').value;
+            const notes = document.getElementById('logNotes').value;
+
+            if (!date) {
+                alert('Bitte füllen Sie mindestens das Datum aus.');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                date,
+                time,
+                trigger,
+                expression,
+                intensity: parseInt(intensity),
+                duration,
+                notes
+            };
+
+            data.logs.unshift(entry);
+            saveData();
+            renderLogs();
+
+            // Reset form
+            document.getElementById('logTrigger').value = '';
+            document.getElementById('logExpression').value = '';
+            document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logList');
+            const triggers = {
+                bezugsperson: '👩 Bezugsperson',
+                spiel: '🎮 Spiel',
+                musik: '🎵 Musik',
+                bewegung: '🔄 Bewegung',
+                spielzeug: '🧸 Spielzeug',
+                essen: '🍼 Essen',
+                spontan: '⚡ Spontan',
+                sonstiges: '❓ Sonstiges'
+            };
+            const expressions = {
+                laecheln: 'Lächeln',
+                lachen: 'Lachen',
+                quietschen: 'Quietschen',
+                strampeln: 'Strampeln',
+                kombination: 'Kombination'
+            };
+
+            container.innerHTML = data.logs.map(log => `
+                <div class="log-item">
+                    <div class="log-item-header">
+                        <span>📅 ${new Date(log.date).toLocaleDateString('de-DE')} ${log.time || ''}</span>
+                        <span>😊 ${'⭐'.repeat(log.intensity)}</span>
+                    </div>
+                    <div class="log-item-content">
+                        <strong>Auslöser:</strong> ${triggers[log.trigger] || log.trigger || '-'}<br>
+                        <strong>Ausdruck:</strong> ${expressions[log.expression] || log.expression || '-'}<br>
+                        <strong>Dauer:</strong> ${log.duration}
+                        ${log.notes ? `<p style="margin-top: 8px; color: #666;">${log.notes}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-09: Zeigt Freude und positive Emotionen',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-09_Freude_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        init();
+    </script>
+</body>
+</html>

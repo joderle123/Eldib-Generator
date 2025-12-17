@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-2: Zeigt Vertrauen zur Bezugsperson - Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); min-height: 100vh; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        header { background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; padding: 30px; text-align: center; }
+        h1 { font-size: 1.6rem; margin-bottom: 10px; }
+        .item-code { background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-weight: 600; }
+        .item-description { font-size: 1.1rem; opacity: 0.95; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section h2 { color: #e74c3c; font-size: 1.3rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e74c3c; }
+        .info-box { background: #fdf2f2; border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #e74c3c; }
+        .activity-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 2px solid #e9ecef; }
+        .activity-card h3 { color: #495057; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .activity-card h3 .icon { font-size: 1.5rem; }
+        .activity-steps { list-style: none; counter-reset: step; }
+        .activity-steps li { counter-increment: step; padding: 10px 0 10px 50px; position: relative; border-bottom: 1px solid #e9ecef; }
+        .activity-steps li:last-child { border-bottom: none; }
+        .activity-steps li::before { content: counter(step); position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 35px; height: 35px; background: #e74c3c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .log-entry { background: #fff; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .log-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .log-header input { width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .log-body textarea { width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; min-height: 100px; resize: vertical; }
+        .rating-scale { display: flex; gap: 10px; margin: 15px 0; }
+        .rating-btn { flex: 1; padding: 15px 10px; border: 2px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; text-align: center; transition: all 0.3s; }
+        .rating-btn:hover { border-color: #e74c3c; background: #fdf2f2; }
+        .rating-btn.selected { border-color: #e74c3c; background: #e74c3c; color: #fff; }
+        .rating-btn .emoji { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px; background: #f8f9fa; margin-bottom: 8px; border-radius: 8px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; }
+        .checklist li:hover { background: #e9ecef; }
+        .checklist li.checked { background: #d4edda; }
+        .checklist li .check { width: 24px; height: 24px; border: 2px solid #e74c3c; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: transparent; }
+        .checklist li.checked .check { background: #e74c3c; color: #fff; }
+        .progress-section { background: #fdf2f2; border-radius: 12px; padding: 20px; }
+        .progress-bar { height: 20px; background: #e9ecef; border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); border-radius: 10px; transition: width 0.5s; }
+        .btn-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(231,76,60,0.4); }
+        .btn-secondary { background: #f8f9fa; color: #495057; border: 2px solid #e9ecef; }
+        .btn-add { width: 100%; padding: 15px; border: 2px dashed #ccc; border-radius: 12px; background: transparent; color: #666; cursor: pointer; margin-top: 15px; }
+        .btn-add:hover { border-color: #e74c3c; color: #e74c3c; }
+        .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .tip-card { background: #fff3cd; border-radius: 10px; padding: 15px; border-left: 4px solid #ffc107; }
+        .tip-card h4 { color: #856404; margin-bottom: 8px; }
+        .tip-card p { font-size: 0.9rem; color: #856404; }
+        .trust-meter { display: flex; gap: 5px; margin: 20px 0; }
+        .trust-level { flex: 1; height: 40px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; opacity: 0.4; }
+        .trust-level:hover { opacity: 0.7; }
+        .trust-level.active { opacity: 1; transform: scale(1.05); }
+        .trust-level:nth-child(1) { background: #e74c3c; }
+        .trust-level:nth-child(2) { background: #e67e22; }
+        .trust-level:nth-child(3) { background: #f1c40f; }
+        .trust-level:nth-child(4) { background: #2ecc71; }
+        .trust-level:nth-child(5) { background: #27ae60; }
+        @media print { body { background: #fff; } .container { box-shadow: none; } .btn, .btn-add { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="item-code">V-2 | Verhalten Stufe I</div>
+            <h1>Zeigt Vertrauen zu einer Bezugsperson</h1>
+            <p class="item-description">Das Kind zeigt durch sein Verhalten, dass es einer bestimmten Person vertraut und sich bei ihr sicher fühlt.</p>
+        </header>
+
+        <div class="content">
+            <section class="section">
+                <h2>🎯 Was bedeutet dieses Ziel?</h2>
+                <div class="info-box">
+                    <p><strong>Vertrauen zeigt sich, wenn das Kind:</strong></p>
+                    <ul style="margin: 15px 0 0 20px;">
+                        <li>Sich bei der Bezugsperson entspannt und wohl fühlt</li>
+                        <li>Körperkontakt sucht oder zulässt</li>
+                        <li>Sich anlehnt oder ankuschelt</li>
+                        <li>Bei Unsicherheit die Nähe der Bezugsperson sucht</li>
+                        <li>Sich von der Bezugsperson beruhigen lässt</li>
+                        <li>Die Bezugsperson mit den Augen verfolgt</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📊 Vertrauens-Einschätzung</h2>
+                <p style="margin-bottom: 15px; color: #666;">Wie stark ist das Vertrauen aktuell ausgeprägt? (Klicke auf eine Stufe)</p>
+                <div class="trust-meter" id="trustMeter">
+                    <div class="trust-level" onclick="setTrust(1)">1</div>
+                    <div class="trust-level" onclick="setTrust(2)">2</div>
+                    <div class="trust-level" onclick="setTrust(3)">3</div>
+                    <div class="trust-level" onclick="setTrust(4)">4</div>
+                    <div class="trust-level" onclick="setTrust(5)">5</div>
+                </div>
+                <p style="text-align: center; color: #666;" id="trustText">Noch nicht bewertet</p>
+            </section>
+
+            <section class="section">
+                <h2>🛠️ Übungen zum Aufbau von Vertrauen</h2>
+
+                <div class="activity-card">
+                    <h3><span class="icon">🤱</span> Übung 1: Sichere Haltepositionen</h3>
+                    <ol class="activity-steps">
+                        <li>Nimm das Kind in eine bequeme, sichere Position auf den Arm</li>
+                        <li>Halte Blickkontakt und sprich sanft mit dem Kind</li>
+                        <li>Achte auf die Körperspannung des Kindes</li>
+                        <li>Wenn das Kind sich anspannt, passe die Position an</li>
+                        <li>Bleibe ruhig und geduldig, bis das Kind sich entspannt</li>
+                    </ol>
+                </div>
+
+                <div class="activity-card">
+                    <h3><span class="icon">🎶</span> Übung 2: Beruhigende Rituale</h3>
+                    <ol class="activity-steps">
+                        <li>Entwickle ein persönliches Beruhigungsritual (Summen, Wiegen)</li>
+                        <li>Führe das Ritual immer auf die gleiche Weise durch</li>
+                        <li>Beobachte, wann das Kind beginnt, das Ritual zu erkennen</li>
+                        <li>Notiere, welche Elemente besonders beruhigend wirken</li>
+                        <li>Passe das Ritual an die Vorlieben des Kindes an</li>
+                    </ol>
+                </div>
+
+                <div class="activity-card">
+                    <h3><span class="icon">👐</span> Übung 3: Körperkontakt-Spiele</h3>
+                    <ol class="activity-steps">
+                        <li>Beginne mit sanften Berührungen an den Händen/Füßen</li>
+                        <li>Beobachte, welche Berührungen das Kind genießt</li>
+                        <li>Steigere langsam die Intensität (Streicheln, sanfte Massage)</li>
+                        <li>Achte auf Zeichen von Unbehagen und respektiere diese</li>
+                        <li>Verbinde Berührung mit beruhigender Stimme</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>✅ Vertrauens-Indikatoren beobachten</h2>
+                <ul class="checklist" id="checklist">
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Entspannt sich im Arm der Bezugsperson</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Sucht aktiv Körperkontakt</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Lächelt die Bezugsperson an</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Schmiegt sich an</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Zeigt keine Abwehrreaktionen</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Beruhigt sich bei Nähe der Bezugsperson</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Verfolgt die Bezugsperson mit Blicken</li>
+                    <li onclick="toggleCheck(this)"><span class="check">✓</span> Zeigt Freude bei Ankunft der Bezugsperson</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>📝 Übungs-Protokoll</h2>
+                <div id="logContainer">
+                    <div class="log-entry">
+                        <div class="log-header">
+                            <input type="date" class="log-date">
+                            <input type="text" class="log-activity" placeholder="Welche Übung?">
+                            <input type="text" class="log-duration" placeholder="Dauer">
+                        </div>
+                        <label style="display: block; margin-bottom: 10px; color: #666;">Vertrauensreaktion:</label>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😰</span>Abwehrend</button>
+                            <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😐</span>Neutral</button>
+                            <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🙂</span>Akzeptierend</button>
+                            <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🥰</span>Vertrauensvoll</button>
+                        </div>
+                        <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung:</label>
+                        <textarea class="log-notes" placeholder="Was hast du beobachtet?"></textarea>
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addLogEntry()">+ Weiteren Eintrag hinzufügen</button>
+            </section>
+
+            <section class="section">
+                <h2>📊 Fortschritt</h2>
+                <div class="progress-section">
+                    <p>Beobachtete Vertrauens-Indikatoren: <strong id="progressCount">0</strong> von 8</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" style="text-align: center; color: #666;">Beginne mit den Beobachtungen</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>💡 Tipps für den Vertrauensaufbau</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>🔄 Konstanz</h4>
+                        <p>Sei verlässlich und berechenbar in deinem Verhalten.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>👁️ Feinfühligkeit</h4>
+                        <p>Achte auf die Signale des Kindes und reagiere prompt.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🏠 Sicherheit</h4>
+                        <p>Schaffe eine ruhige, sichere Umgebung für die Interaktion.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>⏳ Zeit</h4>
+                        <p>Vertrauen braucht Zeit. Setze das Kind nicht unter Druck.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+                <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V2_arbeit';
+        let data = { trustLevel: 0, checklist: [], logs: [] };
+
+        function setTrust(level) {
+            data.trustLevel = level;
+            document.querySelectorAll('.trust-level').forEach((el, i) => {
+                el.classList.toggle('active', i < level);
+            });
+            const texts = ['', 'Sehr geringes Vertrauen', 'Geringes Vertrauen', 'Beginnendes Vertrauen', 'Gutes Vertrauen', 'Starkes Vertrauen'];
+            document.getElementById('trustText').textContent = texts[level];
+            saveData();
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            updateProgress();
+            saveData();
+        }
+
+        function selectRating(btn) {
+            const parent = btn.closest('.log-entry');
+            parent.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function updateProgress() {
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const total = document.querySelectorAll('.checklist li').length;
+            document.getElementById('progressCount').textContent = checked;
+            document.getElementById('progressFill').style.width = (checked / total * 100) + '%';
+            let text = 'Beginne mit den Beobachtungen';
+            if (checked > 0 && checked < total / 2) text = 'Gute Fortschritte!';
+            if (checked >= total / 2) text = 'Das Kind zeigt bereits viel Vertrauen!';
+            if (checked === total) text = '🎉 Alle Indikatoren beobachtet!';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function addLogEntry() {
+            const container = document.getElementById('logContainer');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="log-header">
+                    <input type="date" class="log-date">
+                    <input type="text" class="log-activity" placeholder="Welche Übung?">
+                    <input type="text" class="log-duration" placeholder="Dauer">
+                </div>
+                <label style="display: block; margin-bottom: 10px; color: #666;">Vertrauensreaktion:</label>
+                <div class="rating-scale">
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😰</span>Abwehrend</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">😐</span>Neutral</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🙂</span>Akzeptierend</button>
+                    <button class="rating-btn" onclick="selectRating(this)"><span class="emoji">🥰</span>Vertrauensvoll</button>
+                </div>
+                <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung:</label>
+                <textarea class="log-notes" placeholder="Was hast du beobachtet?"></textarea>
+            `;
+            container.appendChild(entry);
+        }
+
+        function saveData() {
+            data.checklist = [];
+            document.querySelectorAll('.checklist li').forEach((li, i) => {
+                if (li.classList.contains('checked')) data.checklist.push(i);
+            });
+            data.logs = [];
+            document.querySelectorAll('.log-entry').forEach(entry => {
+                const sel = entry.querySelector('.rating-btn.selected');
+                data.logs.push({
+                    date: entry.querySelector('.log-date').value,
+                    activity: entry.querySelector('.log-activity').value,
+                    duration: entry.querySelector('.log-duration').value,
+                    rating: sel ? sel.querySelector('.emoji').textContent : '',
+                    notes: entry.querySelector('.log-notes').value
+                });
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+                if (data.trustLevel) setTrust(data.trustLevel);
+                data.checklist.forEach(i => {
+                    const items = document.querySelectorAll('.checklist li');
+                    if (items[i]) items[i].classList.add('checked');
+                });
+                if (data.logs && data.logs.length > 0) {
+                    const container = document.getElementById('logContainer');
+                    container.innerHTML = '';
+                    data.logs.forEach(log => {
+                        const entry = document.createElement('div');
+                        entry.className = 'log-entry';
+                        entry.innerHTML = `
+                            <div class="log-header">
+                                <input type="date" class="log-date" value="${log.date || ''}">
+                                <input type="text" class="log-activity" value="${log.activity || ''}" placeholder="Welche Übung?">
+                                <input type="text" class="log-duration" value="${log.duration || ''}" placeholder="Dauer">
+                            </div>
+                            <label style="display: block; margin-bottom: 10px; color: #666;">Vertrauensreaktion:</label>
+                            <div class="rating-scale">
+                                <button class="rating-btn ${log.rating === '😰' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">😰</span>Abwehrend</button>
+                                <button class="rating-btn ${log.rating === '😐' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">😐</span>Neutral</button>
+                                <button class="rating-btn ${log.rating === '🙂' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">🙂</span>Akzeptierend</button>
+                                <button class="rating-btn ${log.rating === '🥰' ? 'selected' : ''}" onclick="selectRating(this)"><span class="emoji">🥰</span>Vertrauensvoll</button>
+                            </div>
+                            <label style="display: block; margin: 15px 0 10px; color: #666;">Beschreibung:</label>
+                            <textarea class="log-notes">${log.notes || ''}</textarea>
+                        `;
+                        container.appendChild(entry);
+                    });
+                }
+                updateProgress();
+            }
+        }
+
+        function exportData() {
+            saveData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `ELDiB_V2_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

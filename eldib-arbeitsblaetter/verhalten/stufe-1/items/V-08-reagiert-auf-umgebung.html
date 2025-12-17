@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-08: Reagiert auf Veränderungen in der Umgebung - ELDiB Arbeitsblatt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.7em;
+            margin-bottom: 10px;
+        }
+        .header .item-code {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .header .domain {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #d81b60;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f8bbd9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.5em;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .info-box p {
+            line-height: 1.7;
+            color: #880e4f;
+        }
+        .environment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .env-card {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .env-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .env-card.strong {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #4caf50;
+        }
+        .env-card.moderate {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-color: #ff9800;
+        }
+        .env-card.weak {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-color: #f44336;
+        }
+        .env-card .env-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .env-card .env-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .env-card .env-status {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .reaction-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+        .exercise-card {
+            background: #fff;
+            border: 2px solid #f8bbd9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            border-color: #ec407a;
+            box-shadow: 0 5px 20px rgba(236, 64, 122, 0.2);
+        }
+        .exercise-card h4 {
+            color: #d81b60;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .exercise-number {
+            background: #ec407a;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .exercise-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .steps {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .steps ol {
+            margin-left: 20px;
+        }
+        .steps li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .observation-matrix {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+        }
+        .matrix-table th {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+        }
+        .matrix-table td:first-child {
+            background: #f5f5f5;
+            font-weight: 600;
+            text-align: left;
+        }
+        .matrix-cell {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .matrix-cell:hover {
+            background: #fce4ec;
+        }
+        .matrix-cell.checked {
+            background: #f8bbd9;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover {
+            background: #fce4ec;
+        }
+        .checklist li.checked {
+            background: #f8bbd9;
+        }
+        .checklist li .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ec407a;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checklist li.checked .checkbox {
+            background: #ec407a;
+            color: white;
+        }
+        .log-entry {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-form {
+            display: grid;
+            gap: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ec407a;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(236, 64, 122, 0.4);
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ec407a 0%, #d81b60 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .log-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .log-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .tips-list {
+            list-style: none;
+        }
+        .tips-list li {
+            padding: 12px 15px;
+            padding-left: 45px;
+            background: #fff8e1;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .tips-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 15px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .environment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="item-code">V-08</div>
+            <h1>Reagiert auf Veränderungen in der Umgebung</h1>
+            <div class="domain">Verhalten • Stufe I • Wahrnehmung & Orientierung</div>
+        </div>
+
+        <div class="content">
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📖</span> Zielbeschreibung</h3>
+                <div class="info-box">
+                    <p>Das Kind nimmt Veränderungen in seiner Umgebung wahr und zeigt beobachtbare Reaktionen darauf.
+                    Es reagiert auf neue Gegenstände, veränderte Lichtverhältnisse, ungewohnte Geräusche oder andere
+                    Veränderungen in seiner unmittelbaren Umwelt mit Interesse, Überraschung oder Orientierungsverhalten.</p>
+                    <p style="margin-top: 10px;"><strong>Entwicklungsbedeutung:</strong> Diese Fähigkeit zeigt, dass das Kind
+                    ein inneres Bild seiner vertrauten Umgebung entwickelt hat und Abweichungen davon erkennen kann.
+                    Sie ist die Grundlage für Neugier, Lernen und die Anpassung an neue Situationen.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🌍</span> Reaktionen auf verschiedene Veränderungen</h3>
+                <p style="margin-bottom: 10px; color: #666;">Wie stark reagiert das Kind auf diese Arten von Veränderungen?</p>
+                <div class="reaction-legend">
+                    <div class="legend-item"><div class="legend-color" style="background: #c8e6c9; border: 2px solid #4caf50;"></div> Deutliche Reaktion</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #ffe0b2; border: 2px solid #ff9800;"></div> Leichte Reaktion</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #ffcdd2; border: 2px solid #f44336;"></div> Kaum Reaktion</div>
+                </div>
+                <div class="environment-grid" id="envGrid">
+                    <div class="env-card" data-env="geraeusche">
+                        <div class="env-icon">🔊</div>
+                        <div class="env-name">Geräusche</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="licht">
+                        <div class="env-icon">💡</div>
+                        <div class="env-name">Lichtveränderungen</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="objekte">
+                        <div class="env-icon">🧸</div>
+                        <div class="env-name">Neue Objekte</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="personen">
+                        <div class="env-icon">👥</div>
+                        <div class="env-name">Neue Personen</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="bewegung">
+                        <div class="env-icon">🏃</div>
+                        <div class="env-name">Bewegung im Raum</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="temperatur">
+                        <div class="env-icon">🌡️</div>
+                        <div class="env-name">Temperatur</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="gerueche">
+                        <div class="env-icon">👃</div>
+                        <div class="env-name">Gerüche</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                    <div class="env-card" data-env="raum">
+                        <div class="env-icon">🏠</div>
+                        <div class="env-name">Raumwechsel</div>
+                        <div class="env-status">Tippen zum Bewerten</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">🎮</span> Praktische Übungen</h3>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">1</span> Veränderungsspiele</h4>
+                    <p>Gezielte kleine Veränderungen einführen und die Reaktion beobachten.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Wählen Sie eine ruhige Situation, in der das Kind aufmerksam ist</li>
+                            <li>Führen Sie eine kleine, aber merkliche Veränderung ein (z.B. Licht dimmen)</li>
+                            <li>Beobachten Sie die Reaktion des Kindes (Blickrichtung, Mimik, Bewegung)</li>
+                            <li>Warten Sie ab - geben Sie dem Kind Zeit zu reagieren</li>
+                            <li>Kommentieren Sie die Veränderung: "Oh, es ist dunkler geworden!"</li>
+                            <li>Variieren Sie die Art der Veränderung</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">2</span> Objekt-Überraschungen</h4>
+                    <p>Neue oder veränderte Objekte in die Umgebung einführen.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Platzieren Sie ein neues, interessantes Objekt im Sichtfeld des Kindes</li>
+                            <li>Beobachten Sie, ob das Kind darauf aufmerksam wird</li>
+                            <li>Wenn nicht: Bewegen Sie das Objekt leicht oder machen Sie ein Geräusch damit</li>
+                            <li>Ermöglichen Sie Exploration, wenn das Kind Interesse zeigt</li>
+                            <li>Entfernen Sie das Objekt später und beobachten Sie die Reaktion</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><span class="exercise-number">3</span> Akustische Entdeckungsreise</h4>
+                    <p>Verschiedene Geräusche einführen und Orientierungsreaktionen fördern.</p>
+                    <div class="steps">
+                        <ol>
+                            <li>Beginnen Sie in einer ruhigen Umgebung</li>
+                            <li>Führen Sie ein neues Geräusch ein (Spieluhr, Rassel, Stimme)</li>
+                            <li>Variieren Sie die Richtung, aus der das Geräusch kommt</li>
+                            <li>Beobachten Sie: Wendet das Kind den Kopf? Sucht es die Quelle?</li>
+                            <li>Zeigen Sie die Geräuschquelle, wenn das Kind sucht</li>
+                            <li>Steigern Sie die Komplexität (leiser, weiter entfernt)</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">✅</span> Beobachtungs-Checkliste</h3>
+                <ul class="checklist" id="observationChecklist">
+                    <li data-item="1">
+                        <span class="checkbox">✓</span>
+                        <span>Reagiert auf plötzliche Geräusche (Zusammenzucken, Kopfwenden)</span>
+                    </li>
+                    <li data-item="2">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Interesse an neuen Objekten in der Umgebung</span>
+                    </li>
+                    <li data-item="3">
+                        <span class="checkbox">✓</span>
+                        <span>Reagiert auf Veränderungen der Beleuchtung</span>
+                    </li>
+                    <li data-item="4">
+                        <span class="checkbox">✓</span>
+                        <span>Bemerkt, wenn Personen den Raum betreten oder verlassen</span>
+                    </li>
+                    <li data-item="5">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Orientierungsreaktion (Hinschauen in Richtung der Veränderung)</span>
+                    </li>
+                    <li data-item="6">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt unterschiedliche Reaktionen auf vertraute vs. neue Umgebung</span>
+                    </li>
+                    <li data-item="7">
+                        <span class="checkbox">✓</span>
+                        <span>Gewöhnt sich an wiederholte Reize (Habituation)</span>
+                    </li>
+                    <li data-item="8">
+                        <span class="checkbox">✓</span>
+                        <span>Zeigt Neugier oder Vorsicht bei Veränderungen</span>
+                    </li>
+                </ul>
+                <div class="progress-container">
+                    <div class="progress-bar" id="checklistProgress">0%</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">📝</span> Beobachtungsprotokoll</h3>
+                <div class="log-entry">
+                    <div class="log-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Datum</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Art der Veränderung</label>
+                                <select id="logChangeType">
+                                    <option value="">Auswählen...</option>
+                                    <option value="akustisch">Akustisch (Geräusch)</option>
+                                    <option value="visuell">Visuell (Licht, Objekt)</option>
+                                    <option value="taktil">Taktil (Berührung, Temperatur)</option>
+                                    <option value="person">Person (neu/weg)</option>
+                                    <option value="raum">Raumwechsel</option>
+                                    <option value="sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Konkrete Veränderung</label>
+                                <input type="text" id="logChangeDetail" placeholder="z.B. Türklingel, neues Spielzeug">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Reaktionsart</label>
+                                <select id="logReaction">
+                                    <option value="">Auswählen...</option>
+                                    <option value="orientierung">Orientierung (Hinschauen)</option>
+                                    <option value="ueberraschung">Überraschung</option>
+                                    <option value="neugier">Neugier/Interesse</option>
+                                    <option value="erschrecken">Erschrecken</option>
+                                    <option value="unbehagen">Unbehagen</option>
+                                    <option value="keine">Keine erkennbare Reaktion</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Reaktionsstärke</label>
+                                <select id="logIntensity">
+                                    <option value="5">Sehr deutlich</option>
+                                    <option value="4">Deutlich</option>
+                                    <option value="3" selected>Moderat</option>
+                                    <option value="2">Leicht</option>
+                                    <option value="1">Kaum erkennbar</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Latenz</label>
+                                <select id="logLatency">
+                                    <option value="sofort">Sofort</option>
+                                    <option value="kurz">Kurz verzögert</option>
+                                    <option value="lang">Länger verzögert</option>
+                                    <option value="keine">Keine Reaktion</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Beobachtungen</label>
+                            <textarea id="logNotes" rows="3" placeholder="Beschreiben Sie die konkrete Reaktion des Kindes..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addLogEntry()">
+                            <span>➕</span> Eintrag hinzufügen
+                        </button>
+                    </div>
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="icon">💡</span> Tipps zur Förderung</h3>
+                <ul class="tips-list">
+                    <li>Bieten Sie eine Grundstruktur (vorhersehbare Umgebung) als Basis für Veränderungen</li>
+                    <li>Führen Sie Veränderungen langsam und in kleinen Schritten ein</li>
+                    <li>Kommentieren Sie Veränderungen verbal: "Hör mal! Die Türklingel!"</li>
+                    <li>Bei fehlenden Reaktionen: Veränderungen deutlicher machen</li>
+                    <li>Bei überschießenden Reaktionen: Veränderungen sanfter gestalten</li>
+                    <li>Verbinden Sie neue Reize mit vertrauten, sicheren Elementen</li>
+                    <li>Achten Sie auf sensorische Überempfindlichkeiten</li>
+                    <li>Feiern Sie die Neugier des Kindes mit positiver Verstärkung</li>
+                </ul>
+            </section>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveData()">
+                    <span>💾</span> Speichern
+                </button>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <span>🖨️</span> Drucken
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📤</span> Exportieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            envReactions: {},
+            checklist: {},
+            logs: []
+        };
+
+        const STORAGE_KEY = 'eldib_V8_arbeit';
+
+        function init() {
+            loadData();
+            setupEventListeners();
+            updateDisplay();
+        }
+
+        function setupEventListeners() {
+            // Environment cards - cycle through states
+            document.querySelectorAll('.env-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const envId = this.dataset.env;
+                    const states = ['', 'strong', 'moderate', 'weak'];
+                    const statusTexts = ['Tippen zum Bewerten', 'Deutliche Reaktion', 'Leichte Reaktion', 'Kaum Reaktion'];
+                    const currentState = data.envReactions[envId] || '';
+                    const currentIndex = states.indexOf(currentState);
+                    const nextIndex = (currentIndex + 1) % states.length;
+
+                    this.classList.remove('strong', 'moderate', 'weak');
+                    if (states[nextIndex]) {
+                        this.classList.add(states[nextIndex]);
+                    }
+                    this.querySelector('.env-status').textContent = statusTexts[nextIndex];
+                    data.envReactions[envId] = states[nextIndex];
+                    saveData();
+                });
+            });
+
+            // Checklist
+            document.querySelectorAll('.checklist li').forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemId = this.dataset.item;
+                    this.classList.toggle('checked');
+                    data.checklist[itemId] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+        }
+
+        function updateDisplay() {
+            // Environment reactions
+            const statusTexts = {
+                '': 'Tippen zum Bewerten',
+                'strong': 'Deutliche Reaktion',
+                'moderate': 'Leichte Reaktion',
+                'weak': 'Kaum Reaktion'
+            };
+            Object.entries(data.envReactions).forEach(([env, state]) => {
+                const el = document.querySelector(`.env-card[data-env="${env}"]`);
+                if (el && state) {
+                    el.classList.add(state);
+                    el.querySelector('.env-status').textContent = statusTexts[state];
+                }
+            });
+
+            // Checklist
+            Object.entries(data.checklist).forEach(([item, checked]) => {
+                const li = document.querySelector(`.checklist li[data-item="${item}"]`);
+                if (li && checked) {
+                    li.classList.add('checked');
+                }
+            });
+
+            updateProgress();
+            renderLogs();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist li').length;
+            const checked = document.querySelectorAll('.checklist li.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            const progressBar = document.getElementById('checklistProgress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function addLogEntry() {
+            const date = document.getElementById('logDate').value;
+            const changeType = document.getElementById('logChangeType').value;
+            const changeDetail = document.getElementById('logChangeDetail').value;
+            const reaction = document.getElementById('logReaction').value;
+            const intensity = document.getElementById('logIntensity').value;
+            const latency = document.getElementById('logLatency').value;
+            const notes = document.getElementById('logNotes').value;
+
+            if (!date || !changeType) {
+                alert('Bitte füllen Sie mindestens Datum und Art der Veränderung aus.');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                date,
+                changeType,
+                changeDetail,
+                reaction,
+                intensity: parseInt(intensity),
+                latency,
+                notes
+            };
+
+            data.logs.unshift(entry);
+            saveData();
+            renderLogs();
+
+            // Reset form
+            document.getElementById('logChangeType').value = '';
+            document.getElementById('logChangeDetail').value = '';
+            document.getElementById('logReaction').value = '';
+            document.getElementById('logNotes').value = '';
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logList');
+            const changeTypes = {
+                akustisch: '🔊 Akustisch',
+                visuell: '👁️ Visuell',
+                taktil: '✋ Taktil',
+                person: '👤 Person',
+                raum: '🏠 Raum',
+                sonstiges: '❓ Sonstiges'
+            };
+            const reactions = {
+                orientierung: 'Orientierung',
+                ueberraschung: 'Überraschung',
+                neugier: 'Neugier',
+                erschrecken: 'Erschrecken',
+                unbehagen: 'Unbehagen',
+                keine: 'Keine'
+            };
+            const latencies = {
+                sofort: '⚡ Sofort',
+                kurz: '⏱️ Kurz verzögert',
+                lang: '🕐 Länger verzögert',
+                keine: '❌ Keine Reaktion'
+            };
+
+            container.innerHTML = data.logs.map(log => `
+                <div class="log-item">
+                    <div class="log-item-header">
+                        <span>📅 ${new Date(log.date).toLocaleDateString('de-DE')}</span>
+                        <span>${changeTypes[log.changeType] || log.changeType}</span>
+                    </div>
+                    <div class="log-item-content">
+                        ${log.changeDetail ? `<strong>Was:</strong> ${log.changeDetail}<br>` : ''}
+                        <strong>Reaktion:</strong> ${reactions[log.reaction] || log.reaction || '-'}<br>
+                        <strong>Stärke:</strong> ${'⭐'.repeat(log.intensity)}<br>
+                        <strong>Latenz:</strong> ${latencies[log.latency] || log.latency}
+                        ${log.notes ? `<p style="margin-top: 8px; color: #666;">${log.notes}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-08: Reagiert auf Veränderungen in der Umgebung',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-08_Umgebung_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        init();
+    </script>
+</body>
+</html>
