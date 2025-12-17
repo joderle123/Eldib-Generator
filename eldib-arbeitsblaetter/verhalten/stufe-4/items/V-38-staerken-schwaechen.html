@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-38: Eigene Stärken und Schwächen kennen - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #e17055; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #e17055; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #fdcb6e; }
+        .strengths-weaknesses { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .column { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .column.strengths { border-top: 4px solid #4caf50; }
+        .column.weaknesses { border-top: 4px solid #ff9800; }
+        .column h3 { color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .item-list { list-style: none; }
+        .item-list li { display: flex; align-items: center; gap: 10px; padding: 10px; background: white; border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 2px solid transparent; }
+        .item-list li:hover { border-color: #e0e0e0; }
+        .item-list li.selected { border-color: #4caf50; background: #e8f5e9; }
+        .item-list li .checkbox { width: 20px; height: 20px; border: 2px solid #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .item-list li.selected .checkbox { background: #4caf50; border-color: #4caf50; color: white; }
+        .self-rating { margin: 20px 0; }
+        .rating-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; }
+        .rating-item .label { flex: 1; font-weight: 600; }
+        .rating-stars { display: flex; gap: 5px; }
+        .rating-stars .star { font-size: 1.5em; cursor: pointer; color: #e0e0e0; }
+        .rating-stars .star.filled { color: #ffc107; }
+        .reflection-areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .reflection-area { background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .reflection-area:hover { transform: translateY(-3px); }
+        .reflection-area.reflected { border-color: #4caf50; background: #e8f5e9; }
+        .reflection-area .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .reflection-area .name { font-weight: 600; color: #333; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #fdcb6e, #e17055); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(225,112,85,0.4); }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #fdcb6e, #e17055); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #e17055; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) { .form-row, .strengths-weaknesses { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-38 | Verhalten Stufe IV</span>
+            <h1>Eigene Stärken und Schwächen kennen</h1>
+            <p>Das Kind entwickelt ein realistisches Selbstbild und kann sowohl seine Stärken als auch Bereiche mit Entwicklungspotenzial benennen.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe IV lernen Kinder, sich selbst realistisch einzuschätzen. Sie erkennen ihre Stärken und können diese nutzen. Gleichzeitig akzeptieren sie, dass jeder Mensch auch Schwächen hat, und können damit konstruktiv umgehen.</p>
+        </div>
+
+        <div class="card">
+            <h2>💪 Stärken & 🔧 Entwicklungsbereiche</h2>
+            <p style="margin-bottom: 15px;">Welche kann das Kind bei sich selbst benennen?</p>
+            <div class="strengths-weaknesses">
+                <div class="column strengths">
+                    <h3>💪 Stärken</h3>
+                    <ul class="item-list" id="strengthsList">
+                        <li data-item="creative"><div class="checkbox"></div>Kreativ</li>
+                        <li data-item="helpful"><div class="checkbox"></div>Hilfsbereit</li>
+                        <li data-item="athletic"><div class="checkbox"></div>Sportlich</li>
+                        <li data-item="good-listener"><div class="checkbox"></div>Guter Zuhörer</li>
+                        <li data-item="organized"><div class="checkbox"></div>Ordentlich</li>
+                        <li data-item="funny"><div class="checkbox"></div>Humorvoll</li>
+                        <li data-item="persistent"><div class="checkbox"></div>Ausdauernd</li>
+                        <li data-item="kind"><div class="checkbox"></div>Freundlich</li>
+                    </ul>
+                </div>
+                <div class="column weaknesses">
+                    <h3>🔧 Entwicklungsbereiche</h3>
+                    <ul class="item-list" id="weaknessesList">
+                        <li data-item="patience"><div class="checkbox"></div>Geduld</li>
+                        <li data-item="focus"><div class="checkbox"></div>Konzentration</li>
+                        <li data-item="tidy"><div class="checkbox"></div>Aufräumen</li>
+                        <li data-item="anger"><div class="checkbox"></div>Wut kontrollieren</li>
+                        <li data-item="listening"><div class="checkbox"></div>Zuhören</li>
+                        <li data-item="sharing"><div class="checkbox"></div>Teilen</li>
+                        <li data-item="losing"><div class="checkbox"></div>Verlieren können</li>
+                        <li data-item="speaking"><div class="checkbox"></div>Vor anderen reden</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⭐ Selbsteinschätzung</h2>
+            <p style="margin-bottom: 15px;">Wie schätzt das Kind sich selbst ein? (1-5 Sterne)</p>
+            <div class="self-rating">
+                <div class="rating-item" data-area="school">
+                    <span class="label">📚 Schulische Leistungen</span>
+                    <div class="rating-stars"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div>
+                </div>
+                <div class="rating-item" data-area="social">
+                    <span class="label">👥 Soziale Fähigkeiten</span>
+                    <div class="rating-stars"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div>
+                </div>
+                <div class="rating-item" data-area="sport">
+                    <span class="label">🏃 Sportliche Fähigkeiten</span>
+                    <div class="rating-stars"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div>
+                </div>
+                <div class="rating-item" data-area="creative">
+                    <span class="label">🎨 Kreativität</span>
+                    <div class="rating-stars"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔍 Reflexionsfähigkeit</h2>
+            <p style="margin-bottom: 15px;">In welchen Bereichen kann das Kind reflektieren?</p>
+            <div class="reflection-areas">
+                <div class="reflection-area" data-ref="identify">
+                    <div class="icon">🎯</div>
+                    <div class="name">Stärken benennen</div>
+                </div>
+                <div class="reflection-area" data-ref="weaknesses">
+                    <div class="icon">🔧</div>
+                    <div class="name">Schwächen akzeptieren</div>
+                </div>
+                <div class="reflection-area" data-ref="feedback">
+                    <div class="icon">💬</div>
+                    <div class="name">Feedback annehmen</div>
+                </div>
+                <div class="reflection-area" data-ref="realistic">
+                    <div class="icon">⚖️</div>
+                    <div class="name">Realistische Einschätzung</div>
+                </div>
+                <div class="reflection-area" data-ref="improve">
+                    <div class="icon">📈</div>
+                    <div class="name">Verbesserungswünsche</div>
+                </div>
+                <div class="reflection-area" data-ref="use">
+                    <div class="icon">💪</div>
+                    <div class="name">Stärken einsetzen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Reflexions-Tagebuch</h2>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Bereich</label>
+                        <select id="logArea">
+                            <option value="">-- Wählen --</option>
+                            <option value="staerke">Stärke erkannt</option>
+                            <option value="schwaeche">Schwäche akzeptiert</option>
+                            <option value="feedback">Feedback verarbeitet</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Beobachtung</label>
+                    <textarea id="logObs" placeholder="Was hat das Kind gesagt oder gezeigt?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value" id="strengthsCount">0</div><div class="stat-label">Stärken erkannt</div></div>
+                    <div class="stat"><div class="stat-value" id="weaknessesCount">0</div><div class="stat-label">Entwicklungsbereiche</div></div>
+                    <div class="stat"><div class="stat-value" id="reflectionCount">0/6</div><div class="stat-label">Reflexionsfähigkeiten</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Stärken betonen:</strong> Regelmäßig positive Eigenschaften benennen</li>
+                <li><strong>Wachstum zeigen:</strong> "Früher konntest du X noch nicht, jetzt schon"</li>
+                <li><strong>Schwächen normalisieren:</strong> Jeder hat Bereiche zum Wachsen</li>
+                <li><strong>Keine Vergleiche:</strong> Mit sich selbst vergleichen, nicht mit anderen</li>
+                <li><strong>Feedback üben:</strong> Konstruktives Feedback geben und nehmen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = { strengths: {}, weaknesses: {}, ratings: {}, reflections: {}, logs: [] };
+        const STORAGE_KEY = 'eldib_V38_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('#strengthsList li').forEach(li => {
+                li.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    this.querySelector('.checkbox').textContent = this.classList.contains('selected') ? '✓' : '';
+                    data.strengths[this.dataset.item] = this.classList.contains('selected');
+                    updateProgress(); saveData();
+                });
+                if (data.strengths[li.dataset.item]) {
+                    li.classList.add('selected');
+                    li.querySelector('.checkbox').textContent = '✓';
+                }
+            });
+
+            document.querySelectorAll('#weaknessesList li').forEach(li => {
+                li.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    this.querySelector('.checkbox').textContent = this.classList.contains('selected') ? '✓' : '';
+                    data.weaknesses[this.dataset.item] = this.classList.contains('selected');
+                    updateProgress(); saveData();
+                });
+                if (data.weaknesses[li.dataset.item]) {
+                    li.classList.add('selected');
+                    li.querySelector('.checkbox').textContent = '✓';
+                }
+            });
+
+            document.querySelectorAll('.rating-item').forEach(item => {
+                const area = item.dataset.area;
+                item.querySelectorAll('.star').forEach(star => {
+                    star.addEventListener('click', function() {
+                        const v = parseInt(this.dataset.v);
+                        data.ratings[area] = v;
+                        item.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('filled', i < v));
+                        saveData();
+                    });
+                });
+                if (data.ratings[area]) {
+                    item.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('filled', i < data.ratings[area]));
+                }
+            });
+
+            document.querySelectorAll('.reflection-area').forEach(r => {
+                r.addEventListener('click', function() {
+                    this.classList.toggle('reflected');
+                    data.reflections[this.dataset.ref] = this.classList.contains('reflected');
+                    updateProgress(); saveData();
+                });
+                if (data.reflections[r.dataset.ref]) r.classList.add('reflected');
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs(); updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const area = document.getElementById('logArea').value;
+            const obs = document.getElementById('logObs').value;
+            if (!date || !obs) { alert('Bitte ausfüllen.'); return; }
+            data.logs.push({ date, area, obs, id: Date.now() });
+            saveData(); renderLogs();
+            document.getElementById('logObs').value = '';
+            document.getElementById('logArea').value = '';
+        }
+
+        function deleteLog(id) { data.logs = data.logs.filter(l => l.id !== id); saveData(); renderLogs(); }
+
+        function renderLogs() {
+            const c = document.getElementById('logEntries');
+            if (data.logs.length === 0) { c.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>'; return; }
+            c.innerHTML = data.logs.slice().reverse().map(l => `
+                <div class="log-entry"><div style="flex:1"><strong>${l.obs.substring(0,50)}${l.obs.length>50?'...':''}</strong>
+                <div style="font-size:0.85em;color:#888;margin-top:5px">${l.date} | ${l.area||''}</div></div>
+                <button class="delete-btn" onclick="deleteLog(${l.id})">×</button></div>`).join('');
+        }
+
+        function updateProgress() {
+            const strengthsCount = Object.values(data.strengths).filter(v => v).length;
+            const weaknessesCount = Object.values(data.weaknesses).filter(v => v).length;
+            const reflectionCount = Object.values(data.reflections).filter(v => v).length;
+            document.getElementById('strengthsCount').textContent = strengthsCount;
+            document.getElementById('weaknessesCount').textContent = weaknessesCount;
+            document.getElementById('reflectionCount').textContent = reflectionCount + '/6';
+            const progress = Math.round((Math.min(strengthsCount,5)/5*30) + (Math.min(weaknessesCount,3)/3*30) + (reflectionCount/6*40));
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() {
+            const blob = new Blob([JSON.stringify({ item: 'V-38', ...data }, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `V-38_Staerken-Schwaechen_${new Date().toISOString().split('T')[0]}.json`; a.click();
+        }
+        init();
+    </script>
+</body>
+</html>

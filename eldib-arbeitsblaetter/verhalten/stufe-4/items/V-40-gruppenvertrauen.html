@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-40 Vertrauen in der Gruppe - ELDiB Arbeitsblatt</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .item-code {
+            text-align: center;
+            color: #b21f1f;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .goal-box {
+            background: linear-gradient(135deg, #1a2a6c, #4a5a9c);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .goal-box h3 { margin-bottom: 10px; color: #fdbb2d; }
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #b21f1f;
+            padding-bottom: 8px;
+        }
+
+        /* Trust Building Blocks */
+        .trust-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .trust-block {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .trust-block:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .trust-block .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .trust-block h4 { color: #1a2a6c; margin-bottom: 5px; font-size: 1em; }
+        .trust-block p { color: #666; font-size: 0.85em; }
+        .trust-block[data-level="1"] { border-color: #ffcccb; background: #fff5f5; }
+        .trust-block[data-level="2"] { border-color: #fff3cd; background: #fffef5; }
+        .trust-block[data-level="3"] { border-color: #d4edda; background: #f5fff5; }
+        .trust-block[data-level="4"] { border-color: #b8daff; background: #f5f9ff; }
+
+        /* Trust Circle Visualization */
+        .trust-circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .trust-circles {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .trust-ring {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .trust-ring:hover { transform: scale(1.05); }
+        .trust-ring.ring-outer {
+            width: 300px; height: 300px;
+            top: 0; left: 0;
+            background: rgba(253, 187, 45, 0.2);
+            border: 3px solid #fdbb2d;
+        }
+        .trust-ring.ring-middle {
+            width: 220px; height: 220px;
+            top: 40px; left: 40px;
+            background: rgba(178, 31, 31, 0.2);
+            border: 3px solid #b21f1f;
+        }
+        .trust-ring.ring-inner {
+            width: 140px; height: 140px;
+            top: 80px; left: 80px;
+            background: rgba(26, 42, 108, 0.2);
+            border: 3px solid #1a2a6c;
+        }
+        .trust-ring.ring-core {
+            width: 70px; height: 70px;
+            top: 115px; left: 115px;
+            background: #1a2a6c;
+            color: white;
+            font-weight: bold;
+        }
+        .trust-ring.active { box-shadow: 0 0 20px rgba(26, 42, 108, 0.5); }
+        .circle-labels {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .circle-label {
+            font-size: 0.85em;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .label-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+
+        /* Trust Scenarios */
+        .scenario-cards {
+            display: grid;
+            gap: 15px;
+        }
+        .scenario-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #1a2a6c;
+        }
+        .scenario-card h4 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .scenario-card p {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        .scenario-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .scenario-option {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        .scenario-option:hover { border-color: #1a2a6c; }
+        .scenario-option.selected {
+            background: #1a2a6c;
+            color: white;
+            border-color: #1a2a6c;
+        }
+
+        /* Trust Behaviors Checklist */
+        .behaviors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .behavior-category {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .behavior-category h4 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        .behavior-list {
+            list-style: none;
+        }
+        .behavior-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        .behavior-list li:hover { background: #e9ecef; }
+        .behavior-list li.checked { background: #d4edda; }
+        .behavior-list li::before {
+            content: '☐';
+            font-size: 1.2em;
+            color: #666;
+        }
+        .behavior-list li.checked::before {
+            content: '☑';
+            color: #28a745;
+        }
+
+        /* Group Trust Assessment */
+        .assessment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .assessment-table th, .assessment-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .assessment-table th {
+            background: #1a2a6c;
+            color: white;
+        }
+        .assessment-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .assessment-table tbody tr:hover { background: #f8f9fa; }
+        .trust-rating {
+            display: inline-flex;
+            gap: 3px;
+        }
+        .trust-star {
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s ease;
+        }
+        .trust-star.active { color: #fdbb2d; }
+        .trust-star:hover { color: #b21f1f; }
+
+        /* Reflection Form */
+        .reflection-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            color: #1a2a6c;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #1a2a6c;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        /* Feeling Scale */
+        .feeling-scale {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .feeling-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 15px 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .feeling-btn:hover { transform: scale(1.05); }
+        .feeling-btn .emoji { font-size: 1.8em; display: block; margin-bottom: 5px; }
+        .feeling-btn .label { font-size: 0.8em; color: #666; }
+        .feeling-btn.selected { border-color: #1a2a6c; background: #e8eaf6; }
+
+        /* Log Entries */
+        .log-entries { margin-top: 20px; }
+        .log-entry {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #b21f1f;
+        }
+        .log-entry .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .log-entry .log-situation { color: #1a2a6c; font-weight: 600; }
+        .log-entry .log-notes { color: #555; margin-top: 10px; font-style: italic; }
+        .delete-log {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        /* Progress */
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Trust Level Display */
+        .trust-level-display {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .trust-level-display .level {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .trust-level-display .label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1a2a6c, #4a5a9c);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(26,42,108,0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Tips */
+        .tips-box {
+            background: linear-gradient(135deg, #fdbb2d, #fdd97d);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-box h4 { color: #1a2a6c; margin-bottom: 10px; }
+        .tips-box ul { margin-left: 20px; }
+        .tips-box li { margin: 8px 0; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vertrauen in der Gruppe</h1>
+        <div class="item-code">V-40 | Verhalten Stufe IV</div>
+
+        <div class="goal-box">
+            <h3>Entwicklungsziel</h3>
+            <p>Das Kind entwickelt ein stabiles Vertrauen zu anderen Gruppenmitgliedern, kann sich auf andere verlassen, Vertrauen gewähren und annehmen sowie konstruktiv mit Vertrauensbrüchen umgehen.</p>
+        </div>
+
+        <div class="section">
+            <h3>Bausteine des Vertrauens</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf jeden Baustein um dein Level einzuschätzen (1-4)</p>
+
+            <div class="trust-blocks">
+                <div class="trust-block" data-block="reliability" data-level="0">
+                    <div class="icon">🤝</div>
+                    <h4>Zuverlässigkeit</h4>
+                    <p>Versprechen halten</p>
+                </div>
+                <div class="trust-block" data-block="honesty" data-level="0">
+                    <div class="icon">💬</div>
+                    <h4>Ehrlichkeit</h4>
+                    <p>Die Wahrheit sagen</p>
+                </div>
+                <div class="trust-block" data-block="respect" data-level="0">
+                    <div class="icon">🙏</div>
+                    <h4>Respekt</h4>
+                    <p>Andere achten</p>
+                </div>
+                <div class="trust-block" data-block="support" data-level="0">
+                    <div class="icon">💪</div>
+                    <h4>Unterstützung</h4>
+                    <p>Füreinander da sein</p>
+                </div>
+                <div class="trust-block" data-block="openness" data-level="0">
+                    <div class="icon">🔓</div>
+                    <h4>Offenheit</h4>
+                    <p>Gefühle teilen</p>
+                </div>
+                <div class="trust-block" data-block="forgiveness" data-level="0">
+                    <div class="icon">💚</div>
+                    <h4>Verzeihen</h4>
+                    <p>Fehler vergeben</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Vertrauenskreise</h3>
+            <p style="color: #666; margin-bottom: 15px; text-align: center;">Klicke auf die Kreise um zu markieren, wem du wie viel vertraust</p>
+
+            <div class="trust-circle-container">
+                <div class="trust-circles">
+                    <div class="trust-ring ring-outer" data-ring="outer" title="Bekannte">
+                        <span>Bekannte</span>
+                    </div>
+                    <div class="trust-ring ring-middle" data-ring="middle" title="Gute Bekannte">
+                        <span>Freunde</span>
+                    </div>
+                    <div class="trust-ring ring-inner" data-ring="inner" title="Enge Freunde">
+                        <span>Enge<br>Freunde</span>
+                    </div>
+                    <div class="trust-ring ring-core">
+                        <span>ICH</span>
+                    </div>
+                </div>
+                <div class="circle-labels">
+                    <div class="circle-label"><div class="label-dot" style="background: #fdbb2d;"></div>Wenig Vertrauen</div>
+                    <div class="circle-label"><div class="label-dot" style="background: #b21f1f;"></div>Mittleres Vertrauen</div>
+                    <div class="circle-label"><div class="label-dot" style="background: #1a2a6c;"></div>Großes Vertrauen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Vertrauens-Situationen</h3>
+            <p style="color: #666; margin-bottom: 15px;">Wie würdest du in diesen Situationen reagieren?</p>
+
+            <div class="scenario-cards">
+                <div class="scenario-card" data-scenario="secret">
+                    <h4><span>🤫</span> Ein Freund erzählt dir ein Geheimnis</h4>
+                    <p>Dein Freund bittet dich, niemandem von seinem Problem zu erzählen...</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-value="keep">Ich behalte es für mich</div>
+                        <div class="scenario-option" data-value="best-friend">Nur meinem besten Freund erzählen</div>
+                        <div class="scenario-option" data-value="adult">Einem Erwachsenen erzählen, wenn es wichtig ist</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="mistake">
+                    <h4><span>😔</span> Jemand macht einen Fehler</h4>
+                    <p>Ein Gruppenmitglied hat etwas falsch gemacht und gibt es zu...</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-value="angry">Ich bin enttäuscht und sage es</div>
+                        <div class="scenario-option" data-value="forgive">Ich verzeihe und gebe eine neue Chance</div>
+                        <div class="scenario-option" data-value="talk">Wir reden darüber und finden eine Lösung</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="help">
+                    <h4><span>🆘</span> Du brauchst Hilfe</h4>
+                    <p>Du hast ein Problem und weißt nicht weiter...</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-value="alone">Ich versuche es alleine zu lösen</div>
+                        <div class="scenario-option" data-value="friend">Ich frage einen Freund um Hilfe</div>
+                        <div class="scenario-option" data-value="adult">Ich wende mich an einen Erwachsenen</div>
+                        <div class="scenario-option" data-value="both">Ich frage Freunde und Erwachsene</div>
+                    </div>
+                </div>
+                <div class="scenario-card" data-scenario="broken">
+                    <h4><span>💔</span> Vertrauensbruch</h4>
+                    <p>Jemand hat dein Vertrauen missbraucht...</p>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-value="distance">Ich halte erstmal Abstand</div>
+                        <div class="scenario-option" data-value="confront">Ich spreche die Person direkt an</div>
+                        <div class="scenario-option" data-value="process">Ich brauche Zeit zum Nachdenken</div>
+                        <div class="scenario-option" data-value="rebuild">Wir arbeiten daran, Vertrauen wieder aufzubauen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Vertrauensvolles Verhalten</h3>
+            <p style="color: #666; margin-bottom: 15px;">Markiere die Verhaltensweisen, die du schon zeigst:</p>
+
+            <div class="behaviors-grid">
+                <div class="behavior-category">
+                    <h4>🎁 Vertrauen geben</h4>
+                    <ul class="behavior-list" id="givingBehaviors">
+                        <li data-behavior="share-feelings">Gefühle teilen</li>
+                        <li data-behavior="ask-help">Um Hilfe bitten</li>
+                        <li data-behavior="delegate">Aufgaben abgeben</li>
+                        <li data-behavior="vulnerable">Schwächen zeigen</li>
+                        <li data-behavior="trust-intentions">Gute Absichten annehmen</li>
+                    </ul>
+                </div>
+                <div class="behavior-category">
+                    <h4>🤲 Vertrauen empfangen</h4>
+                    <ul class="behavior-list" id="receivingBehaviors">
+                        <li data-behavior="keep-secrets">Geheimnisse bewahren</li>
+                        <li data-behavior="be-reliable">Zuverlässig sein</li>
+                        <li data-behavior="support-others">Andere unterstützen</li>
+                        <li data-behavior="no-judge">Nicht urteilen</li>
+                        <li data-behavior="be-present">Da sein wenn nötig</li>
+                    </ul>
+                </div>
+                <div class="behavior-category">
+                    <h4>🔧 Vertrauen reparieren</h4>
+                    <ul class="behavior-list" id="repairBehaviors">
+                        <li data-behavior="apologize">Sich entschuldigen</li>
+                        <li data-behavior="accept-apology">Entschuldigungen annehmen</li>
+                        <li data-behavior="new-chance">Neue Chancen geben</li>
+                        <li data-behavior="communicate">Offen kommunizieren</li>
+                        <li data-behavior="patience">Geduldig sein</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Gruppen-Vertrauens-Check</h3>
+            <p style="color: #666; margin-bottom: 15px;">Bewerte das Vertrauen in deiner Gruppe (1-5 Sterne)</p>
+
+            <table class="assessment-table">
+                <thead>
+                    <tr>
+                        <th>Aussage</th>
+                        <th>Bewertung</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ich kann mich auf meine Gruppe verlassen</td>
+                        <td><div class="trust-rating" data-item="rely"><span class="trust-star" data-val="1">★</span><span class="trust-star" data-val="2">★</span><span class="trust-star" data-val="3">★</span><span class="trust-star" data-val="4">★</span><span class="trust-star" data-val="5">★</span></div></td>
+                    </tr>
+                    <tr>
+                        <td>Ich fühle mich sicher in der Gruppe</td>
+                        <td><div class="trust-rating" data-item="safe"><span class="trust-star" data-val="1">★</span><span class="trust-star" data-val="2">★</span><span class="trust-star" data-val="3">★</span><span class="trust-star" data-val="4">★</span><span class="trust-star" data-val="5">★</span></div></td>
+                    </tr>
+                    <tr>
+                        <td>Ich kann offen über meine Gefühle sprechen</td>
+                        <td><div class="trust-rating" data-item="open"><span class="trust-star" data-val="1">★</span><span class="trust-star" data-val="2">★</span><span class="trust-star" data-val="3">★</span><span class="trust-star" data-val="4">★</span><span class="trust-star" data-val="5">★</span></div></td>
+                    </tr>
+                    <tr>
+                        <td>Wir helfen einander bei Problemen</td>
+                        <td><div class="trust-rating" data-item="help"><span class="trust-star" data-val="1">★</span><span class="trust-star" data-val="2">★</span><span class="trust-star" data-val="3">★</span><span class="trust-star" data-val="4">★</span><span class="trust-star" data-val="5">★</span></div></td>
+                    </tr>
+                    <tr>
+                        <td>Wir gehen ehrlich miteinander um</td>
+                        <td><div class="trust-rating" data-item="honest"><span class="trust-star" data-val="1">★</span><span class="trust-star" data-val="2">★</span><span class="trust-star" data-val="3">★</span><span class="trust-star" data-val="4">★</span><span class="trust-star" data-val="5">★</span></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Vertrauens-Erfahrung dokumentieren</h3>
+            <div class="reflection-form">
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="form-group">
+                    <label>Was ist passiert?</label>
+                    <input type="text" id="logSituation" placeholder="Beschreibe die Vertrauens-Situation...">
+                </div>
+                <div class="form-group">
+                    <label>Wie hast du dich dabei gefühlt?</label>
+                    <div class="feeling-scale" id="feelingScale">
+                        <div class="feeling-btn" data-feeling="unsafe">
+                            <span class="emoji">😰</span>
+                            <span class="label">Unsicher</span>
+                        </div>
+                        <div class="feeling-btn" data-feeling="nervous">
+                            <span class="emoji">😟</span>
+                            <span class="label">Nervös</span>
+                        </div>
+                        <div class="feeling-btn" data-feeling="neutral">
+                            <span class="emoji">😐</span>
+                            <span class="label">Neutral</span>
+                        </div>
+                        <div class="feeling-btn" data-feeling="comfortable">
+                            <span class="emoji">🙂</span>
+                            <span class="label">Wohl</span>
+                        </div>
+                        <div class="feeling-btn" data-feeling="safe">
+                            <span class="emoji">😊</span>
+                            <span class="label">Sicher</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Was hast du daraus gelernt?</label>
+                    <textarea id="logReflection" placeholder="Was nimmst du aus dieser Erfahrung mit?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag speichern</button>
+            </div>
+
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="section">
+            <h3>Vertrauens-Level</h3>
+            <div class="trust-level-display">
+                <div class="level" id="trustLevel">0</div>
+                <div class="label">von 100 Punkten</div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9em;" id="progressText">Beginne mit deiner Vertrauens-Reise!</p>
+        </div>
+
+        <div class="tips-box">
+            <h4>💡 Tipps für mehr Vertrauen</h4>
+            <ul>
+                <li><strong>Vertrauen braucht Zeit:</strong> Es wächst langsam durch viele kleine positive Erfahrungen</li>
+                <li><strong>Sei zuverlässig:</strong> Halte Versprechen und stehe zu deinem Wort</li>
+                <li><strong>Zeige Verständnis:</strong> Versuche, die Perspektive anderer zu verstehen</li>
+                <li><strong>Kommuniziere offen:</strong> Sprich über deine Gefühle und Bedürfnisse</li>
+                <li><strong>Verzeihe:</strong> Jeder macht Fehler - gib anderen eine zweite Chance</li>
+                <li><strong>Vertraue dir selbst:</strong> Wer sich selbst vertraut, kann auch anderen vertrauen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="exportData()">📥 Exportieren</button>
+            <button class="btn btn-danger" onclick="resetData()">🗑️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eldib_V40_arbeit';
+        let data = {
+            trustBlocks: {},
+            circles: {},
+            scenarios: {},
+            behaviors: {},
+            ratings: {},
+            logs: []
+        };
+
+        function init() {
+            loadData();
+
+            // Setup trust blocks
+            document.querySelectorAll('.trust-block').forEach(block => {
+                block.addEventListener('click', function() {
+                    const blockId = this.dataset.block;
+                    let level = parseInt(this.dataset.level) || 0;
+                    level = (level % 4) + 1;
+                    if (level > 4) level = 0;
+                    this.dataset.level = level;
+                    data.trustBlocks[blockId] = level;
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup trust circles
+            document.querySelectorAll('.trust-ring[data-ring]').forEach(ring => {
+                ring.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    data.circles[this.dataset.ring] = this.classList.contains('active');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup scenario options
+            document.querySelectorAll('.scenario-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const card = this.closest('.scenario-card');
+                    const scenario = card.dataset.scenario;
+
+                    // Toggle selection within this scenario
+                    card.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    data.scenarios[scenario] = this.dataset.value;
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup behavior checklist
+            document.querySelectorAll('.behavior-list li').forEach(li => {
+                li.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    data.behaviors[this.dataset.behavior] = this.classList.contains('checked');
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Setup star ratings
+            document.querySelectorAll('.trust-rating').forEach(rating => {
+                const item = rating.dataset.item;
+                rating.querySelectorAll('.trust-star').forEach(star => {
+                    star.addEventListener('click', function() {
+                        const value = parseInt(this.dataset.val);
+                        data.ratings[item] = value;
+
+                        // Update visual
+                        rating.querySelectorAll('.trust-star').forEach((s, i) => {
+                            s.classList.toggle('active', i < value);
+                        });
+
+                        updateProgress();
+                        saveData();
+                    });
+                });
+            });
+
+            // Setup feeling scale
+            document.querySelectorAll('.feeling-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // Set today's date
+            document.getElementById('logDate').valueAsDate = new Date();
+
+            applyStoredData();
+            renderLogs();
+            updateProgress();
+        }
+
+        function applyStoredData() {
+            // Apply trust blocks
+            Object.entries(data.trustBlocks).forEach(([block, level]) => {
+                const el = document.querySelector(`.trust-block[data-block="${block}"]`);
+                if (el) el.dataset.level = level;
+            });
+
+            // Apply circles
+            Object.entries(data.circles).forEach(([ring, active]) => {
+                if (active) {
+                    const el = document.querySelector(`.trust-ring[data-ring="${ring}"]`);
+                    if (el) el.classList.add('active');
+                }
+            });
+
+            // Apply scenarios
+            Object.entries(data.scenarios).forEach(([scenario, value]) => {
+                const option = document.querySelector(`.scenario-card[data-scenario="${scenario}"] .scenario-option[data-value="${value}"]`);
+                if (option) option.classList.add('selected');
+            });
+
+            // Apply behaviors
+            Object.entries(data.behaviors).forEach(([behavior, checked]) => {
+                if (checked) {
+                    const li = document.querySelector(`.behavior-list li[data-behavior="${behavior}"]`);
+                    if (li) li.classList.add('checked');
+                }
+            });
+
+            // Apply ratings
+            Object.entries(data.ratings).forEach(([item, value]) => {
+                const rating = document.querySelector(`.trust-rating[data-item="${item}"]`);
+                if (rating) {
+                    rating.querySelectorAll('.trust-star').forEach((s, i) => {
+                        s.classList.toggle('active', i < value);
+                    });
+                }
+            });
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const situation = document.getElementById('logSituation').value;
+            const selectedFeeling = document.querySelector('.feeling-btn.selected');
+            const feeling = selectedFeeling ? selectedFeeling.dataset.feeling : '';
+            const reflection = document.getElementById('logReflection').value;
+
+            if (!date || !situation) {
+                alert('Bitte fülle mindestens Datum und Situation aus!');
+                return;
+            }
+
+            data.logs.push({
+                id: Date.now(),
+                date: date,
+                situation: situation,
+                feeling: feeling,
+                reflection: reflection
+            });
+
+            // Clear form
+            document.getElementById('logSituation').value = '';
+            document.getElementById('logReflection').value = '';
+            document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function deleteLog(id) {
+            data.logs = data.logs.filter(log => log.id !== id);
+            renderLogs();
+            updateProgress();
+            saveData();
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logEntries');
+            const sortedLogs = [...data.logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const feelingEmojis = {
+                unsafe: '😰',
+                nervous: '😟',
+                neutral: '😐',
+                comfortable: '🙂',
+                safe: '😊'
+            };
+
+            container.innerHTML = sortedLogs.map(log => `
+                <div class="log-entry">
+                    <div class="log-header">
+                        <span>${new Date(log.date).toLocaleDateString('de-DE')}</span>
+                        <button class="delete-log" onclick="deleteLog(${log.id})">Löschen</button>
+                    </div>
+                    <div class="log-situation">${log.situation}</div>
+                    ${log.feeling ? `<div style="margin-top: 8px;">Gefühl: ${feelingEmojis[log.feeling] || ''} ${log.feeling}</div>` : ''}
+                    ${log.reflection ? `<div class="log-notes">"${log.reflection}"</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateProgress() {
+            let points = 0;
+            let maxPoints = 100;
+
+            // Trust blocks (max 24 points - 6 blocks x 4 levels)
+            const blockPoints = Object.values(data.trustBlocks).reduce((sum, level) => sum + (level || 0), 0);
+            points += blockPoints;
+
+            // Circles (max 6 points - 3 circles x 2)
+            const circlePoints = Object.values(data.circles).filter(Boolean).length * 2;
+            points += circlePoints;
+
+            // Scenarios (max 8 points - 4 scenarios x 2)
+            const scenarioPoints = Object.keys(data.scenarios).length * 2;
+            points += scenarioPoints;
+
+            // Behaviors (max 30 points - 15 behaviors x 2)
+            const behaviorPoints = Object.values(data.behaviors).filter(Boolean).length * 2;
+            points += behaviorPoints;
+
+            // Ratings (max 25 points - 5 items x 5)
+            const ratingPoints = Object.values(data.ratings).reduce((sum, val) => sum + (val || 0), 0);
+            points += ratingPoints;
+
+            // Logs (max 7 points)
+            const logPoints = Math.min(data.logs.length, 7);
+            points += logPoints;
+
+            points = Math.min(points, maxPoints);
+            const percent = Math.round((points / maxPoints) * 100);
+
+            document.getElementById('trustLevel').textContent = points;
+
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = percent + '%';
+
+            const progressText = document.getElementById('progressText');
+            if (percent === 0) progressText.textContent = 'Beginne mit deiner Vertrauens-Reise!';
+            else if (percent < 25) progressText.textContent = 'Du lernst, was Vertrauen bedeutet.';
+            else if (percent < 50) progressText.textContent = 'Dein Vertrauen wächst!';
+            else if (percent < 75) progressText.textContent = 'Du bist auf einem guten Weg!';
+            else progressText.textContent = 'Großartig! Du hast starkes Vertrauen entwickelt!';
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                data = JSON.parse(stored);
+                if (!data.trustBlocks) data.trustBlocks = {};
+                if (!data.circles) data.circles = {};
+                if (!data.scenarios) data.scenarios = {};
+                if (!data.behaviors) data.behaviors = {};
+                if (!data.ratings) data.ratings = {};
+                if (!data.logs) data.logs = [];
+            }
+        }
+
+        function exportData() {
+            const exportObj = {
+                item: 'V-40',
+                title: 'Vertrauen in der Gruppe',
+                exportDate: new Date().toISOString(),
+                ...data
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `V-40_Gruppenvertrauen_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetData() {
+            if (confirm('Alle Daten zu diesem Arbeitsblatt löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                data = {
+                    trustBlocks: {},
+                    circles: {},
+                    scenarios: {},
+                    behaviors: {},
+                    ratings: {},
+                    logs: []
+                };
+                document.querySelectorAll('.trust-block').forEach(b => b.dataset.level = '0');
+                document.querySelectorAll('.trust-ring').forEach(r => r.classList.remove('active'));
+                document.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected'));
+                document.querySelectorAll('.behavior-list li').forEach(li => li.classList.remove('checked'));
+                document.querySelectorAll('.trust-star').forEach(s => s.classList.remove('active'));
+                renderLogs();
+                updateProgress();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

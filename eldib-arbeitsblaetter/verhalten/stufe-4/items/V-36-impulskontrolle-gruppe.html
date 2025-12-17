@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-36: Impulskontrolle in der Gruppe - ELDiB Arbeitsblatt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header h1 { color: #0984e3; font-size: 1.8em; margin-bottom: 10px; }
+        .header .item-code { background: #0984e3; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; margin-bottom: 10px; }
+        .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #0984e3; }
+        .situations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .situation { background: #f8f9fa; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .situation:hover { transform: translateY(-3px); }
+        .situation.mastered { border-color: #4caf50; background: #e8f5e9; }
+        .situation .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .situation .name { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .situation .status { font-size: 0.8em; color: #888; margin-top: 5px; }
+        .strategies { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .strategy { background: #f8f9fa; border-radius: 15px; padding: 15px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .strategy:hover { border-color: #0984e3; }
+        .strategy.used { border-color: #4caf50; background: #e8f5e9; }
+        .strategy .icon { font-size: 1.8em; margin-bottom: 5px; }
+        .strategy .name { font-weight: 600; color: #333; }
+        .strategy .desc { font-size: 0.85em; color: #666; margin-top: 5px; }
+        .scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .scenario { background: #f8f9fa; border-radius: 15px; padding: 20px; }
+        .scenario h4 { color: #333; margin-bottom: 10px; }
+        .scenario-text { background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .scenario-options { display: flex; flex-direction: column; gap: 8px; }
+        .scenario-option { padding: 10px 15px; border-radius: 10px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .scenario-option:hover { border-color: #0984e3; }
+        .scenario-option.selected { border-color: #0984e3; background: #e3f2fd; }
+        .scenario-option.correct { border-color: #4caf50; background: #e8f5e9; }
+        .tracker-form { background: #f0f4f8; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn { padding: 12px 25px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #0984e3, #74b9ff); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(9,132,227,0.4); }
+        .log-entries { margin-top: 20px; }
+        .log-entry { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .delete-btn { background: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .progress-section { background: #f0f4f8; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #0984e3, #74b9ff); transition: width 0.5s; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; text-align: center; }
+        .stat { background: white; padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #0984e3; }
+        .stat-label { font-size: 0.85em; color: #666; }
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="item-code">V-36 | Verhalten Stufe IV</span>
+            <h1>Impulskontrolle in der Gruppe</h1>
+            <p>Das Kind lernt, seine Impulse in Gruppensituationen zu kontrollieren und sozial angemessen zu reagieren.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Zielbeschreibung</h2>
+            <p>In Stufe IV wird die individuelle Impulskontrolle auf Gruppensituationen erweitert. Kinder lernen, sich in Gruppenaktivitäten zurückzuhalten, andere ausreden zu lassen und ihre Reaktionen an den sozialen Kontext anzupassen.</p>
+        </div>
+
+        <div class="card">
+            <h2>👥 Gruppen-Situationen</h2>
+            <p style="margin-bottom: 15px;">In welchen Situationen gelingt die Impulskontrolle?</p>
+            <div class="situations-grid">
+                <div class="situation" data-sit="wait-turn">
+                    <div class="icon">🙋</div>
+                    <div class="name">Warten, bis man dran ist</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="situation" data-sit="not-interrupt">
+                    <div class="icon">🤐</div>
+                    <div class="name">Nicht unterbrechen</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="situation" data-sit="team-loss">
+                    <div class="icon">⚽</div>
+                    <div class="name">Niederlage im Team</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="situation" data-sit="unfair">
+                    <div class="icon">😤</div>
+                    <div class="name">Bei Ungerechtigkeit ruhig bleiben</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="situation" data-sit="excitement">
+                    <div class="icon">🎉</div>
+                    <div class="name">Aufregung kontrollieren</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+                <div class="situation" data-sit="provoke">
+                    <div class="icon">😠</div>
+                    <div class="name">Bei Provokation ruhig bleiben</div>
+                    <div class="status">Nicht geprüft</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🛠️ Strategien für die Gruppe</h2>
+            <p style="margin-bottom: 15px;">Welche Strategien nutzt das Kind in Gruppensituationen?</p>
+            <div class="strategies">
+                <div class="strategy" data-strat="count">
+                    <div class="icon">🔢</div>
+                    <div class="name">Innerlich zählen</div>
+                    <div class="desc">Bis 5 zählen vor dem Reagieren</div>
+                </div>
+                <div class="strategy" data-strat="breathe">
+                    <div class="icon">🌬️</div>
+                    <div class="name">Tief durchatmen</div>
+                    <div class="desc">Luft holen, bevor man spricht</div>
+                </div>
+                <div class="strategy" data-strat="hand-up">
+                    <div class="icon">✋</div>
+                    <div class="name">Hand heben statt rufen</div>
+                    <div class="desc">Signal geben statt dazwischenrufen</div>
+                </div>
+                <div class="strategy" data-strat="self-talk">
+                    <div class="icon">💭</div>
+                    <div class="name">Selbstgespräch</div>
+                    <div class="desc">"Ich warte, gleich bin ich dran"</div>
+                </div>
+                <div class="strategy" data-strat="look-away">
+                    <div class="icon">👀</div>
+                    <div class="name">Wegschauen</div>
+                    <div class="desc">Bei Provokation nicht reagieren</div>
+                </div>
+                <div class="strategy" data-strat="help">
+                    <div class="icon">🆘</div>
+                    <div class="name">Hilfe holen</div>
+                    <div class="desc">Erwachsenen einbeziehen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎬 Szenarien</h2>
+            <div class="scenarios">
+                <div class="scenario" data-scenario="answer">
+                    <h4>Schnell antworten wollen</h4>
+                    <div class="scenario-text">Du kennst die Antwort und möchtest sie sofort sagen, aber andere melden sich auch.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="controlled" data-correct="true">✋ Hand heben und warten</div>
+                        <div class="scenario-option" data-response="impulsive">🗣️ Sofort die Antwort rufen</div>
+                        <div class="scenario-option" data-response="upset">😤 Frustriert sein und aufgeben</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="tease">
+                    <h4>Geneckt werden</h4>
+                    <div class="scenario-text">Jemand in der Gruppe macht sich über dich lustig.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="controlled" data-correct="true">😊 Ignorieren oder ruhig ansprechen</div>
+                        <div class="scenario-option" data-response="impulsive">😡 Zurückschimpfen oder schlagen</div>
+                        <div class="scenario-option" data-response="cry">😢 Weinen und weglaufen</div>
+                    </div>
+                </div>
+                <div class="scenario" data-scenario="win">
+                    <h4>Beim Spiel gewinnen</h4>
+                    <div class="scenario-text">Dein Team gewinnt und du bist super aufgeregt.</div>
+                    <div class="scenario-options">
+                        <div class="scenario-option" data-response="controlled" data-correct="true">🎉 Freuen, aber andere nicht ärgern</div>
+                        <div class="scenario-option" data-response="impulsive">🤪 Übertrieben feiern und angeben</div>
+                        <div class="scenario-option" data-response="suppress">😐 Freude unterdrücken</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Beobachtungs-Tagebuch</h2>
+            <div class="tracker-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="logDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Gruppensituation</label>
+                        <select id="logSituation">
+                            <option value="">-- Wählen --</option>
+                            <option value="unterricht">Im Unterricht</option>
+                            <option value="pause">In der Pause</option>
+                            <option value="sport">Beim Sport</option>
+                            <option value="gruppe">Gruppenarbeit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Was ist passiert?</label>
+                    <textarea id="logEvent" placeholder="Beschreibe die Situation"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Impulskontrolle</label>
+                    <select id="logControl">
+                        <option value="">-- Wählen --</option>
+                        <option value="gut">Gut kontrolliert</option>
+                        <option value="hilfe">Mit Hilfe/Erinnerung</option>
+                        <option value="schwer">Schwer gefallen</option>
+                        <option value="nicht">Nicht kontrolliert</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addLog()">Eintrag hinzufügen</button>
+            </div>
+            <div class="log-entries" id="logEntries"></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Fortschritt</h2>
+            <div class="progress-section">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value" id="situationsCount">0/6</div><div class="stat-label">Situationen gemeistert</div></div>
+                    <div class="stat"><div class="stat-value" id="strategiesCount">0/6</div><div class="stat-label">Strategien genutzt</div></div>
+                    <div class="stat"><div class="stat-value" id="scenariosCount">0/3</div><div class="stat-label">Kontrollierte Reaktionen</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 Förderhinweise</h2>
+            <ul style="line-height: 2; color: #555;">
+                <li><strong>Vorhersehbare Situationen:</strong> Vorher besprechen</li>
+                <li><strong>Geheime Signale:</strong> Erinnerungszeichen vereinbaren</li>
+                <li><strong>Verstärkung:</strong> Erfolgreiche Kontrolle sofort loben</li>
+                <li><strong>Rollenspiele:</strong> Schwierige Situationen üben</li>
+                <li><strong>Pausen einplanen:</strong> Regelmäßige Erholungsphasen</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveData()">💾 Speichern</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="exportData()">📤 Exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        let data = { situations: {}, strategies: {}, scenarios: {}, logs: [] };
+        const STORAGE_KEY = 'eldib_V36_arbeit';
+
+        function init() {
+            loadData();
+            document.querySelectorAll('.situation').forEach(s => {
+                s.addEventListener('click', function() {
+                    this.classList.toggle('mastered');
+                    this.querySelector('.status').textContent = this.classList.contains('mastered') ? '✅ Gelingt' : 'Nicht geprüft';
+                    data.situations[this.dataset.sit] = this.classList.contains('mastered');
+                    updateProgress(); saveData();
+                });
+                if (data.situations[s.dataset.sit]) {
+                    s.classList.add('mastered');
+                    s.querySelector('.status').textContent = '✅ Gelingt';
+                }
+            });
+
+            document.querySelectorAll('.strategy').forEach(s => {
+                s.addEventListener('click', function() {
+                    this.classList.toggle('used');
+                    data.strategies[this.dataset.strat] = this.classList.contains('used');
+                    updateProgress(); saveData();
+                });
+                if (data.strategies[s.dataset.strat]) s.classList.add('used');
+            });
+
+            document.querySelectorAll('.scenario-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const scenario = this.closest('.scenario').dataset.scenario;
+                    this.closest('.scenario-options').querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected', 'correct'));
+                    this.classList.add('selected');
+                    if (this.dataset.correct) this.classList.add('correct');
+                    data.scenarios[scenario] = { response: this.dataset.response, correct: !!this.dataset.correct };
+                    updateProgress(); saveData();
+                });
+            });
+            Object.entries(data.scenarios).forEach(([scenario, { response }]) => {
+                const sc = document.querySelector(`.scenario[data-scenario="${scenario}"]`);
+                if (sc) {
+                    const opt = sc.querySelector(`.scenario-option[data-response="${response}"]`);
+                    if (opt) { opt.classList.add('selected'); if (opt.dataset.correct) opt.classList.add('correct'); }
+                }
+            });
+
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            renderLogs(); updateProgress();
+        }
+
+        function addLog() {
+            const date = document.getElementById('logDate').value;
+            const situation = document.getElementById('logSituation').value;
+            const event = document.getElementById('logEvent').value;
+            const control = document.getElementById('logControl').value;
+            if (!date || !event) { alert('Bitte ausfüllen.'); return; }
+            data.logs.push({ date, situation, event, control, id: Date.now() });
+            saveData(); renderLogs();
+            document.getElementById('logEvent').value = '';
+            document.getElementById('logControl').value = '';
+        }
+
+        function deleteLog(id) { data.logs = data.logs.filter(l => l.id !== id); saveData(); renderLogs(); }
+
+        function renderLogs() {
+            const c = document.getElementById('logEntries');
+            if (data.logs.length === 0) { c.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Noch keine Einträge.</p>'; return; }
+            const icons = { 'gut': '✅', 'hilfe': '💡', 'schwer': '🔄', 'nicht': '❌' };
+            c.innerHTML = data.logs.slice().reverse().map(l => `
+                <div class="log-entry"><div style="flex:1"><strong>${l.event.substring(0,50)}${l.event.length>50?'...':''}</strong>
+                <div style="font-size:0.85em;color:#888;margin-top:5px">${l.date} | ${l.situation||''} | ${icons[l.control]||''}</div></div>
+                <button class="delete-btn" onclick="deleteLog(${l.id})">×</button></div>`).join('');
+        }
+
+        function updateProgress() {
+            const sitCount = Object.values(data.situations).filter(v => v).length;
+            const stratCount = Object.values(data.strategies).filter(v => v).length;
+            const correctScenarios = Object.values(data.scenarios).filter(s => s.correct).length;
+            document.getElementById('situationsCount').textContent = sitCount + '/6';
+            document.getElementById('strategiesCount').textContent = stratCount + '/6';
+            document.getElementById('scenariosCount').textContent = correctScenarios + '/3';
+            const progress = Math.round((sitCount/6*35) + (stratCount/6*30) + (correctScenarios/3*35));
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function loadData() { const s = localStorage.getItem(STORAGE_KEY); if (s) data = JSON.parse(s); }
+        function exportData() {
+            const blob = new Blob([JSON.stringify({ item: 'V-36', ...data }, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `V-36_Impulskontrolle-Gruppe_${new Date().toISOString().split('T')[0]}.json`; a.click();
+        }
+        init();
+    </script>
+</body>
+</html>
