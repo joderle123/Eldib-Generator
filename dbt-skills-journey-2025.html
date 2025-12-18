@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DBT Skills Journey 2025 ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1b4b;
+            --light: #f8fafc;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 25s infinite;
+        }
+
+        .bg-animation span:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .bg-animation span:nth-child(2) { left: 20%; animation-delay: 2s; width: 40px; height: 40px; }
+        .bg-animation span:nth-child(3) { left: 35%; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 50%; animation-delay: 0s; width: 30px; height: 30px; }
+        .bg-animation span:nth-child(5) { left: 65%; animation-delay: 3s; }
+        .bg-animation span:nth-child(6) { left: 75%; animation-delay: 5s; width: 50px; height: 50px; }
+        .bg-animation span:nth-child(7) { left: 85%; animation-delay: 7s; }
+        .bg-animation span:nth-child(8) { left: 90%; animation-delay: 1s; width: 25px; height: 25px; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-header span {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .timer {
+            background: var(--gradient-2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-4);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .module-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .module-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .module-dot.active {
+            background: var(--gradient-3);
+            transform: scale(1.2);
+        }
+
+        .module-dot.completed {
+            background: var(--success);
+        }
+
+        /* Screen Container */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .btn-success {
+            background: var(--gradient-4);
+            color: #1e1b4b;
+        }
+
+        .btn-lg {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            border-radius: 20px;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        textarea.input-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Emoji Selector */
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .emoji-btn {
+            aspect-ratio: 1;
+            font-size: 2rem;
+            background: rgba(255,255,255,0.1);
+            border: 3px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .emoji-btn.selected {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Player Cards */
+        .player-setup {
+            display: grid;
+            gap: 15px;
+        }
+
+        .player-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .player-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Mood Slider */
+        .mood-slider-container {
+            margin: 30px 0;
+        }
+
+        .mood-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .mood-slider {
+            width: 100%;
+            height: 20px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .mood-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .mood-display {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 3rem;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .skill-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .skill-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        .skill-card.selected {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .skill-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .skill-card h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .skill-card p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-3);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 25px;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--dark);
+        }
+
+        .timeline-month {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        /* Quiz Styles */
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Score Display */
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .score-item {
+            text-align: center;
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Breathing Exercise */
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            margin: 40px auto;
+            border-radius: 50%;
+            background: var(--gradient-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        .breathing-circle.paused {
+            animation-play-state: paused;
+        }
+
+        .breathing-instructions {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+
+        /* Strength Cards */
+        .strength-input-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .strength-for {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .strength-for h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .strength-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .strength-tag {
+            padding: 8px 16px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strength-tag button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Predefined Strengths */
+        .predefined-strengths {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .predefined-strength {
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .predefined-strength:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .predefined-strength.used {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Goals Section */
+        .goal-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .goal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .goal-number {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Certificate */
+        .certificate {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            color: #1e1b4b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 3px solid #d97706;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .certificate h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #92400e;
+        }
+
+        .certificate .name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 20px 0;
+            color: #1e1b4b;
+        }
+
+        .certificate p {
+            margin: 10px 0;
+            color: #78350f;
+        }
+
+        .certificate .seal {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        /* Reveal Animation */
+        .reveal-container {
+            perspective: 1000px;
+        }
+
+        .reveal-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 15px 0;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        .reveal-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Group Activity Indicator */
+        .group-activity {
+            background: var(--gradient-5);
+            color: #1e1b4b;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+        }
+
+        .group-activity .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--gradient-1);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-buttons .btn {
+            flex: 1;
+        }
+
+        /* Instructions Box */
+        .instructions {
+            background: rgba(99, 102, 241, 0.2);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .instructions h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            opacity: 0.9;
+        }
+
+        /* Challenge Timer */
+        .challenge-timer {
+            font-size: 4rem;
+            font-weight: 800;
+            text-align: center;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .emoji-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .score-display {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Print Styles for Certificate */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .certificate {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>✨ DBT Skills Journey 2025 ✨</h1>
+            <p style="opacity: 0.8;">Dein persönlicher Jahresabschluss</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-header">
+                <span id="currentModule">Modul 1 von 7</span>
+                <div class="timer" id="timer">⏱️ 90:00</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="module-indicators">
+                <div class="module-dot" data-module="1">1</div>
+                <div class="module-dot" data-module="2">2</div>
+                <div class="module-dot" data-module="3">3</div>
+                <div class="module-dot" data-module="4">4</div>
+                <div class="module-dot" data-module="5">5</div>
+                <div class="module-dot" data-module="6">6</div>
+                <div class="module-dot" data-module="7">7</div>
+            </div>
+        </div>
+
+        <!-- SCREEN 0: Welcome -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">🌟</div>
+                    <h2 style="font-size: 2rem; margin-bottom: 15px;">Willkommen zur DBT Skills Journey!</h2>
+                    <p style="opacity: 0.8; margin-bottom: 30px; line-height: 1.7;">
+                        Heute nehmen wir uns Zeit, auf das Jahr 2025 zurückzublicken,<br>
+                        unsere Stärken zu feiern und gemeinsam ins neue Jahr zu starten.
+                    </p>
+
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; margin: 30px 0; text-align: left;">
+                        <h3 style="margin-bottom: 15px;">📋 Was erwartet euch:</h3>
+                        <ul style="margin-left: 20px; line-height: 2;">
+                            <li>🧘 Check-In & Ankommen</li>
+                            <li>📅 Jahresrückblick 2025</li>
+                            <li>🧩 DBT-Skills Challenge</li>
+                            <li>🎭 Emotionen-Labor</li>
+                            <li>💪 Stärken-Karussell</li>
+                            <li>🎯 Zukunfts-Kompass</li>
+                            <li>🏆 Abschluss & Zertifikat</li>
+                        </ul>
+                    </div>
+
+                    <p style="font-size: 1.1rem; margin-bottom: 30px;">
+                        <strong>Dauer:</strong> ca. 90 Minuten<br>
+                        <strong>Teilnehmer:</strong> 3 Personen
+                    </p>
+
+                    <button class="btn btn-primary btn-lg" onclick="startJourney()">
+                        🚀 Los geht's!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 1: Check-In -->
+        <div class="screen" id="screen-1">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-3);">🧘</div>
+                    <div>
+                        <div class="card-title">Check-In Station</div>
+                        <div class="card-subtitle">Ankommen & Verbinden</div>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>📝 So geht's:</h4>
+                    <ul>
+                        <li>Jeder gibt seinen Namen ein</li>
+                        <li>Wählt eure aktuelle Stimmung</li>
+                        <li>Dann machen wir eine kurze Atemübung zusammen</li>
+                    </ul>
+                </div>
+
+                <div class="player-setup" id="playerSetup">
+                    <div class="player-card">
+                        <h3>👤 Person 1</h3>
+                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="1">
+                    </div>
+                    <div class="player-card">
+                        <h3>👤 Person 2</h3>
+                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="2">
+                    </div>
+                    <div class="player-card">
+                        <h3>👤 Person 3</h3>
+                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="3">
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-primary btn-block" onclick="saveNames()">
+                        Weiter zur Stimmung →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 1b: Mood Check -->
+        <div class="screen" id="screen-1b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-5);">🎭</div>
+                    <div>
+                        <div class="card-title">Stimmungs-Check</div>
+                        <div class="card-subtitle">Wie geht es dir gerade?</div>
+                    </div>
+                </div>
+
+                <div class="tabs" id="moodTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="moodContent">
+                    <!-- Current player mood selection -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 1c: Breathing Exercise -->
+        <div class="screen" id="screen-1c">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-4);">🌬️</div>
+                    <div>
+                        <div class="card-title">Atemübung</div>
+                        <div class="card-subtitle">Gemeinsam ankommen</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">👥</span>
+                    <span>Gruppenaktivität: Macht diese Übung gemeinsam!</span>
+                </div>
+
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Setzt euch bequem hin und folgt dem Atemkreis.<br>
+                    4 Sekunden einatmen - 4 Sekunden halten - 4 Sekunden ausatmen
+                </p>
+
+                <div class="breathing-circle paused" id="breathingCircle">
+                    Bereit?
+                </div>
+
+                <div class="breathing-instructions" id="breathingInstructions">
+                    Klicke auf Start, wenn alle bereit sind
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="btn btn-primary btn-lg" id="breathingBtn" onclick="toggleBreathing()">
+                        ▶️ Start
+                    </button>
+                </div>
+
+                <div class="nav-buttons" id="breathingNav" style="display: none;">
+                    <button class="btn btn-success btn-block" onclick="goToScreen(2)">
+                        ✓ Weiter zum Jahresrückblick
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: Year Review -->
+        <div class="screen" id="screen-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-1);">📅</div>
+                    <div>
+                        <div class="card-title">Mein Jahr 2025</div>
+                        <div class="card-subtitle">Rückblick auf wichtige Momente</div>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>💭 Denke zurück:</h4>
+                    <ul>
+                        <li>Was waren deine Highlights?</li>
+                        <li>Was hast du Neues gelernt?</li>
+                        <li>Welche Herausforderungen hast du gemeistert?</li>
+                    </ul>
+                </div>
+
+                <div class="tabs" id="reviewTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="reviewContent">
+                    <!-- Current player review -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2b: Skills Used -->
+        <div class="screen" id="screen-2b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-2);">🛠️</div>
+                    <div>
+                        <div class="card-title">Skills die mir geholfen haben</div>
+                        <div class="card-subtitle">Welche DBT-Skills hast du 2025 genutzt?</div>
+                    </div>
+                </div>
+
+                <div class="tabs" id="skillsTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="skillsContent">
+                    <!-- Skills selection -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: Quiz Challenge -->
+        <div class="screen" id="screen-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-5);">🧩</div>
+                    <div>
+                        <div class="card-title">DBT-Skills Challenge</div>
+                        <div class="card-subtitle">Zeigt was ihr gelernt habt!</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">🤝</span>
+                    <span>Team-Challenge: Diskutiert die Antworten gemeinsam!</span>
+                </div>
+
+                <div class="score-display">
+                    <div class="score-item">
+                        <div class="score-value" id="quizScore">0</div>
+                        <div class="score-label">Punkte</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value" id="quizQuestion">1/10</div>
+                        <div class="score-label">Frage</div>
+                    </div>
+                </div>
+
+                <div id="quizContainer">
+                    <!-- Quiz questions will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3b: Quiz Results -->
+        <div class="screen" id="screen-3b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-4);">🏆</div>
+                    <div>
+                        <div class="card-title">Challenge Ergebnis</div>
+                        <div class="card-subtitle">Super gemacht, Team!</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding: 30px 0;">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
+                    <div style="font-size: 3rem; font-weight: 800;" id="finalScore">0/10</div>
+                    <p style="margin: 20px 0; font-size: 1.2rem;" id="scoreMessage"></p>
+                </div>
+
+                <div id="quizReview">
+                    <!-- Wrong answers review -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-success btn-block" onclick="goToScreen(4)">
+                        Weiter zum Emotionen-Labor →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: Emotions Lab -->
+        <div class="screen" id="screen-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-2);">🎭</div>
+                    <div>
+                        <div class="card-title">Emotionen-Labor</div>
+                        <div class="card-subtitle">Gefühle erkennen & verstehen</div>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>🔬 Im Labor heute:</h4>
+                    <ul>
+                        <li>Emotionen im Körper finden</li>
+                        <li>Gefühle benennen</li>
+                        <li>Passende Skills zuordnen</li>
+                    </ul>
+                </div>
+
+                <div class="tabs" id="emotionTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="emotionContent">
+                    <!-- Emotion exercises -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4b: Body Scan -->
+        <div class="screen" id="screen-4b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-3);">🧍</div>
+                    <div>
+                        <div class="card-title">Körper-Scan</div>
+                        <div class="card-subtitle">Wo spürst du Gefühle?</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">👥</span>
+                    <span>Teilt danach eure Erfahrungen miteinander!</span>
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <svg width="200" height="300" viewBox="0 0 200 300" id="bodyMap">
+                        <!-- Head -->
+                        <circle cx="100" cy="40" r="35" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="kopf" onclick="selectBodyPart(this)"/>
+                        <!-- Chest -->
+                        <rect x="60" y="80" width="80" height="60" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="brust" onclick="selectBodyPart(this)"/>
+                        <!-- Stomach -->
+                        <rect x="65" y="145" width="70" height="50" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="bauch" onclick="selectBodyPart(this)"/>
+                        <!-- Arms -->
+                        <rect x="20" y="85" width="35" height="80" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="arme" onclick="selectBodyPart(this)"/>
+                        <rect x="145" y="85" width="35" height="80" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="arme" onclick="selectBodyPart(this)"/>
+                        <!-- Legs -->
+                        <rect x="60" y="200" width="35" height="90" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="beine" onclick="selectBodyPart(this)"/>
+                        <rect x="105" y="200" width="35" height="90" rx="10" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2" class="body-part" data-part="beine" onclick="selectBodyPart(this)"/>
+                    </svg>
+                </div>
+
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Klicke auf die Körperregionen, wo du heute Gefühle spürst
+                </p>
+
+                <div id="bodyPartInfo" style="text-align: center; min-height: 100px;">
+                    <!-- Info about selected body part -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-success btn-block" onclick="goToScreen(5)">
+                        Weiter zum Stärken-Karussell →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: Strengths Carousel -->
+        <div class="screen" id="screen-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-4);">💪</div>
+                    <div>
+                        <div class="card-title">Stärken-Karussell</div>
+                        <div class="card-subtitle">Gegenseitige Wertschätzung</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">❤️</span>
+                    <span>Wichtig: Schreibt ehrliche, positive Dinge über die anderen!</span>
+                </div>
+
+                <div class="instructions">
+                    <h4>🎯 So funktioniert's:</h4>
+                    <ul>
+                        <li>Schreibe für jede andere Person 2-3 Stärken auf</li>
+                        <li>Du kannst vorgefertigte Stärken wählen oder eigene schreiben</li>
+                        <li>Danach werden die Stärken enthüllt!</li>
+                    </ul>
+                </div>
+
+                <div class="tabs" id="strengthWriterTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="strengthWriterContent">
+                    <!-- Strength writing interface -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 5b: Strengths Reveal -->
+        <div class="screen" id="screen-5b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-5);">🎁</div>
+                    <div>
+                        <div class="card-title">Stärken-Enthüllung</div>
+                        <div class="card-subtitle">Das sagen die anderen über dich!</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">🥳</span>
+                    <span>Zeit zum Feiern! Lest die Stärken laut vor!</span>
+                </div>
+
+                <div class="tabs" id="strengthRevealTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="strengthRevealContent">
+                    <!-- Reveal cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: Future Goals -->
+        <div class="screen" id="screen-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-1);">🎯</div>
+                    <div>
+                        <div class="card-title">Zukunfts-Kompass</div>
+                        <div class="card-subtitle">Deine Ziele für 2026</div>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>🌟 Denke groß:</h4>
+                    <ul>
+                        <li>Was willst du 2026 erreichen?</li>
+                        <li>Welche Skills willst du verbessern?</li>
+                        <li>Wie willst du dich fühlen?</li>
+                    </ul>
+                </div>
+
+                <div class="tabs" id="goalTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="goalContent">
+                    <!-- Goals interface -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 6b: Commitment -->
+        <div class="screen" id="screen-6b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-2);">🤝</div>
+                    <div>
+                        <div class="card-title">Meine Selbstverpflichtung</div>
+                        <div class="card-subtitle">Ein Versprechen an dich selbst</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">📢</span>
+                    <span>Teilt eure Verpflichtungen laut miteinander!</span>
+                </div>
+
+                <div class="tabs" id="commitmentTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="commitmentContent">
+                    <!-- Commitment display -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 7: Closing -->
+        <div class="screen" id="screen-7">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-4);">🏆</div>
+                    <div>
+                        <div class="card-title">Abschluss-Zeremonie</div>
+                        <div class="card-subtitle">Zeit zum Feiern!</div>
+                    </div>
+                </div>
+
+                <div class="group-activity">
+                    <span class="icon">🙏</span>
+                    <span>Letzte gemeinsame Übung: Dankbarkeits-Runde</span>
+                </div>
+
+                <div style="text-align: center; padding: 30px 0;">
+                    <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                        Bevor wir eure Zertifikate anschauen,<br>
+                        nennt reihum <strong>eine Sache</strong>, für die ihr heute dankbar seid.
+                    </p>
+
+                    <div style="font-size: 4rem; margin: 30px 0;">🙏</div>
+
+                    <button class="btn btn-primary btn-lg" onclick="showCertificates()">
+                        🎓 Zertifikate anzeigen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 7b: Certificates -->
+        <div class="screen" id="screen-7b">
+            <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
+                <div class="tabs" id="certTabs">
+                    <!-- Generated dynamically -->
+                </div>
+
+                <div id="certContent">
+                    <!-- Certificates -->
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <p style="margin-bottom: 20px; opacity: 0.8;">
+                        💡 Tipp: Macht einen Screenshot von eurem Zertifikat!
+                    </p>
+                    <button class="btn btn-secondary" onclick="restartJourney()">
+                        🔄 Nochmal starten
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ==================== APP STATE ====================
+        const appState = {
+            currentScreen: 'welcome',
+            currentModule: 0,
+            players: [
+                { name: '', mood: 5, moodEmoji: '😊' },
+                { name: '', mood: 5, moodEmoji: '😊' },
+                { name: '', mood: 5, moodEmoji: '😊' }
+            ],
+            reviews: [{}, {}, {}],
+            selectedSkills: [[], [], []],
+            emotions: [{}, {}, {}],
+            strengths: {
+                // strengths[writerIndex][receiverIndex] = ['strength1', 'strength2']
+                0: { 1: [], 2: [] },
+                1: { 0: [], 2: [] },
+                2: { 0: [], 1: [] }
+            },
+            goals: [{}, {}, {}],
+            commitments: ['', '', ''],
+            quizScore: 0,
+            quizAnswers: [],
+            startTime: null,
+            timerInterval: null
+        };
+
+        // ==================== QUIZ DATA ====================
+        const quizQuestions = [
+            {
+                question: "Was bedeutet TIPP als DBT-Skill?",
+                options: [
+                    "Temperatur, Intensive Bewegung, Progressive Muskelentspannung, Paced Breathing",
+                    "Tipps, Ideen, Pläne, Probleme",
+                    "Training, Information, Praxis, Perfektion",
+                    "Tagebuch, Impulse, Positives, Planung"
+                ],
+                correct: 0,
+                explanation: "TIPP steht für Temperatur (z.B. kaltes Wasser), Intensive Bewegung, Progressive Muskelentspannung und Paced Breathing (langsames Atmen)."
+            },
+            {
+                question: "Was ist das Ziel von Achtsamkeit?",
+                options: [
+                    "Möglichst schnell zu sein",
+                    "Im gegenwärtigen Moment präsent zu sein ohne zu urteilen",
+                    "Negative Gedanken zu verdrängen",
+                    "Immer positiv zu denken"
+                ],
+                correct: 1,
+                explanation: "Achtsamkeit bedeutet, den gegenwärtigen Moment bewusst wahrzunehmen, ohne ihn zu bewerten."
+            },
+            {
+                question: "Was sind die 4 Module der DBT?",
+                options: [
+                    "Essen, Schlafen, Sport, Lernen",
+                    "Denken, Fühlen, Handeln, Reden",
+                    "Achtsamkeit, Stresstoleranz, Emotionsregulation, Zwischenmenschliche Fertigkeiten",
+                    "Angst, Wut, Trauer, Freude"
+                ],
+                correct: 2,
+                explanation: "Die 4 DBT-Module sind: Achtsamkeit, Stresstoleranz, Emotionsregulation und Zwischenmenschliche Fertigkeiten."
+            },
+            {
+                question: "Was ist STOP?",
+                options: [
+                    "Ein Verkehrszeichen",
+                    "Stop, Take a step back, Observe, Proceed mindfully",
+                    "Sprechen, Tanzen, Organisieren, Planen",
+                    "Schnell, Toll, Optimal, Perfekt"
+                ],
+                correct: 1,
+                explanation: "STOP: Stopp, Tritt einen Schritt zurück, Beobachte, Gehe achtsam weiter."
+            },
+            {
+                question: "Wofür ist die 'Wise Mind' (Weiser Verstand) bekannt?",
+                options: [
+                    "Nur logisch zu denken",
+                    "Nur emotional zu handeln",
+                    "Die Balance zwischen Verstand und Gefühl",
+                    "Immer anderen zu folgen"
+                ],
+                correct: 2,
+                explanation: "Der Weise Verstand vereint den rationalen Verstand mit dem emotionalen Verstand."
+            },
+            {
+                question: "Was bedeutet 'Radikale Akzeptanz'?",
+                options: [
+                    "Alles toll finden",
+                    "Die Realität so annehmen wie sie ist, ohne zu kämpfen",
+                    "Aufgeben",
+                    "Immer Ja sagen"
+                ],
+                correct: 1,
+                explanation: "Radikale Akzeptanz bedeutet, die Realität anzunehmen wie sie ist – das heißt nicht, sie gutzuheißen."
+            },
+            {
+                question: "Was ist eine gute Strategie bei starken Emotionen?",
+                options: [
+                    "Sie ignorieren",
+                    "Sofort handeln",
+                    "Erst durchatmen und dann überlegen",
+                    "Anderen die Schuld geben"
+                ],
+                correct: 2,
+                explanation: "Bei starken Emotionen ist es wichtig, erst innezuhalten und zu atmen, bevor wir handeln."
+            },
+            {
+                question: "Was gehört zu 'Zwischenmenschlichen Fertigkeiten'?",
+                options: [
+                    "Alleine sein",
+                    "Nein sagen können, Bitten äußern, Beziehungen pflegen",
+                    "Immer still sein",
+                    "Konflikte vermeiden"
+                ],
+                correct: 1,
+                explanation: "Zwischenmenschliche Fertigkeiten helfen uns, für uns einzustehen und gleichzeitig Beziehungen zu pflegen."
+            },
+            {
+                question: "Was ist 'Opposite Action' (Entgegengesetzte Handlung)?",
+                options: [
+                    "Das Gegenteil von dem tun, was die Emotion will",
+                    "Immer das Gegenteil von anderen tun",
+                    "Nie das tun was man will",
+                    "Gegen alles sein"
+                ],
+                correct: 0,
+                explanation: "Wenn eine Emotion nicht zur Situation passt, kann es helfen, das Gegenteil von dem zu tun, was die Emotion vorschlägt."
+            },
+            {
+                question: "Warum ist Selbstfürsorge wichtig?",
+                options: [
+                    "Um egoistisch zu sein",
+                    "Um andere zu beeindrucken",
+                    "Um emotional stabil zu bleiben und gut für sich sorgen zu können",
+                    "Um keine Zeit zu haben"
+                ],
+                correct: 2,
+                explanation: "Selbstfürsorge ist die Basis für emotionale Stabilität – nur wer gut für sich sorgt, kann auch für andere da sein."
+            }
+        ];
+
+        // ==================== SKILLS DATA ====================
+        const dbtSkills = [
+            { icon: '🧘', name: 'Achtsamkeit', desc: 'Im Moment sein' },
+            { icon: '❄️', name: 'TIPP', desc: 'Temperatur, Bewegung...' },
+            { icon: '✋', name: 'STOP', desc: 'Innehalten & beobachten' },
+            { icon: '🧠', name: 'Wise Mind', desc: 'Verstand & Gefühl' },
+            { icon: '💨', name: 'Atmen', desc: 'Tiefes Atmen' },
+            { icon: '🏃', name: 'Bewegung', desc: 'Körperlich aktiv sein' },
+            { icon: '✅', name: 'Akzeptanz', desc: 'Realität annehmen' },
+            { icon: '🗣️', name: 'Kommunikation', desc: 'Klar ausdrücken' },
+            { icon: '🎯', name: 'Ziele setzen', desc: 'Fokus behalten' },
+            { icon: '💪', name: 'Selbstfürsorge', desc: 'Gut zu mir sein' },
+            { icon: '📝', name: 'Tagebuch', desc: 'Gedanken aufschreiben' },
+            { icon: '🎵', name: 'Musik', desc: 'Stimmung regulieren' }
+        ];
+
+        const predefinedStrengths = [
+            'Hilfsbereit', 'Kreativ', 'Mutig', 'Ehrlich', 'Geduldig',
+            'Witzig', 'Zuverlässig', 'Freundlich', 'Stark', 'Klug',
+            'Einfühlsam', 'Motivierend', 'Loyal', 'Optimistisch', 'Respektvoll',
+            'Fleißig', 'Verständnisvoll', 'Inspirierend', 'Aufmerksam', 'Liebevoll'
+        ];
+
+        const moodEmojis = [
+            { emoji: '😢', label: 'Sehr schlecht' },
+            { emoji: '😔', label: 'Schlecht' },
+            { emoji: '😐', label: 'Neutral' },
+            { emoji: '🙂', label: 'Gut' },
+            { emoji: '😊', label: 'Sehr gut' }
+        ];
+
+        const bodyPartInfo = {
+            kopf: {
+                emotions: ['Sorgen', 'Grübeln', 'Kopfschmerzen bei Stress'],
+                tips: 'Achtsamkeitsübungen und tiefes Atmen können helfen.'
+            },
+            brust: {
+                emotions: ['Angst', 'Aufregung', 'Herzklopfen', 'Enge'],
+                tips: 'Langsames Atmen und Erdung helfen, die Brust zu entspannen.'
+            },
+            bauch: {
+                emotions: ['Nervosität', 'Angst', 'Schmetterlinge', 'Übelkeit'],
+                tips: 'Der Bauch reagiert oft auf Stress. TIPP und Atemübungen helfen.'
+            },
+            arme: {
+                emotions: ['Anspannung', 'Unruhe', 'Bewegungsdrang'],
+                tips: 'Bewegung und progressive Muskelentspannung können helfen.'
+            },
+            beine: {
+                emotions: ['Unruhe', 'Fluchtimpuls', 'Zittern'],
+                tips: 'Erdungsübungen und Sport helfen, überschüssige Energie abzubauen.'
+            }
+        };
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showNotification(message, duration = 3000) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), duration);
+        }
+
+        function updateProgress() {
+            const progress = (appState.currentModule / 7) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('currentModule').textContent = `Modul ${appState.currentModule} von 7`;
+
+            document.querySelectorAll('.module-dot').forEach((dot, i) => {
+                dot.classList.remove('active', 'completed');
+                if (i + 1 < appState.currentModule) {
+                    dot.classList.add('completed');
+                } else if (i + 1 === appState.currentModule) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        function startTimer() {
+            appState.startTime = Date.now();
+            const duration = 90 * 60 * 1000; // 90 minutes
+
+            appState.timerInterval = setInterval(() => {
+                const elapsed = Date.now() - appState.startTime;
+                const remaining = Math.max(0, duration - elapsed);
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                document.getElementById('timer').textContent =
+                    `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (remaining === 0) {
+                    clearInterval(appState.timerInterval);
+                }
+            }, 1000);
+        }
+
+        function goToScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+            if (screenNum === 'welcome') {
+                document.getElementById('screen-welcome').classList.add('active');
+                document.getElementById('progressContainer').style.display = 'none';
+                return;
+            }
+
+            document.getElementById(`screen-${screenNum}`).classList.add('active');
+            appState.currentScreen = screenNum;
+
+            // Update module number based on screen
+            if (typeof screenNum === 'number' || !screenNum.includes('b')) {
+                const moduleNum = parseInt(screenNum);
+                if (!isNaN(moduleNum)) {
+                    appState.currentModule = moduleNum;
+                    updateProgress();
+                }
+            }
+
+            // Initialize screen content
+            initializeScreen(screenNum);
+        }
+
+        function generateTabs(containerId, onTabClick) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = appState.players.map((player, i) => `
+                <button class="tab ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="${onTabClick}(${i})">
+                    ${player.name || `Person ${i + 1}`}
+                </button>
+            `).join('');
+        }
+
+        // ==================== SCREEN INITIALIZERS ====================
+        function initializeScreen(screenNum) {
+            switch(screenNum) {
+                case '1b':
+                    initMoodScreen();
+                    break;
+                case 2:
+                    initReviewScreen();
+                    break;
+                case '2b':
+                    initSkillsScreen();
+                    break;
+                case 3:
+                    initQuizScreen();
+                    break;
+                case 4:
+                    initEmotionScreen();
+                    break;
+                case 5:
+                    initStrengthsScreen();
+                    break;
+                case '5b':
+                    initStrengthsReveal();
+                    break;
+                case 6:
+                    initGoalsScreen();
+                    break;
+                case '6b':
+                    initCommitmentScreen();
+                    break;
+                case '7b':
+                    initCertificates();
+                    break;
+            }
+        }
+
+        // ==================== SCREEN 0: WELCOME ====================
+        function startJourney() {
+            document.getElementById('progressContainer').style.display = 'block';
+            goToScreen(1);
+            startTimer();
+            appState.currentModule = 1;
+            updateProgress();
+        }
+
+        // ==================== SCREEN 1: CHECK-IN ====================
+        function saveNames() {
+            const inputs = document.querySelectorAll('.player-name');
+            let allFilled = true;
+
+            inputs.forEach((input, i) => {
+                if (input.value.trim()) {
+                    appState.players[i].name = input.value.trim();
+                } else {
+                    allFilled = false;
+                }
+            });
+
+            if (!allFilled) {
+                showNotification('Bitte alle Namen eingeben!');
+                return;
+            }
+
+            goToScreen('1b');
+        }
+
+        // ==================== SCREEN 1B: MOOD ====================
+        function initMoodScreen() {
+            generateTabs('moodTabs', 'showMoodFor');
+            showMoodFor(0);
+        }
+
+        function showMoodFor(playerIndex) {
+            document.querySelectorAll('#moodTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const content = document.getElementById('moodContent');
+
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">${player.name}, wie geht es dir gerade?</h3>
+
+                    <div class="mood-slider-container">
+                        <div class="mood-labels">
+                            <span>😢 Schlecht</span>
+                            <span>😊 Super</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="${player.mood}" class="mood-slider"
+                            onchange="updateMood(${playerIndex}, this.value)">
+                        <div class="mood-display">${moodEmojis[player.mood - 1].emoji}</div>
+                        <p style="opacity: 0.8; margin-top: 10px;">${moodEmojis[player.mood - 1].label}</p>
+                    </div>
+
+                    <div class="nav-buttons" style="margin-top: 30px;">
+                        ${playerIndex > 0 ? `
+                            <button class="btn btn-secondary" onclick="showMoodFor(${playerIndex - 1})">
+                                ← Zurück
+                            </button>
+                        ` : ''}
+                        ${playerIndex < 2 ? `
+                            <button class="btn btn-primary" onclick="showMoodFor(${playerIndex + 1})">
+                                Weiter →
+                            </button>
+                        ` : `
+                            <button class="btn btn-success" onclick="goToScreen('1c')">
+                                ✓ Zur Atemübung
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateMood(playerIndex, value) {
+            appState.players[playerIndex].mood = parseInt(value);
+            appState.players[playerIndex].moodEmoji = moodEmojis[value - 1].emoji;
+            document.querySelector('.mood-display').textContent = moodEmojis[value - 1].emoji;
+            document.querySelector('.mood-display + p').textContent = moodEmojis[value - 1].label;
+        }
+
+        // ==================== SCREEN 1C: BREATHING ====================
+        let breathingInterval = null;
+        let breathingPhase = 0;
+        const breathingPhases = [
+            { text: 'Einatmen...', duration: 4000 },
+            { text: 'Halten...', duration: 4000 },
+            { text: 'Ausatmen...', duration: 4000 }
+        ];
+        let breathingCycles = 0;
+
+        function toggleBreathing() {
+            const btn = document.getElementById('breathingBtn');
+            const circle = document.getElementById('breathingCircle');
+            const instructions = document.getElementById('breathingInstructions');
+
+            if (breathingInterval) {
+                // Stop
+                clearInterval(breathingInterval);
+                breathingInterval = null;
+                btn.innerHTML = '▶️ Fortsetzen';
+                circle.classList.add('paused');
+            } else {
+                // Start
+                btn.innerHTML = '⏸️ Pause';
+                circle.classList.remove('paused');
+                runBreathingCycle();
+            }
+        }
+
+        function runBreathingCycle() {
+            const circle = document.getElementById('breathingCircle');
+            const instructions = document.getElementById('breathingInstructions');
+
+            function nextPhase() {
+                const phase = breathingPhases[breathingPhase];
+                circle.textContent = phase.text.replace('...', '');
+                instructions.textContent = phase.text;
+
+                breathingPhase = (breathingPhase + 1) % 3;
+
+                if (breathingPhase === 0) {
+                    breathingCycles++;
+                    if (breathingCycles >= 3) {
+                        clearInterval(breathingInterval);
+                        breathingInterval = null;
+                        circle.textContent = '✓';
+                        instructions.textContent = 'Gut gemacht! Ihr seid bereit.';
+                        document.getElementById('breathingBtn').style.display = 'none';
+                        document.getElementById('breathingNav').style.display = 'flex';
+                        return;
+                    }
+                }
+            }
+
+            nextPhase();
+            breathingInterval = setInterval(nextPhase, 4000);
+        }
+
+        // ==================== SCREEN 2: YEAR REVIEW ====================
+        function initReviewScreen() {
+            generateTabs('reviewTabs', 'showReviewFor');
+            showReviewFor(0);
+        }
+
+        function showReviewFor(playerIndex) {
+            document.querySelectorAll('#reviewTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const review = appState.reviews[playerIndex];
+            const content = document.getElementById('reviewContent');
+
+            content.innerHTML = `
+                <h3 style="margin-bottom: 20px;">${player.name}s Jahr 2025</h3>
+
+                <div class="input-group">
+                    <label>🌟 Mein größtes Highlight</label>
+                    <textarea class="input-field" placeholder="Was war dein schönster Moment 2025?"
+                        onchange="appState.reviews[${playerIndex}].highlight = this.value">${review.highlight || ''}</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>📚 Das habe ich gelernt</label>
+                    <textarea class="input-field" placeholder="Was hast du Neues über dich oder das Leben gelernt?"
+                        onchange="appState.reviews[${playerIndex}].learned = this.value">${review.learned || ''}</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>💪 Diese Herausforderung habe ich gemeistert</label>
+                    <textarea class="input-field" placeholder="Was war schwierig, aber du hast es geschafft?"
+                        onchange="appState.reviews[${playerIndex}].challenge = this.value">${review.challenge || ''}</textarea>
+                </div>
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showReviewFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showReviewFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen('2b')">
+                            ✓ Zu den Skills
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        // ==================== SCREEN 2B: SKILLS USED ====================
+        function initSkillsScreen() {
+            generateTabs('skillsTabs', 'showSkillsFor');
+            showSkillsFor(0);
+        }
+
+        function showSkillsFor(playerIndex) {
+            document.querySelectorAll('#skillsTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const selected = appState.selectedSkills[playerIndex];
+            const content = document.getElementById('skillsContent');
+
+            content.innerHTML = `
+                <h3 style="margin-bottom: 10px;">${player.name}, welche Skills haben dir 2025 geholfen?</h3>
+                <p style="opacity: 0.7; margin-bottom: 20px;">Wähle alle aus, die du genutzt hast:</p>
+
+                <div class="skills-grid">
+                    ${dbtSkills.map((skill, i) => `
+                        <div class="skill-card ${selected.includes(i) ? 'selected' : ''}"
+                            onclick="toggleSkill(${playerIndex}, ${i})">
+                            <div class="icon">${skill.icon}</div>
+                            <h4>${skill.name}</h4>
+                            <p>${skill.desc}</p>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showSkillsFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showSkillsFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen(3)">
+                            ✓ Zur Challenge
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        function toggleSkill(playerIndex, skillIndex) {
+            const selected = appState.selectedSkills[playerIndex];
+            const idx = selected.indexOf(skillIndex);
+
+            if (idx > -1) {
+                selected.splice(idx, 1);
+            } else {
+                selected.push(skillIndex);
+            }
+
+            showSkillsFor(playerIndex);
+        }
+
+        // ==================== SCREEN 3: QUIZ ====================
+        let currentQuizQuestion = 0;
+        let shuffledQuestions = [];
+
+        function initQuizScreen() {
+            shuffledQuestions = [...quizQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+            currentQuizQuestion = 0;
+            appState.quizScore = 0;
+            appState.quizAnswers = [];
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const q = shuffledQuestions[currentQuizQuestion];
+            const container = document.getElementById('quizContainer');
+
+            document.getElementById('quizScore').textContent = appState.quizScore;
+            document.getElementById('quizQuestion').textContent = `${currentQuizQuestion + 1}/10`;
+
+            container.innerHTML = `
+                <div class="quiz-question">${q.question}</div>
+                <div class="quiz-options">
+                    ${q.options.map((opt, i) => `
+                        <button class="quiz-option" onclick="selectQuizAnswer(${i})">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectQuizAnswer(answerIndex) {
+            const q = shuffledQuestions[currentQuizQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            const isCorrect = answerIndex === q.correct;
+
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === answerIndex && !isCorrect) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (isCorrect) {
+                appState.quizScore++;
+                document.getElementById('quizScore').textContent = appState.quizScore;
+            }
+
+            appState.quizAnswers.push({
+                question: q.question,
+                userAnswer: q.options[answerIndex],
+                correctAnswer: q.options[q.correct],
+                isCorrect,
+                explanation: q.explanation
+            });
+
+            setTimeout(() => {
+                currentQuizQuestion++;
+                if (currentQuizQuestion < 10) {
+                    showQuizQuestion();
+                } else {
+                    showQuizResults();
+                }
+            }, 1500);
+        }
+
+        function showQuizResults() {
+            goToScreen('3b');
+            document.getElementById('finalScore').textContent = `${appState.quizScore}/10`;
+
+            let message = '';
+            if (appState.quizScore >= 9) {
+                message = '🏆 Unglaublich! Ihr seid DBT-Profis!';
+            } else if (appState.quizScore >= 7) {
+                message = '🌟 Super gemacht! Ihr kennt euch gut aus!';
+            } else if (appState.quizScore >= 5) {
+                message = '👍 Gut! Es gibt noch Raum zum Lernen!';
+            } else {
+                message = '💪 Weiter üben - ihr schafft das!';
+            }
+            document.getElementById('scoreMessage').textContent = message;
+
+            // Show wrong answers for review
+            const review = document.getElementById('quizReview');
+            const wrongAnswers = appState.quizAnswers.filter(a => !a.isCorrect);
+
+            if (wrongAnswers.length > 0) {
+                review.innerHTML = `
+                    <h4 style="margin: 20px 0;">📚 Das könnt ihr noch lernen:</h4>
+                    ${wrongAnswers.map(a => `
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px;">
+                            <p style="font-weight: 600; margin-bottom: 10px;">${a.question}</p>
+                            <p style="color: #10b981; font-size: 0.9rem;">✓ ${a.correctAnswer}</p>
+                            <p style="opacity: 0.7; font-size: 0.85rem; margin-top: 10px;">${a.explanation}</p>
+                        </div>
+                    `).join('')}
+                `;
+            }
+        }
+
+        // ==================== SCREEN 4: EMOTIONS ====================
+        function initEmotionScreen() {
+            generateTabs('emotionTabs', 'showEmotionFor');
+            showEmotionFor(0);
+        }
+
+        function showEmotionFor(playerIndex) {
+            document.querySelectorAll('#emotionTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const emotion = appState.emotions[playerIndex];
+            const content = document.getElementById('emotionContent');
+
+            const emotionOptions = ['😊 Freude', '😢 Trauer', '😠 Wut', '😨 Angst', '😔 Enttäuschung', '🥰 Liebe', '😌 Ruhe', '🤔 Verwirrung'];
+
+            content.innerHTML = `
+                <h3 style="margin-bottom: 20px;">${player.name}s Emotionen 2025</h3>
+
+                <div class="input-group">
+                    <label>Welche Emotion hast du 2025 am häufigsten gespürt?</label>
+                    <div class="emoji-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        ${emotionOptions.map((em, i) => `
+                            <button class="emoji-btn ${emotion.main === em ? 'selected' : ''}"
+                                onclick="selectEmotion(${playerIndex}, 'main', '${em}')">
+                                ${em.split(' ')[0]}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Was hat dir geholfen, mit schwierigen Gefühlen umzugehen?</label>
+                    <textarea class="input-field" placeholder="Beschreibe deine Strategie..."
+                        onchange="appState.emotions[${playerIndex}].strategy = this.value">${emotion.strategy || ''}</textarea>
+                </div>
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showEmotionFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showEmotionFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen('4b')">
+                            ✓ Zum Körper-Scan
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        function selectEmotion(playerIndex, field, value) {
+            appState.emotions[playerIndex][field] = value;
+            showEmotionFor(playerIndex);
+        }
+
+        // ==================== SCREEN 4B: BODY SCAN ====================
+        function selectBodyPart(element) {
+            const part = element.dataset.part;
+            const info = bodyPartInfo[part];
+
+            element.style.fill = 'rgba(6, 182, 212, 0.5)';
+
+            document.getElementById('bodyPartInfo').innerHTML = `
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 16px; text-align: left;">
+                    <h4 style="text-transform: capitalize; margin-bottom: 10px;">📍 ${part}</h4>
+                    <p style="margin-bottom: 10px;"><strong>Typische Emotionen:</strong> ${info.emotions.join(', ')}</p>
+                    <p style="opacity: 0.8;"><strong>💡 Tipp:</strong> ${info.tips}</p>
+                </div>
+            `;
+        }
+
+        // ==================== SCREEN 5: STRENGTHS ====================
+        function initStrengthsScreen() {
+            generateTabs('strengthWriterTabs', 'showStrengthWriterFor');
+            showStrengthWriterFor(0);
+        }
+
+        function showStrengthWriterFor(writerIndex) {
+            document.querySelectorAll('#strengthWriterTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === writerIndex);
+            });
+
+            const writer = appState.players[writerIndex];
+            const content = document.getElementById('strengthWriterContent');
+
+            // Get other players
+            const otherPlayers = appState.players
+                .map((p, i) => ({ ...p, index: i }))
+                .filter((_, i) => i !== writerIndex);
+
+            content.innerHTML = `
+                <h3 style="margin-bottom: 20px;">${writer.name} schreibt Stärken</h3>
+                <p style="opacity: 0.7; margin-bottom: 20px;">
+                    📝 Schreibe für jede Person 2-3 Stärken auf.
+                    Die anderen können deinen Bildschirm nicht sehen!
+                </p>
+
+                <div class="strength-input-container">
+                    ${otherPlayers.map(other => `
+                        <div class="strength-for">
+                            <h4>💌 Stärken für ${other.name}:</h4>
+
+                            <div class="predefined-strengths">
+                                ${predefinedStrengths.map(s => {
+                                    const used = appState.strengths[writerIndex][other.index]?.includes(s);
+                                    return `
+                                        <button class="predefined-strength ${used ? 'used' : ''}"
+                                            onclick="addStrength(${writerIndex}, ${other.index}, '${s}')"
+                                            ${used ? 'disabled' : ''}>
+                                            ${used ? '✓ ' : ''}${s}
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <input type="text" class="input-field" placeholder="Oder eigene Stärke eingeben..."
+                                    id="customStrength-${writerIndex}-${other.index}"
+                                    onkeypress="if(event.key==='Enter') addCustomStrength(${writerIndex}, ${other.index})">
+                                <button class="btn btn-secondary" onclick="addCustomStrength(${writerIndex}, ${other.index})">+</button>
+                            </div>
+
+                            <div class="strength-tags" id="strengthTags-${writerIndex}-${other.index}">
+                                ${(appState.strengths[writerIndex][other.index] || []).map(s => `
+                                    <span class="strength-tag">
+                                        ${s}
+                                        <button onclick="removeStrength(${writerIndex}, ${other.index}, '${s}')">×</button>
+                                    </span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="nav-buttons">
+                    ${writerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showStrengthWriterFor(${writerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${writerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showStrengthWriterFor(${writerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen('5b')">
+                            🎁 Stärken enthüllen!
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        function addStrength(writerIndex, receiverIndex, strength) {
+            if (!appState.strengths[writerIndex][receiverIndex]) {
+                appState.strengths[writerIndex][receiverIndex] = [];
+            }
+            if (!appState.strengths[writerIndex][receiverIndex].includes(strength)) {
+                appState.strengths[writerIndex][receiverIndex].push(strength);
+                showStrengthWriterFor(writerIndex);
+            }
+        }
+
+        function addCustomStrength(writerIndex, receiverIndex) {
+            const input = document.getElementById(`customStrength-${writerIndex}-${receiverIndex}`);
+            const strength = input.value.trim();
+            if (strength) {
+                addStrength(writerIndex, receiverIndex, strength);
+                input.value = '';
+            }
+        }
+
+        function removeStrength(writerIndex, receiverIndex, strength) {
+            const idx = appState.strengths[writerIndex][receiverIndex].indexOf(strength);
+            if (idx > -1) {
+                appState.strengths[writerIndex][receiverIndex].splice(idx, 1);
+                showStrengthWriterFor(writerIndex);
+            }
+        }
+
+        // ==================== SCREEN 5B: STRENGTHS REVEAL ====================
+        function initStrengthsReveal() {
+            generateTabs('strengthRevealTabs', 'showStrengthRevealFor');
+            showStrengthRevealFor(0);
+        }
+
+        function showStrengthRevealFor(playerIndex) {
+            document.querySelectorAll('#strengthRevealTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const content = document.getElementById('strengthRevealContent');
+
+            // Collect all strengths for this player
+            const allStrengths = [];
+            appState.players.forEach((writer, writerIndex) => {
+                if (writerIndex !== playerIndex) {
+                    const strengths = appState.strengths[writerIndex][playerIndex] || [];
+                    strengths.forEach(s => {
+                        allStrengths.push({ strength: s, from: writer.name });
+                    });
+                }
+            });
+
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="font-size: 2rem; margin-bottom: 10px;">🌟 ${player.name}s Stärken 🌟</h2>
+                    <p style="opacity: 0.8;">Das sagen die anderen über dich:</p>
+                </div>
+
+                <div style="display: grid; gap: 15px;">
+                    ${allStrengths.map(item => `
+                        <div style="background: var(--gradient-1); padding: 20px; border-radius: 16px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 5px;">${item.strength}</div>
+                            <div style="opacity: 0.8; font-size: 0.9rem;">— ${item.from}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${allStrengths.length === 0 ? `
+                    <p style="text-align: center; opacity: 0.7;">Noch keine Stärken hinzugefügt.</p>
+                ` : ''}
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showStrengthRevealFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showStrengthRevealFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen(6)">
+                            ✓ Zum Zukunfts-Kompass
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        // ==================== SCREEN 6: GOALS ====================
+        function initGoalsScreen() {
+            generateTabs('goalTabs', 'showGoalsFor');
+            showGoalsFor(0);
+        }
+
+        function showGoalsFor(playerIndex) {
+            document.querySelectorAll('#goalTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const goals = appState.goals[playerIndex];
+            const content = document.getElementById('goalContent');
+
+            content.innerHTML = `
+                <h3 style="margin-bottom: 20px;">${player.name}s Ziele für 2026</h3>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">1</div>
+                        <span>Persönliches Ziel</span>
+                    </div>
+                    <input type="text" class="input-field" placeholder="Was willst du 2026 erreichen?"
+                        value="${goals.personal || ''}"
+                        onchange="appState.goals[${playerIndex}].personal = this.value">
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">2</div>
+                        <span>Skill-Ziel</span>
+                    </div>
+                    <input type="text" class="input-field" placeholder="Welchen DBT-Skill willst du verbessern?"
+                        value="${goals.skill || ''}"
+                        onchange="appState.goals[${playerIndex}].skill = this.value">
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">3</div>
+                        <span>Gefühls-Ziel</span>
+                    </div>
+                    <input type="text" class="input-field" placeholder="Wie willst du dich 2026 öfter fühlen?"
+                        value="${goals.feeling || ''}"
+                        onchange="appState.goals[${playerIndex}].feeling = this.value">
+                </div>
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showGoalsFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showGoalsFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen('6b')">
+                            ✓ Zur Selbstverpflichtung
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        // ==================== SCREEN 6B: COMMITMENT ====================
+        function initCommitmentScreen() {
+            generateTabs('commitmentTabs', 'showCommitmentFor');
+            showCommitmentFor(0);
+        }
+
+        function showCommitmentFor(playerIndex) {
+            document.querySelectorAll('#commitmentTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const goals = appState.goals[playerIndex];
+            const content = document.getElementById('commitmentContent');
+
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h3>${player.name}s Versprechen für 2026</h3>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; margin-bottom: 20px;">
+                    <p style="font-size: 1.2rem; line-height: 1.8;">
+                        Ich, <strong>${player.name}</strong>, verpflichte mich, im Jahr 2026
+                        ${goals.personal ? `<em>"${goals.personal}"</em> zu erreichen` : 'meine Ziele zu erreichen'},
+                        ${goals.skill ? `den Skill <em>"${goals.skill}"</em> zu üben` : 'meine DBT-Skills zu üben'},
+                        und mich öfter ${goals.feeling ? `<em>"${goals.feeling}"</em>` : 'gut'} zu fühlen.
+                    </p>
+                </div>
+
+                <div class="input-group">
+                    <label>📝 Mein erster Schritt (was werde ich morgen tun?):</label>
+                    <textarea class="input-field" placeholder="Schreibe einen konkreten ersten Schritt..."
+                        onchange="appState.commitments[${playerIndex}] = this.value">${appState.commitments[playerIndex] || ''}</textarea>
+                </div>
+
+                <div class="nav-buttons">
+                    ${playerIndex > 0 ? `
+                        <button class="btn btn-secondary" onclick="showCommitmentFor(${playerIndex - 1})">
+                            ← Zurück
+                        </button>
+                    ` : ''}
+                    ${playerIndex < 2 ? `
+                        <button class="btn btn-primary" onclick="showCommitmentFor(${playerIndex + 1})">
+                            Weiter →
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" onclick="goToScreen(7)">
+                            ✓ Zur Abschluss-Zeremonie
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+
+        // ==================== SCREEN 7: CLOSING ====================
+        function showCertificates() {
+            appState.currentModule = 7;
+            updateProgress();
+            goToScreen('7b');
+        }
+
+        function initCertificates() {
+            generateTabs('certTabs', 'showCertificateFor');
+            showCertificateFor(0);
+        }
+
+        function showCertificateFor(playerIndex) {
+            document.querySelectorAll('#certTabs .tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === playerIndex);
+            });
+
+            const player = appState.players[playerIndex];
+            const goals = appState.goals[playerIndex];
+            const selectedSkillCount = appState.selectedSkills[playerIndex].length;
+            const content = document.getElementById('certContent');
+
+            // Collect strengths
+            const allStrengths = [];
+            appState.players.forEach((writer, writerIndex) => {
+                if (writerIndex !== playerIndex) {
+                    const strengths = appState.strengths[writerIndex][playerIndex] || [];
+                    allStrengths.push(...strengths);
+                }
+            });
+
+            content.innerHTML = `
+                <div class="certificate">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
+                    <h2>Zertifikat</h2>
+                    <p>DBT Skills Journey 2025</p>
+
+                    <div class="name">${player.name}</div>
+
+                    <p>hat erfolgreich am Jahresabschluss teilgenommen<br>und folgendes bewiesen:</p>
+
+                    <div style="margin: 25px 0; text-align: left; padding: 0 20px;">
+                        <p>✅ ${selectedSkillCount} DBT-Skills aktiv genutzt</p>
+                        <p>✅ ${appState.quizScore}/10 Punkte in der Challenge</p>
+                        <p>✅ Stärken: ${allStrengths.slice(0, 3).join(', ') || 'Viele!'}</p>
+                        <p>✅ Ziel für 2026: ${goals.personal || 'Großes!'}</p>
+                    </div>
+
+                    <div class="seal">⭐</div>
+
+                    <p style="font-size: 0.9rem; margin-top: 20px;">
+                        Dezember 2025
+                    </p>
+                </div>
+            `;
+        }
+
+        function restartJourney() {
+            // Reset state
+            appState.players = [
+                { name: '', mood: 5, moodEmoji: '😊' },
+                { name: '', mood: 5, moodEmoji: '😊' },
+                { name: '', mood: 5, moodEmoji: '😊' }
+            ];
+            appState.reviews = [{}, {}, {}];
+            appState.selectedSkills = [[], [], []];
+            appState.emotions = [{}, {}, {}];
+            appState.strengths = {
+                0: { 1: [], 2: [] },
+                1: { 0: [], 2: [] },
+                2: { 0: [], 1: [] }
+            };
+            appState.goals = [{}, {}, {}];
+            appState.commitments = ['', '', ''];
+            appState.quizScore = 0;
+            appState.quizAnswers = [];
+            appState.currentModule = 0;
+            breathingCycles = 0;
+            breathingPhase = 0;
+
+            // Reset UI
+            document.getElementById('breathingBtn').style.display = '';
+            document.getElementById('breathingNav').style.display = 'none';
+            document.getElementById('breathingCircle').textContent = 'Bereit?';
+            document.getElementById('breathingCircle').classList.add('paused');
+            document.querySelectorAll('.body-part').forEach(el => {
+                el.style.fill = 'rgba(255,255,255,0.2)';
+            });
+
+            if (appState.timerInterval) {
+                clearInterval(appState.timerInterval);
+            }
+
+            goToScreen('welcome');
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show welcome screen
+            goToScreen('welcome');
+        });
+    </script>
+</body>
+</html>
