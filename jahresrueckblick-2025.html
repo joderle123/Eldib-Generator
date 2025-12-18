@@ -2,35 +2,30 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Jahresrückblick 2025 ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jahresrückblick 2025 🇱🇺</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
-            --primary-dark: #4f46e5;
             --secondary: #ec4899;
             --accent: #06b6d4;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --dark: #1e1b4b;
-            --light: #f8fafc;
             --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+            --lux-red: #EF4135;
+            --lux-blue: #00A1DE;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -81,9 +76,9 @@
         .container {
             position: relative;
             z-index: 1;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
             min-height: 100vh;
         }
 
@@ -94,20 +89,19 @@
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #fff 0%, #c4b5fd 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 10px;
         }
 
         .progress-container {
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
             backdrop-filter: blur(10px);
         }
 
@@ -115,24 +109,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .progress-header span {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            margin-bottom: 15px;
         }
 
         .timer {
             background: var(--gradient-2);
-            padding: 5px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
         }
 
         .progress-bar {
-            height: 8px;
+            height: 10px;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
             overflow: hidden;
@@ -149,20 +138,19 @@
         .module-indicators {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .module-dot {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
 
@@ -193,36 +181,35 @@
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: var(--shadow);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         .card-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         .card-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
         }
 
         .card-subtitle {
-            font-size: 0.9rem;
+            font-size: 1rem;
             opacity: 0.7;
         }
 
@@ -231,15 +218,14 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 15px 30px;
+            padding: 16px 35px;
             border: none;
             border-radius: 16px;
             font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
             color: white;
         }
 
@@ -249,7 +235,7 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
         }
 
@@ -264,8 +250,8 @@
         }
 
         .btn-lg {
-            padding: 20px 40px;
-            font-size: 1.2rem;
+            padding: 22px 50px;
+            font-size: 1.3rem;
             border-radius: 20px;
         }
 
@@ -273,26 +259,15 @@
             width: 100%;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
         .input-field {
             width: 100%;
-            padding: 15px 20px;
+            padding: 16px 22px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
         }
 
@@ -311,19 +286,57 @@
             resize: vertical;
         }
 
-        .emoji-grid {
+        /* 3 Players Side by Side */
+        .players-row {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .player-column {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .player-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
-            margin: 20px 0;
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 15px;
+        }
+
+        /* Emoji Selection */
+        .emoji-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
         }
 
         .emoji-btn {
-            aspect-ratio: 1;
-            font-size: 2rem;
+            width: 55px;
+            height: 55px;
+            font-size: 1.8rem;
             background: rgba(255,255,255,0.1);
             border: 3px solid transparent;
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -338,127 +351,89 @@
 
         .emoji-btn.selected {
             border-color: var(--accent);
-            background: rgba(6, 182, 212, 0.2);
-            transform: scale(1.1);
+            background: rgba(6, 182, 212, 0.3);
+            transform: scale(1.15);
         }
 
-        .player-setup {
-            display: grid;
-            gap: 15px;
-        }
-
-        .player-card {
-            background: rgba(255,255,255,0.05);
+        /* Group Activity Banner */
+        .group-banner {
+            background: var(--gradient-5);
+            color: #1e1b4b;
+            padding: 18px 25px;
             border-radius: 16px;
-            padding: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .player-card h3 {
-            font-size: 1rem;
-            margin-bottom: 10px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .mood-slider-container {
-            margin: 30px 0;
-        }
-
-        .mood-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
-
-        .mood-slider {
-            width: 100%;
-            height: 20px;
-            -webkit-appearance: none;
-            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .mood-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .mood-display {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 3rem;
-        }
-
-        .quiz-question {
-            font-size: 1.2rem;
+            justify-content: center;
+            gap: 15px;
             font-weight: 600;
-            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .group-banner .icon {
+            font-size: 1.8rem;
+        }
+
+        /* Quiz Styles */
+        .quiz-question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
             line-height: 1.5;
         }
 
         .quiz-options {
             display: grid;
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .quiz-option {
-            padding: 18px 20px;
+            padding: 20px 25px;
             background: rgba(255,255,255,0.05);
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: left;
-            font-size: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
             color: white;
             font-family: 'Poppins', sans-serif;
         }
 
         .quiz-option:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.4);
-        }
-
-        .quiz-option.selected {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.02);
         }
 
         .quiz-option.correct {
             border-color: var(--success);
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.3);
         }
 
         .quiz-option.wrong {
             border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.3);
         }
 
         .score-display {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+            gap: 40px;
+            margin: 25px 0;
         }
 
         .score-item {
             text-align: center;
-            padding: 20px 30px;
+            padding: 25px 40px;
             background: rgba(255,255,255,0.1);
-            border-radius: 16px;
+            border-radius: 20px;
         }
 
         .score-value {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
             background: var(--gradient-5);
             -webkit-background-clip: text;
@@ -467,266 +442,79 @@
         }
 
         .score-label {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             opacity: 0.7;
+            margin-top: 5px;
         }
 
-        .group-activity {
-            background: var(--gradient-5);
-            color: #1e1b4b;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 600;
-        }
-
-        .group-activity .icon {
-            font-size: 1.5rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        .tab {
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            background: var(--gradient-1);
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--success);
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .nav-buttons .btn {
-            flex: 1;
-        }
-
-        .instructions {
-            background: rgba(99, 102, 241, 0.2);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 0 12px 12px 0;
-            margin: 20px 0;
-        }
-
-        .instructions h4 {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .instructions ul {
-            margin-left: 20px;
-        }
-
-        .instructions li {
-            margin: 8px 0;
-            opacity: 0.9;
-        }
-
-        /* Voting Card */
+        /* Voting Cards */
         .vote-card {
             background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            text-align: center;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
         }
 
         .vote-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .vote-options {
             display: flex;
-            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .vote-btn {
-            padding: 12px 20px;
+            padding: 15px 30px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-family: 'Poppins', sans-serif;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-width: 120px;
         }
 
         .vote-btn:hover {
             background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
         }
 
         .vote-btn.selected {
             background: var(--gradient-1);
             border-color: transparent;
-        }
-
-        /* Strength Cards */
-        .strength-input-container {
-            display: grid;
-            gap: 20px;
-        }
-
-        .strength-for {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .strength-for h4 {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .strength-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .strength-tag {
-            padding: 8px 16px;
-            background: var(--gradient-1);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .strength-tag button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .predefined-strengths {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .predefined-strength {
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .predefined-strength:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .predefined-strength.used {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* Goals Section */
-        .goal-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .goal-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .goal-number {
-            width: 35px;
-            height: 35px;
-            background: var(--gradient-1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
+            transform: scale(1.05);
         }
 
         /* Award Card */
         .award-card {
             background: linear-gradient(135deg, rgba(250,112,154,0.3) 0%, rgba(254,225,64,0.3) 100%);
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 24px;
+            padding: 30px;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border: 2px solid rgba(255,255,255,0.2);
         }
 
         .award-card .trophy {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 4rem;
+            margin-bottom: 15px;
         }
 
         .award-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
         }
 
         .award-card .winner {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 800;
             background: var(--gradient-5);
             -webkit-background-clip: text;
@@ -734,57 +522,113 @@
             background-clip: text;
         }
 
+        /* Compliment Tags */
+        .compliment-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .compliment-tag {
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .compliment-tag:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .compliment-tag.selected {
+            background: var(--gradient-1);
+            border-color: transparent;
+        }
+
+        .selected-compliments {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+            min-height: 40px;
+        }
+
+        .selected-tag {
+            padding: 8px 15px;
+            background: var(--gradient-4);
+            color: #1e1b4b;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selected-tag button {
+            background: none;
+            border: none;
+            color: #1e1b4b;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0;
+        }
+
         /* Certificate */
         .certificate {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-radius: 24px;
-            padding: 40px;
+            border-radius: 30px;
+            padding: 50px;
             text-align: center;
             color: #1e1b4b;
             position: relative;
             overflow: hidden;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .certificate::before {
             content: '';
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 3px solid #d97706;
-            border-radius: 20px;
-            pointer-events: none;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 4px solid #d97706;
+            border-radius: 24px;
         }
 
         .certificate h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
             color: #92400e;
+            margin-bottom: 10px;
         }
 
         .certificate .name {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            margin: 20px 0;
+            margin: 25px 0;
             color: #1e1b4b;
         }
 
-        .certificate p {
-            margin: 10px 0;
-            color: #78350f;
-        }
-
         .certificate .seal {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: var(--gradient-2);
             border-radius: 50%;
-            margin: 20px auto;
+            margin: 25px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
         }
 
         /* Confetti */
@@ -801,8 +645,8 @@
 
         .confetti-piece {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             top: -20px;
             animation: confetti-fall 3s ease-out forwards;
         }
@@ -814,48 +658,94 @@
             }
         }
 
-        /* Memory Wall */
-        .memory-grid {
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 35px;
+            justify-content: center;
+        }
+
+        .nav-buttons .btn {
+            min-width: 200px;
+        }
+
+        /* This or That */
+        .this-that-card {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 25px 0;
         }
 
-        .memory-card {
+        .this-that-option {
+            padding: 30px;
             background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 15px;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
-        .memory-card .emoji {
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .this-that-option:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.02);
         }
 
-        .memory-card h5 {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
+        .this-that-option.selected {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .this-that-vs {
+            font-size: 1.5rem;
+            font-weight: 800;
+            opacity: 0.5;
+        }
+
+        /* Round indicator */
+        .round-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
             opacity: 0.8;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            padding: 18px 35px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
 
-            .card {
-                padding: 20px;
-            }
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
 
-            .score-display {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .memory-grid {
+        @media (max-width: 900px) {
+            .players-row {
                 grid-template-columns: 1fr;
+            }
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            .this-that-card {
+                grid-template-columns: 1fr;
+            }
+            .this-that-vs {
+                display: none;
             }
         }
     </style>
@@ -868,53 +758,52 @@
 
     <div class="container">
         <header class="header">
-            <h1>Jahresrückblick 2025</h1>
-            <p style="opacity: 0.8;">Euer persönlicher Rückblick</p>
+            <h1>🇱🇺 Jahresréckbléck 2025 🇱🇺</h1>
         </header>
 
         <div class="progress-container" id="progressContainer" style="display: none;">
             <div class="progress-header">
-                <span id="currentModule">Station 1 von 6</span>
-                <div class="timer" id="timer">90:00</div>
+                <span id="currentModule">Station 1 vu 6</span>
+                <div class="timer" id="timer">⏱️ 90:00</div>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
             <div class="module-indicators">
-                <div class="module-dot" data-module="1">1</div>
-                <div class="module-dot" data-module="2">2</div>
-                <div class="module-dot" data-module="3">3</div>
-                <div class="module-dot" data-module="4">4</div>
-                <div class="module-dot" data-module="5">5</div>
-                <div class="module-dot" data-module="6">6</div>
+                <div class="module-dot">1</div>
+                <div class="module-dot">2</div>
+                <div class="module-dot">3</div>
+                <div class="module-dot">4</div>
+                <div class="module-dot">5</div>
+                <div class="module-dot">6</div>
             </div>
         </div>
 
-        <!-- WELCOME SCREEN -->
+        <!-- WELCOME -->
         <div class="screen active" id="screen-welcome">
             <div class="card">
-                <div style="text-align: center; padding: 20px 0;">
-                    <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
-                    <h2 style="font-size: 2rem; margin-bottom: 15px;">Willkommen zum Jahresrückblick!</h2>
-                    <p style="opacity: 0.8; margin-bottom: 30px; line-height: 1.7;">
-                        2025 war ein wildes Jahr!<br>
-                        Lasst uns gemeinsam zurückschauen, lachen und feiern.
+                <div style="text-align: center; padding: 30px 0;">
+                    <div style="font-size: 6rem; margin-bottom: 20px;">🎉</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Moien alleguer!</h2>
+                    <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+                        2025 war e wëllt Joer! Loosst eis zesummen zréckbléckens,<br>
+                        laachen a feieren.
                     </p>
 
-                    <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; margin: 30px 0; text-align: left;">
-                        <h3 style="margin-bottom: 15px;">Was euch erwartet:</h3>
-                        <ul style="margin-left: 20px; line-height: 2;">
-                            <li>Check-In & Mood-Check</li>
-                            <li>Euer Jahr 2025 in Highlights</li>
-                            <li>Das grosse 2025 Quiz</li>
-                            <li>"Wer ist am ehesten..." Voting</li>
-                            <li>Komplimente-Runde</li>
-                            <li>Wünsche für 2026 & Zertifikate</li>
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; margin: 30px auto; max-width: 500px; text-align: left;">
+                        <h3 style="margin-bottom: 20px; text-align: center;">📋 Wat iech erwaart:</h3>
+                        <ul style="margin-left: 25px; line-height: 2.2; font-size: 1.1rem;">
+                            <li>Check-In & Mood</li>
+                            <li>Äert Joer 2025</li>
+                            <li>De groussen 2025 Quiz</li>
+                            <li>This or That</li>
+                            <li>Wee ass am éischten...? Voting</li>
+                            <li>Komplimenter & Zertifikater</li>
                         </ul>
                     </div>
 
                     <button class="btn btn-primary btn-lg" onclick="startJourney()">
-                        Los geht's!
+                        🚀 C'est parti!
                     </button>
                 </div>
             </div>
@@ -927,29 +816,32 @@
                     <div class="card-icon" style="background: var(--gradient-3);">👋</div>
                     <div>
                         <div class="card-title">Check-In</div>
-                        <div class="card-subtitle">Wer seid ihr?</div>
+                        <div class="card-subtitle">Wie sidd dir haut?</div>
                     </div>
                 </div>
 
-                <div class="player-setup" id="playerSetup">
-                    <div class="player-card">
-                        <h3>Person 1</h3>
-                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="1">
+                <div class="group-banner">
+                    <span class="icon">💻</span>
+                    <span>Dir dräi zesummen um Laptop - jiddereen gëtt säin Numm an!</span>
+                </div>
+
+                <div class="players-row">
+                    <div class="player-column">
+                        <div class="player-avatar">1</div>
+                        <input type="text" class="input-field player-name" placeholder="Numm..." data-player="0">
                     </div>
-                    <div class="player-card">
-                        <h3>Person 2</h3>
-                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="2">
+                    <div class="player-column">
+                        <div class="player-avatar">2</div>
+                        <input type="text" class="input-field player-name" placeholder="Numm..." data-player="1">
                     </div>
-                    <div class="player-card">
-                        <h3>Person 3</h3>
-                        <input type="text" class="input-field player-name" placeholder="Dein Name..." data-player="3">
+                    <div class="player-column">
+                        <div class="player-avatar">3</div>
+                        <input type="text" class="input-field player-name" placeholder="Numm..." data-player="2">
                     </div>
                 </div>
 
                 <div class="nav-buttons">
-                    <button class="btn btn-primary btn-block" onclick="saveNames()">
-                        Weiter
-                    </button>
+                    <button class="btn btn-primary" onclick="saveNames()">Weider →</button>
                 </div>
             </div>
         </div>
@@ -961,12 +853,17 @@
                     <div class="card-icon" style="background: var(--gradient-5);">😎</div>
                     <div>
                         <div class="card-title">Mood-Check</div>
-                        <div class="card-subtitle">Wie geht's euch gerade?</div>
+                        <div class="card-subtitle">Wéi geet et iech grad?</div>
                     </div>
                 </div>
 
-                <div class="tabs" id="moodTabs"></div>
-                <div id="moodContent"></div>
+                <div class="players-row" id="moodSelection">
+                    <!-- Generated -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-success" onclick="goToScreen(2)">✓ Weider</button>
+                </div>
             </div>
         </div>
 
@@ -976,40 +873,45 @@
                 <div class="card-header">
                     <div class="card-icon" style="background: var(--gradient-1);">⭐</div>
                     <div>
-                        <div class="card-title">Mein Jahr 2025</div>
-                        <div class="card-subtitle">Die Highlights & Lowlights</div>
+                        <div class="card-title">Äert Joer 2025</div>
+                        <div class="card-subtitle">Jiddereen fëllt säin Deel aus!</div>
                     </div>
                 </div>
 
-                <div class="tabs" id="reviewTabs"></div>
-                <div id="reviewContent"></div>
+                <div class="players-row" id="highlightsSection">
+                    <!-- Generated -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-success" onclick="goToScreen(3)">✓ Zum Quiz!</button>
+                </div>
             </div>
         </div>
 
-        <!-- SCREEN 3: 2025 QUIZ -->
+        <!-- SCREEN 3: QUIZ -->
         <div class="screen" id="screen-3">
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon" style="background: var(--gradient-2);">🧠</div>
                     <div>
-                        <div class="card-title">Das grosse 2025 Quiz</div>
-                        <div class="card-subtitle">Wisst ihr noch, was dieses Jahr passiert ist?</div>
+                        <div class="card-title">De groussen 2025 Quiz</div>
+                        <div class="card-subtitle">Wësst dir nach wat d'Joer passéiert ass?</div>
                     </div>
                 </div>
 
-                <div class="group-activity">
+                <div class="group-banner">
                     <span class="icon">🤝</span>
-                    <span>Diskutiert zusammen und einigt euch auf eine Antwort!</span>
+                    <span>Diskutéiert zesummen a wiielt eng Äntwert!</span>
                 </div>
 
                 <div class="score-display">
                     <div class="score-item">
                         <div class="score-value" id="quizScore">0</div>
-                        <div class="score-label">Punkte</div>
+                        <div class="score-label">Punkten</div>
                     </div>
                     <div class="score-item">
                         <div class="score-value" id="quizQuestion">1/10</div>
-                        <div class="score-label">Frage</div>
+                        <div class="score-label">Fro</div>
                     </div>
                 </div>
 
@@ -1019,139 +921,129 @@
 
         <!-- SCREEN 3B: QUIZ RESULTS -->
         <div class="screen" id="screen-3b">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background: var(--gradient-4);">🏆</div>
-                    <div>
-                        <div class="card-title">Quiz Ergebnis</div>
-                        <div class="card-subtitle">So habt ihr abgeschnitten!</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center; padding: 30px 0;">
-                    <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
-                    <div style="font-size: 3rem; font-weight: 800;" id="finalScore">0/10</div>
-                    <p style="margin: 20px 0; font-size: 1.2rem;" id="scoreMessage"></p>
-                </div>
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 6rem; margin-bottom: 20px;">🏆</div>
+                <h2 style="font-size: 2rem; margin-bottom: 20px;">Quiz Resultat</h2>
+                <div style="font-size: 4rem; font-weight: 800;" id="finalScore">0/10</div>
+                <p style="font-size: 1.3rem; margin: 25px 0;" id="scoreMessage"></p>
 
                 <div class="nav-buttons">
-                    <button class="btn btn-success btn-block" onclick="goToScreen(4)">
-                        Weiter zum Voting
-                    </button>
+                    <button class="btn btn-success" onclick="goToScreen(4)">Weider zu This or That →</button>
                 </div>
             </div>
         </div>
 
-        <!-- SCREEN 4: SUPERLATIVES VOTING -->
+        <!-- SCREEN 4: THIS OR THAT -->
         <div class="screen" id="screen-4">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-icon" style="background: var(--gradient-5);">🗳️</div>
+                    <div class="card-icon" style="background: var(--gradient-3);">⚡</div>
                     <div>
-                        <div class="card-title">"Wer ist am ehesten..."</div>
-                        <div class="card-subtitle">Stimmt ab!</div>
+                        <div class="card-title">This or That</div>
+                        <div class="card-subtitle">Schnell entscheeden!</div>
                     </div>
                 </div>
 
-                <div class="group-activity">
-                    <span class="icon">🤫</span>
-                    <span>Jeder stimmt geheim ab - nicht schummeln!</span>
+                <div class="group-banner">
+                    <span class="icon">👆</span>
+                    <span>Jiddereen klickt säi Choix - keng Diskussioun!</span>
                 </div>
 
-                <div class="tabs" id="votingTabs"></div>
-                <div id="votingContent"></div>
+                <div class="round-indicator" id="thisOrThatRound">Ronn 1 vu 8</div>
+
+                <div id="thisOrThatContainer"></div>
             </div>
         </div>
 
-        <!-- SCREEN 4B: VOTING RESULTS -->
+        <!-- SCREEN 4B: THIS OR THAT RESULTS -->
         <div class="screen" id="screen-4b">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-icon" style="background: var(--gradient-2);">🏅</div>
+                    <div class="card-icon" style="background: var(--gradient-5);">📊</div>
                     <div>
-                        <div class="card-title">Die Awards gehen an...</div>
-                        <div class="card-subtitle">Trommelwirbel bitte!</div>
+                        <div class="card-title">This or That Resultater</div>
+                        <div class="card-subtitle">Sidd dir ähnlech oder ganz verschidden?</div>
                     </div>
                 </div>
 
-                <div id="awardsContent"></div>
+                <div id="thisOrThatResults"></div>
 
                 <div class="nav-buttons">
-                    <button class="btn btn-success btn-block" onclick="goToScreen(5)">
-                        Weiter zur Komplimente-Runde
-                    </button>
+                    <button class="btn btn-success" onclick="goToScreen(5)">Weider zum Voting →</button>
                 </div>
             </div>
         </div>
 
-        <!-- SCREEN 5: COMPLIMENTS -->
+        <!-- SCREEN 5: VOTING -->
         <div class="screen" id="screen-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-2);">🗳️</div>
+                    <div>
+                        <div class="card-title">Wee ass am éischten...?</div>
+                        <div class="card-subtitle">Voting Zäit!</div>
+                    </div>
+                </div>
+
+                <div class="group-banner">
+                    <span class="icon">🙈</span>
+                    <span>Kuckt NET op déi aner hiren Écran!</span>
+                </div>
+
+                <div class="round-indicator" id="votingRound">Ronn 1 vu 6</div>
+
+                <div id="votingContainer"></div>
+            </div>
+        </div>
+
+        <!-- SCREEN 5B: AWARDS -->
+        <div class="screen" id="screen-5b">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: var(--gradient-5);">🏅</div>
+                    <div>
+                        <div class="card-title">D'Awards ginn un...</div>
+                        <div class="card-subtitle">Trommelwirbel!</div>
+                    </div>
+                </div>
+
+                <div id="awardsContainer"></div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-success" onclick="goToScreen(6)">Weider zu de Komplimenter →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: COMPLIMENTS -->
+        <div class="screen" id="screen-6">
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon" style="background: var(--gradient-4);">💝</div>
                     <div>
-                        <div class="card-title">Komplimente-Runde</div>
-                        <div class="card-subtitle">Zeit für nette Worte!</div>
+                        <div class="card-title">Komplimenter</div>
+                        <div class="card-subtitle">Sot eppes Schéines iwwert déi aner!</div>
                     </div>
                 </div>
 
-                <div class="group-activity">
-                    <span class="icon">❤️</span>
-                    <span>Schreibt ehrliche, nette Dinge über die anderen!</span>
-                </div>
+                <div class="round-indicator" id="complimentRound"></div>
 
-                <div class="tabs" id="complimentWriterTabs"></div>
-                <div id="complimentWriterContent"></div>
-            </div>
-        </div>
-
-        <!-- SCREEN 5B: COMPLIMENTS REVEAL -->
-        <div class="screen" id="screen-5b">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background: var(--gradient-5);">🎁</div>
-                    <div>
-                        <div class="card-title">Eure Komplimente</div>
-                        <div class="card-subtitle">Das sagen die anderen über dich!</div>
-                    </div>
-                </div>
-
-                <div class="tabs" id="complimentRevealTabs"></div>
-                <div id="complimentRevealContent"></div>
-            </div>
-        </div>
-
-        <!-- SCREEN 6: WISHES FOR 2026 -->
-        <div class="screen" id="screen-6">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background: var(--gradient-1);">🌟</div>
-                    <div>
-                        <div class="card-title">Wünsche für 2026</div>
-                        <div class="card-subtitle">Was bringt das neue Jahr?</div>
-                    </div>
-                </div>
-
-                <div class="tabs" id="wishTabs"></div>
-                <div id="wishContent"></div>
+                <div id="complimentContainer"></div>
             </div>
         </div>
 
         <!-- SCREEN 6B: CERTIFICATES -->
         <div class="screen" id="screen-6b">
-            <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="font-size: 1.8rem;">🎓 Eure Zertifikate 🎓</h2>
-                    <p style="opacity: 0.8;">Macht einen Screenshot!</p>
+            <div class="card" style="background: transparent; box-shadow: none;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="font-size: 2rem;">🎓 Är Zertifikater 🎓</h2>
+                    <p style="opacity: 0.8;">Screenshot net vergiessen!</p>
                 </div>
 
-                <div class="tabs" id="certTabs"></div>
-                <div id="certContent"></div>
+                <div id="certificatesContainer"></div>
 
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-secondary" onclick="restartJourney()">
-                        🔄 Nochmal starten
-                    </button>
+                <div class="nav-buttons" style="margin-top: 40px;">
+                    <button class="btn btn-secondary" onclick="location.reload()">🔄 Nach eng Kéier</button>
                 </div>
             </div>
         </div>
@@ -1162,782 +1054,509 @@
 
     <script>
         // ==================== APP STATE ====================
-        const appState = {
-            currentModule: 0,
-            players: [
-                { name: '', mood: 3, moodEmoji: '😊' },
-                { name: '', mood: 3, moodEmoji: '😊' },
-                { name: '', mood: 3, moodEmoji: '😊' }
-            ],
-            reviews: [{}, {}, {}],
+        const state = {
+            players: [{name:'', mood:2}, {name:'', mood:2}, {name:'', mood:2}],
+            highlights: [{}, {}, {}],
             quizScore: 0,
+            thisOrThat: [{}, {}, {}],
             votes: [{}, {}, {}],
-            compliments: {
-                0: { 1: [], 2: [] },
-                1: { 0: [], 2: [] },
-                2: { 0: [], 1: [] }
-            },
-            wishes: [{}, {}, {}],
-            startTime: null,
-            timerInterval: null
+            compliments: {0:{1:[],2:[]}, 1:{0:[],2:[]}, 2:{0:[],1:[]}},
+            currentModule: 0
         };
 
-        // ==================== QUIZ DATA 2025 ====================
+        const moodEmojis = ['😴', '😐', '🙂', '😊', '🤩'];
+
+        // ==================== QUIZ - LUXEMBURG FOCUSED ====================
         const quizQuestions = [
             {
-                question: "Welcher Film war 2025 der absolute Blockbuster?",
-                options: ["Avatar 3", "Mission Impossible 8", "Captain America: Brave New World", "Jurassic World 4"],
-                correct: 2,
-                explanation: "Captain America: Brave New World war einer der grössten Hits!"
+                q: "Wéi heescht de Lëtzebuerger Rapper deen 2024/2025 viral goung?",
+                opts: ["Turnup Tun", "Nicool", "Cashmo", "De Läpp"],
+                correct: 0
             },
             {
-                question: "Welcher Song war 2025 ein absoluter Ohrwurm?",
-                options: ["APT. - Rosé & Bruno Mars", "Die With A Smile - Lady Gaga", "Birds of a Feather - Billie Eilish", "Alle drei waren Hits!"],
-                correct: 3,
-                explanation: "2024/2025 waren diese Songs überall!"
+                q: "Wéini war d'Schueberfouer 2025?",
+                opts: ["August", "September", "Oktober", "Juli"],
+                correct: 0
             },
             {
-                question: "Welches Social Media Trend war 2025 überall?",
-                options: ["BeReal Comebacks", "AI-generierte Bilder von sich selbst", "TikTok Dance Challenges", "Alles davon"],
-                correct: 3,
-                explanation: "Social Media war 2025 wild!"
+                q: "Wéi een TikTok Trend war 2025 iwwerall?",
+                opts: ["Brat Summer", "Dubai Schokela Challenge", "Mewing", "All dës"],
+                correct: 3
             },
             {
-                question: "Welches Videospiel hat 2025 alle in den Bann gezogen?",
-                options: ["GTA 6", "Minecraft Updates", "Fortnite Events", "Nintendo Switch 2 Games"],
-                correct: 1,
-                explanation: "Minecraft bleibt ein Dauerbrenner!"
+                q: "Wéi vill Awunner huet Lëtzebuerg elo ongeféier?",
+                opts: ["500.000", "680.000", "800.000", "1 Millioun"],
+                correct: 1
             },
             {
-                question: "Was war 2025 ein grosses Gesprächsthema in der Schweiz?",
-                options: ["Neues Schulsystem", "Klimademos", "Fussball EM Nachwirkungen", "Alles davon"],
-                correct: 3,
-                explanation: "Es war ein ereignisreiches Jahr!"
+                q: "Wéi een Song war 2025 en Ohrwuerm?",
+                opts: ["APT. - Rosé & Bruno Mars", "Die With A Smile", "Birds of a Feather", "All dës Lidder!"],
+                correct: 3
             },
             {
-                question: "Welches Emoji wurde 2025 am meisten benutzt?",
-                options: ["😭 (Tränen lachen)", "💀 (Totenkopf/dead)", "🔥 (Feuer)", "❤️ (Herz)"],
-                correct: 1,
-                explanation: "💀 'I'm dead' war überall!"
+                q: "Wéi eng Serie huet jiddereen 2025 gekuckt?",
+                opts: ["Squid Game 2", "Wednesday 2", "Stranger Things 5", "One Piece"],
+                correct: 0
             },
             {
-                question: "Was war 2025 ein beliebtes Meme-Format?",
-                options: ["Skibidi Toilet Fortsetzungen", "AI-generierte Memes", "Brainrot Content", "Alles davon"],
-                correct: 3,
-                explanation: "Das Internet war 2025 chaotisch wie immer!"
+                q: "Wat war 2025 en grousse Food Trend?",
+                opts: ["Dubai Schokela", "Croissant Würfel", "Bento Cakes", "Alles vun deem"],
+                correct: 3
             },
             {
-                question: "Welche Serie war 2025 ein Must-Watch?",
-                options: ["Stranger Things 5", "Wednesday Staffel 2", "Squid Game Staffel 2", "One Piece Live Action S2"],
-                correct: 2,
-                explanation: "Squid Game kam zurück und alle schauten es!"
+                q: "Wéi heescht d'nei Tram-Linn déi 2024/2025 opgaang ass?",
+                opts: ["Linn 2 op Bonnevoie", "Linn 3 op Findel", "Linn 1 Verlängerung", "Et gëtt keng nei Linn"],
+                correct: 0
             },
             {
-                question: "Was war 2025 ein Food-Trend?",
-                options: ["Dubai Schokolade", "Baked Oats", "Protein alles", "Cloud Bread Comeback"],
-                correct: 0,
-                explanation: "Dubai Schokolade war überall auf TikTok!"
+                q: "Wéi een Emoji war 2025 am meeschte benotzt?",
+                opts: ["😭", "💀", "🔥", "❤️"],
+                correct: 1
             },
             {
-                question: "Womit haben sich viele 2025 die Zeit vertrieben?",
-                options: ["BeReal posten", "AI mit Fragen nerven", "Alte Fotos durchschauen", "Alles davon"],
-                correct: 3,
-                explanation: "Wir hatten viele Möglichkeiten, Zeit totzuschlagen!"
+                q: "Wat huet 2025 jiddereen gespillt?",
+                opts: ["Fortnite Events", "Minecraft", "Roblox", "Alles dovu"],
+                correct: 3
             }
+        ];
+
+        // ==================== THIS OR THAT ====================
+        const thisOrThatQuestions = [
+            { a: "🍕 Pizza", b: "🍔 Burger" },
+            { a: "📱 TikTok", b: "📸 Instagram" },
+            { a: "🎮 Zocken", b: "📺 Serie kucken" },
+            { a: "☀️ Summer", b: "❄️ Wanter" },
+            { a: "🌅 Fréi opstoen", b: "🌙 Laang opbleiwen" },
+            { a: "🎵 Musik lauschteren", b: "🎬 Filmer kucken" },
+            { a: "🏠 Doheem bleiwen", b: "🎉 Erausgoen" },
+            { a: "📚 Buch liesen", b: "🎧 Podcast lauschteren" }
         ];
 
         // ==================== SUPERLATIVES ====================
         const superlatives = [
-            { title: "👑 Wer ist am ehesten berühmt?", id: "famous" },
-            { title: "😂 Wer bringt alle zum Lachen?", id: "funny" },
-            { title: "🎨 Wer ist am kreativsten?", id: "creative" },
-            { title: "💪 Wer gibt nie auf?", id: "determined" },
-            { title: "🤗 Wer ist am hilfsbereitesten?", id: "helpful" },
-            { title: "🎯 Wer hat immer einen Plan?", id: "organized" },
-            { title: "🌈 Wer verbreitet gute Laune?", id: "positive" },
-            { title: "🧠 Wer überrascht mit cleveren Ideen?", id: "smart" }
+            { id: "famous", title: "👑 ...berühmt ze ginn?" },
+            { id: "funny", title: "😂 ...all zum Laachen ze bréngen?" },
+            { id: "late", title: "⏰ ...ëmmer ze spéit ze kommen?" },
+            { id: "phone", title: "📱 ...de ganzen Dag um Handy ze sinn?" },
+            { id: "drama", title: "🎭 ...Drama ze maachen?" },
+            { id: "sleeping", title: "😴 ...an der Klass anzeSchlofen?" }
         ];
 
-        // ==================== COMPLIMENT OPTIONS ====================
+        // ==================== COMPLIMENTS ====================
         const complimentOptions = [
-            'Mega witzig', 'Immer gut drauf', 'Super zuverlässig', 'Richtig kreativ',
-            'Hat Style', 'Guter Zuhörer', 'Macht alles cooler', 'Ehrlich & direkt',
-            'Immer da wenn man sie braucht', 'Hat die besten Ideen', 'Mutig',
-            'Vertrauenswürdig', 'Inspirierend', 'Chillig drauf', 'Gute Vibes',
-            'Schlau', 'Talentiert', 'Einzigartig', 'Loyal', 'Authentisch'
+            'Mega witzeg', 'Ëmmer gutt drop', 'Zuverléisseg', 'Kreativ',
+            'Huet Style', 'Gudden Nolauschterer', 'Mutig', 'Intelligent',
+            'Loyal', 'Good Vibes', 'Inspiréierend', 'Éierlech',
+            'Talentéiert', 'Authentesch', 'Motivéierend', 'Chillig'
         ];
 
-        const moodEmojis = [
-            { emoji: '😴', label: 'Müde' },
-            { emoji: '😐', label: 'Meh' },
-            { emoji: '🙂', label: 'Okay' },
-            { emoji: '😊', label: 'Gut' },
-            { emoji: '🤩', label: 'Hyped!' }
-        ];
+        let quizIndex = 0, shuffledQuiz = [], totIndex = 0, voteIndex = 0, complimentWriter = 0;
 
-        // ==================== UTILITY FUNCTIONS ====================
-        function showNotification(message, duration = 3000) {
-            const notif = document.getElementById('notification');
-            notif.textContent = message;
-            notif.classList.add('show');
-            setTimeout(() => notif.classList.remove('show'), duration);
+        // ==================== UTILITIES ====================
+        function showNotification(msg) {
+            const n = document.getElementById('notification');
+            n.textContent = msg;
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 3000);
         }
 
         function triggerConfetti() {
-            const confetti = document.getElementById('confetti');
-            const colors = ['#f093fb', '#f5576c', '#4facfe', '#43e97b', '#fa709a', '#fee140'];
-
-            for (let i = 0; i < 50; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + '%';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.animationDelay = Math.random() * 2 + 's';
-                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-                confetti.appendChild(piece);
-
-                setTimeout(() => piece.remove(), 3000);
+            const c = document.getElementById('confetti');
+            const colors = ['#f093fb', '#f5576c', '#4facfe', '#43e97b', '#fa709a', '#fee140', '#EF4135', '#00A1DE'];
+            for(let i = 0; i < 60; i++) {
+                const p = document.createElement('div');
+                p.className = 'confetti-piece';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.animationDelay = Math.random() * 2 + 's';
+                c.appendChild(p);
+                setTimeout(() => p.remove(), 3500);
             }
         }
 
         function updateProgress() {
-            const progress = (appState.currentModule / 6) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-            document.getElementById('currentModule').textContent = `Station ${appState.currentModule} von 6`;
-
-            document.querySelectorAll('.module-dot').forEach((dot, i) => {
-                dot.classList.remove('active', 'completed');
-                if (i + 1 < appState.currentModule) {
-                    dot.classList.add('completed');
-                } else if (i + 1 === appState.currentModule) {
-                    dot.classList.add('active');
-                }
+            const pct = (state.currentModule / 6) * 100;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('currentModule').textContent = `Station ${state.currentModule} vu 6`;
+            document.querySelectorAll('.module-dot').forEach((d, i) => {
+                d.classList.remove('active', 'completed');
+                if(i + 1 < state.currentModule) d.classList.add('completed');
+                else if(i + 1 === state.currentModule) d.classList.add('active');
             });
         }
 
-        function startTimer() {
-            appState.startTime = Date.now();
-            const duration = 90 * 60 * 1000;
-
-            appState.timerInterval = setInterval(() => {
-                const elapsed = Date.now() - appState.startTime;
-                const remaining = Math.max(0, duration - elapsed);
-                const minutes = Math.floor(remaining / 60000);
-                const seconds = Math.floor((remaining % 60000) / 1000);
-                document.getElementById('timer').textContent =
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function goToScreen(screenNum) {
+        function goToScreen(num) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-
-            if (screenNum === 'welcome') {
-                document.getElementById('screen-welcome').classList.add('active');
-                document.getElementById('progressContainer').style.display = 'none';
-                return;
-            }
-
-            document.getElementById(`screen-${screenNum}`).classList.add('active');
-
-            const moduleNum = parseInt(String(screenNum).replace('b', ''));
-            if (!isNaN(moduleNum) && !String(screenNum).includes('b')) {
-                appState.currentModule = moduleNum;
+            document.getElementById('screen-' + num).classList.add('active');
+            const mod = parseInt(String(num).replace('b',''));
+            if(!isNaN(mod) && !String(num).includes('b')) {
+                state.currentModule = mod;
                 updateProgress();
             }
-
-            initializeScreen(screenNum);
+            initScreen(num);
         }
 
-        function generateTabs(containerId, onTabClick) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = appState.players.map((player, i) => `
-                <button class="tab ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="${onTabClick}(${i})">
-                    ${player.name || `Person ${i + 1}`}
-                </button>
-            `).join('');
+        function initScreen(num) {
+            if(num === '1b') initMood();
+            if(num === 2) initHighlights();
+            if(num === 3) initQuiz();
+            if(num === 4) initThisOrThat();
+            if(num === '4b') showThisOrThatResults();
+            if(num === 5) initVoting();
+            if(num === '5b') showAwards();
+            if(num === 6) initCompliments();
+            if(num === '6b') showCertificates();
         }
 
-        // ==================== SCREEN INITIALIZERS ====================
-        function initializeScreen(screenNum) {
-            switch(screenNum) {
-                case '1b': initMoodScreen(); break;
-                case 2: initReviewScreen(); break;
-                case 3: initQuizScreen(); break;
-                case 4: initVotingScreen(); break;
-                case '4b': initAwardsScreen(); break;
-                case 5: initComplimentsScreen(); break;
-                case '5b': initComplimentsReveal(); break;
-                case 6: initWishesScreen(); break;
-                case '6b': initCertificates(); break;
-            }
-        }
-
-        // ==================== WELCOME ====================
+        // ==================== START ====================
         function startJourney() {
             document.getElementById('progressContainer').style.display = 'block';
             goToScreen(1);
-            startTimer();
-            appState.currentModule = 1;
+            state.currentModule = 1;
             updateProgress();
+            // Start timer
+            let remaining = 90 * 60;
+            setInterval(() => {
+                if(remaining > 0) remaining--;
+                const m = Math.floor(remaining / 60), s = remaining % 60;
+                document.getElementById('timer').textContent = `⏱️ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            }, 1000);
         }
 
-        // ==================== SCREEN 1: CHECK-IN ====================
+        // ==================== CHECK-IN ====================
         function saveNames() {
             const inputs = document.querySelectorAll('.player-name');
-            let allFilled = true;
-
-            inputs.forEach((input, i) => {
-                if (input.value.trim()) {
-                    appState.players[i].name = input.value.trim();
-                } else {
-                    allFilled = false;
-                }
+            let ok = true;
+            inputs.forEach((inp, i) => {
+                if(inp.value.trim()) state.players[i].name = inp.value.trim();
+                else ok = false;
             });
-
-            if (!allFilled) {
-                showNotification('Bitte alle Namen eingeben!');
-                return;
-            }
-
+            if(!ok) return showNotification('All Nimm aginn!');
             goToScreen('1b');
         }
 
-        // ==================== SCREEN 1B: MOOD ====================
-        function initMoodScreen() {
-            generateTabs('moodTabs', 'showMoodFor');
-            showMoodFor(0);
-        }
-
-        function showMoodFor(playerIndex) {
-            document.querySelectorAll('#moodTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === playerIndex);
-            });
-
-            const player = appState.players[playerIndex];
-            const content = document.getElementById('moodContent');
-
-            content.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 20px;">${player.name}, wie ist dein Vibe gerade?</h3>
-
-                    <div class="emoji-grid">
-                        ${moodEmojis.map((m, i) => `
-                            <button class="emoji-btn ${player.mood === i ? 'selected' : ''}"
-                                onclick="selectMood(${playerIndex}, ${i})">
-                                ${m.emoji}
-                            </button>
+        function initMood() {
+            document.getElementById('moodSelection').innerHTML = state.players.map((p, i) => `
+                <div class="player-column">
+                    <h3>${p.name}</h3>
+                    <div class="emoji-row">
+                        ${moodEmojis.map((e, mi) => `
+                            <button class="emoji-btn ${p.mood === mi ? 'selected' : ''}" onclick="setMood(${i}, ${mi})">${e}</button>
                         `).join('')}
                     </div>
-                    <p style="opacity: 0.8; margin-top: 10px;">${moodEmojis[player.mood].label}</p>
+                </div>
+            `).join('');
+        }
 
-                    <div class="nav-buttons" style="margin-top: 30px;">
-                        ${playerIndex > 0 ? `<button class="btn btn-secondary" onclick="showMoodFor(${playerIndex - 1})">← Zurück</button>` : ''}
-                        ${playerIndex < 2 ? `
-                            <button class="btn btn-primary" onclick="showMoodFor(${playerIndex + 1})">Weiter →</button>
-                        ` : `
-                            <button class="btn btn-success" onclick="goToScreen(2)">✓ Zu den Highlights</button>
-                        `}
+        function setMood(player, mood) {
+            state.players[player].mood = mood;
+            initMood();
+        }
+
+        // ==================== HIGHLIGHTS ====================
+        function initHighlights() {
+            document.getElementById('highlightsSection').innerHTML = state.players.map((p, i) => `
+                <div class="player-column">
+                    <h3>${p.name}</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">⭐ Highlight 2025</label>
+                        <input type="text" class="input-field" placeholder="Beschte Moment..."
+                            onchange="state.highlights[${i}].best = this.value" value="${state.highlights[i].best || ''}">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85rem; opacity: 0.8;">😅 Lustigsten/Peinlechste Moment</label>
+                        <input type="text" class="input-field" placeholder="..."
+                            onchange="state.highlights[${i}].funny = this.value" value="${state.highlights[i].funny || ''}">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; opacity: 0.8;">🎵 Song vum Joer</label>
+                        <input type="text" class="input-field" placeholder="..."
+                            onchange="state.highlights[${i}].song = this.value" value="${state.highlights[i].song || ''}">
                     </div>
                 </div>
-            `;
+            `).join('');
         }
 
-        function selectMood(playerIndex, moodIndex) {
-            appState.players[playerIndex].mood = moodIndex;
-            appState.players[playerIndex].moodEmoji = moodEmojis[moodIndex].emoji;
-            showMoodFor(playerIndex);
+        // ==================== QUIZ ====================
+        function initQuiz() {
+            shuffledQuiz = [...quizQuestions].sort(() => Math.random() - 0.5);
+            quizIndex = 0;
+            state.quizScore = 0;
+            showQuizQ();
         }
 
-        // ==================== SCREEN 2: YEAR REVIEW ====================
-        function initReviewScreen() {
-            generateTabs('reviewTabs', 'showReviewFor');
-            showReviewFor(0);
-        }
-
-        function showReviewFor(playerIndex) {
-            document.querySelectorAll('#reviewTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === playerIndex);
-            });
-
-            const player = appState.players[playerIndex];
-            const review = appState.reviews[playerIndex];
-            const content = document.getElementById('reviewContent');
-
-            content.innerHTML = `
-                <h3 style="margin-bottom: 20px;">${player.name}s Jahr 2025</h3>
-
-                <div class="input-group">
-                    <label>⭐ Mein absolutes Highlight</label>
-                    <textarea class="input-field" placeholder="Was war dein bester Moment 2025?"
-                        onchange="appState.reviews[${playerIndex}].highlight = this.value">${review.highlight || ''}</textarea>
-                </div>
-
-                <div class="input-group">
-                    <label>😅 Mein lustigster/peinlichster Moment</label>
-                    <textarea class="input-field" placeholder="Worüber kannst du jetzt lachen?"
-                        onchange="appState.reviews[${playerIndex}].funny = this.value">${review.funny || ''}</textarea>
-                </div>
-
-                <div class="input-group">
-                    <label>🎵 Mein Song des Jahres</label>
-                    <input type="text" class="input-field" placeholder="Welcher Song lief bei dir auf Repeat?"
-                        onchange="appState.reviews[${playerIndex}].song = this.value" value="${review.song || ''}">
-                </div>
-
-                <div class="input-group">
-                    <label>📱 Meine meistgenutzte App</label>
-                    <input type="text" class="input-field" placeholder="Wo hast du die meiste Zeit verbracht?"
-                        onchange="appState.reviews[${playerIndex}].app = this.value" value="${review.app || ''}">
-                </div>
-
-                <div class="nav-buttons">
-                    ${playerIndex > 0 ? `<button class="btn btn-secondary" onclick="showReviewFor(${playerIndex - 1})">← Zurück</button>` : ''}
-                    ${playerIndex < 2 ? `
-                        <button class="btn btn-primary" onclick="showReviewFor(${playerIndex + 1})">Weiter →</button>
-                    ` : `
-                        <button class="btn btn-success" onclick="goToScreen(3)">✓ Zum Quiz</button>
-                    `}
-                </div>
-            `;
-        }
-
-        // ==================== SCREEN 3: QUIZ ====================
-        let currentQuizQuestion = 0;
-        let shuffledQuestions = [];
-
-        function initQuizScreen() {
-            shuffledQuestions = [...quizQuestions].sort(() => Math.random() - 0.5);
-            currentQuizQuestion = 0;
-            appState.quizScore = 0;
-            showQuizQuestion();
-        }
-
-        function showQuizQuestion() {
-            const q = shuffledQuestions[currentQuizQuestion];
-            const container = document.getElementById('quizContainer');
-
-            document.getElementById('quizScore').textContent = appState.quizScore;
-            document.getElementById('quizQuestion').textContent = `${currentQuizQuestion + 1}/10`;
-
-            container.innerHTML = `
-                <div class="quiz-question">${q.question}</div>
+        function showQuizQ() {
+            const q = shuffledQuiz[quizIndex];
+            document.getElementById('quizScore').textContent = state.quizScore;
+            document.getElementById('quizQuestion').textContent = `${quizIndex + 1}/10`;
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="quiz-question">${q.q}</div>
                 <div class="quiz-options">
-                    ${q.options.map((opt, i) => `
-                        <button class="quiz-option" onclick="selectQuizAnswer(${i})">${opt}</button>
-                    `).join('')}
+                    ${q.opts.map((o, i) => `<button class="quiz-option" onclick="answerQuiz(${i})">${o}</button>`).join('')}
                 </div>
             `;
         }
 
-        function selectQuizAnswer(answerIndex) {
-            const q = shuffledQuestions[currentQuizQuestion];
-            const options = document.querySelectorAll('.quiz-option');
-            const isCorrect = answerIndex === q.correct;
-
-            options.forEach((opt, i) => {
-                opt.style.pointerEvents = 'none';
-                if (i === q.correct) {
-                    opt.classList.add('correct');
-                } else if (i === answerIndex && !isCorrect) {
-                    opt.classList.add('wrong');
-                }
+        function answerQuiz(ans) {
+            const q = shuffledQuiz[quizIndex];
+            const btns = document.querySelectorAll('.quiz-option');
+            btns.forEach((b, i) => {
+                b.style.pointerEvents = 'none';
+                if(i === q.correct) b.classList.add('correct');
+                else if(i === ans) b.classList.add('wrong');
             });
-
-            if (isCorrect) {
-                appState.quizScore++;
-                document.getElementById('quizScore').textContent = appState.quizScore;
+            if(ans === q.correct) {
+                state.quizScore++;
+                document.getElementById('quizScore').textContent = state.quizScore;
             }
-
             setTimeout(() => {
-                currentQuizQuestion++;
-                if (currentQuizQuestion < 10) {
-                    showQuizQuestion();
-                } else {
-                    showQuizResults();
+                quizIndex++;
+                if(quizIndex < 10) showQuizQ();
+                else {
+                    goToScreen('3b');
+                    document.getElementById('finalScore').textContent = state.quizScore + '/10';
+                    let msg = state.quizScore >= 8 ? '🏆 Wow! Dir sidd 2025 Experten!' :
+                              state.quizScore >= 5 ? '👍 Net schlecht!' : '😅 Hutt dir 2025 verpasst?';
+                    document.getElementById('scoreMessage').textContent = msg;
+                    triggerConfetti();
                 }
             }, 1500);
         }
 
-        function showQuizResults() {
-            goToScreen('3b');
-            document.getElementById('finalScore').textContent = `${appState.quizScore}/10`;
+        // ==================== THIS OR THAT ====================
+        function initThisOrThat() {
+            totIndex = 0;
+            state.thisOrThat = [{}, {}, {}];
+            showTOT();
+        }
 
-            let message = '';
-            if (appState.quizScore >= 9) message = '🏆 Wow! Ihr wisst alles über 2025!';
-            else if (appState.quizScore >= 7) message = '🌟 Nicht schlecht! Ihr wart dabei!';
-            else if (appState.quizScore >= 5) message = '👍 Okay, ein bisschen was wisst ihr!';
-            else message = '😅 Habt ihr 2025 verschlafen?';
+        function showTOT() {
+            const q = thisOrThatQuestions[totIndex];
+            document.getElementById('thisOrThatRound').textContent = `Ronn ${totIndex + 1} vu ${thisOrThatQuestions.length}`;
+            document.getElementById('thisOrThatContainer').innerHTML = `
+                <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">Jiddereen klickt op säin Numm a wiielt!</p>
+                <div class="players-row">
+                    ${state.players.map((p, pi) => `
+                        <div class="player-column">
+                            <h3>${p.name}</h3>
+                            <div class="this-that-card" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div class="this-that-option ${state.thisOrThat[pi][totIndex] === 'a' ? 'selected' : ''}"
+                                    onclick="pickTOT(${pi}, 'a')">${q.a}</div>
+                                <div class="this-that-option ${state.thisOrThat[pi][totIndex] === 'b' ? 'selected' : ''}"
+                                    onclick="pickTOT(${pi}, 'b')">${q.b}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="nextTOT()">Weider →</button>
+                </div>
+            `;
+        }
 
-            document.getElementById('scoreMessage').textContent = message;
+        function pickTOT(player, choice) {
+            state.thisOrThat[player][totIndex] = choice;
+            showTOT();
+        }
+
+        function nextTOT() {
+            totIndex++;
+            if(totIndex < thisOrThatQuestions.length) showTOT();
+            else goToScreen('4b');
+        }
+
+        function showThisOrThatResults() {
+            let html = '<div style="display: grid; gap: 15px;">';
+            thisOrThatQuestions.forEach((q, qi) => {
+                const picks = state.players.map((p, pi) => ({name: p.name, pick: state.thisOrThat[pi][qi]}));
+                const aCount = picks.filter(x => x.pick === 'a').length;
+                const bCount = picks.filter(x => x.pick === 'b').length;
+                html += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1.2rem;">${q.a}</span>
+                            <span style="font-weight: 800; font-size: 1.3rem;">${aCount} : ${bCount}</span>
+                            <span style="font-size: 1.2rem;">${q.b}</span>
+                        </div>
+                        <div style="text-align: center; margin-top: 10px; opacity: 0.7; font-size: 0.9rem;">
+                            ${picks.map(x => x.name + ': ' + (x.pick === 'a' ? q.a : q.b)).join(' | ')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            document.getElementById('thisOrThatResults').innerHTML = html;
+        }
+
+        // ==================== VOTING ====================
+        function initVoting() {
+            voteIndex = 0;
+            state.votes = [{}, {}, {}];
+            showVote();
+        }
+
+        function showVote() {
+            const s = superlatives[voteIndex];
+            document.getElementById('votingRound').textContent = `Ronn ${voteIndex + 1} vu ${superlatives.length}`;
+            document.getElementById('votingContainer').innerHTML = `
+                <div class="vote-card">
+                    <h4 style="font-size: 1.5rem; margin-bottom: 25px;">${s.title}</h4>
+                    <div class="players-row">
+                        ${state.players.map((p, pi) => `
+                            <div class="player-column">
+                                <h3>${p.name} stimmt:</h3>
+                                <div class="vote-options" style="flex-direction: column;">
+                                    ${state.players.map((target, ti) => `
+                                        <button class="vote-btn ${state.votes[pi][s.id] === ti ? 'selected' : ''}"
+                                            onclick="castVote(${pi}, '${s.id}', ${ti})">${target.name}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="nextVote()">Weider →</button>
+                </div>
+            `;
+        }
+
+        function castVote(voter, supId, target) {
+            state.votes[voter][supId] = target;
+            showVote();
+        }
+
+        function nextVote() {
+            voteIndex++;
+            if(voteIndex < superlatives.length) showVote();
+            else goToScreen('5b');
+        }
+
+        function showAwards() {
+            let html = '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">';
+            superlatives.forEach(s => {
+                const counts = [0, 0, 0];
+                state.votes.forEach(v => { if(v[s.id] !== undefined) counts[v[s.id]]++; });
+                const max = Math.max(...counts);
+                const winners = state.players.filter((_, i) => counts[i] === max).map(p => p.name);
+                html += `
+                    <div class="award-card">
+                        <div class="trophy">🏆</div>
+                        <h3>${s.title}</h3>
+                        <div class="winner">${winners.join(' & ')}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            document.getElementById('awardsContainer').innerHTML = html;
             triggerConfetti();
         }
 
-        // ==================== SCREEN 4: VOTING ====================
-        let currentSuperlative = 0;
-
-        function initVotingScreen() {
-            currentSuperlative = 0;
-            generateTabs('votingTabs', 'showVotingFor');
-            showVotingFor(0);
+        // ==================== COMPLIMENTS ====================
+        function initCompliments() {
+            complimentWriter = 0;
+            showComplimentWriter();
         }
 
-        function showVotingFor(voterIndex) {
-            document.querySelectorAll('#votingTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === voterIndex);
-            });
+        function showComplimentWriter() {
+            const writer = state.players[complimentWriter];
+            const others = state.players.map((p, i) => ({...p, idx: i})).filter((_, i) => i !== complimentWriter);
+            document.getElementById('complimentRound').textContent = `${writer.name} schreift Komplimenter`;
 
-            const voter = appState.players[voterIndex];
-            const votes = appState.votes[voterIndex];
-            const content = document.getElementById('votingContent');
-
-            content.innerHTML = `
-                <h3 style="margin-bottom: 20px; text-align: center;">${voter.name} stimmt ab</h3>
-                <p style="text-align: center; opacity: 0.7; margin-bottom: 20px;">Zeigt den anderen NICHT euer iPad!</p>
-
-                ${superlatives.map(sup => `
-                    <div class="vote-card">
-                        <h4>${sup.title}</h4>
-                        <div class="vote-options">
-                            ${appState.players.map((p, i) => `
-                                <button class="vote-btn ${votes[sup.id] === i ? 'selected' : ''}"
-                                    onclick="castVote(${voterIndex}, '${sup.id}', ${i})">
-                                    ${p.name}
-                                </button>
-                            `).join('')}
+            document.getElementById('complimentContainer').innerHTML = `
+                <div class="group-banner">
+                    <span class="icon">🙈</span>
+                    <span>Déi aner kucken NET op den Écran!</span>
+                </div>
+                ${others.map(other => `
+                    <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; margin-bottom: 20px;">
+                        <h4 style="text-align: center; margin-bottom: 15px;">💌 Fir ${other.name}:</h4>
+                        <div class="compliment-grid">
+                            ${complimentOptions.map(c => {
+                                const sel = state.compliments[complimentWriter][other.idx]?.includes(c);
+                                return `<button class="compliment-tag ${sel ? 'selected' : ''}"
+                                    onclick="toggleCompliment(${complimentWriter}, ${other.idx}, '${c}')">${sel ? '✓ ' : ''}${c}</button>`;
+                            }).join('')}
                         </div>
                     </div>
                 `).join('')}
-
                 <div class="nav-buttons">
-                    ${voterIndex > 0 ? `<button class="btn btn-secondary" onclick="showVotingFor(${voterIndex - 1})">← Zurück</button>` : ''}
-                    ${voterIndex < 2 ? `
-                        <button class="btn btn-primary" onclick="showVotingFor(${voterIndex + 1})">Weiter →</button>
-                    ` : `
-                        <button class="btn btn-success" onclick="goToScreen('4b')">🏆 Ergebnisse zeigen!</button>
-                    `}
+                    ${complimentWriter > 0 ? `<button class="btn btn-secondary" onclick="prevComplimentWriter()">← Zréck</button>` : ''}
+                    ${complimentWriter < 2 ?
+                        `<button class="btn btn-primary" onclick="nextComplimentWriter()">Weider →</button>` :
+                        `<button class="btn btn-success" onclick="goToScreen('6b')">🎓 Zu den Zertifikater!</button>`
+                    }
                 </div>
             `;
         }
 
-        function castVote(voterIndex, superlativeId, playerIndex) {
-            appState.votes[voterIndex][superlativeId] = playerIndex;
-            showVotingFor(voterIndex);
+        function toggleCompliment(writer, receiver, comp) {
+            if(!state.compliments[writer][receiver]) state.compliments[writer][receiver] = [];
+            const arr = state.compliments[writer][receiver];
+            const idx = arr.indexOf(comp);
+            if(idx > -1) arr.splice(idx, 1);
+            else if(arr.length < 4) arr.push(comp);
+            showComplimentWriter();
         }
 
-        // ==================== SCREEN 4B: AWARDS ====================
-        function initAwardsScreen() {
-            const content = document.getElementById('awardsContent');
+        function prevComplimentWriter() { complimentWriter--; showComplimentWriter(); }
+        function nextComplimentWriter() { complimentWriter++; showComplimentWriter(); }
 
-            const results = superlatives.map(sup => {
-                const voteCounts = [0, 0, 0];
-                appState.votes.forEach(voterVotes => {
-                    if (voterVotes[sup.id] !== undefined) {
-                        voteCounts[voterVotes[sup.id]]++;
+        // ==================== CERTIFICATES ====================
+        function showCertificates() {
+            let currentCert = 0;
+
+            function renderCert() {
+                const p = state.players[currentCert];
+                const h = state.highlights[currentCert];
+
+                // Get compliments for this player
+                const comps = [];
+                state.players.forEach((_, wi) => {
+                    if(wi !== currentCert && state.compliments[wi][currentCert]) {
+                        comps.push(...state.compliments[wi][currentCert]);
                     }
                 });
 
-                const maxVotes = Math.max(...voteCounts);
-                const winners = voteCounts.map((count, i) => count === maxVotes ? i : -1).filter(i => i !== -1);
-
-                return {
-                    title: sup.title,
-                    winners: winners.map(i => appState.players[i].name),
-                    votes: maxVotes
-                };
-            });
-
-            content.innerHTML = results.map(r => `
-                <div class="award-card">
-                    <div class="trophy">🏆</div>
-                    <h3>${r.title.replace('Wer ist am ehesten', '').replace('Wer ', '').replace('?', '')}</h3>
-                    <div class="winner">${r.winners.join(' & ')}</div>
-                    <p style="opacity: 0.7; font-size: 0.85rem;">${r.votes} Stimme${r.votes !== 1 ? 'n' : ''}</p>
-                </div>
-            `).join('');
-
-            triggerConfetti();
-        }
-
-        // ==================== SCREEN 5: COMPLIMENTS ====================
-        function initComplimentsScreen() {
-            generateTabs('complimentWriterTabs', 'showComplimentWriterFor');
-            showComplimentWriterFor(0);
-        }
-
-        function showComplimentWriterFor(writerIndex) {
-            document.querySelectorAll('#complimentWriterTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === writerIndex);
-            });
-
-            const writer = appState.players[writerIndex];
-            const content = document.getElementById('complimentWriterContent');
-            const otherPlayers = appState.players.map((p, i) => ({ ...p, index: i })).filter((_, i) => i !== writerIndex);
-
-            content.innerHTML = `
-                <h3 style="margin-bottom: 20px;">${writer.name} schreibt Komplimente</h3>
-                <p style="opacity: 0.7; margin-bottom: 20px;">Wähle oder schreibe 2-3 nette Dinge für jeden!</p>
-
-                <div class="strength-input-container">
-                    ${otherPlayers.map(other => `
-                        <div class="strength-for">
-                            <h4>💌 Für ${other.name}:</h4>
-
-                            <div class="predefined-strengths">
-                                ${complimentOptions.map(c => {
-                                    const used = appState.compliments[writerIndex][other.index]?.includes(c);
-                                    return `
-                                        <button class="predefined-strength ${used ? 'used' : ''}"
-                                            onclick="addCompliment(${writerIndex}, ${other.index}, '${c}')"
-                                            ${used ? 'disabled' : ''}>
-                                            ${used ? '✓ ' : ''}${c}
-                                        </button>
-                                    `;
-                                }).join('')}
-                            </div>
-
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <input type="text" class="input-field" placeholder="Oder eigenes schreiben..."
-                                    id="customCompliment-${writerIndex}-${other.index}"
-                                    onkeypress="if(event.key==='Enter') addCustomCompliment(${writerIndex}, ${other.index})">
-                                <button class="btn btn-secondary" onclick="addCustomCompliment(${writerIndex}, ${other.index})">+</button>
-                            </div>
-
-                            <div class="strength-tags" id="complimentTags-${writerIndex}-${other.index}">
-                                ${(appState.compliments[writerIndex][other.index] || []).map(c => `
-                                    <span class="strength-tag">
-                                        ${c}
-                                        <button onclick="removeCompliment(${writerIndex}, ${other.index}, '${c}')">×</button>
-                                    </span>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="nav-buttons">
-                    ${writerIndex > 0 ? `<button class="btn btn-secondary" onclick="showComplimentWriterFor(${writerIndex - 1})">← Zurück</button>` : ''}
-                    ${writerIndex < 2 ? `
-                        <button class="btn btn-primary" onclick="showComplimentWriterFor(${writerIndex + 1})">Weiter →</button>
-                    ` : `
-                        <button class="btn btn-success" onclick="goToScreen('5b')">🎁 Komplimente enthüllen!</button>
-                    `}
-                </div>
-            `;
-        }
-
-        function addCompliment(writerIndex, receiverIndex, compliment) {
-            if (!appState.compliments[writerIndex][receiverIndex]) {
-                appState.compliments[writerIndex][receiverIndex] = [];
-            }
-            if (!appState.compliments[writerIndex][receiverIndex].includes(compliment)) {
-                appState.compliments[writerIndex][receiverIndex].push(compliment);
-                showComplimentWriterFor(writerIndex);
-            }
-        }
-
-        function addCustomCompliment(writerIndex, receiverIndex) {
-            const input = document.getElementById(`customCompliment-${writerIndex}-${receiverIndex}`);
-            const compliment = input.value.trim();
-            if (compliment) {
-                addCompliment(writerIndex, receiverIndex, compliment);
-                input.value = '';
-            }
-        }
-
-        function removeCompliment(writerIndex, receiverIndex, compliment) {
-            const idx = appState.compliments[writerIndex][receiverIndex].indexOf(compliment);
-            if (idx > -1) {
-                appState.compliments[writerIndex][receiverIndex].splice(idx, 1);
-                showComplimentWriterFor(writerIndex);
-            }
-        }
-
-        // ==================== SCREEN 5B: COMPLIMENTS REVEAL ====================
-        function initComplimentsReveal() {
-            generateTabs('complimentRevealTabs', 'showComplimentRevealFor');
-            showComplimentRevealFor(0);
-        }
-
-        function showComplimentRevealFor(playerIndex) {
-            document.querySelectorAll('#complimentRevealTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === playerIndex);
-            });
-
-            const player = appState.players[playerIndex];
-            const content = document.getElementById('complimentRevealContent');
-
-            const allCompliments = [];
-            appState.players.forEach((writer, writerIndex) => {
-                if (writerIndex !== playerIndex) {
-                    const compliments = appState.compliments[writerIndex][playerIndex] || [];
-                    compliments.forEach(c => {
-                        allCompliments.push({ compliment: c, from: writer.name });
-                    });
-                }
-            });
-
-            content.innerHTML = `
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h2 style="font-size: 1.8rem; margin-bottom: 10px;">💝 ${player.name} 💝</h2>
-                    <p style="opacity: 0.8;">Das denken die anderen über dich:</p>
-                </div>
-
-                <div style="display: grid; gap: 15px;">
-                    ${allCompliments.map(item => `
-                        <div style="background: var(--gradient-1); padding: 20px; border-radius: 16px; text-align: center;">
-                            <div style="font-size: 1.3rem; font-weight: 600; margin-bottom: 5px;">${item.compliment}</div>
-                            <div style="opacity: 0.8; font-size: 0.85rem;">— ${item.from}</div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                ${allCompliments.length === 0 ? '<p style="text-align: center; opacity: 0.7;">Noch keine Komplimente hinzugefügt.</p>' : ''}
-
-                <div class="nav-buttons">
-                    ${playerIndex > 0 ? `<button class="btn btn-secondary" onclick="showComplimentRevealFor(${playerIndex - 1})">← Zurück</button>` : ''}
-                    ${playerIndex < 2 ? `
-                        <button class="btn btn-primary" onclick="showComplimentRevealFor(${playerIndex + 1})">Weiter →</button>
-                    ` : `
-                        <button class="btn btn-success" onclick="goToScreen(6)">✓ Zu den Wünschen</button>
-                    `}
-                </div>
-            `;
-        }
-
-        // ==================== SCREEN 6: WISHES ====================
-        function initWishesScreen() {
-            generateTabs('wishTabs', 'showWishesFor');
-            showWishesFor(0);
-        }
-
-        function showWishesFor(playerIndex) {
-            document.querySelectorAll('#wishTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === playerIndex);
-            });
-
-            const player = appState.players[playerIndex];
-            const wishes = appState.wishes[playerIndex];
-            const content = document.getElementById('wishContent');
-
-            content.innerHTML = `
-                <h3 style="margin-bottom: 20px;">${player.name}s Wünsche für 2026</h3>
-
-                <div class="input-group">
-                    <label>🎯 Das will ich 2026 unbedingt machen</label>
-                    <textarea class="input-field" placeholder="Was steht auf deiner Liste?"
-                        onchange="appState.wishes[${playerIndex}].goal = this.value">${wishes.goal || ''}</textarea>
-                </div>
-
-                <div class="input-group">
-                    <label>✨ So will ich mich 2026 fühlen</label>
-                    <input type="text" class="input-field" placeholder="Welches Gefühl wünschst du dir?"
-                        onchange="appState.wishes[${playerIndex}].feeling = this.value" value="${wishes.feeling || ''}">
-                </div>
-
-                <div class="input-group">
-                    <label>💭 Mein Vorsatz (den ich wirklich einhalte!)</label>
-                    <textarea class="input-field" placeholder="Was nimmst du dir vor?"
-                        onchange="appState.wishes[${playerIndex}].resolution = this.value">${wishes.resolution || ''}</textarea>
-                </div>
-
-                <div class="nav-buttons">
-                    ${playerIndex > 0 ? `<button class="btn btn-secondary" onclick="showWishesFor(${playerIndex - 1})">← Zurück</button>` : ''}
-                    ${playerIndex < 2 ? `
-                        <button class="btn btn-primary" onclick="showWishesFor(${playerIndex + 1})">Weiter →</button>
-                    ` : `
-                        <button class="btn btn-success" onclick="goToScreen('6b')">🎓 Zu den Zertifikaten!</button>
-                    `}
-                </div>
-            `;
-        }
-
-        // ==================== SCREEN 6B: CERTIFICATES ====================
-        function initCertificates() {
-            generateTabs('certTabs', 'showCertificateFor');
-            showCertificateFor(0);
-            triggerConfetti();
-        }
-
-        function showCertificateFor(playerIndex) {
-            document.querySelectorAll('#certTabs .tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === playerIndex);
-            });
-
-            const player = appState.players[playerIndex];
-            const review = appState.reviews[playerIndex];
-            const wishes = appState.wishes[playerIndex];
-            const content = document.getElementById('certContent');
-
-            // Get awards won
-            const awards = superlatives.filter(sup => {
-                const voteCounts = [0, 0, 0];
-                appState.votes.forEach(voterVotes => {
-                    if (voterVotes[sup.id] !== undefined) {
-                        voteCounts[voterVotes[sup.id]]++;
-                    }
+                // Get awards
+                const awards = superlatives.filter(s => {
+                    const counts = [0, 0, 0];
+                    state.votes.forEach(v => { if(v[s.id] !== undefined) counts[v[s.id]]++; });
+                    const max = Math.max(...counts);
+                    return counts[currentCert] === max && max > 0;
                 });
-                const maxVotes = Math.max(...voteCounts);
-                return voteCounts[playerIndex] === maxVotes && maxVotes > 0;
-            });
 
-            // Get compliments
-            const allCompliments = [];
-            appState.players.forEach((writer, writerIndex) => {
-                if (writerIndex !== playerIndex) {
-                    const compliments = appState.compliments[writerIndex][playerIndex] || [];
-                    allCompliments.push(...compliments);
-                }
-            });
-
-            content.innerHTML = `
-                <div class="certificate">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
-                    <h2>Jahresrückblick 2025</h2>
-                    <p>Offizielles Zertifikat</p>
-
-                    <div class="name">${player.name}</div>
-
-                    <div style="margin: 20px 0; text-align: left; padding: 0 20px; font-size: 0.9rem;">
-                        ${review.highlight ? `<p>⭐ <strong>Highlight:</strong> ${review.highlight}</p>` : ''}
-                        ${review.song ? `<p>🎵 <strong>Song 2025:</strong> ${review.song}</p>` : ''}
-                        ${awards.length > 0 ? `<p>🏆 <strong>Awards:</strong> ${awards.map(a => a.title.split('?')[0].replace('Wer ist am ehesten', '').replace('Wer ', '')).join(', ')}</p>` : ''}
-                        ${allCompliments.length > 0 ? `<p>💝 <strong>Ist:</strong> ${allCompliments.slice(0, 3).join(', ')}</p>` : ''}
-                        ${wishes.goal ? `<p>🎯 <strong>Ziel 2026:</strong> ${wishes.goal}</p>` : ''}
+                document.getElementById('certificatesContainer').innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        ${state.players.map((pl, i) => `
+                            <button class="btn ${i === currentCert ? 'btn-primary' : 'btn-secondary'}"
+                                style="margin: 5px;" onclick="window.showCertFor(${i})">${pl.name}</button>
+                        `).join('')}
                     </div>
+                    <div class="certificate">
+                        <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
+                        <h2>Jahresréckbléck 2025</h2>
+                        <p>Offiziellt Zertifikat</p>
+                        <div class="name">${p.name}</div>
+                        <div style="text-align: left; margin: 20px 30px; font-size: 0.95rem; color: #78350f;">
+                            ${h.best ? `<p>⭐ <b>Highlight:</b> ${h.best}</p>` : ''}
+                            ${h.song ? `<p>🎵 <b>Song:</b> ${h.song}</p>` : ''}
+                            ${awards.length > 0 ? `<p>🏆 <b>Awards:</b> ${awards.map(a => a.title.split('...')[1]?.replace('?','') || a.title).join(', ')}</p>` : ''}
+                            ${comps.length > 0 ? `<p>💝 <b>Ass:</b> ${[...new Set(comps)].slice(0,4).join(', ')}</p>` : ''}
+                            <p>🧠 <b>Quiz:</b> ${state.quizScore}/10 Punkten</p>
+                        </div>
+                        <div class="seal">⭐</div>
+                        <p style="font-size: 0.9rem; color: #92400e;">Dezember 2025 🇱🇺</p>
+                    </div>
+                `;
+            }
 
-                    <div class="seal">⭐</div>
-
-                    <p style="font-size: 0.85rem; margin-top: 15px;">
-                        Quiz Score: ${appState.quizScore}/10<br>
-                        Dezember 2025
-                    </p>
-                </div>
-            `;
+            window.showCertFor = (i) => { currentCert = i; renderCert(); };
+            renderCert();
+            triggerConfetti();
         }
 
-        function restartJourney() {
-            appState.players = [
-                { name: '', mood: 3, moodEmoji: '😊' },
-                { name: '', mood: 3, moodEmoji: '😊' },
-                { name: '', mood: 3, moodEmoji: '😊' }
-            ];
-            appState.reviews = [{}, {}, {}];
-            appState.quizScore = 0;
-            appState.votes = [{}, {}, {}];
-            appState.compliments = {
-                0: { 1: [], 2: [] },
-                1: { 0: [], 2: [] },
-                2: { 0: [], 1: [] }
-            };
-            appState.wishes = [{}, {}, {}];
-            appState.currentModule = 0;
-
-            if (appState.timerInterval) clearInterval(appState.timerInterval);
-
-            goToScreen('welcome');
-        }
-
+        // Init
         document.addEventListener('DOMContentLoaded', () => goToScreen('welcome'));
     </script>
 </body>
