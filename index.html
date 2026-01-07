@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELDiB Digital - Entwicklungspädagogischer Lernziel-Diagnose-Bogen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>ELD<span class="logo-accent">i</span>B</h1>
+                    <p class="subtitle">Entwicklungspädagogischer Lernziel-Diagnose-Bogen</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="exportPDF()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        PDF Export
+                    </button>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        PEI-Bericht erstellen
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="eingabe" onclick="switchTab('eingabe')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Schülerdaten
+            </button>
+            <button class="tab-btn" data-tab="bewertung" onclick="switchTab('bewertung')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                ELDiB-Bewertung
+            </button>
+            <button class="tab-btn" data-tab="bericht" onclick="switchTab('bericht')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                PEI-Bericht
+            </button>
+            <button class="tab-btn" data-tab="visualisierung" onclick="switchTab('visualisierung')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Visualisierung
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab: Schülerdaten -->
+            <section id="tab-eingabe" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Schülerinformationen</h2>
+                        <p class="card-description">Bitte füllen Sie die grundlegenden Informationen zum Kind/Jugendlichen aus.</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="studentForm" class="form-grid">
+                            <div class="form-group">
+                                <label for="studentName">Name des Kindes/Jugendlichen *</label>
+                                <input type="text" id="studentName" required placeholder="Vorname Nachname">
+                            </div>
+                            <div class="form-group">
+                                <label for="birthDate">Geburtsdatum *</label>
+                                <input type="date" id="birthDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="foerderort">Förderort</label>
+                                <input type="text" id="foerderort" placeholder="z.B. CDSE, Schule XY">
+                            </div>
+                            <div class="form-group">
+                                <label for="klasse">Klasse/Gruppe</label>
+                                <input type="text" id="klasse" placeholder="z.B. 3a, Fördergruppe B">
+                            </div>
+                            <div class="form-group">
+                                <label for="assessmentDate">Datum der Einschätzung *</label>
+                                <input type="date" id="assessmentDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assessorName">Name der Einschätzenden</label>
+                                <input type="text" id="assessorName" placeholder="Name und Funktion">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="notes">Allgemeine Bemerkungen</label>
+                                <textarea id="notes" rows="4" placeholder="Zusätzliche Informationen zum Kind..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: ELDiB-Bewertung -->
+            <section id="tab-bewertung" class="tab-content">
+                <div class="assessment-container">
+                    <!-- Bereichs-Tabs -->
+                    <div class="domain-tabs">
+                        <button class="domain-tab active" data-domain="verhalten" onclick="switchDomain('verhalten')" style="--domain-color: #E74C3C">
+                            <span class="domain-icon">V</span>
+                            Verhalten
+                        </button>
+                        <button class="domain-tab" data-domain="kommunikation" onclick="switchDomain('kommunikation')" style="--domain-color: #3498DB">
+                            <span class="domain-icon">K</span>
+                            Kommunikation
+                        </button>
+                        <button class="domain-tab" data-domain="sozialisation" onclick="switchDomain('sozialisation')" style="--domain-color: #2ECC71">
+                            <span class="domain-icon">S</span>
+                            Sozialisation
+                        </button>
+                        <button class="domain-tab" data-domain="kognition" onclick="switchDomain('kognition')" style="--domain-color: #9B59B6">
+                            <span class="domain-icon">KOG</span>
+                            Kognition
+                        </button>
+                    </div>
+
+                    <!-- Assessment Matrix -->
+                    <div id="assessmentMatrix" class="assessment-matrix">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+
+                    <!-- Legende -->
+                    <div class="legend">
+                        <h4>Legende:</h4>
+                        <div class="legend-items">
+                            <div class="legend-item">
+                                <span class="status-badge status-erreicht"></span>
+                                <span>Erreicht</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="status-badge status-nicht-erreicht"></span>
+                                <span>Nicht erreicht</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="status-badge status-ziel"></span>
+                                <span>Aktuelles Ziel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: PEI-Bericht -->
+            <section id="tab-bericht" class="tab-content">
+                <div id="peiReport" class="pei-report">
+                    <div class="report-placeholder">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <h3>Noch kein Bericht erstellt</h3>
+                        <p>Bewerten Sie zuerst die Items im ELDiB-Bewertungs-Tab und klicken Sie dann auf "PEI-Bericht erstellen".</p>
+                        <button class="btn btn-primary" onclick="generateReport()">PEI-Bericht erstellen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Visualisierung -->
+            <section id="tab-visualisierung" class="tab-content">
+                <div class="visualization-container">
+                    <div class="viz-grid">
+                        <!-- Entwicklungsprofil -->
+                        <div class="card viz-card">
+                            <div class="card-header">
+                                <h3>Entwicklungsprofil</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Fortschrittsübersicht -->
+                        <div class="card viz-card">
+                            <div class="card-header">
+                                <h3>Fortschritt nach Bereichen</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="progressBars" class="progress-container">
+                                    <!-- Wird dynamisch gefüllt -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stufenübersicht -->
+                        <div class="card viz-card full-width">
+                            <div class="card-header">
+                                <h3>Stufenübersicht</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="stageOverview" class="stage-overview">
+                                    <!-- Wird dynamisch gefüllt -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CDSE Offizielles Dokument -->
+                        <div class="card viz-card full-width official-doc">
+                            <div class="card-header">
+                                <h3>CDSE - Entwicklungspädagogische Übersicht</h3>
+                                <span class="badge">Offizielles Dokument</span>
+                            </div>
+                            <div class="card-body" id="cdseDocument">
+                                <!-- Wird dynamisch gefüllt -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 ELDiB Digital - Basierend auf dem ELDiB von ETEP Europe</p>
+            <p class="footer-note">Dieses Tool dient der pädagogischen Dokumentation und Förderplanung.</p>
+        </footer>
+    </div>
+
+    <!-- Modal für Zielformulierung -->
+    <div id="goalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Zielformulierung & Intervention</h3>
+                <button class="modal-close" onclick="closeGoalModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="goalModalBody">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeGoalModal()">Schließen</button>
+                <button class="btn btn-primary" onclick="saveGoal()">Ziel speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
