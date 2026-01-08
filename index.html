@@ -64,6 +64,210 @@
             background: #219a52;
         }
 
+        /* Profil & Evaluationen Management */
+        .profile-management {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            padding: 16px 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .profile-management label {
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .profile-management select {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 200px;
+            cursor: pointer;
+        }
+
+        .profile-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.4);
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .profile-btn.danger {
+            background: rgba(231,76,60,0.3);
+            border-color: #e74c3c;
+        }
+
+        .profile-btn.danger:hover {
+            background: rgba(231,76,60,0.5);
+        }
+
+        .evaluation-info {
+            margin-left: auto;
+            color: white;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .evaluation-count {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Vergleichs-Tab */
+        .comparison-tab {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .comparison-tab.active {
+            background: white;
+            color: #8e44ad;
+        }
+
+        /* Vergleichs-Ansicht */
+        .comparison-section {
+            display: none;
+            padding: 24px 40px;
+            background: white;
+        }
+
+        .comparison-section.active {
+            display: block;
+        }
+
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #8e44ad;
+        }
+
+        .comparison-header h2 {
+            color: #8e44ad;
+            font-size: 20px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        .comparison-table th {
+            background: #8e44ad;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f4fc;
+        }
+
+        .delta-positive {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .delta-negative {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .progress-chart {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .progress-chart h3 {
+            color: #2c3e50;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .chart-label {
+            width: 120px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .chart-bars {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+            align-items: flex-end;
+            height: 60px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 100%);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-width: 30px;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: #8e44ad;
+        }
+
         /* Schülerdaten */
         .student-section {
             background: white;
@@ -444,6 +648,34 @@
         </button>
     </header>
 
+    <!-- Profil & Evaluationen Management -->
+    <section class="profile-management">
+        <div>
+            <label>Schüler/in:</label>
+            <select id="profileSelect" onchange="loadProfile(this.value)">
+                <option value="">-- Profil wählen --</option>
+            </select>
+        </div>
+        <button class="profile-btn" onclick="createNewProfile()">+ Neues Profil</button>
+        <button class="profile-btn danger" onclick="deleteCurrentProfile()" id="deleteProfileBtn" style="display:none;">Profil löschen</button>
+
+        <div style="border-left: 2px solid rgba(255,255,255,0.3); height: 30px; margin: 0 10px;"></div>
+
+        <div>
+            <label>Evaluation:</label>
+            <select id="evaluationSelect" onchange="loadEvaluation(this.value)">
+                <option value="">-- Evaluation wählen --</option>
+            </select>
+        </div>
+        <button class="profile-btn" onclick="createNewEvaluation()">+ Neue Evaluation</button>
+        <button class="profile-btn danger" onclick="deleteCurrentEvaluation()" id="deleteEvalBtn" style="display:none;">Löschen</button>
+
+        <div class="evaluation-info">
+            <span id="evaluationCount" class="evaluation-count">0 Evaluationen</span>
+            <button class="profile-btn" onclick="showComparison()" id="compareBtn" style="display:none;">📊 Vergleich</button>
+        </div>
+    </section>
+
     <!-- Schülerdaten -->
     <section class="student-section">
         <div class="student-grid">
@@ -484,7 +716,42 @@
         <button class="domain-tab" data-domain="kognition" onclick="switchDomain('kognition')">
             Kognition
         </button>
+        <button class="domain-tab comparison-tab" data-domain="vergleich" onclick="switchDomain('vergleich')" id="comparisonTab" style="display:none;">
+            📊 Entwicklungsverlauf
+        </button>
     </nav>
+
+    <!-- Vergleichs-Ansicht -->
+    <section class="comparison-section" id="comparisonSection">
+        <div class="comparison-header">
+            <h2>📊 Entwicklungsverlauf über Zeit</h2>
+            <span id="comparisonInfo"></span>
+        </div>
+
+        <div class="progress-chart" id="progressChart">
+            <h3>Entwicklungsalter pro Bereich über Zeit</h3>
+            <div id="chartContent">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 16px; color: #2c3e50;">Evaluations-Übersicht</h3>
+        <table class="comparison-table" id="comparisonTable">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Verhalten</th>
+                    <th>Kommunikation</th>
+                    <th>Sozialisation</th>
+                    <th>Kognition</th>
+                    <th>Ø Gesamt</th>
+                </tr>
+            </thead>
+            <tbody id="comparisonTableBody">
+                <!-- Wird dynamisch gefüllt -->
+            </tbody>
+        </table>
+    </section>
 
     <!-- Hauptinhalt -->
     <main class="main-content">
@@ -522,6 +789,412 @@
     </div>
 
     <script>
+// ==========================================
+// Profil & Evaluationen Management
+// ==========================================
+let allProfiles = {};  // Alle Schülerprofile
+let currentProfileId = null;
+let currentEvaluationId = null;
+
+function generateId() {
+    return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function createNewProfile() {
+    const name = prompt('Name des Schülers/der Schülerin:');
+    if (!name || name.trim() === '') return;
+
+    const profileId = generateId();
+    allProfiles[profileId] = {
+        id: profileId,
+        studentData: {
+            name: name.trim(),
+            birthDate: '',
+            foerderort: '',
+            assessorName: ''
+        },
+        evaluations: []
+    };
+
+    saveAllProfiles();
+    updateProfileDropdown();
+    loadProfile(profileId);
+
+    // Automatisch erste Evaluation erstellen
+    createNewEvaluation();
+}
+
+function loadProfile(profileId) {
+    if (!profileId) {
+        currentProfileId = null;
+        currentEvaluationId = null;
+        document.getElementById('deleteProfileBtn').style.display = 'none';
+        document.getElementById('evaluationSelect').innerHTML = '<option value="">-- Evaluation wählen --</option>';
+        updateEvaluationUI();
+        return;
+    }
+
+    currentProfileId = profileId;
+    const profile = allProfiles[profileId];
+
+    // Stammdaten laden
+    document.getElementById('studentName').value = profile.studentData.name || '';
+    document.getElementById('birthDate').value = profile.studentData.birthDate || '';
+    document.getElementById('foerderort').value = profile.studentData.foerderort || '';
+
+    document.getElementById('deleteProfileBtn').style.display = 'inline-block';
+
+    updateEvaluationDropdown();
+
+    // Letzte Evaluation laden falls vorhanden
+    if (profile.evaluations.length > 0) {
+        loadEvaluation(profile.evaluations[profile.evaluations.length - 1].id);
+    } else {
+        currentEvaluationId = null;
+        resetAssessments();
+        updateEvaluationUI();
+    }
+}
+
+function deleteCurrentProfile() {
+    if (!currentProfileId) return;
+    const profile = allProfiles[currentProfileId];
+    if (!confirm(`Profil "${profile.studentData.name}" und alle ${profile.evaluations.length} Evaluationen löschen?`)) return;
+
+    delete allProfiles[currentProfileId];
+    currentProfileId = null;
+    currentEvaluationId = null;
+
+    saveAllProfiles();
+    updateProfileDropdown();
+    document.getElementById('profileSelect').value = '';
+    loadProfile('');
+}
+
+function createNewEvaluation() {
+    if (!currentProfileId) {
+        alert('Bitte zuerst ein Schülerprofil erstellen oder auswählen.');
+        return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const evaluationId = generateId();
+
+    const newEvaluation = {
+        id: evaluationId,
+        date: today,
+        assessorName: document.getElementById('assessorName').value || '',
+        assessments: JSON.parse(JSON.stringify(assessments)), // Deep copy
+        developmentalAges: null // Wird beim Speichern berechnet
+    };
+
+    // Bisherige Bewertungen als Ausgangspunkt (falls gewünscht)
+    const profile = allProfiles[currentProfileId];
+    if (profile.evaluations.length > 0) {
+        const copyPrevious = confirm('Vorherige Bewertungen als Ausgangspunkt übernehmen?');
+        if (copyPrevious) {
+            const lastEval = profile.evaluations[profile.evaluations.length - 1];
+            newEvaluation.assessments = JSON.parse(JSON.stringify(lastEval.assessments));
+        }
+    }
+
+    profile.evaluations.push(newEvaluation);
+    saveAllProfiles();
+    updateEvaluationDropdown();
+    loadEvaluation(evaluationId);
+}
+
+function loadEvaluation(evaluationId) {
+    if (!currentProfileId || !evaluationId) {
+        currentEvaluationId = null;
+        document.getElementById('deleteEvalBtn').style.display = 'none';
+        updateEvaluationUI();
+        return;
+    }
+
+    const profile = allProfiles[currentProfileId];
+    const evaluation = profile.evaluations.find(e => e.id === evaluationId);
+
+    if (!evaluation) return;
+
+    currentEvaluationId = evaluationId;
+
+    // Bewertungen laden
+    Object.keys(evaluation.assessments).forEach(domain => {
+        if (assessments[domain]) {
+            Object.assign(assessments[domain], evaluation.assessments[domain]);
+        }
+    });
+
+    // Datum und Bewerter laden
+    document.getElementById('assessmentDate').value = evaluation.date || '';
+    document.getElementById('assessorName').value = evaluation.assessorName || '';
+
+    document.getElementById('deleteEvalBtn').style.display = 'inline-block';
+
+    renderAllDomains();
+    updateStats();
+    updateEvaluationUI();
+}
+
+function deleteCurrentEvaluation() {
+    if (!currentProfileId || !currentEvaluationId) return;
+
+    const profile = allProfiles[currentProfileId];
+    const evalIndex = profile.evaluations.findIndex(e => e.id === currentEvaluationId);
+
+    if (evalIndex === -1) return;
+
+    const evalDate = profile.evaluations[evalIndex].date;
+    if (!confirm(`Evaluation vom ${new Date(evalDate).toLocaleDateString('de-DE')} löschen?`)) return;
+
+    profile.evaluations.splice(evalIndex, 1);
+    currentEvaluationId = null;
+
+    saveAllProfiles();
+    updateEvaluationDropdown();
+
+    // Letzte Evaluation laden falls vorhanden
+    if (profile.evaluations.length > 0) {
+        loadEvaluation(profile.evaluations[profile.evaluations.length - 1].id);
+    } else {
+        resetAssessments();
+        updateEvaluationUI();
+    }
+}
+
+function saveCurrentEvaluation() {
+    if (!currentProfileId || !currentEvaluationId) return;
+
+    const profile = allProfiles[currentProfileId];
+    const evaluation = profile.evaluations.find(e => e.id === currentEvaluationId);
+
+    if (!evaluation) return;
+
+    // Stammdaten aktualisieren
+    profile.studentData.name = document.getElementById('studentName').value;
+    profile.studentData.birthDate = document.getElementById('birthDate').value;
+    profile.studentData.foerderort = document.getElementById('foerderort').value;
+
+    // Evaluation aktualisieren
+    evaluation.date = document.getElementById('assessmentDate').value;
+    evaluation.assessorName = document.getElementById('assessorName').value;
+    evaluation.assessments = JSON.parse(JSON.stringify(assessments));
+
+    // Entwicklungsalter berechnen und speichern
+    evaluation.developmentalAges = calculateAllDevelopmentalAges();
+
+    saveAllProfiles();
+    updateProfileDropdown(); // Name könnte sich geändert haben
+}
+
+function calculateAllDevelopmentalAges() {
+    const stageData = {};
+    Object.keys(ELDIB_DATA).forEach(domain => {
+        stageData[domain] = {};
+        ELDIB_DATA[domain].stufen.forEach(stufe => {
+            stageData[domain][stufe.nummer] = {
+                total: stufe.items.length,
+                erreicht: 0
+            };
+            stufe.items.forEach(item => {
+                if (assessments[domain][item.id].erreicht) {
+                    stageData[domain][stufe.nummer].erreicht++;
+                }
+            });
+        });
+    });
+
+    const result = {};
+    Object.keys(ELDIB_DATA).forEach(domain => {
+        let highestStage = 0;
+        for (let i = 5; i >= 1; i--) {
+            if (stageData[domain][i].erreicht > 0) {
+                highestStage = i;
+                break;
+            }
+        }
+        const devAge = calculateDevelopmentalAge(highestStage, stageData, domain);
+        result[domain] = devAge.age;
+    });
+
+    return result;
+}
+
+function resetAssessments() {
+    Object.keys(ELDIB_DATA).forEach(domain => {
+        ELDIB_DATA[domain].stufen.forEach(stufe => {
+            stufe.items.forEach(item => {
+                assessments[domain][item.id] = { erreicht: false, ziel: false };
+            });
+        });
+    });
+    renderAllDomains();
+    updateStats();
+}
+
+function updateProfileDropdown() {
+    const select = document.getElementById('profileSelect');
+    const currentValue = select.value;
+
+    select.innerHTML = '<option value="">-- Profil wählen --</option>';
+
+    Object.values(allProfiles)
+        .sort((a, b) => a.studentData.name.localeCompare(b.studentData.name))
+        .forEach(profile => {
+            const option = document.createElement('option');
+            option.value = profile.id;
+            option.textContent = profile.studentData.name + ` (${profile.evaluations.length} Eval.)`;
+            select.appendChild(option);
+        });
+
+    if (currentProfileId && allProfiles[currentProfileId]) {
+        select.value = currentProfileId;
+    }
+}
+
+function updateEvaluationDropdown() {
+    const select = document.getElementById('evaluationSelect');
+    select.innerHTML = '<option value="">-- Evaluation wählen --</option>';
+
+    if (!currentProfileId) return;
+
+    const profile = allProfiles[currentProfileId];
+    profile.evaluations
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .forEach((evaluation, index) => {
+            const option = document.createElement('option');
+            option.value = evaluation.id;
+            const date = new Date(evaluation.date).toLocaleDateString('de-DE');
+            option.textContent = `${index + 1}. Evaluation - ${date}`;
+            select.appendChild(option);
+        });
+
+    if (currentEvaluationId) {
+        select.value = currentEvaluationId;
+    }
+}
+
+function updateEvaluationUI() {
+    const profile = currentProfileId ? allProfiles[currentProfileId] : null;
+    const evalCount = profile ? profile.evaluations.length : 0;
+
+    document.getElementById('evaluationCount').textContent = evalCount + ' Evaluation' + (evalCount !== 1 ? 'en' : '');
+
+    // Vergleichs-Button und Tab anzeigen wenn mehr als 1 Evaluation
+    const showComparison = evalCount > 1;
+    document.getElementById('compareBtn').style.display = showComparison ? 'inline-block' : 'none';
+    document.getElementById('comparisonTab').style.display = showComparison ? 'inline-block' : 'none';
+}
+
+function showComparison() {
+    switchDomain('vergleich');
+}
+
+function renderComparison() {
+    if (!currentProfileId) return;
+
+    const profile = allProfiles[currentProfileId];
+    const evaluations = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (evaluations.length < 2) return;
+
+    // Info
+    document.getElementById('comparisonInfo').textContent =
+        `${profile.studentData.name} - ${evaluations.length} Evaluationen`;
+
+    // Tabelle füllen
+    const tbody = document.getElementById('comparisonTableBody');
+    tbody.innerHTML = '';
+
+    evaluations.forEach((evaluation, index) => {
+        const row = document.createElement('tr');
+        const date = new Date(evaluation.date).toLocaleDateString('de-DE');
+        const ages = evaluation.developmentalAges || {};
+
+        // Deltas berechnen
+        let deltas = { verhalten: '', kommunikation: '', sozialisation: '', kognition: '' };
+        if (index > 0) {
+            const prevAges = evaluations[index - 1].developmentalAges || {};
+            ['verhalten', 'kommunikation', 'sozialisation', 'kognition'].forEach(domain => {
+                if (ages[domain] && prevAges[domain]) {
+                    const diff = ages[domain] - prevAges[domain];
+                    if (diff !== 0) {
+                        deltas[domain] = diff > 0 ?
+                            `<span class="delta-positive">+${diff.toFixed(1)}</span>` :
+                            `<span class="delta-negative">${diff.toFixed(1)}</span>`;
+                    }
+                }
+            });
+        }
+
+        const avg = ['verhalten', 'kommunikation', 'sozialisation', 'kognition']
+            .map(d => ages[d] || 0)
+            .filter(a => a > 0);
+        const avgVal = avg.length > 0 ? (avg.reduce((a, b) => a + b, 0) / avg.length).toFixed(1) : '-';
+
+        row.innerHTML = `
+            <td><strong>${date}</strong></td>
+            <td>${ages.verhalten?.toFixed(1) || '-'} J. ${deltas.verhalten}</td>
+            <td>${ages.kommunikation?.toFixed(1) || '-'} J. ${deltas.kommunikation}</td>
+            <td>${ages.sozialisation?.toFixed(1) || '-'} J. ${deltas.sozialisation}</td>
+            <td>${ages.kognition?.toFixed(1) || '-'} J. ${deltas.kognition}</td>
+            <td><strong>${avgVal} J.</strong></td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Chart rendern
+    renderProgressChart(evaluations);
+}
+
+function renderProgressChart(evaluations) {
+    const chartContent = document.getElementById('chartContent');
+    const domains = ['verhalten', 'kommunikation', 'sozialisation', 'kognition'];
+    const domainNames = { verhalten: 'Verhalten', kommunikation: 'Kommunikation', sozialisation: 'Sozialisation', kognition: 'Kognition' };
+    const domainColors = { verhalten: '#e74c3c', kommunikation: '#3498db', sozialisation: '#27ae60', kognition: '#9b59b6' };
+
+    const maxAge = 16;
+
+    let html = '';
+    domains.forEach(domain => {
+        html += `<div class="chart-row">
+            <div class="chart-label" style="color: ${domainColors[domain]};">${domainNames[domain]}</div>
+            <div class="chart-bars">`;
+
+        evaluations.forEach(evaluation => {
+            const age = evaluation.developmentalAges?.[domain] || 0;
+            const height = Math.max(5, (age / maxAge) * 100);
+            const date = new Date(evaluation.date).toLocaleDateString('de-DE', { month: 'short', year: '2-digit' });
+
+            html += `<div class="chart-bar" style="height: ${height}%; background: ${domainColors[domain]};">
+                <span class="chart-bar-value">${age > 0 ? age.toFixed(1) : '-'}</span>
+                <span class="chart-bar-label">${date}</span>
+            </div>`;
+        });
+
+        html += `</div></div>`;
+    });
+
+    chartContent.innerHTML = html;
+}
+
+function saveAllProfiles() {
+    localStorage.setItem('eldib_profiles_v3', JSON.stringify(allProfiles));
+}
+
+function loadAllProfiles() {
+    const saved = localStorage.getItem('eldib_profiles_v3');
+    if (saved) {
+        try {
+            allProfiles = JSON.parse(saved);
+        } catch (e) {
+            console.error('Error loading profiles:', e);
+            allProfiles = {};
+        }
+    }
+}
+
 // ==========================================
 // ELDiB Daten
 // ==========================================
@@ -994,6 +1667,19 @@ function switchDomain(domain) {
     document.querySelectorAll('.domain-section').forEach(section => {
         section.classList.toggle('active', section.dataset.domain === domain);
     });
+
+    // Vergleichs-Sektion
+    const compSection = document.getElementById('comparisonSection');
+    const mainContent = document.querySelector('.main-content');
+
+    if (domain === 'vergleich') {
+        compSection.classList.add('active');
+        mainContent.style.display = 'none';
+        renderComparison();
+    } else {
+        compSection.classList.remove('active');
+        mainContent.style.display = 'block';
+    }
 }
 
 function toggleStatus(domain, itemId, type) {
@@ -1041,11 +1727,15 @@ function updateStats() {
 // Local Storage
 // ==========================================
 function saveToLocalStorage() {
+    // Alte Speichermethode für Kompatibilität
     const data = {
         assessments: assessments,
         student: getStudentData()
     };
     localStorage.setItem('eldib_data_v2', JSON.stringify(data));
+
+    // Neue Speichermethode: Aktuelle Evaluation speichern
+    saveCurrentEvaluation();
 }
 
 function loadFromLocalStorage() {
@@ -1324,67 +2014,138 @@ function calculateAge(birthDate) {
     return { years: age, months: months, decimal: age + (months / 12) };
 }
 
-// Generiert individuelle professionelle Statements pro Bereich
+// Generiert individuelle professionelle Statements pro Bereich mit Implikationen
 function generateDomainStatement(domain, domainName, bioAge, devAge, gap, stage, angst, domainStageData) {
     if (gap === null || !bioAge || !devAge) {
-        return `Keine vollständige Einschätzung im Bereich ${domainName} möglich. Bitte Geburtsdatum und Entwicklungsitems prüfen.`;
+        return `Keine vollständige Einschätzung im Bereich ${domainName} möglich.`;
     }
 
-    // Stufenbeschreibungen für konkrete Aussagen
-    const stageDescriptions = {
+    // Globale Implikationen: Was bedeutet dieser Entwicklungsstand konkret?
+    const implications = {
         verhalten: {
-            1: { kann: "auf Reize reagieren und einfache Routinen erkennen", braucht: "körperliche Nähe und klare sensorische Signale", next: "selbstständig auf Spielmaterial reagieren" },
-            2: { kann: "an Aktivitäten teilnehmen und kurz warten", braucht: "strukturierte Abläufe und positive Verstärkung", next: "Verhaltenserwartungen verstehen und benennen" },
-            3: { kann: "Gruppenregeln erkennen und Selbstkontrolle zeigen", braucht: "klare Erwartungen und Reflexionsgespräche", next: "flexibel auf Veränderungen reagieren" },
-            4: { kann: "eigenes Verhalten reflektieren und Alternativen anwenden", braucht: "Verantwortungsübernahme und Problemlösegespräche", next: "konstruktive Lösungsvorschläge entwickeln" },
-            5: { kann: "Verhalten in neuen Situationen angemessen steuern", braucht: "Möglichkeiten zur Selbstverantwortung", next: "reife Verhaltenssteuerung in allen Kontexten" }
+            1: {
+                alltag: "Das Kind braucht ständige Begleitung und reagiert impulsiv auf Reize. Übergänge und Veränderungen lösen starke Reaktionen aus.",
+                schwierigkeit: "Selbstständige Teilnahme an Gruppenaktivitäten ist nicht möglich. Jeder Handlungsschritt braucht direkte Anleitung.",
+                peers: "Während Gleichaltrige selbstständig Routinen folgen, benötigt dieses Kind 1:1-Begleitung wie ein Kleinkind."
+            },
+            2: {
+                alltag: "Das Kind kann kurz warten und an Aktivitäten teilnehmen, verliert aber bei Frustration schnell die Kontrolle.",
+                schwierigkeit: "Gruppensituationen ohne enge Begleitung führen zu Konflikten. Regeln werden noch nicht als sinnvoll verstanden.",
+                peers: "Gleichaltrige zeigen bereits Frustrationstoleranz - dieses Kind reagiert auf Enttäuschungen noch wie ein Kleinkind."
+            },
+            3: {
+                alltag: "Das Kind kennt Regeln und verhält sich in strukturierten Situationen angemessen, braucht aber Erinnerungen und Unterstützung.",
+                schwierigkeit: "Bei unerwarteten Situationen oder wenn andere die Kontrolle verlieren, destabilisiert sich das Kind.",
+                peers: "Im Vergleich zu Gleichaltrigen fehlt die Fähigkeit, Verhalten flexibel an neue Situationen anzupassen."
+            },
+            4: {
+                alltag: "Das Kind kann sein Verhalten reflektieren und Alternativen benennen, setzt diese unter Stress aber nicht immer um.",
+                schwierigkeit: "Eigenverantwortung und Selbststeuerung in komplexen Situationen fallen noch schwer.",
+                peers: "Gleichaltrige übernehmen bereits Verantwortung für Gruppenentscheidungen."
+            },
+            5: {
+                alltag: "Das Kind zeigt reife Verhaltenssteuerung und reagiert auch in neuen Situationen angemessen.",
+                schwierigkeit: "Unter extremem Druck können frühere Muster auftreten.",
+                peers: "Das Verhalten entspricht dem der Gleichaltrigen."
+            }
         },
         kommunikation: {
-            1: { kann: "Laute produzieren und auf Sprache reagieren", braucht: "intensive sprachliche Zuwendung und einfache Wörter", next: "Wörter gezielt einsetzen" },
-            2: { kann: "einfache Wörter und Sätze verstehen und nutzen", braucht: "Sprachmodelle und Gesprächsanlässe", next: "sich in Gruppengesprächen beteiligen" },
-            3: { kann: "eigene Erlebnisse erzählen und Gefühle benennen", braucht: "Erzählkreise und Gefühlswortschatz", next: "Gefühle anderer erkennen und beschreiben" },
-            4: { kann: "Gefühle reflektieren und Beziehungen sprachlich gestalten", braucht: "Konfliktgespräche und kreative Ausdrucksmöglichkeiten", next: "komplexe Zusammenhänge verbalisieren" },
-            5: { kann: "differenziert kommunizieren und Beziehungen pflegen", braucht: "Austauschmöglichkeiten auf Augenhöhe", next: "reife Kommunikationskompetenz" }
+            1: {
+                alltag: "Kommunikation erfolgt hauptsächlich nonverbal oder mit einzelnen Wörtern. Bedürfnisse werden durch Verhalten ausgedrückt.",
+                schwierigkeit: "Frustration durch mangelnde Ausdrucksmöglichkeit führt zu Verhaltensauffälligkeiten. Anweisungen werden oft nicht verstanden.",
+                peers: "Während Gleichaltrige komplexe Gespräche führen, kommuniziert dieses Kind auf Kleinkind-Niveau."
+            },
+            2: {
+                alltag: "Einfache Sätze werden verwendet, komplexe Gedanken können aber nicht verbalisiert werden.",
+                schwierigkeit: "Missverständnisse sind häufig. Konflikte können nicht verbal gelöst werden - das Kind greift auf Handlungen zurück.",
+                peers: "Gleichaltrige diskutieren und argumentieren - dieses Kind kann nur einfache Aussagen machen."
+            },
+            3: {
+                alltag: "Das Kind berichtet über Erlebnisse und benennt Gefühle, hat aber Schwierigkeiten mit abstrakten Themen.",
+                schwierigkeit: "Schulische Anforderungen an Leseverständnis und Ausdruck überfordern das Kind oft.",
+                peers: "Gespräche mit Gleichaltrigen scheitern manchmal am unterschiedlichen Sprachniveau."
+            },
+            4: {
+                alltag: "Gefühle werden reflektiert und Beziehungen sprachlich gestaltet, komplexe Themen brauchen Unterstützung.",
+                schwierigkeit: "Abstrakte Unterrichtsinhalte und differenzierte Diskussionen sind herausfordernd.",
+                peers: "Kommunikation gelingt, tiefere Gespräche über Werte oder Zukunft fallen schwer."
+            },
+            5: {
+                alltag: "Differenzierte Kommunikation und sprachliche Beziehungspflege sind möglich.",
+                schwierigkeit: "Sehr abstrakte oder emotionale Themen können gelegentlich schwierig sein.",
+                peers: "Kommunikationsfähigkeit entspricht der Altersgruppe."
+            }
         },
         sozialisation: {
-            1: { kann: "Andere wahrnehmen und parallel spielen", braucht: "sichere Bindung zu Bezugspersonen", next: "Kontakt zu Gleichaltrigen aufnehmen" },
-            2: { kann: "an gemeinsamen Aktivitäten teilnehmen und teilen lernen", braucht: "strukturierte Spielsituationen mit Peers", next: "kooperativ mit anderen spielen" },
-            3: { kann: "Gruppenregeln befolgen und Freundschaften zeigen", braucht: "Gruppenaktivitäten und soziales Lernen", next: "Gruppenaktivitäten vorschlagen" },
-            4: { kann: "sich als Gruppenmitglied einbringen und reflektieren", braucht: "Verantwortung in der Gruppe", next: "Konflikte konstruktiv lösen" },
-            5: { kann: "tragfähige Beziehungen aufbauen und Empathie zeigen", braucht: "authentische soziale Erfahrungen", next: "reife Beziehungsfähigkeit" }
+            1: {
+                alltag: "Das Kind spielt allein oder parallel, zeigt wenig Interesse an Peers. Bindung zu Erwachsenen steht im Vordergrund.",
+                schwierigkeit: "Gruppenaktivitäten sind kaum möglich. Das Kind sucht ständig die Nähe vertrauter Erwachsener.",
+                peers: "Gleichaltrige bilden Freundschaften und spielen kooperativ - dieses Kind ist noch im Parallelspiel."
+            },
+            2: {
+                alltag: "Kurzes gemeinsames Spiel ist möglich, Teilen und Abwechseln führen aber oft zu Konflikten.",
+                schwierigkeit: "Stabile Freundschaften entstehen nicht. Das Kind wird oft ausgeschlossen wegen unreifen Sozialverhaltens.",
+                peers: "Während Gleichaltrige feste Freundschaften haben, wechselt dieses Kind häufig Spielpartner."
+            },
+            3: {
+                alltag: "Beginnende Freundschaften und Befolgen von Gruppenregeln, aber Konflikte brauchen Unterstützung.",
+                schwierigkeit: "Komplexe soziale Dynamiken wie Cliquen oder subtile Ausgrenzung werden nicht verstanden.",
+                peers: "Gleichaltrige navigieren komplexe Situationen - dieses Kind versteht nur einfache Gruppenstrukturen."
+            },
+            4: {
+                alltag: "Aktive Beteiligung in Gruppen und Berücksichtigung verschiedener Perspektiven.",
+                schwierigkeit: "Tiefere Freundschaften mit gegenseitiger Unterstützung entwickeln sich noch.",
+                peers: "Soziale Fähigkeiten nähern sich dem Niveau Gleichaltriger an."
+            },
+            5: {
+                alltag: "Tragfähige Beziehungen und echte Empathie sind vorhanden.",
+                schwierigkeit: "Komplexe Situationen wie romantische Beziehungen können herausfordernd sein.",
+                peers: "Soziale Kompetenz entspricht der Altersgruppe."
+            }
         },
         kognition: {
-            1: { kann: "auf Reize reagieren und einfache Handlungen imitieren", braucht: "sensorische Anregung und Wiederholung", next: "Gegenstände kategorisieren" },
-            2: { kann: "sortieren, zählen und grundlegende Konzepte verstehen", braucht: "konkretes Material und Übung", next: "Grundfertigkeiten in Lesen und Rechnen" },
-            3: { kann: "lesen, schreiben und rechnen auf Grundniveau", braucht: "strukturierte Lernangebote", next: "Wissen für soziale Situationen nutzen" },
-            4: { kann: "kognitive Fähigkeiten für Gruppenarbeit einsetzen", braucht: "anspruchsvolle Lernaufgaben", next: "abstrakt denken und analysieren" },
-            5: { kann: "differenziert denken und Probleme analysieren", braucht: "eigenverantwortliches Lernen", next: "reife kognitive Kompetenz" }
+            1: {
+                alltag: "Lernen erfolgt durch Sinneserfahrung und Wiederholung. Abstraktes Denken ist nicht möglich.",
+                schwierigkeit: "Schulische Anforderungen können nicht erfüllt werden. Jeder Lernschritt braucht konkretes Material.",
+                peers: "Gleichaltrige arbeiten mit Texten und Zahlen - dieses Kind braucht Bildmaterial und Handlungsorientierung."
+            },
+            2: {
+                alltag: "Sortieren, Zählen und einfache Muster werden erkannt, Lesen und Schreiben sind noch nicht möglich.",
+                schwierigkeit: "Der Regellehrplan ist nicht zugänglich. Adaptiertes Material auf Vorschulniveau wird benötigt.",
+                peers: "Während Gleichaltrige lesen und rechnen, arbeitet dieses Kind mit Vorschulmaterial."
+            },
+            3: {
+                alltag: "Grundlegende Kulturtechniken sind vorhanden, schulische Anforderungen entsprechen jüngerem Alter.",
+                schwierigkeit: "Komplexere Aufgaben, Textaufgaben und abstraktes Denken überfordern.",
+                peers: "Der Leistungsunterschied zu Gleichaltrigen wird in höheren Klassen deutlicher."
+            },
+            4: {
+                alltag: "Wissen wird angewendet und einfache Probleme werden gelöst.",
+                schwierigkeit: "Abstrakte Konzepte erfordern zusätzliche Erklärung.",
+                peers: "Kognitive Fähigkeiten nähern sich dem Niveau Gleichaltriger an."
+            },
+            5: {
+                alltag: "Differenziertes Denken und Problemanalyse sind möglich.",
+                schwierigkeit: "Sehr komplexe Problemstellungen können Unterstützung erfordern.",
+                peers: "Kognitive Kompetenz entspricht der Altersgruppe."
+            }
         }
     };
 
-    const stageInfo = stageDescriptions[domain]?.[stage] || stageDescriptions.verhalten[1];
+    const impl = implications[domain]?.[stage] || implications.verhalten[1];
     const stufenLabel = STAGE_DATA[stage]?.label || "0-2 Jahre";
-    const erreichtInStufe = domainStageData?.[stage]?.erreicht || 0;
-    const totalInStufe = domainStageData?.[stage]?.total || 1;
-    const prozent = Math.round((erreichtInStufe / totalInStufe) * 100);
 
-    // Altersgemäß oder voraus
+    // Altersgemäß
     if (gap <= 0) {
-        return `<strong>Altersgemäße Entwicklung:</strong> Das Kind zeigt im Bereich ${domainName} Kompetenzen auf Stufe ${stage} (${stufenLabel}). Es ${stageInfo.kann}. Diese Stärke kann als Ressource für andere Bereiche genutzt werden.`;
+        return `<strong>${domainName} – Altersgemäß (Stufe ${stage}):</strong> ${impl.alltag} Diese Kompetenz ist eine wichtige Ressource.`;
     }
 
-    // Leichte Differenz (0-2 Jahre)
-    if (gap <= 2) {
-        return `<strong>Stufe ${stage} (${stufenLabel}):</strong> Das Kind ${stageInfo.kann} (${prozent}% der Stufe erreicht). Entwicklungsangst: <em>${angst}</em>. Nächster Schritt: ${stageInfo.next}. Förderansatz: ${stageInfo.braucht}.`;
-    }
-
-    // Moderate Differenz (2-4 Jahre)
-    if (gap <= 4) {
-        return `<strong>Stufe ${stage} (${stufenLabel}) - ${gap.toFixed(1)} J. Differenz:</strong> Das Kind arbeitet am Thema "${angst}". Aktuelle Fähigkeiten: ${stageInfo.kann} (${prozent}% erreicht). Intensive Förderung mit ${stageInfo.braucht}. Zielperspektive: ${stageInfo.next}.`;
-    }
-
-    // Deutliche Differenz (>4 Jahre)
-    return `<strong>Stufe ${stage} (${stufenLabel}) - ${gap.toFixed(1)} J. Differenz:</strong> Zentrale Entwicklungsaufgabe: "${angst}". Das Kind ${stageInfo.kann} (${prozent}% der Stufe). Benötigt: ${stageInfo.braucht}. Multiprofessionelle Förderung empfohlen. Langfristziel: ${stageInfo.next}.`;
+    // Mit Entwicklungsdifferenz
+    return `<strong>${domainName} – Stufe ${stage} (${stufenLabel}) | ${gap.toFixed(1)} Jahre Differenz</strong><br>
+<em>Entwicklungsthema: ${angst}</em><br><br>
+<u>Alltag:</u> ${impl.alltag}<br>
+<u>Schwierigkeit:</u> ${impl.schwierigkeit}<br>
+<u>Vergleich Peers:</u> ${impl.peers}`;
 }
 
 function calculateDevelopmentalAge(highestStage, stageData, domain) {
@@ -2665,9 +3426,16 @@ function exportToWord() {
 // Initialize
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Neue Profile laden
+    loadAllProfiles();
+    updateProfileDropdown();
+
+    // Alte Daten für Kompatibilität laden
     loadFromLocalStorage();
+
     renderAllDomains();
     updateStats();
+    updateEvaluationUI();
 
     // Auto-save on input change
     document.querySelectorAll('.student-grid input').forEach(input => {
