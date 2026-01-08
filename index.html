@@ -65,36 +65,47 @@
         }
 
         /* Profil & Evaluationen Management */
-        .profile-management {
+        .profile-bar {
             background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
-            padding: 16px 40px;
+            padding: 12px 40px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             flex-wrap: wrap;
         }
 
-        .profile-management label {
+        .profile-bar label {
             color: white;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .profile-management select {
+        .profile-bar select {
             padding: 8px 12px;
             border: none;
             border-radius: 6px;
             font-size: 14px;
-            min-width: 200px;
+            min-width: 180px;
             cursor: pointer;
+        }
+
+        .profile-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
         }
 
         .profile-btn {
             background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid rgba(255,255,255,0.4);
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 6px 12px;
+            font-size: 12px;
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
@@ -106,6 +117,15 @@
             border-color: white;
         }
 
+        .profile-btn.primary {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .profile-btn.primary:hover {
+            background: #219a52;
+        }
+
         .profile-btn.danger {
             background: rgba(231,76,60,0.3);
             border-color: #e74c3c;
@@ -113,6 +133,17 @@
 
         .profile-btn.danger:hover {
             background: rgba(231,76,60,0.5);
+        }
+
+        .profile-btn.small {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .divider {
+            border-left: 2px solid rgba(255,255,255,0.3);
+            height: 35px;
+            margin: 0 5px;
         }
 
         .evaluation-info {
@@ -129,6 +160,22 @@
             padding: 4px 12px;
             border-radius: 20px;
             font-weight: 600;
+        }
+
+        .save-indicator {
+            display: none;
+            color: #2ecc71;
+            font-size: 12px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .save-indicator.show {
+            display: inline-block;
         }
 
         /* Vergleichs-Tab */
@@ -649,30 +696,41 @@
     </header>
 
     <!-- Profil & Evaluationen Management -->
-    <section class="profile-management">
-        <div>
-            <label>Schüler/in:</label>
+    <section class="profile-bar">
+        <!-- Profil-Gruppe -->
+        <div class="profile-group">
+            <label>Profil:</label>
             <select id="profileSelect" onchange="loadProfile(this.value)">
-                <option value="">-- Profil wählen --</option>
+                <option value="">-- Wählen --</option>
             </select>
+            <button class="profile-btn small" onclick="createNewProfile()" title="Neues Profil erstellen">+ Neu</button>
+            <button class="profile-btn small danger" onclick="deleteCurrentProfile()" id="deleteProfileBtn" style="display:none;" title="Profil löschen">X</button>
         </div>
-        <button class="profile-btn" onclick="createNewProfile()">+ Neues Profil</button>
-        <button class="profile-btn danger" onclick="deleteCurrentProfile()" id="deleteProfileBtn" style="display:none;">Profil löschen</button>
 
-        <div style="border-left: 2px solid rgba(255,255,255,0.3); height: 30px; margin: 0 10px;"></div>
+        <div class="divider"></div>
 
-        <div>
+        <!-- Evaluationen-Gruppe -->
+        <div class="profile-group">
             <label>Evaluation:</label>
             <select id="evaluationSelect" onchange="loadEvaluation(this.value)">
-                <option value="">-- Evaluation wählen --</option>
+                <option value="">-- Wählen --</option>
             </select>
+            <button class="profile-btn small" onclick="createNewEvaluation()" title="Neue Evaluation erstellen">+ Neu</button>
+            <button class="profile-btn small danger" onclick="deleteCurrentEvaluation()" id="deleteEvalBtn" style="display:none;" title="Evaluation löschen">X</button>
         </div>
-        <button class="profile-btn" onclick="createNewEvaluation()">+ Neue Evaluation</button>
-        <button class="profile-btn danger" onclick="deleteCurrentEvaluation()" id="deleteEvalBtn" style="display:none;">Löschen</button>
 
+        <div class="divider"></div>
+
+        <!-- Speichern-Button -->
+        <button class="profile-btn primary" onclick="manualSave()" id="saveBtn" title="Aktuelle Evaluation speichern">
+            Speichern
+        </button>
+        <span class="save-indicator" id="saveIndicator">Gespeichert!</span>
+
+        <!-- Info-Bereich -->
         <div class="evaluation-info">
             <span id="evaluationCount" class="evaluation-count">0 Evaluationen</span>
-            <button class="profile-btn" onclick="showComparison()" id="compareBtn" style="display:none;">📊 Vergleich</button>
+            <button class="profile-btn" onclick="showComparison()" id="compareBtn" style="display:none;">Vergleich</button>
         </div>
     </section>
 
@@ -986,6 +1044,38 @@ function saveCurrentEvaluation() {
 
     saveAllProfiles();
     updateProfileDropdown(); // Name könnte sich geändert haben
+}
+
+function manualSave() {
+    if (!currentProfileId) {
+        alert('Bitte zuerst ein Schülerprofil erstellen oder auswählen.');
+        return;
+    }
+    if (!currentEvaluationId) {
+        alert('Bitte zuerst eine Evaluation erstellen.');
+        return;
+    }
+
+    saveCurrentEvaluation();
+
+    // Visuelles Feedback
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    setTimeout(() => {
+        indicator.classList.remove('show');
+    }, 2000);
+}
+
+// Hilfsfunktion für Farbschattierungen (für Word-Export)
+function getColorShades(baseColor) {
+    // Gibt ein Array von Farben zurück: [hellste, ..., dunkelste (original)]
+    const shades = {
+        '#e74c3c': ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'], // Rot
+        '#3498db': ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'], // Blau
+        '#27ae60': ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'], // Grün
+        '#9b59b6': ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6']  // Lila
+    };
+    return shades[baseColor] || [baseColor, baseColor, baseColor, baseColor, baseColor];
 }
 
 function calculateAllDevelopmentalAges() {
@@ -3469,10 +3559,10 @@ function exportToWord() {
         <div style="font-weight: bold; font-size: 14pt; margin-bottom: 20px; color: #2c3e50;">Visueller Entwicklungsverlauf</div>`;
 
             const domainInfo = {
-                verhalten: { name: 'Verhalten', color: '#e74c3c' },
-                kommunikation: { name: 'Kommunikation', color: '#3498db' },
-                sozialisation: { name: 'Sozialisation', color: '#27ae60' },
-                kognition: { name: 'Kognition', color: '#9b59b6' }
+                verhalten: { name: 'Verhalten', color: '#e74c3c', shades: ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'] },
+                kommunikation: { name: 'Kommunikation', color: '#3498db', shades: ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'] },
+                sozialisation: { name: 'Sozialisation', color: '#27ae60', shades: ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'] },
+                kognition: { name: 'Kognition', color: '#9b59b6', shades: ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6'] }
             };
 
             // Max age for scaling (16 years)
@@ -3496,24 +3586,26 @@ function exportToWord() {
             </div>`;
 
                 // Create a bar for each evaluation
+                const evalCount = evaluations.length;
                 evaluations.forEach((evaluation, idx) => {
                     const devAge = evaluation.developmentalAges?.[domain] || 0;
                     const barPercent = Math.min(100, (devAge / maxAge) * 100);
                     const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
 
-                    // Different opacity for older evaluations
-                    const opacity = 0.4 + (0.6 * (idx / (evaluations.length - 1 || 1)));
-                    const barColor = info.color;
+                    // Use color shades instead of opacity (Word doesn't support opacity)
+                    // Map index to shade: older = lighter, newer = darker
+                    const shadeIndex = evalCount === 1 ? 4 : Math.round((idx / (evalCount - 1)) * 4);
+                    const barColor = info.shades[shadeIndex];
 
                     html += `
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
                 <tr>
                     <td style="width: 90px; font-size: 9pt; color: #666; vertical-align: middle;">${evalDate}</td>
                     <td style="vertical-align: middle;">
-                        <table style="width: 100%; height: 18px; border: 1px solid #ddd; background: #fff;">
+                        <table style="width: 100%; height: 20px; border: 1px solid #bbb; background: #fff;">
                             <tr>
-                                <td style="width: ${barPercent}%; background: ${barColor}; opacity: ${opacity.toFixed(2)};"></td>
-                                <td style="background: #fff;"></td>
+                                <td style="width: ${barPercent}%; background-color: ${barColor};"></td>
+                                <td style="background-color: #f5f5f5;"></td>
                             </tr>
                         </table>
                     </td>
