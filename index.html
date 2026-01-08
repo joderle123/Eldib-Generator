@@ -1021,28 +1021,55 @@ function exportToWord() {
     const student = getStudentData();
     const today = new Date().toLocaleDateString('de-DE');
 
-    // Collect data per domain
+    // Collect detailed data per domain and stage
     const reportData = {};
+    const stageData = {};
+
     Object.keys(ELDIB_DATA).forEach(domain => {
         const domainData = ELDIB_DATA[domain];
         reportData[domain] = {
             name: domainData.name,
             color: domainData.color,
+            code: domainData.code,
             erreicht: [],
-            ziele: []
+            ziele: [],
+            totalItems: 0
         };
+        stageData[domain] = {};
 
         domainData.stufen.forEach(stufe => {
+            stageData[domain][stufe.nummer] = {
+                total: stufe.items.length,
+                erreicht: 0,
+                ziele: 0,
+                stufenziel: stufe.stufenziel
+            };
+
             stufe.items.forEach(item => {
+                reportData[domain].totalItems++;
                 const status = assessments[domain][item.id];
                 if (status.erreicht) {
                     reportData[domain].erreicht.push({ ...item, stufe: stufe.nummer });
+                    stageData[domain][stufe.nummer].erreicht++;
                 }
                 if (status.ziel) {
                     reportData[domain].ziele.push({ ...item, stufe: stufe.nummer });
+                    stageData[domain][stufe.nummer].ziele++;
                 }
             });
         });
+    });
+
+    // Calculate highest achieved stage per domain
+    const highestStage = {};
+    Object.keys(stageData).forEach(domain => {
+        highestStage[domain] = 0;
+        for (let i = 5; i >= 1; i--) {
+            if (stageData[domain][i].erreicht > 0) {
+                highestStage[domain] = i;
+                break;
+            }
+        }
     });
 
     // Build HTML content for Word
@@ -1052,101 +1079,357 @@ function exportToWord() {
 <head>
 <meta charset="UTF-8">
 <style>
-    @page { margin: 2cm; }
+    @page { margin: 1.5cm; }
     body {
         font-family: Calibri, Arial, sans-serif;
-        font-size: 11pt;
-        line-height: 1.4;
+        font-size: 10pt;
+        line-height: 1.3;
         color: #333;
     }
     .header {
         text-align: center;
-        margin-bottom: 30px;
-        border-bottom: 3px solid #2c3e50;
-        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 4px solid #2c3e50;
+        padding-bottom: 15px;
     }
     .header h1 {
-        font-size: 24pt;
+        font-size: 26pt;
         color: #2c3e50;
         margin: 0 0 5px 0;
+        letter-spacing: 2px;
     }
     .header h1 span { color: #3498db; }
     .header p {
-        font-size: 12pt;
+        font-size: 11pt;
         color: #666;
         margin: 0;
     }
-    .info-table {
+    .info-box {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .info-grid {
+        display: table;
+        width: 100%;
+    }
+    .info-row {
+        display: table-row;
+    }
+    .info-cell {
+        display: table-cell;
+        padding: 5px 10px;
+        width: 25%;
+    }
+    .info-label {
+        font-weight: bold;
+        color: #495057;
+        font-size: 9pt;
+    }
+    .info-value {
+        color: #212529;
+        font-size: 11pt;
+    }
+
+    /* ===== ENTWICKLUNGSRASTER ===== */
+    .raster-section {
+        margin: 25px 0;
+        page-break-inside: avoid;
+    }
+    .raster-title {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #3498db;
+    }
+    .raster-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 25px;
-        background: #f8f9fa;
+        margin-bottom: 10px;
     }
-    .info-table td {
-        padding: 8px 12px;
-        border: 1px solid #ddd;
+    .raster-table th {
+        background: #2c3e50;
+        color: white;
+        padding: 10px 8px;
+        font-size: 9pt;
+        text-align: center;
+        border: 1px solid #2c3e50;
     }
-    .info-table .label {
+    .raster-table th.domain-col {
+        width: 18%;
+        text-align: left;
+        padding-left: 12px;
+    }
+    .raster-table th.stage-col {
+        width: 16.4%;
+    }
+    .raster-table td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .raster-table td.domain-name {
+        text-align: left;
         font-weight: bold;
-        width: 25%;
-        background: #ecf0f1;
+        padding-left: 12px;
     }
-    .domain {
+    .stage-cell {
+        position: relative;
+        height: 50px;
+    }
+    .stage-indicator {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        line-height: 36px;
+        font-weight: bold;
+        font-size: 11pt;
+    }
+    .stage-empty {
+        background: #f8f9fa;
+        color: #adb5bd;
+        border: 2px dashed #dee2e6;
+    }
+    .stage-erreicht {
+        background: #27ae60;
+        color: white;
+        border: 2px solid #1e8449;
+    }
+    .stage-ziel {
+        background: #f39c12;
+        color: white;
+        border: 2px solid #d68910;
+    }
+    .stage-mixed {
+        background: linear-gradient(135deg, #27ae60 50%, #f39c12 50%);
+        color: white;
+        border: 2px solid #1e8449;
+    }
+    .stage-count {
+        font-size: 8pt;
+        color: #666;
+        margin-top: 3px;
+    }
+
+    /* ===== FORTSCHRITTSBALKEN ===== */
+    .progress-section {
+        margin: 25px 0;
+    }
+    .progress-title {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #27ae60;
+    }
+    .progress-item {
+        margin-bottom: 15px;
+        page-break-inside: avoid;
+    }
+    .progress-header {
+        display: table;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .progress-domain {
+        display: table-cell;
+        font-weight: bold;
+        font-size: 11pt;
+    }
+    .progress-stats {
+        display: table-cell;
+        text-align: right;
+        font-size: 9pt;
+        color: #666;
+    }
+    .progress-bar-container {
+        background: #ecf0f1;
+        border-radius: 10px;
+        height: 24px;
+        overflow: hidden;
+        border: 1px solid #bdc3c7;
+    }
+    .progress-bar {
+        height: 100%;
+        border-radius: 10px 0 0 10px;
+        display: inline-block;
+        vertical-align: top;
+    }
+    .progress-bar.erreicht {
+        background: linear-gradient(90deg, #27ae60, #2ecc71);
+    }
+    .progress-bar.ziel {
+        background: linear-gradient(90deg, #f39c12, #f1c40f);
+    }
+
+    /* ===== ZUSAMMENFASSUNG CARDS ===== */
+    .summary-section {
+        margin: 25px 0;
+    }
+    .summary-title {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #9b59b6;
+    }
+    .summary-grid {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+    .summary-card {
+        display: table-cell;
+        width: 25%;
+        padding: 10px;
+        text-align: center;
+        vertical-align: top;
+    }
+    .summary-card-inner {
+        border: 2px solid;
+        border-radius: 10px;
+        padding: 15px 10px;
+    }
+    .summary-icon {
+        font-size: 24pt;
+        margin-bottom: 5px;
+    }
+    .summary-number {
+        font-size: 28pt;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .summary-label {
+        font-size: 9pt;
+        color: #666;
+    }
+    .summary-sublabel {
+        font-size: 8pt;
+        color: #999;
+        margin-top: 3px;
+    }
+
+    /* ===== DETAILBEREICH ===== */
+    .detail-section {
+        margin: 30px 0;
+        page-break-before: always;
+    }
+    .detail-title {
+        font-size: 16pt;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #2c3e50;
+    }
+    .domain-block {
         margin-bottom: 25px;
         page-break-inside: avoid;
     }
     .domain-header {
-        font-size: 16pt;
-        font-weight: bold;
-        padding: 10px 15px;
-        margin-bottom: 15px;
+        padding: 12px 15px;
         color: white;
-        border-radius: 5px;
-    }
-    .section-title {
-        font-size: 12pt;
+        font-size: 13pt;
         font-weight: bold;
-        margin: 15px 0 10px 0;
-        padding: 5px 10px;
-        border-left: 4px solid;
+        border-radius: 6px 6px 0 0;
+        margin-bottom: 0;
     }
-    .section-title.erreicht {
-        color: #27ae60;
-        border-color: #27ae60;
-        background: #e8f8f0;
-    }
-    .section-title.ziel {
-        color: #e67e22;
-        border-color: #e67e22;
-        background: #fef5e7;
-    }
-    .item {
-        margin: 8px 0 8px 20px;
-        padding: 8px 12px;
+    .domain-content {
+        border: 1px solid #dee2e6;
+        border-top: none;
+        border-radius: 0 0 6px 6px;
+        padding: 15px;
         background: #fafafa;
-        border-left: 3px solid #ddd;
+    }
+    .section-header {
+        font-size: 11pt;
+        font-weight: bold;
+        margin: 10px 0 8px 0;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .section-header.erreicht {
+        background: #d5f5e3;
+        color: #1e8449;
+        border-left: 4px solid #27ae60;
+    }
+    .section-header.ziel {
+        background: #fef9e7;
+        color: #b7950b;
+        border-left: 4px solid #f39c12;
+    }
+    .item-list {
+        margin: 0 0 15px 15px;
+    }
+    .item-entry {
+        padding: 6px 0;
+        border-bottom: 1px dotted #ddd;
+        font-size: 10pt;
+    }
+    .item-entry:last-child {
+        border-bottom: none;
     }
     .item-id {
         font-weight: bold;
         color: #2c3e50;
+        background: #ecf0f1;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-right: 8px;
     }
     .item-name {
         font-weight: bold;
     }
     .item-desc {
         color: #555;
+        font-size: 9pt;
+        margin-left: 5px;
     }
     .no-items {
-        color: #888;
+        color: #999;
         font-style: italic;
-        margin-left: 20px;
+        padding: 8px;
     }
+
+    /* ===== LEGENDE ===== */
+    .legend {
+        margin-top: 20px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-size: 9pt;
+    }
+    .legend-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    .legend-item {
+        display: inline-block;
+        margin-right: 20px;
+    }
+    .legend-dot {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
     .footer {
         margin-top: 30px;
         text-align: center;
         color: #888;
         font-size: 9pt;
-        border-top: 1px solid #ddd;
+        border-top: 2px solid #eee;
         padding-top: 15px;
     }
 </style>
@@ -1154,78 +1437,207 @@ function exportToWord() {
 <body>
 
 <div class="header">
-    <h1>ELD<span>i</span>B - Entwicklungseinschätzung</h1>
+    <h1>ELD<span>i</span>B</h1>
     <p>Entwicklungspädagogischer Lernziel-Diagnose-Bogen</p>
 </div>
 
-<table class="info-table">
-    <tr>
-        <td class="label">Name</td>
-        <td>${student.name || '-'}</td>
-        <td class="label">Geburtsdatum</td>
-        <td>${student.birthDate ? new Date(student.birthDate).toLocaleDateString('de-DE') : '-'}</td>
-    </tr>
-    <tr>
-        <td class="label">Förderort</td>
-        <td>${student.foerderort || '-'}</td>
-        <td class="label">Datum der Einschätzung</td>
-        <td>${student.assessmentDate ? new Date(student.assessmentDate).toLocaleDateString('de-DE') : '-'}</td>
-    </tr>
-    <tr>
-        <td class="label">Einschätzende Person</td>
-        <td colspan="3">${student.assessorName || '-'}</td>
-    </tr>
-</table>
-`;
+<div class="info-box">
+    <div class="info-grid">
+        <div class="info-row">
+            <div class="info-cell">
+                <div class="info-label">Name</div>
+                <div class="info-value">${student.name || '-'}</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Geburtsdatum</div>
+                <div class="info-value">${student.birthDate ? new Date(student.birthDate).toLocaleDateString('de-DE') : '-'}</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Förderort</div>
+                <div class="info-value">${student.foerderort || '-'}</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Datum</div>
+                <div class="info-value">${student.assessmentDate ? new Date(student.assessmentDate).toLocaleDateString('de-DE') : '-'}</div>
+            </div>
+        </div>
+        <div class="info-row">
+            <div class="info-cell" colspan="4">
+                <div class="info-label">Einschätzende Person</div>
+                <div class="info-value">${student.assessorName || '-'}</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    // Add domain sections
+<!-- ===== ENTWICKLUNGSRASTER ===== -->
+<div class="raster-section">
+    <div class="raster-title">Entwicklungsraster - Übersicht</div>
+    <table class="raster-table">
+        <tr>
+            <th class="domain-col">Bereich</th>
+            <th class="stage-col">Stufe 1</th>
+            <th class="stage-col">Stufe 2</th>
+            <th class="stage-col">Stufe 3</th>
+            <th class="stage-col">Stufe 4</th>
+            <th class="stage-col">Stufe 5</th>
+        </tr>`;
+
+    // Generate raster rows
+    Object.keys(ELDIB_DATA).forEach(domain => {
+        const data = reportData[domain];
+        html += `
+        <tr>
+            <td class="domain-name" style="color: ${data.color};">
+                <span style="font-size: 14pt;">${data.code}</span><br>
+                <span style="font-size: 9pt; color: #666;">${data.name}</span>
+            </td>`;
+
+        for (let stage = 1; stage <= 5; stage++) {
+            const sd = stageData[domain][stage];
+            const hasErreicht = sd.erreicht > 0;
+            const hasZiel = sd.ziele > 0;
+
+            let cellClass = 'stage-empty';
+            let cellContent = '-';
+
+            if (hasErreicht && hasZiel) {
+                cellClass = 'stage-mixed';
+                cellContent = `${sd.erreicht}/${sd.ziele}`;
+            } else if (hasErreicht) {
+                cellClass = 'stage-erreicht';
+                cellContent = sd.erreicht;
+            } else if (hasZiel) {
+                cellClass = 'stage-ziel';
+                cellContent = sd.ziele;
+            }
+
+            html += `
+            <td class="stage-cell">
+                <div class="stage-indicator ${cellClass}">${cellContent}</div>
+                <div class="stage-count">${sd.total} Items</div>
+            </td>`;
+        }
+
+        html += `</tr>`;
+    });
+
+    html += `
+    </table>
+    <div class="legend">
+        <span class="legend-title">Legende:</span>
+        <span class="legend-item"><span class="legend-dot" style="background: #27ae60;"></span> Erreicht</span>
+        <span class="legend-item"><span class="legend-dot" style="background: #f39c12;"></span> Ziel</span>
+        <span class="legend-item"><span class="legend-dot" style="background: linear-gradient(135deg, #27ae60 50%, #f39c12 50%);"></span> Erreicht + Ziel</span>
+        <span class="legend-item"><span class="legend-dot" style="background: #f8f9fa; border: 1px dashed #ccc;"></span> Nicht markiert</span>
+    </div>
+</div>
+
+<!-- ===== ZUSAMMENFASSUNG ===== -->
+<div class="summary-section">
+    <div class="summary-title">Gesamtübersicht</div>
+    <div class="summary-grid">`;
+
+    // Summary cards for each domain
+    Object.keys(reportData).forEach(domain => {
+        const data = reportData[domain];
+        const percentage = Math.round((data.erreicht.length / data.totalItems) * 100);
+
+        html += `
+        <div class="summary-card">
+            <div class="summary-card-inner" style="border-color: ${data.color};">
+                <div class="summary-icon" style="color: ${data.color};">${data.code}</div>
+                <div class="summary-number" style="color: ${data.color};">${data.erreicht.length}</div>
+                <div class="summary-label">Erreicht</div>
+                <div class="summary-sublabel">${data.ziele.length} Ziele | ${percentage}%</div>
+            </div>
+        </div>`;
+    });
+
+    html += `
+    </div>
+</div>
+
+<!-- ===== FORTSCHRITTSBALKEN ===== -->
+<div class="progress-section">
+    <div class="progress-title">Entwicklungsfortschritt je Bereich</div>`;
+
+    Object.keys(reportData).forEach(domain => {
+        const data = reportData[domain];
+        const erreichtPercent = Math.round((data.erreicht.length / data.totalItems) * 100);
+        const zielPercent = Math.round((data.ziele.length / data.totalItems) * 100);
+
+        html += `
+    <div class="progress-item">
+        <div class="progress-header">
+            <span class="progress-domain" style="color: ${data.color};">${data.name}</span>
+            <span class="progress-stats">${data.erreicht.length} erreicht | ${data.ziele.length} Ziele | ${data.totalItems} gesamt</span>
+        </div>
+        <div class="progress-bar-container">
+            <span class="progress-bar erreicht" style="width: ${erreichtPercent}%;"></span><span class="progress-bar ziel" style="width: ${zielPercent}%;"></span>
+        </div>
+    </div>`;
+    });
+
+    html += `
+</div>
+
+<!-- ===== DETAILIERTE AUFLISTUNG ===== -->
+<div class="detail-section">
+    <div class="detail-title">Detaillierte Auflistung</div>`;
+
     Object.keys(reportData).forEach(domain => {
         const data = reportData[domain];
 
         html += `
-<div class="domain">
-    <div class="domain-header" style="background-color: ${data.color};">${data.name.toUpperCase()}</div>
-
-    <div class="section-title erreicht">✓ Erreichte Kompetenzen (${data.erreicht.length})</div>
-`;
+    <div class="domain-block">
+        <div class="domain-header" style="background-color: ${data.color};">${data.name}</div>
+        <div class="domain-content">
+            <div class="section-header erreicht">✓ Erreichte Kompetenzen (${data.erreicht.length})</div>
+            <div class="item-list">`;
 
         if (data.erreicht.length > 0) {
             data.erreicht.forEach(item => {
                 html += `
-    <div class="item">
-        <span class="item-id">${item.id}</span> -
-        <span class="item-name">${item.name}:</span>
-        <span class="item-desc">${item.beschreibung}</span>
-    </div>`;
+                <div class="item-entry">
+                    <span class="item-id">${item.id}</span>
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-desc">– ${item.beschreibung}</span>
+                </div>`;
             });
         } else {
-            html += `<p class="no-items">Keine Items als erreicht markiert</p>`;
+            html += `<div class="no-items">Keine Items markiert</div>`;
         }
 
         html += `
-    <div class="section-title ziel">◎ Aktuelle Förderziele (${data.ziele.length})</div>
-`;
+            </div>
+            <div class="section-header ziel">◎ Aktuelle Förderziele (${data.ziele.length})</div>
+            <div class="item-list">`;
 
         if (data.ziele.length > 0) {
             data.ziele.forEach(item => {
                 html += `
-    <div class="item">
-        <span class="item-id">${item.id}</span> -
-        <span class="item-name">${item.name}:</span>
-        <span class="item-desc">${item.beschreibung}</span>
-    </div>`;
+                <div class="item-entry">
+                    <span class="item-id">${item.id}</span>
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-desc">– ${item.beschreibung}</span>
+                </div>`;
             });
         } else {
-            html += `<p class="no-items">Keine Förderziele definiert</p>`;
+            html += `<div class="no-items">Keine Ziele definiert</div>`;
         }
 
-        html += `</div>`;
+        html += `
+            </div>
+        </div>
+    </div>`;
     });
 
-    // Footer
     html += `
+</div>
+
 <div class="footer">
-    Erstellt am ${today} | ELDiB Digital - CDSE
+    <strong>ELDiB Digital</strong> | Erstellt am ${today} | CDSE - Centre pour le Développement Socio-Émotionnel
 </div>
 
 </body>
