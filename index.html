@@ -3401,8 +3401,105 @@ function exportToWord() {
     });
 
     html += `
-</div>
+</div>`;
 
+    // Entwicklungsverlauf hinzufügen wenn mehrere Evaluationen vorhanden
+    if (currentProfileId && allProfiles[currentProfileId]) {
+        const profile = allProfiles[currentProfileId];
+        const evaluations = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        if (evaluations.length > 1) {
+            html += `
+<div style="margin-top: 30px; page-break-before: always;">
+    <div style="font-size: 16pt; font-weight: bold; color: #8e44ad; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #8e44ad;">
+        Entwicklungsverlauf
+    </div>
+    <p style="font-size: 10pt; color: #666; margin-bottom: 15px;">
+        Übersicht über ${evaluations.length} Evaluationen von ${new Date(evaluations[0].date).toLocaleDateString('de-DE')} bis ${new Date(evaluations[evaluations.length - 1].date).toLocaleDateString('de-DE')}
+    </p>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr style="background: #8e44ad; color: white;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #8e44ad;">Datum</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Verhalten</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Kommunikation</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Sozialisation</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Kognition</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Ø Gesamt</th>
+        </tr>`;
+
+            evaluations.forEach((evaluation, index) => {
+                const ages = evaluation.developmentalAges || {};
+                const date = new Date(evaluation.date).toLocaleDateString('de-DE');
+                const domains = ['verhalten', 'kommunikation', 'sozialisation', 'kognition'];
+
+                // Calculate averages
+                const validAges = domains.map(d => ages[d]).filter(a => a && a > 0);
+                const avg = validAges.length > 0 ? (validAges.reduce((a, b) => a + b, 0) / validAges.length).toFixed(1) : '-';
+
+                // Calculate deltas
+                let deltas = {};
+                if (index > 0) {
+                    const prevAges = evaluations[index - 1].developmentalAges || {};
+                    domains.forEach(d => {
+                        if (ages[d] && prevAges[d]) {
+                            const diff = ages[d] - prevAges[d];
+                            deltas[d] = diff !== 0 ? (diff > 0 ? ` <span style="color: #27ae60;">(+${diff.toFixed(1)})</span>` : ` <span style="color: #e74c3c;">(${diff.toFixed(1)})</span>`) : '';
+                        }
+                    });
+                }
+
+                const bgColor = index % 2 === 0 ? '#f8f4fc' : '#fff';
+                html += `
+        <tr style="background: ${bgColor};">
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">${date}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.verhalten?.toFixed(1) || '-'} J.${deltas.verhalten || ''}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.kommunikation?.toFixed(1) || '-'} J.${deltas.kommunikation || ''}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.sozialisation?.toFixed(1) || '-'} J.${deltas.sozialisation || ''}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.kognition?.toFixed(1) || '-'} J.${deltas.kognition || ''}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">${avg} J.</td>
+        </tr>`;
+            });
+
+            html += `
+    </table>
+
+    <!-- Visueller Fortschritt -->
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
+        <div style="font-weight: bold; margin-bottom: 15px; color: #2c3e50;">Fortschritt pro Bereich</div>`;
+
+            const domainInfo = {
+                verhalten: { name: 'Verhalten', color: '#e74c3c' },
+                kommunikation: { name: 'Kommunikation', color: '#3498db' },
+                sozialisation: { name: 'Sozialisation', color: '#27ae60' },
+                kognition: { name: 'Kognition', color: '#9b59b6' }
+            };
+
+            Object.keys(domainInfo).forEach(domain => {
+                const info = domainInfo[domain];
+                const firstAge = evaluations[0].developmentalAges?.[domain] || 0;
+                const lastAge = evaluations[evaluations.length - 1].developmentalAges?.[domain] || 0;
+                const progress = lastAge - firstAge;
+                const progressText = progress > 0 ? `+${progress.toFixed(1)} Jahre` : (progress < 0 ? `${progress.toFixed(1)} Jahre` : 'keine Veränderung');
+                const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#666');
+
+                html += `
+        <div style="display: table; width: 100%; margin-bottom: 10px;">
+            <div style="display: table-cell; width: 120px; font-weight: bold; color: ${info.color};">${info.name}</div>
+            <div style="display: table-cell; width: 80px;">${firstAge.toFixed(1)} J.</div>
+            <div style="display: table-cell; text-align: center;">→</div>
+            <div style="display: table-cell; width: 80px;">${lastAge.toFixed(1)} J.</div>
+            <div style="display: table-cell; text-align: right; font-weight: bold; color: ${progressColor};">${progressText}</div>
+        </div>`;
+            });
+
+            html += `
+    </div>
+</div>`;
+        }
+    }
+
+    html += `
 <div class="footer">
     <strong>ELDiB Digital</strong> | Erstellt am ${today} | CDSE - Centre pour le Développement Socio-Émotionnel
 </div>
