@@ -3464,9 +3464,9 @@ function exportToWord() {
             html += `
     </table>
 
-    <!-- Visueller Fortschritt -->
-    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
-        <div style="font-weight: bold; margin-bottom: 15px; color: #2c3e50;">Fortschritt pro Bereich</div>`;
+    <!-- Visueller Entwicklungsverlauf mit Balken -->
+    <div style="margin-top: 30px;">
+        <div style="font-weight: bold; font-size: 14pt; margin-bottom: 20px; color: #2c3e50;">Visueller Entwicklungsverlauf</div>`;
 
             const domainInfo = {
                 verhalten: { name: 'Verhalten', color: '#e74c3c' },
@@ -3474,6 +3474,83 @@ function exportToWord() {
                 sozialisation: { name: 'Sozialisation', color: '#27ae60' },
                 kognition: { name: 'Kognition', color: '#9b59b6' }
             };
+
+            // Max age for scaling (16 years)
+            const maxAge = 16;
+
+            Object.keys(domainInfo).forEach(domain => {
+                const info = domainInfo[domain];
+                const firstAge = evaluations[0].developmentalAges?.[domain] || 0;
+                const lastAge = evaluations[evaluations.length - 1].developmentalAges?.[domain] || 0;
+                const progress = lastAge - firstAge;
+                const progressText = progress > 0 ? `+${progress.toFixed(1)} J.` : (progress < 0 ? `${progress.toFixed(1)} J.` : '±0');
+                const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#888');
+
+                html += `
+        <div style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-left: 4px solid ${info.color};">
+            <div style="font-weight: bold; font-size: 12pt; color: ${info.color}; margin-bottom: 12px;">
+                ${info.name}
+                <span style="float: right; font-size: 11pt; color: ${progressColor};">
+                    Entwicklung: ${progressText}
+                </span>
+            </div>`;
+
+                // Create a bar for each evaluation
+                evaluations.forEach((evaluation, idx) => {
+                    const devAge = evaluation.developmentalAges?.[domain] || 0;
+                    const barPercent = Math.min(100, (devAge / maxAge) * 100);
+                    const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
+
+                    // Different opacity for older evaluations
+                    const opacity = 0.4 + (0.6 * (idx / (evaluations.length - 1 || 1)));
+                    const barColor = info.color;
+
+                    html += `
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
+                <tr>
+                    <td style="width: 90px; font-size: 9pt; color: #666; vertical-align: middle;">${evalDate}</td>
+                    <td style="vertical-align: middle;">
+                        <table style="width: 100%; height: 18px; border: 1px solid #ddd; background: #fff;">
+                            <tr>
+                                <td style="width: ${barPercent}%; background: ${barColor}; opacity: ${opacity.toFixed(2)};"></td>
+                                <td style="background: #fff;"></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 60px; text-align: right; font-size: 10pt; font-weight: bold; color: #333; vertical-align: middle;">${devAge.toFixed(1)} J.</td>
+                </tr>
+            </table>`;
+                });
+
+                html += `
+            <!-- Skala -->
+            <table style="width: 100%; font-size: 8pt; color: #999; margin-left: 90px; margin-top: 4px;">
+                <tr>
+                    <td style="width: 12.5%;">0</td>
+                    <td style="width: 12.5%;">2</td>
+                    <td style="width: 12.5%;">4</td>
+                    <td style="width: 12.5%;">6</td>
+                    <td style="width: 12.5%;">8</td>
+                    <td style="width: 12.5%;">10</td>
+                    <td style="width: 12.5%;">12</td>
+                    <td style="width: 12.5%;">14</td>
+                    <td>16 J.</td>
+                </tr>
+            </table>
+        </div>`;
+            });
+
+            // Summary section
+            html += `
+        <div style="margin-top: 20px; padding: 15px; background: #e8f4e8; border: 1px solid #27ae60; border-radius: 4px;">
+            <div style="font-weight: bold; color: #27ae60; margin-bottom: 10px;">Zusammenfassung der Entwicklung</div>
+            <table style="width: 100%; font-size: 10pt;">
+                <tr style="background: #fff;">
+                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #27ae60;">Bereich</th>
+                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Erste Evaluation</th>
+                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Aktuelle Evaluation</th>
+                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Fortschritt</th>
+                </tr>`;
 
             Object.keys(domainInfo).forEach(domain => {
                 const info = domainInfo[domain];
@@ -3484,16 +3561,31 @@ function exportToWord() {
                 const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#666');
 
                 html += `
-        <div style="display: table; width: 100%; margin-bottom: 10px;">
-            <div style="display: table-cell; width: 120px; font-weight: bold; color: ${info.color};">${info.name}</div>
-            <div style="display: table-cell; width: 80px;">${firstAge.toFixed(1)} J.</div>
-            <div style="display: table-cell; text-align: center;">→</div>
-            <div style="display: table-cell; width: 80px;">${lastAge.toFixed(1)} J.</div>
-            <div style="display: table-cell; text-align: right; font-weight: bold; color: ${progressColor};">${progressText}</div>
-        </div>`;
+                <tr>
+                    <td style="padding: 8px; font-weight: bold; color: ${info.color};">${info.name}</td>
+                    <td style="padding: 8px; text-align: center;">${firstAge.toFixed(1)} Jahre</td>
+                    <td style="padding: 8px; text-align: center;">${lastAge.toFixed(1)} Jahre</td>
+                    <td style="padding: 8px; text-align: center; font-weight: bold; color: ${progressColor};">${progressText}</td>
+                </tr>`;
             });
 
+            // Calculate overall progress
+            const domains = ['verhalten', 'kommunikation', 'sozialisation', 'kognition'];
+            const firstAvg = domains.reduce((sum, d) => sum + (evaluations[0].developmentalAges?.[d] || 0), 0) / 4;
+            const lastAvg = domains.reduce((sum, d) => sum + (evaluations[evaluations.length - 1].developmentalAges?.[d] || 0), 0) / 4;
+            const overallProgress = lastAvg - firstAvg;
+            const overallText = overallProgress > 0 ? `+${overallProgress.toFixed(1)} Jahre` : (overallProgress < 0 ? `${overallProgress.toFixed(1)} Jahre` : 'keine Veränderung');
+            const overallColor = overallProgress > 0 ? '#27ae60' : (overallProgress < 0 ? '#e74c3c' : '#666');
+
             html += `
+                <tr style="background: #f0f0f0; font-weight: bold;">
+                    <td style="padding: 8px;">Durchschnitt</td>
+                    <td style="padding: 8px; text-align: center;">${firstAvg.toFixed(1)} Jahre</td>
+                    <td style="padding: 8px; text-align: center;">${lastAvg.toFixed(1)} Jahre</td>
+                    <td style="padding: 8px; text-align: center; color: ${overallColor};">${overallText}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>`;
         }
