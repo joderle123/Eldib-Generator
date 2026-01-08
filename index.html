@@ -575,6 +575,167 @@
             font-weight: bold;
         }
 
+        /* Neue Checkbox-Typen */
+        .checkbox-nicht-erreicht,
+        .checkbox-ressource {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .checkbox-nicht-erreicht:hover {
+            border-color: #95a5a6;
+        }
+
+        .checkbox-ressource:hover {
+            border-color: #3498db;
+        }
+
+        .checkbox-nicht-erreicht.checked {
+            background: #95a5a6;
+            border-color: #95a5a6;
+        }
+
+        .checkbox-ressource.checked {
+            background: #3498db;
+            border-color: #3498db;
+        }
+
+        .checkbox-nicht-erreicht.checked::after {
+            content: "✗";
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .checkbox-ressource.checked::after {
+            content: "★";
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Disabled states */
+        .checkbox-disabled {
+            opacity: 0.3;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
+
+        .checkbox-group.disabled label {
+            opacity: 0.4;
+        }
+
+        /* Item row clickable */
+        .item-info {
+            cursor: pointer;
+        }
+
+        .item-info:hover .item-name {
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        /* Modal für Item-Erklärung */
+        .item-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .item-modal-overlay.active {
+            display: flex;
+        }
+
+        .item-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .item-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .item-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .item-modal-close:hover {
+            color: #333;
+        }
+
+        .item-modal-body {
+            padding: 24px;
+        }
+
+        .item-modal-code {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .item-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .item-modal-description {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #333;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .item-modal-hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+
         /* Legende */
         .legend {
             display: flex;
@@ -584,6 +745,7 @@
             border-radius: 8px;
             margin-bottom: 24px;
             font-size: 13px;
+            flex-wrap: wrap;
         }
 
         .legend-item {
@@ -815,12 +977,23 @@
     <main class="main-content">
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-dot erreicht"></div>
-                <span><strong>Erreicht</strong> - Die Fähigkeit ist vorhanden</span>
+                <div class="legend-dot" style="background: #27ae60;"></div>
+                <span><strong>Erreicht</strong> - Fähigkeit vorhanden</span>
             </div>
             <div class="legend-item">
-                <div class="legend-dot ziel"></div>
+                <div class="legend-dot" style="background: #95a5a6;"></div>
+                <span><strong>Nicht erreicht</strong> - Noch nicht vorhanden</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #f39c12;"></div>
                 <span><strong>Ziel</strong> - Aktuelles Förderziel</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #3498db;"></div>
+                <span><strong>Ressource</strong> - Stärke/Ressource</span>
+            </div>
+            <div class="legend-item" style="margin-left: auto; font-size: 12px; color: #888;">
+                <span>Doppelklick auf Item = Details anzeigen</span>
             </div>
         </div>
 
@@ -828,6 +1001,22 @@
             <!-- Wird dynamisch gefüllt -->
         </div>
     </main>
+
+    <!-- Modal für Item-Details -->
+    <div class="item-modal-overlay" id="itemModal" onclick="closeItemModal(event)">
+        <div class="item-modal" onclick="event.stopPropagation()">
+            <div class="item-modal-header">
+                <h3>Item-Details</h3>
+                <button class="item-modal-close" onclick="closeItemModal()">&times;</button>
+            </div>
+            <div class="item-modal-body">
+                <span class="item-modal-code" id="modalItemCode"></span>
+                <div class="item-modal-title" id="modalItemTitle"></div>
+                <div class="item-modal-description" id="modalItemDescription"></div>
+                <div class="item-modal-hint">Tipp: Klicken Sie außerhalb des Fensters oder drücken Sie ESC zum Schließen.</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Zusammenfassung -->
     <div class="summary-bar">
@@ -839,6 +1028,10 @@
             <div class="stat-item">
                 <div class="stat-value ziel" id="totalZiele">0</div>
                 <div class="stat-label">Ziele</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" style="color: #3498db;" id="totalRessourcen">0</div>
+                <div class="stat-label">Ressourcen</div>
             </div>
         </div>
         <button class="export-btn" onclick="exportToWord()">
@@ -1115,7 +1308,7 @@ function resetAssessments() {
     Object.keys(ELDIB_DATA).forEach(domain => {
         ELDIB_DATA[domain].stufen.forEach(stufe => {
             stufe.items.forEach(item => {
-                assessments[domain][item.id] = { erreicht: false, ziel: false };
+                assessments[domain][item.id] = { erreicht: false, nichtErreicht: false, ziel: false, ressource: false };
             });
         });
     });
@@ -1668,7 +1861,7 @@ function renderDomain(domain) {
                     </button>
                 </div>
                 <div class="items-list">
-                    ${stufe.items.map(item => renderItem(domain, item)).join('')}
+                    ${stufe.items.map(item => renderItem(domain, item, stufe.nummer)).join('')}
                 </div>
             </div>
         `;
@@ -1704,11 +1897,17 @@ function toggleStufeComplete(domain, stufeNummer) {
     saveToLocalStorage();
 }
 
-function renderItem(domain, item) {
+function renderItem(domain, item, stufeNummer) {
     const status = assessments[domain][item.id];
+
+    // Prüfe ob Ziele blockiert werden sollen
+    const zielDisabled = status.nichtErreicht || isZielDisabledByBioAge(domain, stufeNummer);
+    const zielDisabledClass = zielDisabled ? 'checkbox-disabled' : '';
+    const zielGroupDisabled = zielDisabled ? 'disabled' : '';
+
     return `
-        <div class="item-row" data-domain="${domain}">
-            <div class="item-info">
+        <div class="item-row" data-domain="${domain}" data-item-id="${item.id}">
+            <div class="item-info" ondblclick="showItemModal('${domain}', '${item.id}')">
                 <span class="item-code">${item.id}</span>
                 <span class="item-name">${item.name}</span>
                 <div class="item-description">${item.beschreibung}</div>
@@ -1720,13 +1919,78 @@ function renderItem(domain, item) {
                          onclick="toggleStatus('${domain}', '${item.id}', 'erreicht')"></div>
                 </div>
                 <div class="checkbox-group">
+                    <label>Nicht err.</label>
+                    <div class="checkbox-nicht-erreicht ${status.nichtErreicht ? 'checked' : ''}"
+                         onclick="toggleStatus('${domain}', '${item.id}', 'nichtErreicht')"></div>
+                </div>
+                <div class="checkbox-group ${zielGroupDisabled}">
                     <label>Ziel</label>
-                    <div class="checkbox-ziel ${status.ziel ? 'checked' : ''}"
-                         onclick="toggleStatus('${domain}', '${item.id}', 'ziel')"></div>
+                    <div class="checkbox-ziel ${status.ziel ? 'checked' : ''} ${zielDisabledClass}"
+                         onclick="${zielDisabled ? '' : "toggleStatus('" + domain + "', '" + item.id + "', 'ziel')"}"></div>
+                </div>
+                <div class="checkbox-group">
+                    <label>Ressource</label>
+                    <div class="checkbox-ressource ${status.ressource ? 'checked' : ''}"
+                         onclick="toggleStatus('${domain}', '${item.id}', 'ressource')"></div>
                 </div>
             </div>
         </div>
     `;
+}
+
+// Prüft ob Ziele für diese Stufe blockiert sind (weil Bio-Alter >= Stufen-Alter)
+function isZielDisabledByBioAge(domain, stufeNummer) {
+    const birthDate = document.getElementById('birthDate')?.value;
+    if (!birthDate) return false;
+
+    const bioAgeDecimal = parseFloat(calculateAge(birthDate));
+    if (isNaN(bioAgeDecimal) || bioAgeDecimal <= 0) return false;
+
+    // Stufen-Altersreferenzen
+    const stufenAlter = {
+        1: 2,   // 0-2 Jahre
+        2: 5,   // 2-5 Jahre
+        3: 9,   // 6-9 Jahre
+        4: 12,  // 10-12 Jahre
+        5: 16   // 13-16 Jahre
+    };
+
+    const stufeMaxAge = stufenAlter[stufeNummer] || 16;
+
+    // Wenn Bio-Alter >= Stufen-Maximum, dann keine Ziele mehr erlaubt (nur Ressourcen)
+    return bioAgeDecimal >= stufeMaxAge;
+}
+
+// Modal für Item-Details anzeigen
+function showItemModal(domain, itemId) {
+    const data = ELDIB_DATA[domain];
+    let item = null;
+
+    for (const stufe of data.stufen) {
+        item = stufe.items.find(i => i.id === itemId);
+        if (item) break;
+    }
+
+    if (!item) return;
+
+    document.getElementById('modalItemCode').textContent = item.id;
+    document.getElementById('modalItemCode').style.background = data.color;
+    document.getElementById('modalItemTitle').textContent = item.name;
+    document.getElementById('modalItemDescription').textContent = item.beschreibung;
+    document.getElementById('itemModal').classList.add('active');
+
+    // ESC-Taste zum Schließen
+    document.addEventListener('keydown', handleModalEsc);
+}
+
+function handleModalEsc(e) {
+    if (e.key === 'Escape') closeItemModal();
+}
+
+function closeItemModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    document.getElementById('itemModal').classList.remove('active');
+    document.removeEventListener('keydown', handleModalEsc);
 }
 
 function renderAllDomains() {
@@ -1773,27 +2037,43 @@ function switchDomain(domain) {
 }
 
 function toggleStatus(domain, itemId, type) {
-    // If clicking erreicht, uncheck ziel and vice versa
-    if (type === 'erreicht') {
-        assessments[domain][itemId].erreicht = !assessments[domain][itemId].erreicht;
-        if (assessments[domain][itemId].erreicht) {
-            assessments[domain][itemId].ziel = false;
-        }
-    } else {
-        assessments[domain][itemId].ziel = !assessments[domain][itemId].ziel;
-        if (assessments[domain][itemId].ziel) {
-            assessments[domain][itemId].erreicht = false;
-        }
+    const item = assessments[domain][itemId];
+
+    switch (type) {
+        case 'erreicht':
+            item.erreicht = !item.erreicht;
+            if (item.erreicht) {
+                // Erreicht schließt nichtErreicht und ziel aus
+                item.nichtErreicht = false;
+                item.ziel = false;
+            }
+            break;
+
+        case 'nichtErreicht':
+            item.nichtErreicht = !item.nichtErreicht;
+            if (item.nichtErreicht) {
+                // Nicht erreicht schließt erreicht aus, ziel wird automatisch deaktiviert
+                item.erreicht = false;
+                item.ziel = false;
+            }
+            break;
+
+        case 'ziel':
+            item.ziel = !item.ziel;
+            if (item.ziel) {
+                // Ziel schließt erreicht und nichtErreicht aus
+                item.erreicht = false;
+                item.nichtErreicht = false;
+            }
+            break;
+
+        case 'ressource':
+            // Ressource kann unabhängig von anderen gesetzt werden
+            item.ressource = !item.ressource;
+            break;
     }
 
-    // Re-render the item row
-    const itemRow = document.querySelector(`.item-row[data-domain="${domain}"] .item-code`);
-    if (itemRow) {
-        renderAllDomains();
-    } else {
-        renderAllDomains();
-    }
-
+    renderAllDomains();
     updateStats();
     saveToLocalStorage();
 }
@@ -1801,16 +2081,21 @@ function toggleStatus(domain, itemId, type) {
 function updateStats() {
     let totalErreicht = 0;
     let totalZiele = 0;
+    let totalRessourcen = 0;
 
     Object.keys(assessments).forEach(domain => {
         Object.values(assessments[domain]).forEach(status => {
             if (status.erreicht) totalErreicht++;
             if (status.ziel) totalZiele++;
+            if (status.ressource) totalRessourcen++;
         });
     });
 
     document.getElementById('totalErreicht').textContent = totalErreicht;
     document.getElementById('totalZiele').textContent = totalZiele;
+
+    const ressourcenEl = document.getElementById('totalRessourcen');
+    if (ressourcenEl) ressourcenEl.textContent = totalRessourcen;
 }
 
 // ==========================================
@@ -3505,6 +3790,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-save on input change
     document.querySelectorAll('.student-grid input').forEach(input => {
         input.addEventListener('change', saveToLocalStorage);
+    });
+
+    // Geburtsdatum-Änderung: Re-render um Bio-Alter-Sperre zu aktualisieren
+    document.getElementById('birthDate')?.addEventListener('change', () => {
+        renderAllDomains();
     });
 });
     </script>
