@@ -3149,12 +3149,39 @@ function exportToWord() {
 
     <div class="domain-profile-grid">`;
 
-    // Domain profile cards
+    // Domain profile cards - mit Entwicklungstrend
+    const hasMultipleEvals = currentProfileId && allProfiles[currentProfileId] && allProfiles[currentProfileId].evaluations.length > 1;
+    let previousEvalAges = {};
+    if (hasMultipleEvals) {
+        const profile = allProfiles[currentProfileId];
+        const sortedEvals = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
+        if (sortedEvals.length >= 2) {
+            previousEvalAges = sortedEvals[sortedEvals.length - 2].developmentalAges || {};
+        }
+    }
+
     Object.keys(reportData).forEach(domain => {
         const data = reportData[domain];
         const devAge = developmentalAges[domain];
         const bioAge = biologicalAge ? biologicalAge.decimal : 0;
         const barPercent = bioAge > 0 && devAge.age > 0 ? Math.min(100, (devAge.age / bioAge) * 100) : 0;
+
+        // Trend berechnen
+        let trendText = '-';
+        let trendColor = '#666';
+        if (hasMultipleEvals && previousEvalAges[domain]) {
+            const diff = devAge.age - previousEvalAges[domain];
+            if (diff > 0) {
+                trendText = `+${diff.toFixed(1)} J.`;
+                trendColor = '#27ae60';
+            } else if (diff < 0) {
+                trendText = `${diff.toFixed(1)} J.`;
+                trendColor = '#e74c3c';
+            } else {
+                trendText = '±0';
+                trendColor = '#888';
+            }
+        }
 
         html += `
         <div class="domain-profile-card">
@@ -3169,10 +3196,11 @@ function exportToWord() {
                         <span class="domain-profile-age-label">Stufe:</span>
                         <span class="domain-profile-age-value">${devAge.stage > 0 ? devAge.stage + ' (' + devAge.stageLabel + ')' : '-'}</span>
                     </div>
+                    ${hasMultipleEvals ? `
                     <div class="domain-profile-age-row">
-                        <span class="domain-profile-age-label">Stufenfortschritt:</span>
-                        <span class="domain-profile-age-value">${devAge.completion > 0 ? devAge.completion + '%' : '-'}</span>
-                    </div>
+                        <span class="domain-profile-age-label">Fortschritt:</span>
+                        <span class="domain-profile-age-value" style="color: ${trendColor}; font-weight: bold;">${trendText}</span>
+                    </div>` : ''}
                 </div>
                 <div class="domain-profile-bar">
                     <div class="domain-profile-bar-fill" style="width: ${barPercent}%; background: ${data.color};"></div>
@@ -3237,9 +3265,22 @@ function exportToWord() {
         </table>
     </div>
 
-    <!-- ===== VISUELLER ALTERSVERGLEICH ===== -->
+    <!-- ===== VISUELLER ALTERSVERGLEICH MIT ENTWICKLUNGSVERLAUF ===== -->
     <div class="age-visual-section">
-        <div class="age-visual-title">Visueller Altersvergleich pro Bereich</div>`;
+        <div class="age-visual-title">Visueller Altersvergleich pro Bereich${hasMultipleEvals ? ' (mit Entwicklungsverlauf)' : ''}</div>`;
+
+    // Alle Evaluationen für den Verlauf holen
+    let allEvaluations = [];
+    const domainShades = {
+        verhalten: ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'],
+        kommunikation: ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'],
+        sozialisation: ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'],
+        kognition: ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6']
+    };
+    if (hasMultipleEvals) {
+        const profile = allProfiles[currentProfileId];
+        allEvaluations = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
 
     // Visual age bars for each domain with individual statements
     const maxAge = 18; // Maximum age for scale
@@ -3264,45 +3305,90 @@ function exportToWord() {
                 <span class="age-visual-domain" style="color: ${data.color};">${data.name}</span>
                 <span class="age-visual-values" style="color: ${gapColor}; font-weight: bold;">${gapText}</span>
             </div>
-            <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+            <table style="width: 100%; border-collapse: collapse; margin: 8px 0;">
                 <tr>
-                    <td style="width: 140px; padding: 5px 10px 5px 0; font-size: 10pt; color: #3498db; font-weight: bold;">Bio. Alter: ${bioAge > 0 ? bioAge.toFixed(1) + ' J.' : '-'}</td>
-                    <td style="padding: 5px;">
-                        <table style="width: 100%; height: 20px; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                    <td style="width: 140px; padding: 4px 10px 4px 0; font-size: 10pt; color: #95a5a6; font-weight: bold;">Bio. Alter:</td>
+                    <td style="padding: 4px;">
+                        <table style="width: 100%; height: 18px; border-collapse: collapse; border: 1px solid #bdc3c7;">
                             <tr>
-                                <td style="width: ${bioPercent}%; background: #3498db; height: 20px;"></td>
-                                <td style="background: #ecf0f1; height: 20px;"></td>
+                                <td style="width: ${bioPercent}%; background: #95a5a6; height: 18px;"></td>
+                                <td style="background: #f5f5f5; height: 18px;"></td>
                             </tr>
                         </table>
                     </td>
-                </tr>
+                    <td style="width: 55px; text-align: right; font-size: 10pt; font-weight: bold; color: #95a5a6;">${bioAge > 0 ? bioAge.toFixed(1) + ' J.' : '-'}</td>
+                </tr>`;
+
+        // Wenn mehrere Evaluationen existieren, zeige alle Entwicklungsbalken
+        if (hasMultipleEvals && allEvaluations.length > 1) {
+            const evalCount = allEvaluations.length;
+            const shades = domainShades[domain] || [data.color];
+
+            allEvaluations.forEach((evaluation, idx) => {
+                const evalDevAge = evaluation.developmentalAges?.[domain] || 0;
+                const evalPercent = Math.min(100, (evalDevAge / maxAge) * 100);
+                const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                const shadeIndex = Math.round((idx / (evalCount - 1)) * 4);
+                const barColor = shades[shadeIndex];
+                const isLast = idx === evalCount - 1;
+
+                html += `
                 <tr>
-                    <td style="width: 140px; padding: 5px 10px 5px 0; font-size: 10pt; color: #9b59b6; font-weight: bold;">Entw. Alter: ${devAge.age > 0 ? devAge.age.toFixed(1) + ' J.' : '-'}</td>
-                    <td style="padding: 5px;">
-                        <table style="width: 100%; height: 20px; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                    <td style="width: 140px; padding: 3px 10px 3px 0; font-size: 9pt; color: ${isLast ? data.color : '#888'}; ${isLast ? 'font-weight: bold;' : ''}">${evalDate}${isLast ? ' (aktuell)' : ''}:</td>
+                    <td style="padding: 3px;">
+                        <table style="width: 100%; height: ${isLast ? '20' : '14'}px; border-collapse: collapse; border: 1px solid ${isLast ? '#999' : '#ccc'};">
                             <tr>
-                                <td style="width: ${devPercent}%; background: #9b59b6; height: 20px;"></td>
-                                <td style="background: #ecf0f1; height: 20px;"></td>
+                                <td style="width: ${evalPercent}%; background-color: ${barColor}; height: ${isLast ? '20' : '14'}px;"></td>
+                                <td style="background: #f8f8f8; height: ${isLast ? '20' : '14'}px;"></td>
                             </tr>
                         </table>
                     </td>
-                </tr>
+                    <td style="width: 55px; text-align: right; font-size: ${isLast ? '10' : '9'}pt; ${isLast ? 'font-weight: bold;' : ''} color: ${isLast ? data.color : '#666'};">${evalDevAge.toFixed(1)} J.</td>
+                </tr>`;
+            });
+        } else {
+            // Nur aktuelles Entwicklungsalter
+            html += `
+                <tr>
+                    <td style="width: 140px; padding: 4px 10px 4px 0; font-size: 10pt; color: ${data.color}; font-weight: bold;">Entw. Alter:</td>
+                    <td style="padding: 4px;">
+                        <table style="width: 100%; height: 20px; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                            <tr>
+                                <td style="width: ${devPercent}%; background: ${data.color}; height: 20px;"></td>
+                                <td style="background: #f5f5f5; height: 20px;"></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 55px; text-align: right; font-size: 10pt; font-weight: bold; color: ${data.color};">${devAge.age > 0 ? devAge.age.toFixed(1) + ' J.' : '-'}</td>
+                </tr>`;
+        }
+
+        html += `
             </table>
-            <table style="width: 100%; font-size: 8pt; color: #888; margin-left: 150px;">
+            <table style="width: 100%; font-size: 8pt; color: #999; margin-left: 140px;">
                 <tr>
                     <td style="width: 11%;">0</td>
                     <td style="width: 11%;">2</td>
                     <td style="width: 17%;">5</td>
                     <td style="width: 22%;">9</td>
                     <td style="width: 17%;">12</td>
-                    <td style="width: 22%;">16+ Jahre</td>
+                    <td style="width: 22%;">18 J.</td>
                 </tr>
             </table>
-            <div style="margin-top: 10px; padding: 10px 12px; background: #fff; border-left: 4px solid ${gapColor}; font-size: 10pt; color: #333;">
+            <div style="margin-top: 8px; padding: 10px 12px; background: #fff; border-left: 4px solid ${gapColor}; font-size: 10pt; color: #333;">
                 ${domainStatement}
             </div>
         </div>`;
     });
+
+    // Legende wenn Verlauf vorhanden
+    if (hasMultipleEvals) {
+        html += `
+        <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px; font-size: 9pt; color: #666;">
+            <span style="display: inline-block; width: 14px; height: 14px; background: #95a5a6; vertical-align: middle; margin-right: 5px; border: 1px solid #bbb;"></span> Biologisches Alter |
+            <span style="margin-left: 15px;">Farbverlauf hell → dunkel = ältere → neuere Evaluation</span>
+        </div>`;
+    }
 
     html += `
     </div>
@@ -3380,130 +3466,6 @@ function exportToWord() {
 
     html += `
 </div>`;
-
-    // Entwicklungsverlauf hinzufügen wenn mehrere Evaluationen vorhanden
-    if (currentProfileId && allProfiles[currentProfileId]) {
-        const profile = allProfiles[currentProfileId];
-        const evaluations = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        if (evaluations.length > 1) {
-            // Biologisches Alter berechnen
-            const bioAge = calculateAge(student.birthDate);
-            const bioAgeNum = parseFloat(bioAge) || 10;
-
-            html += `
-<div style="margin-top: 30px;">
-    <div style="font-size: 16pt; font-weight: bold; color: #8e44ad; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 3px solid #8e44ad;">
-        Entwicklungsverlauf (${evaluations.length} Evaluationen)
-    </div>`;
-
-            const domainInfo = {
-                verhalten: { name: 'V - Verhalten', color: '#e74c3c', shades: ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'] },
-                kommunikation: { name: 'K - Kommunikation', color: '#3498db', shades: ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'] },
-                sozialisation: { name: 'S - Sozialisation', color: '#27ae60', shades: ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'] },
-                kognition: { name: 'C - Kognition', color: '#9b59b6', shades: ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6'] }
-            };
-
-            const maxAge = 16;
-            const bioPercent = Math.min(100, (bioAgeNum / maxAge) * 100);
-
-            Object.keys(domainInfo).forEach(domain => {
-                const info = domainInfo[domain];
-                const firstAge = evaluations[0].developmentalAges?.[domain] || 0;
-                const lastAge = evaluations[evaluations.length - 1].developmentalAges?.[domain] || 0;
-                const progress = lastAge - firstAge;
-                const progressText = progress > 0 ? `+${progress.toFixed(1)}` : (progress < 0 ? `${progress.toFixed(1)}` : '±0');
-                const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#888');
-                const evalCount = evaluations.length;
-
-                html += `
-    <div style="margin-bottom: 12px; padding: 10px; background: #fafafa; border-left: 4px solid ${info.color};">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 140px; font-weight: bold; font-size: 11pt; color: ${info.color}; vertical-align: top; padding-top: 3px;">
-                    ${info.name}
-                    <div style="font-size: 9pt; color: ${progressColor}; font-weight: normal; margin-top: 2px;">${progressText} Jahre</div>
-                </td>
-                <td>`;
-
-                // Biologisches Alter Balken (grau, als Referenzlinie)
-                html += `
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 4px;">
-                        <tr>
-                            <td style="width: 70px; font-size: 8pt; color: #888; vertical-align: middle;">Bio: ${bioAgeNum.toFixed(1)} J.</td>
-                            <td>
-                                <table style="width: 100%; height: 12px; border: 1px solid #ccc; background: #fff;">
-                                    <tr>
-                                        <td style="width: ${bioPercent}%; background-color: #95a5a6;"></td>
-                                        <td style="background-color: #f0f0f0;"></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>`;
-
-                // Balken für jede Evaluation
-                evaluations.forEach((evaluation, idx) => {
-                    const devAge = evaluation.developmentalAges?.[domain] || 0;
-                    const barPercent = Math.min(100, (devAge / maxAge) * 100);
-                    const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
-                    const shadeIndex = evalCount === 1 ? 4 : Math.round((idx / (evalCount - 1)) * 4);
-                    const barColor = info.shades[shadeIndex];
-
-                    html += `
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 3px;">
-                        <tr>
-                            <td style="width: 70px; font-size: 8pt; color: #666; vertical-align: middle;">${evalDate}</td>
-                            <td>
-                                <table style="width: 100%; height: 16px; border: 1px solid #aaa; background: #fff;">
-                                    <tr>
-                                        <td style="width: ${barPercent}%; background-color: ${barColor};"></td>
-                                        <td style="background-color: #f5f5f5;"></td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td style="width: 45px; text-align: right; font-size: 9pt; font-weight: bold; color: #333; vertical-align: middle;">${devAge.toFixed(1)} J.</td>
-                        </tr>
-                    </table>`;
-                });
-
-                html += `
-                </td>
-            </tr>
-        </table>
-    </div>`;
-            });
-
-            // Kompakte Skala am Ende
-            html += `
-    <table style="width: 100%; font-size: 8pt; color: #999; margin-left: 140px; margin-top: 5px;">
-        <tr>
-            <td style="width: 70px;"></td>
-            <td>
-                <table style="width: 100%;">
-                    <tr>
-                        <td style="width: 12.5%;">0</td>
-                        <td style="width: 12.5%;">2</td>
-                        <td style="width: 12.5%;">4</td>
-                        <td style="width: 12.5%;">6</td>
-                        <td style="width: 12.5%;">8</td>
-                        <td style="width: 12.5%;">10</td>
-                        <td style="width: 12.5%;">12</td>
-                        <td style="width: 12.5%;">14</td>
-                        <td>16 J.</td>
-                    </tr>
-                </table>
-            </td>
-            <td style="width: 45px;"></td>
-        </tr>
-    </table>
-    <div style="margin-top: 10px; font-size: 9pt; color: #666;">
-        <span style="display: inline-block; width: 12px; height: 12px; background: #95a5a6; vertical-align: middle; margin-right: 5px;"></span> Biologisches Alter |
-        <span style="margin-left: 10px;">Hell → Dunkel = Ältere → Neuere Evaluation</span>
-    </div>
-</div>`;
-        }
-    }
 
     html += `
 <div class="footer">
