@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELDiB - Digitale Entwicklungseinschätzung</title>
-    <script src="https://unpkg.com/docx@8.2.0/build/index.umd.js"></script>
-    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.0/docx.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -1020,178 +1020,222 @@ function getStudentData() {
 // Word Export
 // ==========================================
 async function exportToWord() {
-    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, BorderStyle } = docx;
+    try {
+        // Check if libraries are loaded
+        if (typeof window.docx === 'undefined') {
+            alert('Fehler: Die Word-Export-Bibliothek konnte nicht geladen werden. Bitte prüfen Sie Ihre Internetverbindung und laden Sie die Seite neu.');
+            return;
+        }
 
-    const student = getStudentData();
-    const today = new Date().toLocaleDateString('de-DE');
+        if (typeof window.saveAs === 'undefined') {
+            alert('Fehler: Die Download-Bibliothek konnte nicht geladen werden. Bitte prüfen Sie Ihre Internetverbindung und laden Sie die Seite neu.');
+            return;
+        }
 
-    // Collect data per domain
-    const reportData = {};
-    Object.keys(ELDIB_DATA).forEach(domain => {
-        const domainData = ELDIB_DATA[domain];
-        reportData[domain] = {
-            name: domainData.name,
-            erreicht: [],
-            ziele: []
-        };
+        const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, BorderStyle } = window.docx;
 
-        domainData.stufen.forEach(stufe => {
-            stufe.items.forEach(item => {
-                const status = assessments[domain][item.id];
-                if (status.erreicht) {
-                    reportData[domain].erreicht.push({ ...item, stufe: stufe.nummer });
-                }
-                if (status.ziel) {
-                    reportData[domain].ziele.push({ ...item, stufe: stufe.nummer });
-                }
+        const student = getStudentData();
+        const today = new Date().toLocaleDateString('de-DE');
+
+        // Collect data per domain
+        const reportData = {};
+        Object.keys(ELDIB_DATA).forEach(domain => {
+            const domainData = ELDIB_DATA[domain];
+            reportData[domain] = {
+                name: domainData.name,
+                erreicht: [],
+                ziele: []
+            };
+
+            domainData.stufen.forEach(stufe => {
+                stufe.items.forEach(item => {
+                    const status = assessments[domain][item.id];
+                    if (status.erreicht) {
+                        reportData[domain].erreicht.push({ ...item, stufe: stufe.nummer });
+                    }
+                    if (status.ziel) {
+                        reportData[domain].ziele.push({ ...item, stufe: stufe.nummer });
+                    }
+                });
             });
         });
-    });
 
-    // Build document sections
-    const children = [];
+        // Build document sections
+        const children = [];
 
-    // Title
-    children.push(
-        new Paragraph({
-            children: [new TextRun({ text: "ELDiB - Entwicklungseinschätzung", bold: true, size: 48 })],
-            alignment: AlignmentType.CENTER,
-            spacing: { after: 200 }
-        })
-    );
+        // Title
+        children.push(
+            new Paragraph({
+                children: [new TextRun({ text: "ELDiB - Entwicklungseinschätzung", bold: true, size: 48 })],
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 200 }
+            })
+        );
 
-    children.push(
-        new Paragraph({
-            children: [new TextRun({ text: "Entwicklungspädagogischer Lernziel-Diagnose-Bogen", size: 24, color: "666666" })],
-            alignment: AlignmentType.CENTER,
-            spacing: { after: 400 }
-        })
-    );
+        children.push(
+            new Paragraph({
+                children: [new TextRun({ text: "Entwicklungspädagogischer Lernziel-Diagnose-Bogen", size: 24, color: "666666" })],
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 400 }
+            })
+        );
 
-    // Student Info Table
-    children.push(
-        new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            rows: [
-                new TableRow({
-                    children: [
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Name:", bold: true })] })], width: { size: 25, type: WidthType.PERCENTAGE } }),
-                        new TableCell({ children: [new Paragraph(student.name || "-")] }),
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Geburtsdatum:", bold: true })] })], width: { size: 25, type: WidthType.PERCENTAGE } }),
-                        new TableCell({ children: [new Paragraph(student.birthDate ? new Date(student.birthDate).toLocaleDateString('de-DE') : "-")] })
-                    ]
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Förderort:", bold: true })] })] }),
-                        new TableCell({ children: [new Paragraph(student.foerderort || "-")] }),
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Einschätzung:", bold: true })] })] }),
-                        new TableCell({ children: [new Paragraph(student.assessmentDate ? new Date(student.assessmentDate).toLocaleDateString('de-DE') : "-")] })
-                    ]
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Einschätzende Person:", bold: true })] })] }),
-                        new TableCell({ children: [new Paragraph(student.assessorName || "-")], columnSpan: 3 })
-                    ]
+        // Student Info
+        children.push(
+            new Paragraph({
+                children: [
+                    new TextRun({ text: "Name: ", bold: true }),
+                    new TextRun({ text: student.name || "-" }),
+                    new TextRun({ text: "    |    Geburtsdatum: ", bold: true }),
+                    new TextRun({ text: student.birthDate ? new Date(student.birthDate).toLocaleDateString('de-DE') : "-" })
+                ],
+                spacing: { after: 100 }
+            })
+        );
+
+        children.push(
+            new Paragraph({
+                children: [
+                    new TextRun({ text: "Förderort: ", bold: true }),
+                    new TextRun({ text: student.foerderort || "-" }),
+                    new TextRun({ text: "    |    Datum der Einschätzung: ", bold: true }),
+                    new TextRun({ text: student.assessmentDate ? new Date(student.assessmentDate).toLocaleDateString('de-DE') : "-" })
+                ],
+                spacing: { after: 100 }
+            })
+        );
+
+        children.push(
+            new Paragraph({
+                children: [
+                    new TextRun({ text: "Einschätzende Person: ", bold: true }),
+                    new TextRun({ text: student.assessorName || "-" })
+                ],
+                spacing: { after: 400 }
+            })
+        );
+
+        // Horizontal line
+        children.push(
+            new Paragraph({
+                children: [new TextRun({ text: "─".repeat(80), color: "CCCCCC" })],
+                spacing: { after: 300 }
+            })
+        );
+
+        // Domain sections
+        Object.keys(reportData).forEach(domain => {
+            const data = reportData[domain];
+
+            // Domain header
+            children.push(
+                new Paragraph({
+                    children: [new TextRun({ text: data.name.toUpperCase(), bold: true, size: 32 })],
+                    heading: HeadingLevel.HEADING_1,
+                    spacing: { before: 400, after: 200 }
                 })
-            ]
-        })
-    );
+            );
 
-    children.push(new Paragraph({ spacing: { after: 400 } }));
+            // Erreichte Kompetenzen
+            children.push(
+                new Paragraph({
+                    children: [new TextRun({ text: `✓ Erreichte Kompetenzen (${data.erreicht.length})`, bold: true, size: 26, color: "27ae60" })],
+                    spacing: { before: 200, after: 100 }
+                })
+            );
 
-    // Domain sections
-    Object.keys(reportData).forEach(domain => {
-        const data = reportData[domain];
-
-        // Domain header
-        children.push(
-            new Paragraph({
-                children: [new TextRun({ text: data.name, bold: true, size: 32 })],
-                heading: HeadingLevel.HEADING_1,
-                spacing: { before: 400, after: 200 },
-                border: { bottom: { color: "3498db", size: 12, style: BorderStyle.SINGLE } }
-            })
-        );
-
-        // Erreichte Kompetenzen
-        children.push(
-            new Paragraph({
-                children: [new TextRun({ text: `Erreichte Kompetenzen (${data.erreicht.length})`, bold: true, size: 26, color: "27ae60" })],
-                spacing: { before: 200, after: 100 }
-            })
-        );
-
-        if (data.erreicht.length > 0) {
-            data.erreicht.forEach(item => {
+            if (data.erreicht.length > 0) {
+                data.erreicht.forEach(item => {
+                    children.push(
+                        new Paragraph({
+                            children: [
+                                new TextRun({ text: `${item.id} - ${item.name}: `, bold: true }),
+                                new TextRun({ text: item.beschreibung })
+                            ],
+                            spacing: { after: 100 },
+                            indent: { left: 360 }
+                        })
+                    );
+                });
+            } else {
                 children.push(
                     new Paragraph({
-                        children: [
-                            new TextRun({ text: `${item.id} - ${item.name}: `, bold: true }),
-                            new TextRun({ text: item.beschreibung })
-                        ],
-                        spacing: { after: 100 },
+                        children: [new TextRun({ text: "Keine Items als erreicht markiert", italics: true, color: "888888" })],
                         indent: { left: 360 }
                     })
                 );
-            });
-        } else {
+            }
+
+            // Aktuelle Ziele
             children.push(
                 new Paragraph({
-                    children: [new TextRun({ text: "Keine Items als erreicht markiert", italics: true, color: "888888" })],
-                    indent: { left: 360 }
+                    children: [new TextRun({ text: `◎ Aktuelle Förderziele (${data.ziele.length})`, bold: true, size: 26, color: "E67E22" })],
+                    spacing: { before: 300, after: 100 }
                 })
             );
-        }
 
-        // Aktuelle Ziele
+            if (data.ziele.length > 0) {
+                data.ziele.forEach(item => {
+                    children.push(
+                        new Paragraph({
+                            children: [
+                                new TextRun({ text: `${item.id} - ${item.name}: `, bold: true }),
+                                new TextRun({ text: item.beschreibung })
+                            ],
+                            spacing: { after: 100 },
+                            indent: { left: 360 }
+                        })
+                    );
+                });
+            } else {
+                children.push(
+                    new Paragraph({
+                        children: [new TextRun({ text: "Keine Förderziele definiert", italics: true, color: "888888" })],
+                        indent: { left: 360 }
+                    })
+                );
+            }
+
+            // Separator between domains
+            children.push(
+                new Paragraph({
+                    children: [new TextRun({ text: "" })],
+                    spacing: { after: 200 }
+                })
+            );
+        });
+
+        // Footer
         children.push(
             new Paragraph({
-                children: [new TextRun({ text: `Aktuelle Förderziele (${data.ziele.length})`, bold: true, size: 26, color: "f39c12" })],
+                children: [new TextRun({ text: "─".repeat(80), color: "CCCCCC" })],
                 spacing: { before: 300, after: 100 }
             })
         );
 
-        if (data.ziele.length > 0) {
-            data.ziele.forEach(item => {
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({ text: `${item.id} - ${item.name}: `, bold: true }),
-                            new TextRun({ text: item.beschreibung })
-                        ],
-                        spacing: { after: 100 },
-                        indent: { left: 360 }
-                    })
-                );
-            });
-        } else {
-            children.push(
-                new Paragraph({
-                    children: [new TextRun({ text: "Keine Förderziele definiert", italics: true, color: "888888" })],
-                    indent: { left: 360 }
-                })
-            );
-        }
-    });
+        children.push(
+            new Paragraph({
+                children: [new TextRun({ text: `Erstellt am ${today} | ELDiB Digital - CDSE`, size: 18, color: "888888" })],
+                alignment: AlignmentType.CENTER,
+                spacing: { before: 100 }
+            })
+        );
 
-    // Footer
-    children.push(
-        new Paragraph({
-            children: [new TextRun({ text: `Erstellt am ${today} | ELDiB Digital`, size: 18, color: "888888" })],
-            alignment: AlignmentType.CENTER,
-            spacing: { before: 600 }
-        })
-    );
+        const doc = new Document({
+            sections: [{
+                properties: {},
+                children: children
+            }]
+        });
 
-    const doc = new Document({
-        sections: [{ children: children }]
-    });
+        const blob = await Packer.toBlob(doc);
+        const fileName = `ELDiB_${(student.name || 'Evaluation').replace(/\s+/g, '_')}_${today.replace(/\./g, '-')}.docx`;
+        window.saveAs(blob, fileName);
 
-    const blob = await Packer.toBlob(doc);
-    const fileName = `ELDiB_${student.name || 'Evaluation'}_${today.replace(/\./g, '-')}.docx`;
-    saveAs(blob, fileName);
+    } catch (error) {
+        console.error('Export Error:', error);
+        alert('Fehler beim Exportieren: ' + error.message + '\n\nBitte laden Sie die Seite neu und versuchen Sie es erneut.');
+    }
 }
 
 // ==========================================
