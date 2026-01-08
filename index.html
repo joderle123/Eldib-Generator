@@ -1325,58 +1325,66 @@ function calculateAge(birthDate) {
 }
 
 // Generiert individuelle professionelle Statements pro Bereich
-function generateDomainStatement(domain, domainName, bioAge, devAge, gap, stage, angst) {
+function generateDomainStatement(domain, domainName, bioAge, devAge, gap, stage, angst, domainStageData) {
     if (gap === null || !bioAge || !devAge) {
         return `Keine vollständige Einschätzung im Bereich ${domainName} möglich. Bitte Geburtsdatum und Entwicklungsitems prüfen.`;
     }
 
-    const domainDescriptions = {
+    // Stufenbeschreibungen für konkrete Aussagen
+    const stageDescriptions = {
         verhalten: {
-            name: 'Verhaltenssteuerung',
-            strength: 'Selbstregulation und Impulskontrolle',
-            focus: 'angemessenes Verhaltensrepertoire',
-            intervention: 'klare Strukturen und positive Verstärkung'
+            1: { kann: "auf Reize reagieren und einfache Routinen erkennen", braucht: "körperliche Nähe und klare sensorische Signale", next: "selbstständig auf Spielmaterial reagieren" },
+            2: { kann: "an Aktivitäten teilnehmen und kurz warten", braucht: "strukturierte Abläufe und positive Verstärkung", next: "Verhaltenserwartungen verstehen und benennen" },
+            3: { kann: "Gruppenregeln erkennen und Selbstkontrolle zeigen", braucht: "klare Erwartungen und Reflexionsgespräche", next: "flexibel auf Veränderungen reagieren" },
+            4: { kann: "eigenes Verhalten reflektieren und Alternativen anwenden", braucht: "Verantwortungsübernahme und Problemlösegespräche", next: "konstruktive Lösungsvorschläge entwickeln" },
+            5: { kann: "Verhalten in neuen Situationen angemessen steuern", braucht: "Möglichkeiten zur Selbstverantwortung", next: "reife Verhaltenssteuerung in allen Kontexten" }
         },
         kommunikation: {
-            name: 'kommunikative Kompetenz',
-            strength: 'sprachliche Ausdrucksfähigkeit',
-            focus: 'Kommunikationsfertigkeiten',
-            intervention: 'sprachliche Modelle und Interaktionsmöglichkeiten'
+            1: { kann: "Laute produzieren und auf Sprache reagieren", braucht: "intensive sprachliche Zuwendung und einfache Wörter", next: "Wörter gezielt einsetzen" },
+            2: { kann: "einfache Wörter und Sätze verstehen und nutzen", braucht: "Sprachmodelle und Gesprächsanlässe", next: "sich in Gruppengesprächen beteiligen" },
+            3: { kann: "eigene Erlebnisse erzählen und Gefühle benennen", braucht: "Erzählkreise und Gefühlswortschatz", next: "Gefühle anderer erkennen und beschreiben" },
+            4: { kann: "Gefühle reflektieren und Beziehungen sprachlich gestalten", braucht: "Konfliktgespräche und kreative Ausdrucksmöglichkeiten", next: "komplexe Zusammenhänge verbalisieren" },
+            5: { kann: "differenziert kommunizieren und Beziehungen pflegen", braucht: "Austauschmöglichkeiten auf Augenhöhe", next: "reife Kommunikationskompetenz" }
         },
         sozialisation: {
-            name: 'soziale Kompetenz',
-            strength: 'Beziehungsfähigkeit',
-            focus: 'soziale Interaktion',
-            intervention: 'kooperative Lernsituationen und Peerinteraktion'
+            1: { kann: "Andere wahrnehmen und parallel spielen", braucht: "sichere Bindung zu Bezugspersonen", next: "Kontakt zu Gleichaltrigen aufnehmen" },
+            2: { kann: "an gemeinsamen Aktivitäten teilnehmen und teilen lernen", braucht: "strukturierte Spielsituationen mit Peers", next: "kooperativ mit anderen spielen" },
+            3: { kann: "Gruppenregeln befolgen und Freundschaften zeigen", braucht: "Gruppenaktivitäten und soziales Lernen", next: "Gruppenaktivitäten vorschlagen" },
+            4: { kann: "sich als Gruppenmitglied einbringen und reflektieren", braucht: "Verantwortung in der Gruppe", next: "Konflikte konstruktiv lösen" },
+            5: { kann: "tragfähige Beziehungen aufbauen und Empathie zeigen", braucht: "authentische soziale Erfahrungen", next: "reife Beziehungsfähigkeit" }
         },
         kognition: {
-            name: 'kognitive Entwicklung',
-            strength: 'Lern- und Denkfähigkeit',
-            focus: 'kognitive Fertigkeiten',
-            intervention: 'entwicklungsangemessene Lernangebote'
+            1: { kann: "auf Reize reagieren und einfache Handlungen imitieren", braucht: "sensorische Anregung und Wiederholung", next: "Gegenstände kategorisieren" },
+            2: { kann: "sortieren, zählen und grundlegende Konzepte verstehen", braucht: "konkretes Material und Übung", next: "Grundfertigkeiten in Lesen und Rechnen" },
+            3: { kann: "lesen, schreiben und rechnen auf Grundniveau", braucht: "strukturierte Lernangebote", next: "Wissen für soziale Situationen nutzen" },
+            4: { kann: "kognitive Fähigkeiten für Gruppenarbeit einsetzen", braucht: "anspruchsvolle Lernaufgaben", next: "abstrakt denken und analysieren" },
+            5: { kann: "differenziert denken und Probleme analysieren", braucht: "eigenverantwortliches Lernen", next: "reife kognitive Kompetenz" }
         }
     };
 
-    const desc = domainDescriptions[domain] || domainDescriptions.verhalten;
-    const gapYears = gap.toFixed(1);
+    const stageInfo = stageDescriptions[domain]?.[stage] || stageDescriptions.verhalten[1];
+    const stufenLabel = STAGE_DATA[stage]?.label || "0-2 Jahre";
+    const erreichtInStufe = domainStageData?.[stage]?.erreicht || 0;
+    const totalInStufe = domainStageData?.[stage]?.total || 1;
+    const prozent = Math.round((erreichtInStufe / totalInStufe) * 100);
 
-    // Altersgemäß oder voraus (gap <= 0)
+    // Altersgemäß oder voraus
     if (gap <= 0) {
-        return `Im Bereich ${desc.name} zeigt das Kind altersgemäße oder überdurchschnittliche Kompetenzen (Entwicklungsalter ${devAge.toFixed(1)} J. bei biologischem Alter ${bioAge.toFixed(1)} J.). Die ${desc.strength} ist eine wichtige Ressource, auf der weitere Förderung aufbauen kann.`;
+        return `<strong>Altersgemäße Entwicklung:</strong> Das Kind zeigt im Bereich ${domainName} Kompetenzen auf Stufe ${stage} (${stufenLabel}). Es ${stageInfo.kann}. Diese Stärke kann als Ressource für andere Bereiche genutzt werden.`;
     }
 
     // Leichte Differenz (0-2 Jahre)
     if (gap <= 2) {
-        return `Im Bereich ${desc.name} besteht eine leichte Entwicklungsdifferenz von ${gapYears} Jahren. Das Kind zeigt bereits grundlegende ${desc.focus}. Durch gezielte ${desc.intervention} kann das Kind seine Kompetenzen weiter ausbauen.`;
+        return `<strong>Stufe ${stage} (${stufenLabel}):</strong> Das Kind ${stageInfo.kann} (${prozent}% der Stufe erreicht). Entwicklungsangst: <em>${angst}</em>. Nächster Schritt: ${stageInfo.next}. Förderansatz: ${stageInfo.braucht}.`;
     }
 
     // Moderate Differenz (2-4 Jahre)
     if (gap <= 4) {
-        return `Im Bereich ${desc.name} zeigt sich eine Differenz von ${gapYears} Jahren zum biologischen Alter. Das zentrale Entwicklungsthema ist "${angst || 'in Bearbeitung'}". Intensive Förderung mit Fokus auf ${desc.focus} und ${desc.intervention} sind empfohlen.`;
+        return `<strong>Stufe ${stage} (${stufenLabel}) - ${gap.toFixed(1)} J. Differenz:</strong> Das Kind arbeitet am Thema "${angst}". Aktuelle Fähigkeiten: ${stageInfo.kann} (${prozent}% erreicht). Intensive Förderung mit ${stageInfo.braucht}. Zielperspektive: ${stageInfo.next}.`;
     }
 
     // Deutliche Differenz (>4 Jahre)
-    return `Im Bereich ${desc.name} besteht eine deutliche Entwicklungsdifferenz von ${gapYears} Jahren. Das Kind befindet sich auf Stufe ${stage || 1} mit dem Entwicklungsthema "${angst || 'Verlassenheit'}". Multiprofessionelle Zusammenarbeit und entwicklungsangemessene Förderung mit ${desc.intervention} sind besonders wichtig.`;
+    return `<strong>Stufe ${stage} (${stufenLabel}) - ${gap.toFixed(1)} J. Differenz:</strong> Zentrale Entwicklungsaufgabe: "${angst}". Das Kind ${stageInfo.kann} (${prozent}% der Stufe). Benötigt: ${stageInfo.braucht}. Multiprofessionelle Förderung empfohlen. Langfristziel: ${stageInfo.next}.`;
 }
 
 function calculateDevelopmentalAge(highestStage, stageData, domain) {
@@ -2380,11 +2388,7 @@ function exportToWord() {
 
     <!-- ===== VISUELLER ALTERSVERGLEICH ===== -->
     <div class="age-visual-section">
-        <div class="age-visual-title">Visueller Altersvergleich pro Bereich</div>
-        <div class="age-bar-legend">
-            <span><span class="dot" style="background: #3498db;"></span> Biologisches Alter</span>
-            <span><span class="dot" style="background: #9b59b6;"></span> Sozio-emotionales Entwicklungsalter</span>
-        </div>`;
+        <div class="age-visual-title">Visueller Altersvergleich pro Bereich</div>`;
 
     // Visual age bars for each domain with individual statements
     const maxAge = 18; // Maximum age for scale
@@ -2401,34 +2405,49 @@ function exportToWord() {
         const gapColor = gap !== null ? (gap > 2 ? '#e74c3c' : gap > 0 ? '#f39c12' : '#27ae60') : '#666';
 
         // Generate individual statement for this domain
-        const domainStatement = generateDomainStatement(domain, data.name, bioAge, devAge.age, gap, devAge.stage, devAge.angst);
+        const domainStatement = generateDomainStatement(domain, data.name, bioAge, devAge.age, gap, devAge.stage, devAge.angst, stageData[domain]);
 
         html += `
         <div class="age-visual-row">
             <div class="age-visual-header">
                 <span class="age-visual-domain" style="color: ${data.color};">${data.name}</span>
-                <span class="age-visual-values" style="color: ${gapColor};">${gapText}</span>
+                <span class="age-visual-values" style="color: ${gapColor}; font-weight: bold;">${gapText}</span>
             </div>
-            <div class="age-bar-wrapper">
-                <table class="age-bar-table" style="border: 1px solid #bdc3c7;">
-                    <tr>
-                        <td style="width: 11%; background: #d5f5e3;"></td>
-                        <td style="width: 17%; background: #abebc6;"></td>
-                        <td style="width: 22%; background: #fcf3cf;"></td>
-                        <td style="width: 17%; background: #fdebd0;"></td>
-                        <td style="width: 22%; background: #fadbd8;"></td>
-                        <td style="width: 11%; background: #f5b7b1;"></td>
-                    </tr>
-                </table>
-                <div class="age-bar-markers">
-                    ${bioAge > 0 ? `<div class="age-bar-marker bio" style="left: ${bioPercent}%;">${bioAge.toFixed(0)}</div>` : ''}
-                    ${devAge.age > 0 ? `<div class="age-bar-marker dev" style="left: ${devPercent}%;">${devAge.age.toFixed(1)}</div>` : ''}
-                </div>
-            </div>
-            <div class="age-bar-scale">
-                <span>0</span><span>2</span><span>5</span><span>9</span><span>12</span><span>16+</span>
-            </div>
-            <div class="age-statement" style="border-color: ${gapColor};">
+            <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                <tr>
+                    <td style="width: 140px; padding: 5px 10px 5px 0; font-size: 10pt; color: #3498db; font-weight: bold;">Bio. Alter: ${bioAge > 0 ? bioAge.toFixed(1) + ' J.' : '-'}</td>
+                    <td style="padding: 5px;">
+                        <table style="width: 100%; height: 20px; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                            <tr>
+                                <td style="width: ${bioPercent}%; background: #3498db; height: 20px;"></td>
+                                <td style="background: #ecf0f1; height: 20px;"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 140px; padding: 5px 10px 5px 0; font-size: 10pt; color: #9b59b6; font-weight: bold;">Entw. Alter: ${devAge.age > 0 ? devAge.age.toFixed(1) + ' J.' : '-'}</td>
+                    <td style="padding: 5px;">
+                        <table style="width: 100%; height: 20px; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                            <tr>
+                                <td style="width: ${devPercent}%; background: #9b59b6; height: 20px;"></td>
+                                <td style="background: #ecf0f1; height: 20px;"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table style="width: 100%; font-size: 8pt; color: #888; margin-left: 150px;">
+                <tr>
+                    <td style="width: 11%;">0</td>
+                    <td style="width: 11%;">2</td>
+                    <td style="width: 17%;">5</td>
+                    <td style="width: 22%;">9</td>
+                    <td style="width: 17%;">12</td>
+                    <td style="width: 22%;">16+ Jahre</td>
+                </tr>
+            </table>
+            <div style="margin-top: 10px; padding: 10px 12px; background: #fff; border-left: 4px solid ${gapColor}; font-size: 10pt; color: #333;">
                 ${domainStatement}
             </div>
         </div>`;
