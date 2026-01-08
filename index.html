@@ -165,6 +165,16 @@
             padding: 16px 24px;
             background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
             border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stufe-header-text {
+            flex: 1;
+            min-width: 200px;
         }
 
         .stufe-header h3 {
@@ -176,6 +186,31 @@
         .stufe-header p {
             font-size: 13px;
             color: #666;
+        }
+
+        .stufe-complete-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .stufe-complete-btn:hover {
+            background: #219a52;
+            transform: scale(1.02);
+        }
+
+        .stufe-complete-btn.completed {
+            background: #95a5a6;
         }
 
         /* Items Liste */
@@ -856,11 +891,18 @@ function renderDomain(domain) {
     let html = '';
 
     data.stufen.forEach(stufe => {
+        const allReached = isStufeComplete(domain, stufe.nummer);
         html += `
             <div class="stufe-container" data-domain="${domain}">
                 <div class="stufe-header">
-                    <h3>Stufe ${stufe.nummer}: ${stufe.stufenziel}</h3>
-                    <p>${stufe.bereichsziel}</p>
+                    <div class="stufe-header-text">
+                        <h3>Stufe ${stufe.nummer}: ${stufe.stufenziel}</h3>
+                        <p>${stufe.bereichsziel}</p>
+                    </div>
+                    <button class="stufe-complete-btn ${allReached ? 'completed' : ''}"
+                            onclick="toggleStufeComplete('${domain}', ${stufe.nummer})">
+                        ${allReached ? '✓ Stufe erreicht' : '☐ Stufe komplett erreicht'}
+                    </button>
                 </div>
                 <div class="items-list">
                     ${stufe.items.map(item => renderItem(domain, item)).join('')}
@@ -870,6 +912,33 @@ function renderDomain(domain) {
     });
 
     return html;
+}
+
+function isStufeComplete(domain, stufeNummer) {
+    const data = ELDIB_DATA[domain];
+    const stufe = data.stufen.find(s => s.nummer === stufeNummer);
+    if (!stufe) return false;
+    return stufe.items.every(item => assessments[domain][item.id].erreicht);
+}
+
+function toggleStufeComplete(domain, stufeNummer) {
+    const data = ELDIB_DATA[domain];
+    const stufe = data.stufen.find(s => s.nummer === stufeNummer);
+    if (!stufe) return;
+
+    const allReached = isStufeComplete(domain, stufeNummer);
+
+    // Toggle: if all reached, uncheck all; otherwise check all
+    stufe.items.forEach(item => {
+        assessments[domain][item.id].erreicht = !allReached;
+        if (!allReached) {
+            assessments[domain][item.id].ziel = false;
+        }
+    });
+
+    renderAllDomains();
+    updateStats();
+    saveToLocalStorage();
 }
 
 function renderItem(domain, item) {
@@ -1255,6 +1324,61 @@ function calculateAge(birthDate) {
     return { years: age, months: months, decimal: age + (months / 12) };
 }
 
+// Generiert individuelle professionelle Statements pro Bereich
+function generateDomainStatement(domain, domainName, bioAge, devAge, gap, stage, angst) {
+    if (gap === null || !bioAge || !devAge) {
+        return `Keine vollständige Einschätzung im Bereich ${domainName} möglich. Bitte Geburtsdatum und Entwicklungsitems prüfen.`;
+    }
+
+    const domainDescriptions = {
+        verhalten: {
+            name: 'Verhaltenssteuerung',
+            strength: 'Selbstregulation und Impulskontrolle',
+            focus: 'angemessenes Verhaltensrepertoire',
+            intervention: 'klare Strukturen und positive Verstärkung'
+        },
+        kommunikation: {
+            name: 'kommunikative Kompetenz',
+            strength: 'sprachliche Ausdrucksfähigkeit',
+            focus: 'Kommunikationsfertigkeiten',
+            intervention: 'sprachliche Modelle und Interaktionsmöglichkeiten'
+        },
+        sozialisation: {
+            name: 'soziale Kompetenz',
+            strength: 'Beziehungsfähigkeit',
+            focus: 'soziale Interaktion',
+            intervention: 'kooperative Lernsituationen und Peerinteraktion'
+        },
+        kognition: {
+            name: 'kognitive Entwicklung',
+            strength: 'Lern- und Denkfähigkeit',
+            focus: 'kognitive Fertigkeiten',
+            intervention: 'entwicklungsangemessene Lernangebote'
+        }
+    };
+
+    const desc = domainDescriptions[domain] || domainDescriptions.verhalten;
+    const gapYears = gap.toFixed(1);
+
+    // Altersgemäß oder voraus (gap <= 0)
+    if (gap <= 0) {
+        return `Im Bereich ${desc.name} zeigt das Kind altersgemäße oder überdurchschnittliche Kompetenzen (Entwicklungsalter ${devAge.toFixed(1)} J. bei biologischem Alter ${bioAge.toFixed(1)} J.). Die ${desc.strength} ist eine wichtige Ressource, auf der weitere Förderung aufbauen kann.`;
+    }
+
+    // Leichte Differenz (0-2 Jahre)
+    if (gap <= 2) {
+        return `Im Bereich ${desc.name} besteht eine leichte Entwicklungsdifferenz von ${gapYears} Jahren. Das Kind zeigt bereits grundlegende ${desc.focus}. Durch gezielte ${desc.intervention} kann das Kind seine Kompetenzen weiter ausbauen.`;
+    }
+
+    // Moderate Differenz (2-4 Jahre)
+    if (gap <= 4) {
+        return `Im Bereich ${desc.name} zeigt sich eine Differenz von ${gapYears} Jahren zum biologischen Alter. Das zentrale Entwicklungsthema ist "${angst || 'in Bearbeitung'}". Intensive Förderung mit Fokus auf ${desc.focus} und ${desc.intervention} sind empfohlen.`;
+    }
+
+    // Deutliche Differenz (>4 Jahre)
+    return `Im Bereich ${desc.name} besteht eine deutliche Entwicklungsdifferenz von ${gapYears} Jahren. Das Kind befindet sich auf Stufe ${stage || 1} mit dem Entwicklungsthema "${angst || 'Verlassenheit'}". Multiprofessionelle Zusammenarbeit und entwicklungsangemessene Förderung mit ${desc.intervention} sind besonders wichtig.`;
+}
+
 function calculateDevelopmentalAge(highestStage, stageData, domain) {
     if (highestStage === 0) return { age: 0, stage: 0 };
 
@@ -1622,44 +1746,52 @@ function exportToWord() {
         text-align: right;
         font-size: 10pt;
     }
-    .age-bar-container {
-        position: relative;
+    .age-bar-table {
+        width: 100%;
+        border-collapse: collapse;
         height: 30px;
-        background: linear-gradient(90deg, #e8f6f3 0%, #d5f5e3 20%, #fcf3cf 40%, #fdebd0 60%, #fadbd8 80%, #f5b7b1 100%);
         border-radius: 15px;
-        border: 1px solid #bdc3c7;
-        overflow: visible;
+        overflow: hidden;
+    }
+    .age-bar-table td {
+        height: 30px;
+        padding: 0;
+        border: none;
+    }
+    .age-bar-wrapper {
+        position: relative;
+        margin-bottom: 5px;
+    }
+    .age-bar-markers {
+        position: relative;
+        height: 45px;
+        margin-top: -38px;
     }
     .age-bar-marker {
         position: absolute;
-        top: -5px;
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        text-align: center;
+        line-height: 36px;
         font-weight: bold;
         font-size: 10pt;
         color: white;
         border: 3px solid white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        transform: translateX(-50%);
+        margin-left: -18px;
     }
     .age-bar-marker.bio {
         background: #3498db;
-        z-index: 2;
     }
     .age-bar-marker.dev {
         background: #9b59b6;
-        z-index: 3;
     }
     .age-bar-scale {
         display: table;
         width: 100%;
         font-size: 8pt;
         color: #666;
-        margin-top: 5px;
+        margin-top: 15px;
     }
     .age-bar-scale span {
         display: table-cell;
@@ -1680,6 +1812,15 @@ function exportToWord() {
         border-radius: 50%;
         margin-right: 4px;
         vertical-align: middle;
+    }
+    .age-statement {
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: #fff;
+        border-left: 4px solid;
+        font-size: 10pt;
+        font-style: italic;
+        color: #555;
     }
 
     /* ===== ZIELE MIT INTERVENTIONEN ===== */
@@ -2245,7 +2386,7 @@ function exportToWord() {
             <span><span class="dot" style="background: #9b59b6;"></span> Sozio-emotionales Entwicklungsalter</span>
         </div>`;
 
-    // Visual age bars for each domain
+    // Visual age bars for each domain with individual statements
     const maxAge = 18; // Maximum age for scale
     Object.keys(reportData).forEach(domain => {
         const data = reportData[domain];
@@ -2259,18 +2400,36 @@ function exportToWord() {
         const gapText = gap !== null ? (gap > 0 ? `${gap.toFixed(1)} Jahre Differenz` : 'Altersgemäß') : '';
         const gapColor = gap !== null ? (gap > 2 ? '#e74c3c' : gap > 0 ? '#f39c12' : '#27ae60') : '#666';
 
+        // Generate individual statement for this domain
+        const domainStatement = generateDomainStatement(domain, data.name, bioAge, devAge.age, gap, devAge.stage, devAge.angst);
+
         html += `
         <div class="age-visual-row">
             <div class="age-visual-header">
                 <span class="age-visual-domain" style="color: ${data.color};">${data.name}</span>
                 <span class="age-visual-values" style="color: ${gapColor};">${gapText}</span>
             </div>
-            <div class="age-bar-container">
-                ${bioAge > 0 ? `<div class="age-bar-marker bio" style="left: ${bioPercent}%;">${bioAge.toFixed(0)}</div>` : ''}
-                ${devAge.age > 0 ? `<div class="age-bar-marker dev" style="left: ${devPercent}%;">${devAge.age.toFixed(1)}</div>` : ''}
+            <div class="age-bar-wrapper">
+                <table class="age-bar-table" style="border: 1px solid #bdc3c7;">
+                    <tr>
+                        <td style="width: 11%; background: #d5f5e3;"></td>
+                        <td style="width: 17%; background: #abebc6;"></td>
+                        <td style="width: 22%; background: #fcf3cf;"></td>
+                        <td style="width: 17%; background: #fdebd0;"></td>
+                        <td style="width: 22%; background: #fadbd8;"></td>
+                        <td style="width: 11%; background: #f5b7b1;"></td>
+                    </tr>
+                </table>
+                <div class="age-bar-markers">
+                    ${bioAge > 0 ? `<div class="age-bar-marker bio" style="left: ${bioPercent}%;">${bioAge.toFixed(0)}</div>` : ''}
+                    ${devAge.age > 0 ? `<div class="age-bar-marker dev" style="left: ${devPercent}%;">${devAge.age.toFixed(1)}</div>` : ''}
+                </div>
             </div>
             <div class="age-bar-scale">
                 <span>0</span><span>2</span><span>5</span><span>9</span><span>12</span><span>16+</span>
+            </div>
+            <div class="age-statement" style="border-color: ${gapColor};">
+                ${domainStatement}
             </div>
         </div>`;
     });
@@ -2398,15 +2557,20 @@ function exportToWord() {
     Object.keys(reportData).forEach(domain => {
         const data = reportData[domain];
 
+        // Nur die letzten 10 erreichten Items anzeigen (höchste Stufen zuerst)
+        const sortedErreicht = [...data.erreicht].sort((a, b) => b.stufe - a.stufe);
+        const last10Erreicht = sortedErreicht.slice(0, 10);
+        const hasMore = data.erreicht.length > 10;
+
         html += `
     <div class="domain-block">
         <div class="domain-header" style="background-color: ${data.color};">${data.name}</div>
         <div class="domain-content">
-            <div class="section-header erreicht">✓ Erreichte Kompetenzen (${data.erreicht.length})</div>
+            <div class="section-header erreicht">✓ Erreichte Kompetenzen (${last10Erreicht.length} von ${data.erreicht.length} angezeigt)</div>
             <div class="item-list">`;
 
-        if (data.erreicht.length > 0) {
-            data.erreicht.forEach(item => {
+        if (last10Erreicht.length > 0) {
+            last10Erreicht.forEach(item => {
                 html += `
                 <div class="item-entry">
                     <span class="item-id">${item.id}</span>
@@ -2414,6 +2578,9 @@ function exportToWord() {
                     <span class="item-desc">– ${item.beschreibung}</span>
                 </div>`;
             });
+            if (hasMore) {
+                html += `<div style="font-size: 9pt; color: #888; font-style: italic; margin-top: 8px;">... und ${data.erreicht.length - 10} weitere erreichte Items</div>`;
+            }
         } else {
             html += `<div class="no-items">Keine Items markiert</div>`;
         }
