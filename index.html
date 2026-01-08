@@ -3308,118 +3308,6 @@ function exportToWord() {
     </div>
 </div>
 
-<!-- ===== ENTWICKLUNGSRASTER ===== -->
-<div class="raster-section">
-    <div class="raster-title">Entwicklungsraster - Übersicht</div>
-    <table class="raster-table">
-        <tr>
-            <th class="domain-col">Bereich</th>
-            <th class="stage-col">Stufe 1</th>
-            <th class="stage-col">Stufe 2</th>
-            <th class="stage-col">Stufe 3</th>
-            <th class="stage-col">Stufe 4</th>
-            <th class="stage-col">Stufe 5</th>
-        </tr>`;
-
-    // Generate raster rows
-    Object.keys(ELDIB_DATA).forEach(domain => {
-        const data = reportData[domain];
-        html += `
-        <tr>
-            <td class="domain-name" style="color: ${data.color};">
-                <span style="font-size: 14pt;">${data.code}</span><br>
-                <span style="font-size: 9pt; color: #666;">${data.name}</span>
-            </td>`;
-
-        for (let stage = 1; stage <= 5; stage++) {
-            const sd = stageData[domain][stage];
-            const hasErreicht = sd.erreicht > 0;
-            const hasZiel = sd.ziele > 0;
-
-            let cellClass = 'stage-empty';
-            let cellContent = '-';
-
-            if (hasErreicht && hasZiel) {
-                cellClass = 'stage-mixed';
-                cellContent = `${sd.erreicht}/${sd.ziele}`;
-            } else if (hasErreicht) {
-                cellClass = 'stage-erreicht';
-                cellContent = sd.erreicht;
-            } else if (hasZiel) {
-                cellClass = 'stage-ziel';
-                cellContent = sd.ziele;
-            }
-
-            html += `
-            <td class="stage-cell">
-                <div class="stage-indicator ${cellClass}">${cellContent}</div>
-                <div class="stage-count">${sd.total} Items</div>
-            </td>`;
-        }
-
-        html += `</tr>`;
-    });
-
-    html += `
-    </table>
-    <div class="legend">
-        <span class="legend-title">Legende:</span>
-        <span class="legend-item"><span class="legend-dot" style="background: #27ae60;"></span> Erreicht</span>
-        <span class="legend-item"><span class="legend-dot" style="background: #f39c12;"></span> Ziel</span>
-        <span class="legend-item"><span class="legend-dot" style="background: linear-gradient(135deg, #27ae60 50%, #f39c12 50%);"></span> Erreicht + Ziel</span>
-        <span class="legend-item"><span class="legend-dot" style="background: #f8f9fa; border: 1px dashed #ccc;"></span> Nicht markiert</span>
-    </div>
-</div>
-
-<!-- ===== ZUSAMMENFASSUNG ===== -->
-<div class="summary-section">
-    <div class="summary-title">Gesamtübersicht</div>
-    <div class="summary-grid">`;
-
-    // Summary cards for each domain
-    Object.keys(reportData).forEach(domain => {
-        const data = reportData[domain];
-        const percentage = Math.round((data.erreicht.length / data.totalItems) * 100);
-
-        html += `
-        <div class="summary-card">
-            <div class="summary-card-inner" style="border-color: ${data.color};">
-                <div class="summary-icon" style="color: ${data.color};">${data.code}</div>
-                <div class="summary-number" style="color: ${data.color};">${data.erreicht.length}</div>
-                <div class="summary-label">Erreicht</div>
-                <div class="summary-sublabel">${data.ziele.length} Ziele | ${percentage}%</div>
-            </div>
-        </div>`;
-    });
-
-    html += `
-    </div>
-</div>
-
-<!-- ===== FORTSCHRITTSBALKEN ===== -->
-<div class="progress-section">
-    <div class="progress-title">Entwicklungsfortschritt je Bereich</div>`;
-
-    Object.keys(reportData).forEach(domain => {
-        const data = reportData[domain];
-        const erreichtPercent = Math.round((data.erreicht.length / data.totalItems) * 100);
-        const zielPercent = Math.round((data.ziele.length / data.totalItems) * 100);
-
-        html += `
-    <div class="progress-item">
-        <div class="progress-header">
-            <span class="progress-domain" style="color: ${data.color};">${data.name}</span>
-            <span class="progress-stats">${data.erreicht.length} erreicht | ${data.ziele.length} Ziele | ${data.totalItems} gesamt</span>
-        </div>
-        <div class="progress-bar-container">
-            <span class="progress-bar erreicht" style="width: ${erreichtPercent}%;"></span><span class="progress-bar ziel" style="width: ${zielPercent}%;"></span>
-        </div>
-    </div>`;
-    });
-
-    html += `
-</div>
-
 <!-- ===== DETAILIERTE AUFLISTUNG ===== -->
 <div class="detail-section">
     <div class="detail-title">Detaillierte Auflistung</div>`;
@@ -3499,185 +3387,119 @@ function exportToWord() {
         const evaluations = profile.evaluations.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         if (evaluations.length > 1) {
-            html += `
-<div style="margin-top: 30px; page-break-before: always;">
-    <div style="font-size: 16pt; font-weight: bold; color: #8e44ad; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #8e44ad;">
-        Entwicklungsverlauf
-    </div>
-    <p style="font-size: 10pt; color: #666; margin-bottom: 15px;">
-        Übersicht über ${evaluations.length} Evaluationen von ${new Date(evaluations[0].date).toLocaleDateString('de-DE')} bis ${new Date(evaluations[evaluations.length - 1].date).toLocaleDateString('de-DE')}
-    </p>
-
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-        <tr style="background: #8e44ad; color: white;">
-            <th style="padding: 10px; text-align: left; border: 1px solid #8e44ad;">Datum</th>
-            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Verhalten</th>
-            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Kommunikation</th>
-            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Sozialisation</th>
-            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Kognition</th>
-            <th style="padding: 10px; text-align: center; border: 1px solid #8e44ad;">Ø Gesamt</th>
-        </tr>`;
-
-            evaluations.forEach((evaluation, index) => {
-                const ages = evaluation.developmentalAges || {};
-                const date = new Date(evaluation.date).toLocaleDateString('de-DE');
-                const domains = ['verhalten', 'kommunikation', 'sozialisation', 'kognition'];
-
-                // Calculate averages
-                const validAges = domains.map(d => ages[d]).filter(a => a && a > 0);
-                const avg = validAges.length > 0 ? (validAges.reduce((a, b) => a + b, 0) / validAges.length).toFixed(1) : '-';
-
-                // Calculate deltas
-                let deltas = {};
-                if (index > 0) {
-                    const prevAges = evaluations[index - 1].developmentalAges || {};
-                    domains.forEach(d => {
-                        if (ages[d] && prevAges[d]) {
-                            const diff = ages[d] - prevAges[d];
-                            deltas[d] = diff !== 0 ? (diff > 0 ? ` <span style="color: #27ae60;">(+${diff.toFixed(1)})</span>` : ` <span style="color: #e74c3c;">(${diff.toFixed(1)})</span>`) : '';
-                        }
-                    });
-                }
-
-                const bgColor = index % 2 === 0 ? '#f8f4fc' : '#fff';
-                html += `
-        <tr style="background: ${bgColor};">
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">${date}</td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.verhalten?.toFixed(1) || '-'} J.${deltas.verhalten || ''}</td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.kommunikation?.toFixed(1) || '-'} J.${deltas.kommunikation || ''}</td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.sozialisation?.toFixed(1) || '-'} J.${deltas.sozialisation || ''}</td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${ages.kognition?.toFixed(1) || '-'} J.${deltas.kognition || ''}</td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">${avg} J.</td>
-        </tr>`;
-            });
+            // Biologisches Alter berechnen
+            const bioAge = calculateAge(student.birthDate);
+            const bioAgeNum = parseFloat(bioAge) || 10;
 
             html += `
-    </table>
-
-    <!-- Visueller Entwicklungsverlauf mit Balken -->
-    <div style="margin-top: 30px;">
-        <div style="font-weight: bold; font-size: 14pt; margin-bottom: 20px; color: #2c3e50;">Visueller Entwicklungsverlauf</div>`;
+<div style="margin-top: 30px;">
+    <div style="font-size: 16pt; font-weight: bold; color: #8e44ad; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 3px solid #8e44ad;">
+        Entwicklungsverlauf (${evaluations.length} Evaluationen)
+    </div>`;
 
             const domainInfo = {
-                verhalten: { name: 'Verhalten', color: '#e74c3c', shades: ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'] },
-                kommunikation: { name: 'Kommunikation', color: '#3498db', shades: ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'] },
-                sozialisation: { name: 'Sozialisation', color: '#27ae60', shades: ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'] },
-                kognition: { name: 'Kognition', color: '#9b59b6', shades: ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6'] }
+                verhalten: { name: 'V - Verhalten', color: '#e74c3c', shades: ['#fadbd8', '#f5b7b1', '#f1948a', '#ec7063', '#e74c3c'] },
+                kommunikation: { name: 'K - Kommunikation', color: '#3498db', shades: ['#d4e6f1', '#a9cce3', '#7fb3d5', '#5499c7', '#3498db'] },
+                sozialisation: { name: 'S - Sozialisation', color: '#27ae60', shades: ['#d4efdf', '#a9dfbf', '#7dcea0', '#52be80', '#27ae60'] },
+                kognition: { name: 'C - Kognition', color: '#9b59b6', shades: ['#e8daef', '#d2b4de', '#bb8fce', '#a569bd', '#9b59b6'] }
             };
 
-            // Max age for scaling (16 years)
             const maxAge = 16;
+            const bioPercent = Math.min(100, (bioAgeNum / maxAge) * 100);
 
             Object.keys(domainInfo).forEach(domain => {
                 const info = domainInfo[domain];
                 const firstAge = evaluations[0].developmentalAges?.[domain] || 0;
                 const lastAge = evaluations[evaluations.length - 1].developmentalAges?.[domain] || 0;
                 const progress = lastAge - firstAge;
-                const progressText = progress > 0 ? `+${progress.toFixed(1)} J.` : (progress < 0 ? `${progress.toFixed(1)} J.` : '±0');
+                const progressText = progress > 0 ? `+${progress.toFixed(1)}` : (progress < 0 ? `${progress.toFixed(1)}` : '±0');
                 const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#888');
+                const evalCount = evaluations.length;
 
                 html += `
-        <div style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-left: 4px solid ${info.color};">
-            <div style="font-weight: bold; font-size: 12pt; color: ${info.color}; margin-bottom: 12px;">
-                ${info.name}
-                <span style="float: right; font-size: 11pt; color: ${progressColor};">
-                    Entwicklung: ${progressText}
-                </span>
-            </div>`;
+    <div style="margin-bottom: 12px; padding: 10px; background: #fafafa; border-left: 4px solid ${info.color};">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 140px; font-weight: bold; font-size: 11pt; color: ${info.color}; vertical-align: top; padding-top: 3px;">
+                    ${info.name}
+                    <div style="font-size: 9pt; color: ${progressColor}; font-weight: normal; margin-top: 2px;">${progressText} Jahre</div>
+                </td>
+                <td>`;
 
-                // Create a bar for each evaluation
-                const evalCount = evaluations.length;
+                // Biologisches Alter Balken (grau, als Referenzlinie)
+                html += `
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 4px;">
+                        <tr>
+                            <td style="width: 70px; font-size: 8pt; color: #888; vertical-align: middle;">Bio: ${bioAgeNum.toFixed(1)} J.</td>
+                            <td>
+                                <table style="width: 100%; height: 12px; border: 1px solid #ccc; background: #fff;">
+                                    <tr>
+                                        <td style="width: ${bioPercent}%; background-color: #95a5a6;"></td>
+                                        <td style="background-color: #f0f0f0;"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>`;
+
+                // Balken für jede Evaluation
                 evaluations.forEach((evaluation, idx) => {
                     const devAge = evaluation.developmentalAges?.[domain] || 0;
                     const barPercent = Math.min(100, (devAge / maxAge) * 100);
-                    const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { month: 'short', year: 'numeric' });
-
-                    // Use color shades instead of opacity (Word doesn't support opacity)
-                    // Map index to shade: older = lighter, newer = darker
+                    const evalDate = new Date(evaluation.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
                     const shadeIndex = evalCount === 1 ? 4 : Math.round((idx / (evalCount - 1)) * 4);
                     const barColor = info.shades[shadeIndex];
 
                     html += `
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
-                <tr>
-                    <td style="width: 90px; font-size: 9pt; color: #666; vertical-align: middle;">${evalDate}</td>
-                    <td style="vertical-align: middle;">
-                        <table style="width: 100%; height: 20px; border: 1px solid #bbb; background: #fff;">
-                            <tr>
-                                <td style="width: ${barPercent}%; background-color: ${barColor};"></td>
-                                <td style="background-color: #f5f5f5;"></td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width: 60px; text-align: right; font-size: 10pt; font-weight: bold; color: #333; vertical-align: middle;">${devAge.toFixed(1)} J.</td>
-                </tr>
-            </table>`;
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 3px;">
+                        <tr>
+                            <td style="width: 70px; font-size: 8pt; color: #666; vertical-align: middle;">${evalDate}</td>
+                            <td>
+                                <table style="width: 100%; height: 16px; border: 1px solid #aaa; background: #fff;">
+                                    <tr>
+                                        <td style="width: ${barPercent}%; background-color: ${barColor};"></td>
+                                        <td style="background-color: #f5f5f5;"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width: 45px; text-align: right; font-size: 9pt; font-weight: bold; color: #333; vertical-align: middle;">${devAge.toFixed(1)} J.</td>
+                        </tr>
+                    </table>`;
                 });
 
                 html += `
-            <!-- Skala -->
-            <table style="width: 100%; font-size: 8pt; color: #999; margin-left: 90px; margin-top: 4px;">
-                <tr>
-                    <td style="width: 12.5%;">0</td>
-                    <td style="width: 12.5%;">2</td>
-                    <td style="width: 12.5%;">4</td>
-                    <td style="width: 12.5%;">6</td>
-                    <td style="width: 12.5%;">8</td>
-                    <td style="width: 12.5%;">10</td>
-                    <td style="width: 12.5%;">12</td>
-                    <td style="width: 12.5%;">14</td>
-                    <td>16 J.</td>
-                </tr>
-            </table>
-        </div>`;
+                </td>
+            </tr>
+        </table>
+    </div>`;
             });
 
-            // Summary section
+            // Kompakte Skala am Ende
             html += `
-        <div style="margin-top: 20px; padding: 15px; background: #e8f4e8; border: 1px solid #27ae60; border-radius: 4px;">
-            <div style="font-weight: bold; color: #27ae60; margin-bottom: 10px;">Zusammenfassung der Entwicklung</div>
-            <table style="width: 100%; font-size: 10pt;">
-                <tr style="background: #fff;">
-                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #27ae60;">Bereich</th>
-                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Erste Evaluation</th>
-                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Aktuelle Evaluation</th>
-                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #27ae60;">Fortschritt</th>
-                </tr>`;
-
-            Object.keys(domainInfo).forEach(domain => {
-                const info = domainInfo[domain];
-                const firstAge = evaluations[0].developmentalAges?.[domain] || 0;
-                const lastAge = evaluations[evaluations.length - 1].developmentalAges?.[domain] || 0;
-                const progress = lastAge - firstAge;
-                const progressText = progress > 0 ? `+${progress.toFixed(1)} Jahre` : (progress < 0 ? `${progress.toFixed(1)} Jahre` : 'keine Veränderung');
-                const progressColor = progress > 0 ? '#27ae60' : (progress < 0 ? '#e74c3c' : '#666');
-
-                html += `
-                <tr>
-                    <td style="padding: 8px; font-weight: bold; color: ${info.color};">${info.name}</td>
-                    <td style="padding: 8px; text-align: center;">${firstAge.toFixed(1)} Jahre</td>
-                    <td style="padding: 8px; text-align: center;">${lastAge.toFixed(1)} Jahre</td>
-                    <td style="padding: 8px; text-align: center; font-weight: bold; color: ${progressColor};">${progressText}</td>
-                </tr>`;
-            });
-
-            // Calculate overall progress
-            const domains = ['verhalten', 'kommunikation', 'sozialisation', 'kognition'];
-            const firstAvg = domains.reduce((sum, d) => sum + (evaluations[0].developmentalAges?.[d] || 0), 0) / 4;
-            const lastAvg = domains.reduce((sum, d) => sum + (evaluations[evaluations.length - 1].developmentalAges?.[d] || 0), 0) / 4;
-            const overallProgress = lastAvg - firstAvg;
-            const overallText = overallProgress > 0 ? `+${overallProgress.toFixed(1)} Jahre` : (overallProgress < 0 ? `${overallProgress.toFixed(1)} Jahre` : 'keine Veränderung');
-            const overallColor = overallProgress > 0 ? '#27ae60' : (overallProgress < 0 ? '#e74c3c' : '#666');
-
-            html += `
-                <tr style="background: #f0f0f0; font-weight: bold;">
-                    <td style="padding: 8px;">Durchschnitt</td>
-                    <td style="padding: 8px; text-align: center;">${firstAvg.toFixed(1)} Jahre</td>
-                    <td style="padding: 8px; text-align: center;">${lastAvg.toFixed(1)} Jahre</td>
-                    <td style="padding: 8px; text-align: center; color: ${overallColor};">${overallText}</td>
-                </tr>
-            </table>
-        </div>
+    <table style="width: 100%; font-size: 8pt; color: #999; margin-left: 140px; margin-top: 5px;">
+        <tr>
+            <td style="width: 70px;"></td>
+            <td>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 12.5%;">0</td>
+                        <td style="width: 12.5%;">2</td>
+                        <td style="width: 12.5%;">4</td>
+                        <td style="width: 12.5%;">6</td>
+                        <td style="width: 12.5%;">8</td>
+                        <td style="width: 12.5%;">10</td>
+                        <td style="width: 12.5%;">12</td>
+                        <td style="width: 12.5%;">14</td>
+                        <td>16 J.</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 45px;"></td>
+        </tr>
+    </table>
+    <div style="margin-top: 10px; font-size: 9pt; color: #666;">
+        <span style="display: inline-block; width: 12px; height: 12px; background: #95a5a6; vertical-align: middle; margin-right: 5px;"></span> Biologisches Alter |
+        <span style="margin-left: 10px;">Hell → Dunkel = Ältere → Neuere Evaluation</span>
     </div>
 </div>`;
         }
